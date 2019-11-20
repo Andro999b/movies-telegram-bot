@@ -1,0 +1,39 @@
+service: movies-telegram-bot
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: eu-central-1
+
+functions:
+  search:
+    handler: index.search
+    events:
+      - http: 
+          path: search
+          method: get
+          cors: true
+
+  info:
+    handler: index.info
+    events:
+      - http: 
+          path: info
+          method: get
+          cors: true  
+
+  extract:
+    handler: index.extract
+    events:
+      - http: 
+          path: extract
+          method: get
+          cors: true
+
+  bot:
+    handler: index.bot
+    events:
+      - http: 
+          path: bot
+          method: any
+          cors: true
