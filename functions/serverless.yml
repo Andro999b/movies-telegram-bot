@@ -10,7 +10,21 @@ functions:
     handler: index.search
     events:
       - http: 
-          path: search
+          path: api/trackers/{provider}/search
+          method: get
+          cors: true
+          request:
+            parameters:
+              path:
+                provider: true
+              querystrings:
+                q: true
+
+  provider:
+    handler: index.provider
+    events:
+      - http: 
+          path: api/trackers
           method: get
           cors: true
 
@@ -18,9 +32,14 @@ functions:
     handler: index.info
     events:
       - http: 
-          path: info
+          path: api/trackers/{provider}/items/{resultId}
           method: get
-          cors: true  
+          cors: true
+          request:
+            parameters:
+              path:
+                - provider: true 
+                - resultId: true 
 
   extract:
     handler: index.extract

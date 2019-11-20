@@ -4,9 +4,9 @@ const makeResponse = require('../utils/makeResponse')
 module.exports = async (event) => {
     let result = {}
 
-    if(event.queryStringParameters) {
-        let { provider, id } = event.queryStringParameters
-        result = await providersService.getInfo(provider, id)
+    if(event.pathParameters) {
+        const { provider, resultId } = event.pathParameters
+        result = await providersService.getInfo(provider, resultId)
     }
 
     return makeResponse(result)

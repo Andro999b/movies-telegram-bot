@@ -10,14 +10,22 @@ const search = async (providers, ctx) => {
     const q = ctx.message.text
     const results = await providersService.search(providers, q)
 
-    await ctx.reply('There what i found', Extra.markup(Markup.keyboard(
-        results.map((result) => Markup.switchToCurrentChatButton(result.name, `info:${result.provider}:${result.id}`))
+    await ctx.reply(`Results for: "${q}"`, Extra.markup(Markup.inlineKeyboard(
+        results.map((result) =>
+            Markup.urlButton(
+                result.name,
+                `https://movies-player.web.app?provider=${result.provider}&id=${result.id}`
+            )
+        ), {
+            columns: 1
+        }
     )))
 }
 
+bot.command('start', (ctx) => ctx.reply(
+    'Just type Movie, TV Show or Catroon name and i will try to find something for you'
+))
 bot.on('text', (ctx) => search(providersService.getProviders(), ctx))
-bot.command('start', (ctx) => ctx.reply('Just type Movie, TV Show or Catroon name and i will try to find something for you'))
-bot.inlineQuery(/info:/, (ctx) => console.log(ctx.message))
 
 providersService.getProviders().forEach((provider) => {
     bot.command(provider, (ctx) => search([provider], ctx))

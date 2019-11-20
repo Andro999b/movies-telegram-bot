@@ -5,16 +5,11 @@ module.exports = async (event) => {
     let results = []
 
     if(event.queryStringParameters) {
-        let { q, providers } = event.queryStringParameters
+        const { q } = event.queryStringParameters
+        const { provider } = event.pathParameters
 
         if(q) {
-            if(!providers) {
-                providers = providersService.getProviders()
-            } else {
-                providers = providers.split(',')
-            }
-        
-            results = await providersService.search(providers, q)
+            results = await providersService.search([provider], q)
         }
     }
 

@@ -1,5 +1,6 @@
 const crawler = require('../utils/crawler')
 const PROVIDERS_CONFIG= require('../providersConfig')
+const urlencode = require('urlencode')
 
 class Provider {
     constructor(name, config) {
@@ -104,11 +105,6 @@ class Provider {
         throw new Error('Provider not implement getSearchUrl()')
     }
 
-    // eslint-disable-next-line no-unused-vars
-    getInfoUrl(resultsId) {
-        throw new Error('Provider not implement getInfoUrl()')
-    }
-
     getName() {
         const { subtype } = this.config
         return `${this.name}${subtype ? '-' + subtype : ''}`
@@ -128,6 +124,15 @@ class Provider {
     }
 
     _crawlerSearchRequestGenerator(query, page) { } // eslint-disable-line
+
+    getType() {
+        return 'directMedia'
+    }
+
+    getInfoUrl(resultsId) {
+        const url = urlencode.decode(resultsId)
+        return url.startsWith('/') ? this.config.baseUrl + url : url
+    }
 }
 
 module.exports = Provider

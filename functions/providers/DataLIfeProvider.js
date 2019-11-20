@@ -7,10 +7,6 @@ require('superagent-charset')(superagent)
 class DataLifeProvider extends Provider {
     getSearchUrl() {}
 
-    getInfoUrl(resultsId) {
-        return urlencode.decode(resultsId)
-    }
-
     _getSiteEncoding() {
         return null
     }
