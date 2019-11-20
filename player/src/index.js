@@ -46,10 +46,11 @@ function mapFile({ name, url, manifestUrl, alternativeUrls }) {
     }
 }
 
-function startPlayer(playlist) {
+function startPlayer(playlist, poster) {
     new Playerjs({ 
         id: 'player', 
-        file: playlist
+        file: playlist,
+        poster
     })
     
 }
@@ -57,8 +58,8 @@ function startPlayer(playlist) {
 if (provider && id) {
     fetch(`${API_BASE}/trackers/${provider}/items/${encodeURIComponent(id)}`)
         .then((response) => response.json())
-        .then(({ files }) => fileGrouping(files))
-        .then((directories) => {
+        .then(({ image, files }) => {
+            const directories = fileGrouping(files)
             let playlist
             if(directories.length == 1) {
                 playlist = directories[0].files.map(mapFile)
@@ -69,8 +70,6 @@ if (provider && id) {
                 }))
             }
 
-            // console.dir(directories, playlist)
-
-            startPlayer(playlist) 
+            startPlayer(playlist, image) 
         })
 }
