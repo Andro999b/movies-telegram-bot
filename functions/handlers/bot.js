@@ -14,7 +14,7 @@ const search = async (providers, ctx) => {
         results.map((result) =>
             Markup.urlButton(
                 result.name,
-                `https://movies-player.web.app?provider=${result.provider}&id=${result.id}`
+                `${process.env.PLAYER_URL}?provider=${result.provider}&id=${result.id}`
             )
         ), {
             columns: 1
@@ -25,9 +25,9 @@ const search = async (providers, ctx) => {
 bot.command('start', (ctx) => ctx.reply(
     'Just type Movie, TV Show or Cartoon name and i will try to find something for you'
 ))
-providersService.getProviders().forEach((provider) => {
+providersService.getProviders().forEach((provider) => 
     bot.command(provider, (ctx) => search([provider], ctx))
-})
+)
 bot.on('text', (ctx) => search(['seasonvar', 'kinogo'], ctx))
 
 module.exports = async (event) => {
