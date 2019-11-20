@@ -23,13 +23,12 @@ const search = async (providers, ctx) => {
 }
 
 bot.command('start', (ctx) => ctx.reply(
-    'Just type Movie, TV Show or Catroon name and i will try to find something for you'
+    'Just type Movie, TV Show or Cartoon name and i will try to find something for you'
 ))
-bot.on('text', (ctx) => search(providersService.getProviders(), ctx))
-
 providersService.getProviders().forEach((provider) => {
     bot.command(provider, (ctx) => search([provider], ctx))
 })
+bot.on('text', (ctx) => search(['seasonvar', 'kinogo'], ctx))
 
 module.exports = async (event) => {
     const body = JSON.parse(event.body)

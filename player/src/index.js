@@ -26,14 +26,15 @@ function mapFile({ name, url, manifestUrl, alternativeUrls }) {
     } else if(url) {
         if(alternativeUrls) {
             file = alternativeUrls.concat(url) 
-                .map((url) => {
-                    const q = qualities.find((q) => url.indexOf(q) != -1)
-                    if(q) {
-                        return `[${q}]${url}`
-                    }
-                })
+                // .map((url) => {
+                //     const q = qualities.find((q) => url.indexOf(q) != -1)
+                //     if(q) {
+                //         return `[${q}]${url}`
+                //     }
+                // })
                 .filter((it) => it)
-                .join(',')
+                .reverse()
+                .join(' or ')
         } else {
             file = url
         }
@@ -46,12 +47,9 @@ function mapFile({ name, url, manifestUrl, alternativeUrls }) {
 }
 
 function startPlayer(playlist) {
-    const player = new Playerjs({ 
+    new Playerjs({ 
         id: 'player', 
-        file: playlist, 
-        ready: function() {
-            console.log(player.quality, player.qualities);
-        } 
+        file: playlist
     })
     
 }
