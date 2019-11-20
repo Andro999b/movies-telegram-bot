@@ -1,19 +1,32 @@
 
 const makeResponse = require('../utils/makeResponse')
-const superagent = require('superagent')
+const providersService = require('../providers')
+const Telegraf = require('telegraf')
+const Extra = require('telegraf/extra')
+const Markup = require('telegraf/markup')
+const bot = new Telegraf(process.env.TOKEN)
 
-const token = '1009613571:AAHyGk-2jjuLg-6ckbgj7QoKwi3YIVVS_aQ';
+const search = async (providers, ctx) => {
+    const q = ctx.message.text
+    const results = await providersService.search(providers, q)
+
+    await ctx.reply('There what i found', Extra.markup(Markup.keyboard(
+        results.map((result) => Markup.switchToCurrentChatButton(result.name, `info:${result.provider}:${result.id}`))
+    )))
+}
+
+bot.on('text', (ctx) => search(providersService.getProviders(), ctx))
+bot.command('start', (ctx) => ctx.reply('Just type Movie, TV Show or Catroon name and i will try to find something for you'))
+bot.inlineQuery(/info:/, (ctx) => console.log(ctx.message))
+
+providersService.getProviders().forEach((provider) => {
+    bot.command(provider, (ctx) => search([provider], ctx))
+})
 
 module.exports = async (event) => {
     const body = JSON.parse(event.body)
 
-    const message = body.message
-    const chatId = message.chat.id
-    const BASE_URL = `https://api.telegram.org/bot${token}/sendMessage`;
-
-    await superagent
-        .post(BASE_URL).type('form')
-        .send({ text: message.text, chat_id: chatId })
+    await bot.handleUpdate(body)
 
     return makeResponse({ input: event })
 }
