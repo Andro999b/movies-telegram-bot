@@ -13,24 +13,32 @@ bot.command('start', (ctx) => ctx.reply(
     'Just type Movie, TV Show or Cartoon name and i will try to find something for you'
 ))
 bot.command('providers', (ctx) => ctx.reply(
-    'Avalaible search providers: ',
-    Markup.keyboard(
+    'Avalaible search providers',
+    Markup.inlineKeyboard(
         providersService.getProviders().map((provider) =>
-            Markup.callbackButton(provider, provider, true)
+            Markup.callbackButton(provider, provider)
+        ).concat(
+            Markup.callbackButton('default', 'default')
         )
-    ).extra()
+    ).resize().oneTime().extra()
 ))
 providersService.getProviders().forEach((provider) =>
-    bot.command(provider, async (ctx) => {
+    bot.action(provider, async (ctx) => {
         ctx.session.provider = provider
         await ctx.reply(`${provider} will be used for next search`)
     })
 )
+bot.action('default', async (ctx) => {
+    ctx.session.provider = null
+    await ctx.reply('Default providers will be used for next search')
+})
 bot.on('text', async (ctx) => {
     const provider = ctx.session.provider
     ctx.session.provider = null
 
     const providers = provider ? [provider] : DEFAULT_PROVIDERS
+
+    await ctx.replyWithChatAction('typing')
 
     const q = ctx.message.text
     const results = await providersService.search(providers, q)
@@ -47,9 +55,7 @@ bot.on('text', async (ctx) => {
                     `${process.env.PLAYER_URL}?provider=${result.provider}&id=${result.id}`
                 )
             ),
-            {
-                columns: 1
-            }
+            { columns: 1 }
         ).extra()
     )
 })
