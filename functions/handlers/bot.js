@@ -6,8 +6,7 @@ const Extra = require('telegraf/extra')
 const Markup = require('telegraf/markup')
 const bot = new Telegraf(process.env.TOKEN)
 
-const search = async (providers, ctx) => {
-    const q = ctx.message.text
+const search = async (providers, q, ctx) => {
     const results = await providersService.search(providers, q)
 
     await ctx.reply(`Results for: "${q}"`, Extra.markup(Markup.inlineKeyboard(
@@ -25,10 +24,15 @@ const search = async (providers, ctx) => {
 bot.command('start', (ctx) => ctx.reply(
     'Just type Movie, TV Show or Cartoon name and i will try to find something for you'
 ))
+bot.command('providers', (ctx) => ctx.reply(providersService.getProviders().join(', ')))
 providersService.getProviders().forEach((provider) => 
-    bot.command(provider, (ctx) => search([provider], ctx))
+    bot.command(provider, async (ctx) => {
+        //cut command
+        const q = ctx.message.text.substr(provider.length + 2)
+        await search([provider], q, ctx)
+    })
 )
-bot.on('text', (ctx) => search(['seasonvar', 'kinogo'], ctx))
+bot.on('text', (ctx) => search(['seasonvar', 'kinogo'], ctx.message.text, ctx))
 
 module.exports = async (event) => {
     const body = JSON.parse(event.body)

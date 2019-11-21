@@ -16,6 +16,10 @@ module.exports = {
         return Promise.reject(`No provider found for ${name}`)
     },
     async search(providers, query, page = 0, pageCount = 1) {
+        if(!query || !providers || !providers.length) {
+            return []
+        }
+
         const results = await Promise.all(providers.map(async (providerName) => {
             try{
                 const provider = await this.getProvider(providerName)
