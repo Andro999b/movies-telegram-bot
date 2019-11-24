@@ -47,7 +47,7 @@ bot.on('text', async (ctx) => {
         return await ctx.reply(`No results for: "${q}"`)
 
     await ctx.reply(
-        `Results for: "${q}"`,
+        `📽 Results for: "${q}"`,
         Markup.inlineKeyboard(
             results.map((result) =>
                 Markup.urlButton(

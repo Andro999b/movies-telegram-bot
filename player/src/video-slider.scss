@@ -1,0 +1,75 @@
+.ui-video-seek-slider {
+  position: relative;
+}
+.ui-video-seek-slider:focus {
+  outline: none;
+}
+.ui-video-seek-slider .track {
+  padding: 10px 0;
+  cursor: pointer;
+  outline: none;
+}
+.ui-video-seek-slider .track:focus {
+  border: 0;
+  outline: none;
+}
+.ui-video-seek-slider .track .main {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0.2);
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  transition: transform 0.4s;
+  outline: none;
+}
+.ui-video-seek-slider .track .main:focus {
+  border: 0;
+  outline: none;
+}
+.ui-video-seek-slider .track .main .seek-hover {
+  position: absolute;
+  background-color: rgba(255,255,255,0.5);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transform: scaleX(0.6);
+  transform-origin: 0 0;
+  transition: opacity 0.4s;
+}
+.ui-video-seek-slider .track .main .buffered {
+  position: absolute;
+  background-color: rgba(255,255,255,0.3);
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0.8);
+  z-index: 2;
+  transform-origin: 0 0;
+}
+.ui-video-seek-slider .track .main .connect {
+  position: absolute;
+  background-color: #f00;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  left: 0;
+  transform: scaleX(0.13);
+  transform-origin: 0 0;
+}
+.ui-video-seek-slider .time-indicator{
+  z-index: 4;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  height: 100%;
+  touch-action: none;
+  pointer-events: none;
+  user-select: none;
+}
+.ui-video-seek-slider {
+  display: block;
+}
