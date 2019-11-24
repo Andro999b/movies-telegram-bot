@@ -125,7 +125,11 @@ export class LocalDevice extends Device {
         if (fileIndex < 0 || fileIndex >= files.length)
             return
 
-        localStore.set(`${this.getPlaylistPrefix()}:current`, fileIndex)
+        const storedIndex = localStore.get(`${this.getPlaylistPrefix()}:current`) || 0
+        if(storedIndex != fileIndex) {
+            localStore.set(`${this.getPlaylistPrefix()}:current`, fileIndex)
+            localStore.set(`${this.getPlaylistPrefix()}:ts`, 0)
+        }
 
         this.currentFileIndex = fileIndex
         this.setSource(files[this.currentFileIndex])

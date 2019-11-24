@@ -25,12 +25,12 @@ bot.command('providers', (ctx) => ctx.reply(
 providersService.getProviders().forEach((provider) =>
     bot.action(provider, async (ctx) => {
         ctx.session.provider = provider
-        await ctx.reply(`${provider} will be used for next search`)
+        await ctx.answerCbQuery(`${provider} will be used for next search`)
     })
 )
 bot.action('default', async (ctx) => {
     ctx.session.provider = null
-    await ctx.reply('Default providers will be used for next search')
+    await ctx.answerCbQuery('Default providers will be used for next search')
 })
 bot.on('text', async (ctx) => {
     const provider = ctx.session.provider

@@ -1,9 +1,25 @@
 service: movies-telegram-bot
 
+custom:
+  tableName: 'infoTable'
+
 provider:
   name: aws
   runtime: nodejs10.x
   region: eu-central-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - { "Fn::GetAtt": ["InfoTable", "Arn" ] }
+  environment:
+    TABLE_NAME: ${self:custom.tableName}
 
 functions:
   search:
@@ -56,3 +72,22 @@ functions:
           path: bot
           method: any
           cors: true
+
+resources:
+  Resources:
+    InfoTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableName}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: TRUE

@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.578.0",
     "cheerio": "^1.0.0-rc.3",
     "superagent": "^5.1.0",
     "superagent-charset": "^1.2.0",

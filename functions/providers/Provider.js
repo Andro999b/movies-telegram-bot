@@ -94,7 +94,8 @@ class Provider {
         details = await this._postProcessResultDetails(details, resultsId)
         details = {
             ...details,
-            provider: this.getName()
+            provider: this.getName(),
+            id: resultsId
         }
 
         return details

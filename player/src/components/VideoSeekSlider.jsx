@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { toHHMMSS, isMobile } from '../utils'
+import { toHHMMSS, isTablet } from '../utils'
 
 class VideoSeekSlider extends Component {
 
@@ -75,8 +75,8 @@ class VideoSeekSlider extends Component {
                     className={seekTime != null ? 'track active' : 'track'}
                     ref={(ref) => this.track = ref}
                     onPointerDown={this.handleSeekEnd}
-                    onMouseMove={isMobile() ? null : this.handleStartHover}
-                    onMouseLeave={isMobile() ? null : this.handleEndHover}
+                    onMouseMove={isTablet() ? null : this.handleStartHover}
+                    onMouseLeave={isTablet() ? null : this.handleEndHover}
                 >
                     <div className="main">
                         <div className="buffered" style={this.getPositionStyle(buffered, duration)} />
