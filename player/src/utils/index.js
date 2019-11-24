@@ -3,7 +3,7 @@ import groupBy from 'lodash.groupby'
 export function createExtractorUrlBuilder(extractor, additionalParams) {
     let extractorBaseUrl = null
     const { type, params } = extractor
-    extractorBaseUrl = `${window.API_BASE_URL}/extract`
+    extractorBaseUrl = `${window.API_BASE_URL}/extract?`
     extractorBaseUrl += `type=${type}`
 
     const finalParams = {...params, ...additionalParams}

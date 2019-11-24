@@ -18,8 +18,6 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - { "Fn::GetAtt": ["InfoTable", "Arn" ] }
-  environment:
-    TABLE_NAME: ${self:custom.tableName}
 
 functions:
   search:
@@ -56,9 +54,11 @@ functions:
               path:
                 - provider: true 
                 - resultId: true 
+    environment:
+      TABLE_NAME: ${self:custom.tableName}
 
   extract:
-    handler: index.extract
+    handler: api/index.extract
     events:
       - http: 
           path: extract
