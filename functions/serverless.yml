@@ -58,10 +58,10 @@ functions:
       TABLE_NAME: ${self:custom.tableName}
 
   extract:
-    handler: api/index.extract
+    handler: index.extract
     events:
       - http: 
-          path: extract
+          path: api/extract
           method: get
           cors: true
 
