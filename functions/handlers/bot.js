@@ -5,7 +5,7 @@ const Telegraf = require('telegraf')
 const Markup = require('telegraf/markup')
 const session = require('telegraf/session')
 
-const DEFAULT_PROVIDERS = ['seasonvar', 'kinogo']
+const DEFAULT_PROVIDERS = ['seasonvar', 'kinogo', 'animeVost']
 
 const bot = new Telegraf(process.env.TOKEN)
 bot.use(session())
@@ -19,8 +19,9 @@ bot.command('providers', (ctx) => ctx.reply(
             Markup.callbackButton(provider, provider)
         ).concat(
             Markup.callbackButton('default', 'default')
-        )
-    ).resize().oneTime().extra()
+        ),
+        { columns: 3 }
+    ).oneTime().extra()
 ))
 providersService.getProviders().forEach((provider) =>
     bot.action(provider, async (ctx) => {
