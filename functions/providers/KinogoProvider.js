@@ -91,11 +91,12 @@ class KinogoProvider extends DataLifeProvider {
                             alternativeUrls: urls 
                         }]
                     } else {
-                        return it.folder.map(({ file } , episode) => {
+                        const { folder, comment } = it
+                        return folder.map(({ file } , episode) => {
                             const urls = getBestPlayerJSQuality(file)
                             return {
-                                path: `Season ${season + 1}`,
-                                name: `Season ${season + 1} / Episode ${episode + 1}`,
+                                path: comment,
+                                name: `${comment} / Episode ${episode + 1}`,
                                 url: urls.pop(), 
                                 alternativeUrls: urls 
                             }

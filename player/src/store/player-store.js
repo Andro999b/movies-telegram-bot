@@ -175,7 +175,20 @@ class PlayerStore {
     }
 
     @action.bound switchFile(fileIndex) {
-        this.device.selectFile(fileIndex)
+        const  {currentFileIndex, shuffle, playlist: { files }} = this.device
+
+        if(files.length > 1 && shuffle) {
+            let next
+            
+            do{
+                next = Math.round(Math.random() * (files.length - 1))
+            } while(next == currentFileIndex)
+            
+            this.device.selectFile(next)
+        } else {
+            this.device.selectFile(fileIndex)
+        }
+
         this.device.play()
     }
 
@@ -188,19 +201,7 @@ class PlayerStore {
     }
 
     @action.bound endFile() {
-        const  {currentFileIndex, shuffle, playlist: { files }} = this.device
-
-        if(files.length > 1 && shuffle) {
-            let next
-            
-            do{
-                next = Math.round(Math.random() * (files.length - 1))
-            } while(next == currentFileIndex)
-            
-            this.switchFile(next)
-            
-            return
-        }
+        const  {currentFileIndex, playlist: { files }} = this.device
 
         if(currentFileIndex == files.length - 1) {
             this.device.pause()
