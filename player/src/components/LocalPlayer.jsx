@@ -43,7 +43,7 @@ class LocalPlayer extends Component {
         const { props: { playerStore: { device } }, state: { idle } } = this
 
         if (isTouchDevice() && idle) {
-            this.setState({ idle: false })
+            this.handleActivity()
             return
         }
 
@@ -109,6 +109,7 @@ class LocalPlayer extends Component {
     }
 
     setIdleTimeout() {
+        console.log('setIdleTimeout')
         this.idleTimeout = setTimeout(
             () => this.setState({ idle: true }),
             IDLE_TIMEOUT
@@ -127,8 +128,8 @@ class LocalPlayer extends Component {
     }
 
     componentDidMount() {
+        this.setIdleTimeout()
         if (!isTouchDevice()) {
-            this.setIdleTimeout();
             ['mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
                 (event) => window.addEventListener(event, this.handleActivity)
             )
