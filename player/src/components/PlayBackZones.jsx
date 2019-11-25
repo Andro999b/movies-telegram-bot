@@ -125,7 +125,7 @@ class PlayBackZones extends Component {
 
         return (
             <div 
-                className={`player__pause-zone ${(isPlaying || isLoading) ? '' : 'player__pause-cover'}`}
+                className={`player__pause-zone ${(isPlaying || isLoading) ? '' : ''}`}
                 onMouseDown={onClick}
             >
                 <div

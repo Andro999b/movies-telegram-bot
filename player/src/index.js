@@ -9,18 +9,20 @@ const provider = urlParams.get('provider')
 const id = urlParams.get('id')
 
 function renderError(e) {
-    if(e) console.error(e)
+    if (e) console.error(e)
     document.querySelector('#app .loader').textContent = 'Can`t load playlist'
 }
 
 if (provider && id) {
     fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}`)
         .then((response) => response.json())
+        .catch((e) => renderError(e))
         .then((playlist) => {
-            playerStore.openPlaylist({ id, provider, ...playlist })
-            render((<App />), document.getElementById('app'))
+            if (playlist) {
+                playerStore.openPlaylist({ id, provider, ...playlist })
+                render((<App />), document.getElementById('app'))
+            }
         })
-        .catch(renderError)
 } else {
     renderError()
 }

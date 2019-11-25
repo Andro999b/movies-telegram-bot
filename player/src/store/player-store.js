@@ -64,7 +64,7 @@ export class LocalDevice extends Device {
 
     getPlaylistPrefix = () => `playlist:${this.playlist.provider}:${this.playlist.id}`
 
-    @action setSource(source) {
+    @action.bound setSource(source) {
         this.source = source
         this.currentTime = source.currentTime || 0
         this.duration = 0
@@ -73,7 +73,7 @@ export class LocalDevice extends Device {
         this.audioTracks = []
     }
 
-    @action play(currentTime) {
+    @action.bound play(currentTime) {
         this.isPlaying = true
         if (currentTime != undefined) {
             this.currentTime = currentTime
@@ -85,20 +85,20 @@ export class LocalDevice extends Device {
         }
     }
 
-    @action seek(seekTo) {
+    @action.bound seek(seekTo) {
         this.seekTo = seekTo
         this.seekTime = null
     }
 
-    @action resume() {
+    @action.bound resume() {
         this.isPlaying = true
     }
 
-    @action pause() {
+    @action.bound pause() {
         this.isPlaying = false
     }
 
-    @action onUpdate({ duration, buffered, currentTime }) {
+    @action.bound onUpdate({ duration, buffered, currentTime }) {
         if (duration) this.duration = duration
         if (buffered) this.buffered = buffered
         if (currentTime) {
@@ -112,14 +112,14 @@ export class LocalDevice extends Device {
         }
     }
 
-    @action setPlaylist(playlist) {
+    @action.bound setPlaylist(playlist) {
         this.playlist = playlist
         this.selectFile(localStore.get(`${this.getPlaylistPrefix()}:current`) || 0)
         this.play()
         this.isPlaying = false
     }
 
-    @action selectFile(fileIndex) {
+    @action.bound selectFile(fileIndex) {
         const { files } = this.playlist
 
         if (fileIndex < 0 || fileIndex >= files.length)
@@ -135,33 +135,33 @@ export class LocalDevice extends Device {
         this.setSource(files[this.currentFileIndex])
     }
 
-    @action setLoading(loading) {
+    @action.bound setLoading(loading) {
         this.isLoading = loading
     }
 
-    @action setError(error) {
+    @action.bound setError(error) {
         this.error = error
     }
 
-    @action setVolume(volume) {
+    @action.bound setVolume(volume) {
         this.volume = volume
         localStore.set('volume', volume)
     }
 
-    @action setAudioTrack(id) {
+    @action.bound setAudioTrack(id) {
         this.audioTrack = id
     }
 
-    @action setAudioTracks(audioTracks) { 
+    @action.bound setAudioTracks(audioTracks) { 
         this.audioTracks = audioTracks 
     }
 
-    @action setShuffle(shuffle) { 
+    @action.bound setShuffle(shuffle) { 
         this.shuffle = shuffle 
         localStore.set('shuffle', shuffle)
     }
 
-    @action toggleMute() {
+    @action.bound toggleMute() {
         this.isMuted = !this.isMuted
     }
 }

@@ -16,7 +16,7 @@ import {
 } from '@material-ui/icons'
 import MobileSoundControl from './MobileSoundControl'
 import SoundControl from './SoundControl'
-import { isMobile } from '../utils'
+import { isTouchDevice } from '../utils'
 import { observer } from 'mobx-react'
 import AudioTrackSelector from './AudioTrackSelector'
 
@@ -40,7 +40,7 @@ class MediaControls extends Component {
             shuffle,
         } = device
 
-        const mobile = isMobile()
+        const mobile = isTouchDevice()
         const hasAudioTracks = device.audioTracks.length > 1
 
         return (

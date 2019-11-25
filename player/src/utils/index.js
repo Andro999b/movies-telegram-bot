@@ -26,16 +26,11 @@ export function invokeAll() {
     }
 }
 
-export function isTablet() {
-    if(window.matchMedia) {
-        const isMobile = window.matchMedia('only screen and (max-width: 768px)')
-        return isMobile.matches
+export function isTouchDevice() {
+    if('ontouchstart' in document.documentElement) {
+        return true
     }
-
-    return false
-}
-
-export function isMobile() {
+    
     if(window.matchMedia) {
         const isMobile = window.matchMedia('only screen and (max-width: 570px)')
         return isMobile.matches
