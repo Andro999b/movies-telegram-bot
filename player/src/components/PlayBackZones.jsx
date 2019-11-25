@@ -8,7 +8,6 @@ import {
 } from '@material-ui/icons'
 
 import { observer } from 'mobx-react'
-import { isTouchDevice } from '../utils'
 
 @observer
 class PlayBackZones extends Component {
