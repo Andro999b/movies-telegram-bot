@@ -78,11 +78,8 @@ export class LocalDevice extends Device {
         if (currentTime != undefined) {
             this.currentTime = currentTime
             this.seekTo = currentTime
-            this.seekTime = null
-        } else {
-            const mark = parseFloat(localStore.get(`${this.getPlaylistPrefix()}:ts`))
-            this.currentTime = !isNaN(mark) ? mark : 0
         }
+        this.seekTime = null
     }
 
     @action.bound seek(seekTo) {
@@ -92,6 +89,7 @@ export class LocalDevice extends Device {
 
     @action.bound resume() {
         this.isPlaying = true
+        this.seekTime = null
     }
 
     @action.bound pause() {
@@ -189,7 +187,10 @@ class PlayerStore {
             this.device.selectFile(fileIndex)
         }
 
-        this.device.play()
+        const mark = parseFloat(localStore.get(`${this.getPlaylistPrefix()}:ts`))
+        const currentTime = !isNaN(mark) ? mark : 0 
+
+        this.device.play(currentTime)
     }
 
     @action.bound prevFile() {

@@ -1,0 +1,8 @@
+{
+    "start": "Just type Movie, TV Show or Cartoon name and i will try to find something for you",
+    "providers": "Avalaible search providers",
+    "provider_answer": "${provider} will be used for next search",
+    "provider_default": "Default providers will be used for next search",
+    "results": "📽 Results for: \"${q}\"",
+    "no_results": "No results for: \"${q}\""
+}

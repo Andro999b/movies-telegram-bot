@@ -15,7 +15,7 @@ import { observer, inject } from 'mobx-react'
 
 import { isTouchDevice } from '../utils'
 
-const IDLE_TIMEOUT = 3000
+const IDLE_TIMEOUT = 5000
 
 @inject('playerStore')
 @observer
@@ -109,10 +109,10 @@ class LocalPlayer extends Component {
     }
 
     setIdleTimeout() {
-        this.idleTimeout = setTimeout(
-            () => this.setState({ idle: true }),
-            IDLE_TIMEOUT
-        )
+        // this.idleTimeout = setTimeout(
+        //     () => this.setState({ idle: true }),
+        //     IDLE_TIMEOUT
+        // )
     }
 
     componentWillUnmount() {
