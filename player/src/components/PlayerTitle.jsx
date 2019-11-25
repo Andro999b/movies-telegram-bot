@@ -9,7 +9,7 @@ class PlayerTitle extends Component {
 
         return (
             <div className="player__title">
-                <Typography variant="h6" style={{ wordBreak: 'break-all', marginLeft: '10px' }}>
+                <Typography variant="h6" style={{ wordBreak: 'break-all' }}>
                     {title}
                 </Typography>
             </div>

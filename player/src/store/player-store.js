@@ -211,13 +211,12 @@ class PlayerStore {
 
     getPlayerTitle() {
         const {
-            playlist: { name, files },
+            playlist: { title, files },
             currentFileIndex
         } = this.device
 
-        if (name && files) {
-            return name +
-                (files.length > 1 ? ` - ${currentFileIndex + 1} / ${files.length}` : '')
+        if (title && files) {
+            return title + (files.length > 1 ? ` - ${currentFileIndex + 1} / ${files.length}` : '')
         }
     }
 }
