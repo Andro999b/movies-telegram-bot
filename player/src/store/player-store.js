@@ -2,6 +2,7 @@ import { observable, action } from 'mobx'
 import localStore from 'store'
 
 const END_FILE_TIME_OFFSET = 60
+const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${playlist.id}`
 
 export class Device {
     @observable playlist = { name: '', files: [] }
@@ -62,8 +63,6 @@ export class LocalDevice extends Device {
         this.shuffle = localStore.get('shuffle') || false
     }
 
-    getPlaylistPrefix = () => `playlist:${this.playlist.provider}:${this.playlist.id}`
-
     @action.bound setSource(source) {
         this.source = source
         this.currentTime = source.currentTime || 0
@@ -105,14 +104,14 @@ export class LocalDevice extends Device {
             if (this.duration) {
                 const timeLimit = Math.max(0, this.duration - END_FILE_TIME_OFFSET)
                 const mark = Math.min(timeLimit, currentTime)
-                localStore.set(`${this.getPlaylistPrefix()}:ts`, mark)
+                localStore.set(`${getPlaylistPrefix(this.playlist)}:ts`, mark)
             }
         }
     }
 
     @action.bound setPlaylist(playlist) {
         this.playlist = playlist
-        this.selectFile(localStore.get(`${this.getPlaylistPrefix()}:current`) || 0)
+        this.selectFile(localStore.get(`${getPlaylistPrefix(this.playlist)}:current`) || 0)
         this.play()
         this.isPlaying = false
     }
@@ -123,10 +122,11 @@ export class LocalDevice extends Device {
         if (fileIndex < 0 || fileIndex >= files.length)
             return
 
-        const storedIndex = localStore.get(`${this.getPlaylistPrefix()}:current`) || 0
+        const playlistPrefix = getPlaylistPrefix(this.playlist)
+        const storedIndex = localStore.get(`${playlistPrefix}:current`) || 0
         if(storedIndex != fileIndex) {
-            localStore.set(`${this.getPlaylistPrefix()}:current`, fileIndex)
-            localStore.set(`${this.getPlaylistPrefix()}:ts`, 0)
+            localStore.set(`${playlistPrefix}:current`, fileIndex)
+            localStore.set(`${playlistPrefix}:ts`, 0)
         }
 
         this.currentFileIndex = fileIndex
@@ -173,7 +173,8 @@ class PlayerStore {
     }
 
     @action.bound switchFile(fileIndex) {
-        const  {currentFileIndex, shuffle, playlist: { files }} = this.device
+        const { currentFileIndex, shuffle, playlist } = this.device
+        const { files } = playlist
 
         if(files.length > 1 && shuffle) {
             let next
@@ -187,7 +188,7 @@ class PlayerStore {
             this.device.selectFile(fileIndex)
         }
 
-        const mark = parseFloat(localStore.get(`${this.getPlaylistPrefix()}:ts`))
+        const mark = parseFloat(localStore.get(`${getPlaylistPrefix(playlist)}:ts`))
         const currentTime = !isNaN(mark) ? mark : 0 
 
         this.device.play(currentTime)

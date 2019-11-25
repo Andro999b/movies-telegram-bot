@@ -34,6 +34,13 @@ module.exports = {
 
         return results.reduce((acc, result) => acc.concat(result), [])
     },
+    async searchOne(provider, query, page = 0, pageCount = 1) {
+        if(!query) {
+            return []
+        }
+
+        return await provider.search(query, page, pageCount)
+    },
     async getInfo(providerName, resultsId) {
         const provider = await this.getProvider(providerName)
         return await provider.getInfo(resultsId)

@@ -117,7 +117,7 @@ class LocalPlayer extends Component {
         const { idleTimeout } = this
         clearTimeout(idleTimeout);
 
-        ['touchstart', 'touchmove', 'mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
+        ['touchmove', 'mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
             (event) => window.removeEventListener(event, this.handleActivity)
         )
 
@@ -127,7 +127,7 @@ class LocalPlayer extends Component {
     componentDidMount() {
         this.setIdleTimeout()
         if (isTouchDevice()) {
-            ['touchstart', 'touchmove', 'scroll'].forEach(
+            ['touchmove', 'scroll'].forEach(
                 (event) => window.addEventListener(event, this.handleActivity)
             )
         } else {
