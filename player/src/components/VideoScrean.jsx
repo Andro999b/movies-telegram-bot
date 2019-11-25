@@ -5,32 +5,6 @@ import Hls from 'hls.js'
 import BaseScrean from './BaseScrean'
 import { createExtractorUrlBuilder } from '../utils'
 
-class HLSLoader extends Hls.DefaultConfig.loader {
-    constructor(config) {
-        super(config)
-
-        const load = this.load.bind(this)
-
-        let extractorUrlBuilder = null
-        if (config.extractor) {
-            extractorUrlBuilder = createExtractorUrlBuilder(config.extractor)
-        }
-
-        this.load = function (context, config, callbacks) {
-            if (extractorUrlBuilder) {
-                if (context.url.startsWith(window.location.origin)) { // replaces relative urls
-                    const baseUrl = decodeURIComponent(context.frag.baseurl.split('&url=')[1])
-                    context.url = new URL(context.frag.relurl, baseUrl).toString()
-                }
-
-                context.url = extractorUrlBuilder(context.url)
-            }
-
-            load(context, config, callbacks)
-        }
-    }
-}
-
 @observer
 class VideoScrean extends BaseScrean {
     constructor(props, context) {
@@ -165,15 +139,13 @@ class VideoScrean extends BaseScrean {
         this.hlsMode = true
 
         const { props: { device } } = this
-        const { source } = device
+        const { source: { manifestUrl } } = device
 
         const hls = new Hls({
             startPosition: device.currentTime,
             xhrSetup: (xhr) => {
                 xhr.timeout = 0
-            },
-            extractor: source.extractor,
-            loader: HLSLoader
+            }
         })
 
         hls.attachMedia(this.video)
@@ -207,7 +179,7 @@ class VideoScrean extends BaseScrean {
             }
         })
 
-        hls.loadSource(source.manifestUrl)
+        hls.loadSource(manifestUrl)
 
         this.hls = hls
     }

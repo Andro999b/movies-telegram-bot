@@ -1,10 +1,9 @@
 const superagent = require('superagent')
 const makeResponse = require('../utils/makeResponse')
 
-module.exports = (regExps) => async (params, res) => {
+module.exports = (regExps) => async (params) => {
     const { url } = params
-    const siteRes = await superagent.get(url)
-        .timeout(5000)
+    const siteRes = await superagent.get(url).timeout(5000)
 
     for(let extractExpr of regExps) {
         const matches = siteRes.text.match(extractExpr)

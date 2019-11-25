@@ -5,5 +5,5 @@ module.exports = (body,  status = 200, headers) => ({
         'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
         'Content-Type': 'application/json'
     }, headers),
-    body: JSON.stringify(body),
-});
+    body: JSON.stringify(body)
+})

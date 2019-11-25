@@ -1,7 +1,7 @@
 const providers = [
     new (require('./SeasonvarProvider'))(),
     new (require('./KinogoProvider'))(),
-    new (require('./KinokradProvider'))(),
+    new (require('./AnimeVostProvider'))()
 ]
 
 module.exports = {

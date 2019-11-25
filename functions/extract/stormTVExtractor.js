@@ -2,7 +2,7 @@ const superagent = require('superagent')
 const getBestPlayerJSQuality= require('../utils/getBestPlayerJSQuality')
 const makeResponse = require('../utils/makeResponse')
 
-module.exports = async (params, res) => {
+module.exports = async (params) => {
     const { url } = params
 
     const siteRes = await superagent.get(url).timeout(5000)
