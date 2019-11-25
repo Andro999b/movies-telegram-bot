@@ -109,7 +109,6 @@ class LocalPlayer extends Component {
     }
 
     setIdleTimeout() {
-        console.log('setIdleTimeout')
         this.idleTimeout = setTimeout(
             () => this.setState({ idle: true }),
             IDLE_TIMEOUT
