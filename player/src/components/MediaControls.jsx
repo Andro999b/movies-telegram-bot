@@ -57,7 +57,7 @@ class MediaControls extends Component {
                     <div className="player-controls__panel">
                         <div className="player-controls__panel-section">
                             {currentFileIndex != 0 &&
-                                <IconButton onClick={onPrev}>
+                                <IconButton onClick={onPrev} disabled={shuffle}>
                                     <PreviousIcon />
                                 </IconButton>
                             }

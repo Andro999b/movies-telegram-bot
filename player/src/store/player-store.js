@@ -174,6 +174,29 @@ class PlayerStore {
     }
 
     @action.bound switchFile(fileIndex) {
+        this.device.selectFile(fileIndex)
+        this.device.play()
+    }
+
+    @action.bound prevFile() {
+        this.switchFile(this.device.currentFileIndex - 1)
+    }
+
+    @action.bound nextFile() {
+        this.switchFileOrShuffle(this.device.currentFileIndex + 1)
+    }
+
+    @action.bound endFile() {
+        const  {currentFileIndex, playlist: { files }} = this.device
+
+        if(currentFileIndex == files.length - 1) {
+            this.device.pause()
+        } else {
+            this.switchFileOrShuffle(this.device.currentFileIndex + 1)
+        }
+    }
+
+    @action.bound switchFileOrShuffle(fileIndex) {
         const { currentFileIndex, shuffle, playlist } = this.device
         const { files } = playlist
 
@@ -190,24 +213,6 @@ class PlayerStore {
         }
 
         this.device.play()
-    }
-
-    @action.bound prevFile() {
-        this.switchFile(this.device.currentFileIndex - 1)
-    }
-
-    @action.bound nextFile() {
-        this.switchFile(this.device.currentFileIndex + 1)
-    }
-
-    @action.bound endFile() {
-        const  {currentFileIndex, playlist: { files }} = this.device
-
-        if(currentFileIndex == files.length - 1) {
-            this.device.pause()
-        } else {
-            this.switchFile(this.device.currentFileIndex + 1)
-        }
     }
 
     getPlayerTitle() {
