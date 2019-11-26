@@ -74,7 +74,7 @@ export class LocalDevice extends Device {
 
     @action.bound play(currentTime) {
         this.isPlaying = true
-        if (currentTime != undefined) {
+        if (!isNaN(currentTime)) {
             this.currentTime = currentTime
             this.seekTo = currentTime
         }
@@ -109,10 +109,10 @@ export class LocalDevice extends Device {
         }
     }
 
-    @action.bound setPlaylist(playlist) {
+    @action.bound setPlaylist(playlist, fileIndex, startTime) {
         this.playlist = playlist
-        this.selectFile(localStore.get(`${getPlaylistPrefix(this.playlist)}:current`) || 0)
-        this.play()
+        this.selectFile(fileIndex || 0)
+        this.play(startTime)
         this.isPlaying = false
     }
 
@@ -123,11 +123,8 @@ export class LocalDevice extends Device {
             return
 
         const playlistPrefix = getPlaylistPrefix(this.playlist)
-        const storedIndex = localStore.get(`${playlistPrefix}:current`) || 0
-        if(storedIndex != fileIndex) {
-            localStore.set(`${playlistPrefix}:current`, fileIndex)
-            localStore.set(`${playlistPrefix}:ts`, 0)
-        }
+
+        localStore.set(`${playlistPrefix}:current`, fileIndex)
 
         this.currentFileIndex = fileIndex
         this.setSource(files[this.currentFileIndex])
@@ -169,7 +166,11 @@ class PlayerStore {
 
     @action openPlaylist(playlist) {
         this.device = new LocalDevice()
-        this.device.setPlaylist(playlist)
+
+        const fileIndex = localStore.get(`${getPlaylistPrefix(playlist)}:current`)
+        const startTime = parseFloat(localStore.get(`${getPlaylistPrefix(playlist)}:ts`))
+        
+        this.device.setPlaylist(playlist, fileIndex, startTime)
     }
 
     @action.bound switchFile(fileIndex) {
@@ -188,10 +189,7 @@ class PlayerStore {
             this.device.selectFile(fileIndex)
         }
 
-        const mark = parseFloat(localStore.get(`${getPlaylistPrefix(playlist)}:ts`))
-        const currentTime = !isNaN(mark) ? mark : 0 
-
-        this.device.play(currentTime)
+        this.device.play()
     }
 
     @action.bound prevFile() {
@@ -219,7 +217,8 @@ class PlayerStore {
         } = this.device
 
         if (title && files) {
-            return title + (files.length > 1 ? ` - ${currentFileIndex + 1} / ${files.length}` : '')
+            const file = files[currentFileIndex]
+            return title + ' - ' + file.name
         }
     }
 }

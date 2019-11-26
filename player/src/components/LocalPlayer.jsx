@@ -83,16 +83,18 @@ class LocalPlayer extends Component {
 
         const step = e.ctrlKey ? 10 : (e.shiftKey ? 60 : 30)
 
-        if (e.which == 32) { //spacebar
+        if (e.code == 'Space') { //spacebar
             if (device.isPlaying) {
                 device.pause()
             } else {
                 device.play()
             }
-        } else if (e.which == 37) {
+        } else if (e.code == 'ArrowLeft') {
             device.skip(-step)
-        } else if (e.which == 39) {
+        } else if (e.code == 'ArrowRight') {
             device.skip(step)
+        } else if (e.code == 'KeyF') {
+            this.handleToggleFullscreen()
         }
     }
 
@@ -117,7 +119,7 @@ class LocalPlayer extends Component {
         const { idleTimeout } = this
         clearTimeout(idleTimeout);
 
-        ['touchmove', 'mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
+        ['pointerdown', 'pointermove', 'mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
             (event) => window.removeEventListener(event, this.handleActivity)
         )
 
@@ -127,7 +129,7 @@ class LocalPlayer extends Component {
     componentDidMount() {
         this.setIdleTimeout()
         if (isTouchDevice()) {
-            ['touchmove', 'scroll'].forEach(
+            ['pointerdown', 'pointermove', 'scroll'].forEach(
                 (event) => window.addEventListener(event, this.handleActivity)
             )
         } else {
