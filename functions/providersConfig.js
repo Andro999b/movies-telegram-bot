@@ -1,6 +1,6 @@
 module.exports = {
     'timeout': 5,
-    'pageSize': 5,
+    'pageSize': 15,
     'anidub': {
         'baseUrl': 'https://online.anidub.com',
         'searchUrl': 'https://online.anidub.com/index.php?do=search'

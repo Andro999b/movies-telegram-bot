@@ -3,7 +3,7 @@ const providers = [
     new (require('./KinogoProvider'))(),
     new (require('./AnimeVostProvider'))(),
     new (require('./BaskinoProvider'))()
-    
+
 ]
 
 module.exports = {
@@ -18,15 +18,15 @@ module.exports = {
         return Promise.reject(`No provider found for ${name}`)
     },
     async search(providers, query, page = 0, pageCount = 1) {
-        if(!query || !providers || !providers.length) {
+        if (!query || !providers || !providers.length) {
             return []
         }
 
         const results = await Promise.all(providers.map(async (providerName) => {
-            try{
+            try {
                 const provider = await this.getProvider(providerName)
                 return await provider.search(query, page, pageCount)
-            } catch(e) {
+            } catch (e) {
                 console.error(`Provider ${providerName} failed.`, e.message, e.stack)
                 return []
             }
@@ -34,12 +34,19 @@ module.exports = {
 
         return results.reduce((acc, result) => acc.concat(result), [])
     },
-    async searchOne(provider, query, page = 0, pageCount = 1) {
-        if(!query) {
+    async searchOne(providerName, query, page = 0, pageCount = 1) {
+        if (!query) {
             return []
         }
 
-        return await provider.search(query, page, pageCount)
+        try {
+            const provider = await this.getProvider(providerName)
+            return await provider.search(query, page, pageCount)
+        } catch (e) {
+            console.error(`Provider ${providerName} failed.`, e.message, e.stack)
+        }
+
+        return []
     },
     async getInfo(providerName, resultsId) {
         const provider = await this.getProvider(providerName)

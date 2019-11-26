@@ -1,8 +1,10 @@
 {
-    "start": "Just type Movie, TV Show or Cartoon name and i will try to find something for you",
-    "providers": "Avalaible search providers",
-    "provider_answer": "${provider} will be used for next search",
-    "provider_default": "Default providers will be used for next search",
-    "results": "📽 Results for: \"${q}\"",
-    "no_results": "No results for: \"${q}\""
+    "start": "Просто напишите мне название фильма, сериала или аниме и попробую что-нибудь найти",
+    "settings": "База ${provider} используется для поиска",
+    "settings_default": "Список баз достпуных для поиска",
+    "provider_answer": "$База {provider} будет использован для поиска",
+    "provider_default": "Выбраны настрокий поиска по умолчанию",
+    "results": "📽 Результаты для: \"${q}\"",
+    "more_results": "Больше результатов",
+    "no_results": "Нет результатов для: \"${q}\""
 }

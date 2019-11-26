@@ -18,6 +18,7 @@
         "semi": ["warn", "never"],
         "no-console": ["warn", { "allow": ["warn", "error"] }],
         "brace-style": ["warn"],
-        "arrow-parens": ["warn"]
+        "arrow-parens": ["warn"],
+        "require-atomic-updates": "off"
     }
 }
