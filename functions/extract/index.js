@@ -2,7 +2,7 @@
 const makeResponse = require('../utils/makeResponse')
 
 const extractors = {
-    'stormTv': require('./stormTVExtractor')
+    'animevost': require('./animevostExtractor')
 }
 
 module.exports = async (parmas) => {
