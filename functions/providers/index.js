@@ -3,7 +3,6 @@ const providers = [
     new (require('./KinogoProvider'))(),
     new (require('./AnimeVostProvider'))(),
     new (require('./BaskinoProvider'))()
-
 ]
 
 module.exports = {

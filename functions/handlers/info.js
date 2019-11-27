@@ -3,7 +3,7 @@ const providersService = require('../providers')
 const makeResponse = require('../utils/makeResponse')
 
 const documentClient = new AWS.DynamoDB.DocumentClient()
-const TTL = 12 * 3600
+const TTL = 2 * 3600
 
 module.exports = async (event) => {
     let result = {}

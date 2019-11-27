@@ -4,7 +4,7 @@ module.exports = (input) => {
         .split(' or ')
         .reduce((acc, it) => acc.concat(it.split(',')), [])
         .map((link) => {
-            const res = link.match(/(\[\d+p\])?(?<url>.*\/(?<quality>\d+).mp4)/)
+            const res = link.match(/(\[.+\])(?<url>.*[^\d](?<quality>\d+).mp4)/)
             return res && {
                 url: res.groups.url,
                 quality: parseInt(res.groups.quality)
