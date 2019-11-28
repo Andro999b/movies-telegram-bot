@@ -42,7 +42,7 @@ class EXFSProvider extends DataLifeProvider {
 
                         return Object.keys(translations)
                             .map((translation) => {
-                                const translationName = translations[translation]
+                                const translationName = translation === '0' ? '' : `[${translations[translation]}] `
                                 const playlist = playlists[translation]
 
                                 if (typeof playlist === 'string') {
@@ -57,8 +57,8 @@ class EXFSProvider extends DataLifeProvider {
                                     return convertPlayerJSPlaylist(playlist)
                                         .map((file) => ({
                                             ...file,
-                                            name: `${translationName} ${file.name}`,
-                                            path: `${translationName} ${file.path}`
+                                            name: `${translationName}${file.name}`,
+                                            path: `${translationName}${file.path}`
                                         }))
                                 }
                             })
