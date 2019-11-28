@@ -2,6 +2,7 @@ const DirectMediaProvider = require('./Provider')
 const urlencode = require('urlencode')
 const $ = require('cheerio')
 const superagent = require('superagent')
+const convertPlayerJSPlaylist= require('../utils/convertPlayerJSPlaylist')
 
 const ENCRYPT_KEY = 'ololo'
 
@@ -51,11 +52,15 @@ class SeasonvarProvider extends DirectMediaProvider {
                         const files = (await Promise.all(seasons.map(async (seasonId) =>
                             await this._extractSeasonFiles(serialId, seasonId, secureMark)
                         )))
-                            .map((files, index) =>
-                                files.map((file) => (({
+                            .map((files, index) => {
+                                if(files.length && files[0].path)
+                                    return files
+
+                                return files.map((file) => (({
                                     ...file,
                                     path: `Season ${index + 1}`
-                                }))))
+                                })))
+                            })
                             .reduce((acc, files) => acc.concat(files), [])
                             .map((file, index) => ({
                                 ...file,
@@ -90,10 +95,7 @@ class SeasonvarProvider extends DirectMediaProvider {
 
         const playlist = JSON.parse(plistRes.text)
 
-        return playlist.map((item, index) => ({
-            name: `Episode ${index + 1}`,
-            url: this._decryptFilePath(item.file)
-        }))
+        return convertPlayerJSPlaylist(playlist, this._decryptFilePath)
     }
 
     _decryptFilePath(x) {

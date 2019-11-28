@@ -1,25 +1,36 @@
 const getBestPlayerJSQuality = require('./getBestPlayerJSQuality')
 
-module.exports = function(playlist) {
+module.exports = function(playlist, linksExtractor = getBestPlayerJSQuality) {
     return playlist.map((it, season) => {
         if (it.file) {
-            const urls = getBestPlayerJSQuality(it.file)
-            return [{
+            const urls = linksExtractor(it.file)
+            const item = {
                 name: `Episode ${season + 1}`,
-                url: urls.pop(),
-                alternativeUrls: urls
-            }]
+                url: urls.pop()
+            }
+
+            if(urls.length > 0) {
+                item.alternativeUrls = urls
+            }
+
+            return [item]
         } else {
-            const { title, folder } = it
-            const path = title ? title.trim() : `Season ${season + 1}`
+            const { title, comment, folder } = it
+            const path = title || comment || `Season ${season + 1}`
             return folder.map(({ file }, episode) => {
-                const urls = getBestPlayerJSQuality(file)
-                return {
+                const urls = linksExtractor(file)
+
+                const item = {
                     path,
                     name: `${path} / Episode ${episode + 1}`,
-                    url: urls.pop(),
-                    alternativeUrls: urls
+                    url: urls.pop()
                 }
+    
+                if(urls.length > 0) {
+                    item.alternativeUrls = urls
+                }
+
+                return item
             })
         }
     })
