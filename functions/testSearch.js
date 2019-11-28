@@ -1,4 +1,4 @@
 const providers = require('./providers')
 
-providers.searchOne('exfs', 'Рик и морти')
+providers.searchOne('animeVost', 'Overlord')
     .then(console.log) // eslint-disable-line
