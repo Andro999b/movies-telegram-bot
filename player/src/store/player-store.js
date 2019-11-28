@@ -171,11 +171,13 @@ class PlayerStore {
         const startTime = parseFloat(localStore.get(`${getPlaylistPrefix(playlist)}:ts`))
         
         this.device.setPlaylist(playlist, fileIndex, startTime)
+        document.title = this.getPlayerTitle()
     }
 
     @action.bound switchFile(fileIndex) {
         this.device.selectFile(fileIndex)
         this.device.play()
+        document.title = this.getPlayerTitle()
     }
 
     @action.bound prevFile() {
@@ -213,6 +215,7 @@ class PlayerStore {
         }
 
         this.device.play()
+        document.title = this.getPlayerTitle()
     }
 
     getPlayerTitle() {

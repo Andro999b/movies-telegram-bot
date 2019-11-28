@@ -16,5 +16,9 @@ module.exports = {
     'seasonvar': {
         'baseUrl': 'http://seasonvar.ru',
         'searchUrl': 'http://seasonvar.ru/search'
+    },
+    'exfs': {
+        'baseUrl': 'http://ex-fs.net',
+        'searchUrl': 'http://ex-fs.net'
     }
 }

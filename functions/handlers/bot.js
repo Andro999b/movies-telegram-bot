@@ -8,7 +8,7 @@ const Markup = require('telegraf/markup')
 const session = require('telegraf/session')
 const uuid = require('uuid')
 
-const DEFAULT_PROVIDERS = ['seasonvar', 'kinogo', 'animeVost']
+const DEFAULT_PROVIDERS = ['exfs', 'seasonvar', 'animeVost']
 const PAGE_SIZE = 3
 
 const i18n = new TelegrafI18n({

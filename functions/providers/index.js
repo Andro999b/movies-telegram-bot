@@ -2,7 +2,8 @@ const providers = [
     new (require('./SeasonvarProvider'))(),
     new (require('./KinogoProvider'))(),
     new (require('./AnimeVostProvider'))(),
-    new (require('./BaskinoProvider'))()
+    new (require('./BaskinoProvider'))(),
+    new (require('./EXFSProvider'))()
 ]
 
 module.exports = {
@@ -26,7 +27,7 @@ module.exports = {
                 const provider = await this.getProvider(providerName)
                 return await provider.search(query, page, pageCount)
             } catch (e) {
-                console.error(`Provider ${providerName} failed.`, e.message, e.stack)
+                console.error(`Provider ${providerName} failed.`, e)
                 return []
             }
         }))
@@ -42,7 +43,7 @@ module.exports = {
             const provider = await this.getProvider(providerName)
             return await provider.search(query, page, pageCount)
         } catch (e) {
-            console.error(`Provider ${providerName} failed.`, e.message, e.stack)
+            console.error(`Provider ${providerName} failed.`, e)
         }
 
         return []
