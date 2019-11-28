@@ -19,7 +19,7 @@ module.exports = async (event) => {
         } else {
             result = await providersService.getInfo(provider, resultId)
 
-            const ttl = new Date().getTime() + TTL
+            const ttl = Math.floor(new Date().getTime() / 1000) + TTL
             const putRequest = { TableName: process.env.TABLE_NAME, Item: { id, result, ttl } }
             await documentClient.put(putRequest).promise()
         }
