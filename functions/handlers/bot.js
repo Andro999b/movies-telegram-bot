@@ -107,7 +107,7 @@ bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) =>
 function getResultsKeyboad(searchId, results, hasMore, i18n) {
     let buttons = results.map((result) =>
         Markup.urlButton(
-            `[${result.provider}] result.name`,
+            `[${result.provider}] ${result.name}`,
             `${process.env.PLAYER_URL}?provider=${result.provider}&id=${result.id}`
         )
     )
