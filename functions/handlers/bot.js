@@ -23,19 +23,22 @@ bot.use(i18n.middleware())
 
 bot.command('start', ({ i18n, reply }) => reply(i18n.t('start')))
 
-bot.command('settings', ({ i18n, reply, session: { provider } }) => reply(
-    // render current settings
-    provider ? i18n.t('settings', { provider }) : i18n.t('settings_default'),
-    // render keyboard
-    Markup.inlineKeyboard(
-        providersService.getProviders().map((provider) =>
-            Markup.callbackButton(`🔍 ${provider}`, provider)
-        ).concat(
-            Markup.callbackButton('🔄 default', 'default')
-        ),
-        { columns: 3 }
-    ).oneTime().extra()
-))
+bot.command('settings', async ({ i18n, reply, deleteMessage, session: { provider } }) => {
+    await deleteMessage()
+    await reply(
+        // render current settings
+        provider ? i18n.t('settings', { provider }) : i18n.t('settings_default'),
+        // render keyboard
+        Markup.inlineKeyboard(
+            providersService.getProviders().map((provider) =>
+                Markup.callbackButton(`🔍 ${provider}`, provider)
+            ).concat(
+                Markup.callbackButton('🔄 default', 'default')
+            ),
+            { columns: 3 }
+        ).oneTime().extra()
+    )
+})
 
 providersService.getProviders().forEach((provider) =>
     bot.action(provider, async ({ i18n, session, reply, answerCbQuery, deleteMessage }) => {
@@ -70,7 +73,7 @@ bot.action(/more_results.+/, async ({
             const { results, hasMore } = getResults(providersResults, session.page)
 
             await editMessageReplyMarkup(
-                getResultsKeyboad(searchId,results, hasMore, i18n)
+                getResultsKeyboad(searchId, results, hasMore, i18n)
             )
         }
     }
