@@ -3,7 +3,7 @@ const getBestPlayerJSQuality = require('./getBestPlayerJSQuality')
 module.exports = function(playlist, linksExtractor = getBestPlayerJSQuality) {
     return playlist.map((it, season) => {
         if (it.file) {
-            const urls = linksExtractor(it.file)
+            const urls = [].concat(linksExtractor(it.file))
             const item = {
                 name: `Episode ${season + 1}`,
                 url: urls.pop()
@@ -18,7 +18,7 @@ module.exports = function(playlist, linksExtractor = getBestPlayerJSQuality) {
             const { title, comment, folder } = it
             const path = title || comment || `Season ${season + 1}`
             return folder.map(({ file }, episode) => {
-                const urls = linksExtractor(file)
+                const urls = [].concat(linksExtractor(file))
 
                 const item = {
                     path,
