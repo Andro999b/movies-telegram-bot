@@ -40,43 +40,73 @@ class EXFSProvider extends DataLifeProvider {
                         const files = $('#files').attr('value')
                         const playlists = JSON.parse(files)
 
-                        return Object.keys(translations)
-                            .map((translation) => {
-                                const translationName = translation === '0' ? '' : `[${translations[translation]}] `
-                                const playlist = playlists[translation]
+                        if(Object.keys(translations).length == 0) {
+                            const translationId = $('#translation_id').attr('value')
+                            return this._extractNoTranslations(playlists[translationId])
+                        }
 
-                                if (typeof playlist === 'string') {
-                                    const urls = getBestPlayerJSQuality(playlist)
-
-                                    return [{
-                                        name: translationName,
-                                        url: urls.pop(),
-                                        alternativeUrls: urls
-                                    }]
-                                } else {
-                                    return convertPlayerJSPlaylist(playlist)
-                                        .map((file) => ({
-                                            ...file,
-                                            name: `${translationName}${file.name}`,
-                                            path: `${translationName}${file.path}`
-                                        }))
-                                }
-                            })
-                            .reduce((acc, item) => acc.concat(item), [])
-                            .map((file, index) => ({
-                                ...file,
-                                id: index
-                            }))
+                        return this._extractTranslations(translations, playlists)
                     }
                 }
             }
         })
     }
 
+    _extractNoTranslations(playlist) {
+        if (typeof playlist === 'string') {
+            const urls = getBestPlayerJSQuality(playlist)
+
+            return [{
+                url: urls.pop(),
+                alternativeUrls: urls
+            }]
+        } else {
+            return convertPlayerJSPlaylist(playlist)
+        }
+    }
+
+    _extractTranslations(translations, playlists) {
+        return Object.keys(translations)
+            .map((translation) => {
+                const translationName = translation === '0' ? '' : `[${translations[translation]}] `
+                const playlist = playlists[translation]
+
+                if (typeof playlist === 'string') {
+                    const urls = getBestPlayerJSQuality(playlist)
+
+                    return [{
+                        name: translationName,
+                        url: urls.pop(),
+                        alternativeUrls: urls
+                    }]
+                } else {
+                    return convertPlayerJSPlaylist(playlist)
+                        .map((file) => ({
+                            ...file,
+                            name: `${translationName}${file.name}`,
+                            path: `${translationName}${file.path}`
+                        }))
+                }
+            })
+            .reduce((acc, item) => acc.concat(item), [])
+            .map((file, index) => ({
+                ...file,
+                id: index
+            }))
+    }
+
     _postProcessResult(results) {
         return super._postProcessResult(
             results.filter(({ id }) => id.indexOf('actors') === -1)
         )
+    }
+
+    async _postProcessResultDetails(details) {
+        if(details.files.length == 1) {
+            details.files[0].name = details.title
+        } 
+
+        return details
     }
 }
 
