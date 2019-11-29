@@ -1,12 +1,13 @@
 import React from 'react'
 import { render } from 'react-dom'
+import store from 'store'
 
 import App from './App'
 import playerStore from './store/player-store'
 
 const urlParams = new URLSearchParams(window.location.search)
-const provider = urlParams.get('provider')
-const id = urlParams.get('id')
+const provider = urlParams.get('provider') || store.get('lastProvider')
+const id = urlParams.get('id') || store.get('lastId')
 
 function renderError(e) {
     if (e) console.error(e)
@@ -14,6 +15,9 @@ function renderError(e) {
 }
 
 if (provider && id) {
+    store.set('lastProvider', provider)
+    store.set('lastId', id)
+
     fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}`)
         .then((response) => response.json())
         .catch((e) => renderError(e))

@@ -74,7 +74,7 @@ export class LocalDevice extends Device {
 
     @action.bound play(currentTime) {
         this.isPlaying = true
-        if (!isNaN(currentTime)) {
+        if (currentTime !== null && !isNaN(currentTime)) {
             this.currentTime = currentTime
             this.seekTo = currentTime
         }

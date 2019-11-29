@@ -37,7 +37,7 @@ class PlayBackZones extends Component {
         window.addEventListener('pointercancel', this.handleSeekEnd)
         window.addEventListener('pointerup', this.handleSeekEnd)
 
-        this.delayTimeout = setTimeout(() => this.startSeeking(seekMode), 100)
+        this.delayTimeout = setTimeout(() => this.startSeeking(seekMode), 200)
     }
 
     startSeeking = (seekMode) =>  {
@@ -47,11 +47,11 @@ class PlayBackZones extends Component {
         clearInterval(this.stepInterval)
 
         const { device } = this.props
-
-        device.seeking(device.currentTime)
-        device.pause()
-
         const { currentTime } = device
+
+
+        device.seeking(currentTime)
+        device.pause()
 
         this.setState({
             seekMode,
@@ -68,7 +68,7 @@ class PlayBackZones extends Component {
         }
     }
 
-    handleSeekEnd = () => {
+    handleSeekEnd = (e) => {
         if(this.lastTs) { // seeking started
             const { device } = this.props
 
@@ -78,9 +78,6 @@ class PlayBackZones extends Component {
         }
 
         this.setState({ seekMode: null })
-
-        this.targetTime = null
-        this.lastTs = null
 
         this.cleanUp()
     }
@@ -128,6 +125,8 @@ class PlayBackZones extends Component {
 
         this.stepInterval = null
         this.delayTimeout = null
+        this.targetTime = null
+        this.lastTs = null
     }
 
     render() {
