@@ -8,7 +8,7 @@ const Markup = require('telegraf/markup')
 const session = require('telegraf/session')
 const uuid = require('uuid')
 
-const DEFAULT_PROVIDERS = ['exfs', 'seasonvar', 'animeVost']
+const DEFAULT_PROVIDERS = ['exfs', 'seasonvar', 'animeVost', 'kinogo']
 const PAGE_SIZE = 3
 
 const i18n = new TelegrafI18n({
@@ -29,24 +29,28 @@ bot.command('settings', ({ i18n, reply, session: { provider } }) => reply(
     // render keyboard
     Markup.inlineKeyboard(
         providersService.getProviders().map((provider) =>
-            Markup.callbackButton(provider, provider)
+            Markup.callbackButton(`🔍 ${provider}`, provider)
         ).concat(
-            Markup.callbackButton('default', 'default')
+            Markup.callbackButton('🔄 default', 'default')
         ),
         { columns: 3 }
     ).oneTime().extra()
 ))
 
 providersService.getProviders().forEach((provider) =>
-    bot.action(provider, async ({ i18n, session, answerCbQuery }) => {
+    bot.action(provider, async ({ i18n, session, reply, answerCbQuery, deleteMessage }) => {
         session.provider = provider
-        await answerCbQuery(i18n.t('provider_answer', { provider }))
+        await deleteMessage()
+        await reply(i18n.t('provider_answer', { provider }))
+        await answerCbQuery()
     })
 )
 
-bot.action('default', async ({ i18n, session, answerCbQuery }) => {
+bot.action('default', async ({ i18n, session, reply, answerCbQuery, deleteMessage }) => {
     session.provider = null
-    await answerCbQuery(i18n.t('provider_default'))
+    await deleteMessage()
+    await reply(i18n.t('provider_default'))
+    await answerCbQuery()
 })
 
 
