@@ -226,7 +226,7 @@ class PlayerStore {
 
         if (title && files) {
             const file = files[currentFileIndex]
-            return title + ' - ' + file.name
+            return `${title}${files.length > 1 ?  ' - ' + file.name : ''}`
         }
     }
 }

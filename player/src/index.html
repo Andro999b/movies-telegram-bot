@@ -23,6 +23,17 @@
             transform: translate(-50%, -50%);
         }
     </style>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153629378-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-153629378-1');
+    </script>
+
 </head>
 
 <body>
@@ -32,14 +43,5 @@
     <script>
         window.API_BASE_URL = 'https://6gov3btrq2.execute-api.eu-central-1.amazonaws.com/dev/api'
     </script>
-    <!-- Google Analytics -->
-    <script>
-        window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) }; ga.l = +new Date;
-        ga('create', '216157302', 'auto');
-        ga('send', 'pageview');
-    </script>
-    <script async src='https://www.google-analytics.com/analytics.js'></script>
-    <!-- End Google Analytics -->
-</body>
 
 </html>
