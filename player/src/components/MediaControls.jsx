@@ -41,6 +41,7 @@ class MediaControls extends Component {
 
         const mobile = isTouchDevice()
         const hasAudioTracks = device.audioTracks.length > 1
+        const hasQualities = device.qualities.length > 1
 
         return (
             <Slide direction="up" in mountOnEnter unmountOnExit>
@@ -92,7 +93,7 @@ class MediaControls extends Component {
                             {hasAudioTracks && <AudioTrackSelector device={device} />}
                         </div>
                         <div className="player-controls__panel-section">
-                            <VideoQualitySelector device={device}/>
+                            {hasQualities && <VideoQualitySelector device={device}/>}
                             <IconButton onClick={() => onFullScreenToggle()}>
                                 {!fullScreen && <FullscreenIcon />}
                                 {fullScreen && <FullscreenExitIcon />}

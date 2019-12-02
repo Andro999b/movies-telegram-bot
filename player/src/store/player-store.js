@@ -39,8 +39,8 @@ export class LocalDevice {
         this.audioTrack = null
         this.audioTracks = []
 
-        if(source.url && !source.qualityUrls) {
-            const urls = [source.url].concat(source.alternativeUrls || [])
+        if(source.url && source.alternativeUrls && !source.qualityUrls) {
+            const urls = [source.url].concat(source.alternativeUrls)
 
             source.qualityUrls = urls
                 .map((link) => {
@@ -56,7 +56,8 @@ export class LocalDevice {
 
         if(source.qualityUrls) {
             this.qualities = Object.keys(source.qualityUrls)
-            this.quality = localStore.get('quality')
+            const storedQuality = localStore.get('quality')
+            this.quality = storedQuality && this.qualities[storedQuality] ? storedQuality : null
         } else {
             this.qualities = []
             this.quality = null
