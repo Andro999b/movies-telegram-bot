@@ -19,6 +19,7 @@ import SoundControl from './SoundControl'
 import { isTouchDevice } from '../utils'
 import { observer } from 'mobx-react'
 import AudioTrackSelector from './AudioTrackSelector'
+import VideoQualitySelector from './VideoQualitySelector'
 
 @observer
 class MediaControls extends Component {
@@ -32,8 +33,6 @@ class MediaControls extends Component {
             onNext,
         } = this.props
 
-        const showFullscrean = device.isLocal()
-
         const {
             currentFileIndex,
             playlist: { files },
@@ -42,6 +41,7 @@ class MediaControls extends Component {
 
         const mobile = isTouchDevice()
         const hasAudioTracks = device.audioTracks.length > 1
+        const hasQualities = device.qualities.length > 1
 
         return (
             <Slide direction="up" in mountOnEnter unmountOnExit>
@@ -93,12 +93,11 @@ class MediaControls extends Component {
                             {hasAudioTracks && <AudioTrackSelector device={device} />}
                         </div>
                         <div className="player-controls__panel-section">
-                            {showFullscrean &&
-                                <IconButton onClick={() => onFullScreenToggle()}>
-                                    {!fullScreen && <FullscreenIcon />}
-                                    {fullScreen && <FullscreenExitIcon />}
-                                </IconButton>
-                            }
+                            {hasQualities && <VideoQualitySelector device={device}/>}
+                            <IconButton onClick={() => onFullScreenToggle()}>
+                                {!fullScreen && <FullscreenIcon />}
+                                {fullScreen && <FullscreenExitIcon />}
+                            </IconButton>
                             <IconButton onClick={() => onPlaylistToggle()}>
                                 <ListIcon />
                             </IconButton>

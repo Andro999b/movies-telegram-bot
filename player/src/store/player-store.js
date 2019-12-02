@@ -4,7 +4,7 @@ import localStore from 'store'
 const END_FILE_TIME_OFFSET = 60
 const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${playlist.id}`
 
-export class Device {
+export class LocalDevice {
     @observable playlist = { name: '', files: [] }
     @observable currentFileIndex = 0
     @observable currentTime = 0
@@ -19,46 +19,14 @@ export class Device {
     @observable audioTrack = null
     @observable shuffle = false
     @observable seekTime = null
-    
-    isLocal() {
-        return true
-    }
-
-    /* eslint-disable no-unused-vars */
-    resume() { }
-    pause() { }
-    play(currentTime) { }
-    seek(currentTime) { }
-    connect() { }
-    disconnect() { }
-    setVolume(volume) { }
-    selectFile(fileIndex) { }
-    setPlaylist(playlist, fileIndex, marks) { }
-    setShuffle(shuffle) { }
-    setAudioTrack(id) { }
-    setAudioTracks(audioTracks) { }
-    /* eslint-enable */
-
-    @action.bound seeking(seekTime) {
-        this.seekTime = seekTime
-    }
-
-    skip(sec) {
-        if (this.duration) {
-            const seekTo = this.currentTime + sec
-            this.seek(Math.min(Math.max(seekTo, 0), this.duration))
-        }
-    }
-}
-
-export class LocalDevice extends Device {
     @observable url = null
     @observable seekTo = null
     @observable source = null
     @observable progress = null
+    @observable qualities = []
+    @observable quality = null
 
     constructor() {
-        super()
         this.volume = localStore.get('volume') || 1
         this.shuffle = localStore.get('shuffle') || false
     }
@@ -70,6 +38,30 @@ export class LocalDevice extends Device {
         this.buffered = 0
         this.audioTrack = null
         this.audioTracks = []
+
+        if(source.url && source.alternativeUrls && !source.qualityUrls) {
+            const urls = [source.url].concat(source.alternativeUrls)
+
+            source.qualityUrls = urls
+                .map((link) => {
+                    const res = link.match(/(?<url>.*[^\d](?<quality>\d+).mp4)/)
+                    return res && {
+                        url: res.groups.url,
+                        quality: res.groups.quality
+                    }
+                })
+                .filter((it) => it)
+                .reduce((acc, { url, quality }) => ({ ...acc, [quality]: url }), {})
+        }
+
+        if(source.qualityUrls) {
+            this.qualities = Object.keys(source.qualityUrls)
+            const storedQuality = localStore.get('quality')
+            this.quality = storedQuality && this.qualities[storedQuality] ? storedQuality : null
+        } else {
+            this.qualities = []
+            this.quality = null
+        }
     }
 
     @action.bound play(currentTime) {
@@ -84,6 +76,10 @@ export class LocalDevice extends Device {
     @action.bound seek(seekTo) {
         this.seekTo = seekTo
         this.seekTime = null
+    }
+
+    @action.bound seeking(seekTime) {
+        this.seekTime = seekTime
     }
 
     @action.bound resume() {
@@ -147,6 +143,11 @@ export class LocalDevice extends Device {
         this.audioTrack = id
     }
 
+    @action.bound setQuality(quality) {
+        this.quality = quality
+        localStore.set('quality', quality)
+    }
+
     @action.bound setAudioTracks(audioTracks) { 
         this.audioTracks = audioTracks 
     }
@@ -158,6 +159,13 @@ export class LocalDevice extends Device {
 
     @action.bound toggleMute() {
         this.isMuted = !this.isMuted
+    }
+
+    skip(sec) {
+        if (this.duration) {
+            const seekTo = this.currentTime + sec
+            this.seek(Math.min(Math.max(seekTo, 0), this.duration))
+        }
     }
 }
 
