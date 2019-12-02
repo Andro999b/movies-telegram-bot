@@ -18,6 +18,7 @@ const i18n = new TelegrafI18n({
 })
 
 const bot = new Telegraf(process.env.TOKEN)
+
 bot.use(session())
 bot.use(i18n.middleware())
 
@@ -109,6 +110,29 @@ bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) =>
         i18n.t('results', { q }),
         getResultsKeyboad(searchId, results, hasMore, i18n).extra()
     )
+})
+
+bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
+    const q = inlineQuery.query
+
+    const results = await providersService.search(['seasonvar', 'animeVost', 'kinogo'], q)
+
+    await answerInlineQuery(results.map(({ name, image, provider, id }) => ({
+        type: 'article',
+        id: uuid.v4(),
+        title: name,
+        description: provider,
+        thumb_url: image,
+        input_message_content: {
+            message_text: name
+        },
+        reply_markup: Markup.inlineKeyboard([
+            Markup.urlButton(
+                i18n.t('watch'), 
+                `${process.env.PLAYER_URL}?provider=${provider}&id=${id}`
+            )
+        ])
+    })))
 })
 
 function getResultsKeyboad(searchId, results, hasMore, i18n) {

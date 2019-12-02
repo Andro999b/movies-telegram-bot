@@ -8,7 +8,11 @@ class AnimeVostProvider extends DataLifeProvider {
             scope: '.shortstory',
             selectors: {
                 id: { selector: '.shortstoryHead a', transform: ($el) => urlencode($el.attr('href')) },
-                name: '.shortstoryHead a'
+                name: '.shortstoryHead a',
+                image: {
+                    selector: '.shortstoryContent div > a > img',
+                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                }
             },
             detailsScope: '#dle-content',
             detailsSelectors: {

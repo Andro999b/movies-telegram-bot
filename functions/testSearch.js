@@ -1,4 +1,4 @@
 const providers = require('./providers')
 
-providers.searchOne('animeVost', 'Overlord')
+providers.searchOne('seasonvar', 'Рик и морти')
     .then(console.log) // eslint-disable-line

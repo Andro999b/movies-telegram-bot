@@ -12,7 +12,11 @@ class SeasonvarProvider extends DirectMediaProvider {
             scope: '.pgs-search-wrap',
             selectors: {
                 id: { selector: '.pgs-search-info a:first-child', transform: ($el) => urlencode($el.attr('href')) },
-                name: '.pgs-search-info a:first-child'
+                name: '.pgs-search-info a:first-child',
+                image: {
+                    selector: '.pst img',
+                    transform: ($el) => $el.attr('src')
+                }
             },
             detailsScope: '.middle',
             detailsSelectors: {

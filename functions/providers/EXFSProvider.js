@@ -11,7 +11,11 @@ class EXFSProvider extends DataLifeProvider {
             scope: '.SeaRchresultPost',
             selectors: {
                 id: { selector: '.SeaRchresultPostTitle a', transform: ($el) => urlencode($el.attr('href')) },
-                name: '.SeaRchresultPostTitle'
+                name: '.SeaRchresultPostTitle',
+                image: {
+                    selector: '.SeaRchresultPostPoster img',
+                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                }
             },
             detailsScope: '#dle-content',
             detailsSelectors: {

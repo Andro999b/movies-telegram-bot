@@ -9,7 +9,8 @@ class BaskinoProvider extends DataLifeProvider {
             scope: '.shortpost',
             selectors: {
                 id: { selector: '.posttitle a', transform: ($el) => urlencode($el.attr('href')) },
-                name: '.posttitle a'
+                name: '.posttitle a',
+                image: { selector: '.postcover a img', transform: ($el) => $el.attr('src') }
             },
             detailsScope: '#dle-content',
             detailsSelectors: {

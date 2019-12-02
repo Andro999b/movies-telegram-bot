@@ -6,5 +6,6 @@
     "provider_default": "⚙️ Default providers will be used for next search",
     "results": "📽 Results for: \"${q}\"",
     "more_results": "⬇️ More results",
-    "no_results": "🤷‍♂️ No results for: \"${q}\""
+    "no_results": "🤷‍♂️ No results for: \"${q}\"",
+    "watch": "👉Watch"
 }

@@ -13,7 +13,11 @@ class KinogoProvider extends DataLifeProvider {
                     selector: '.zagolovki>a:nth-last-child(1)', 
                     transform: ($el) => urlencode($el.attr('href'))
                 },
-                name: '.zagolovki>a:nth-last-child(1)'
+                name: '.zagolovki>a:nth-last-child(1)',
+                image: {
+                    selector: '.shortimg>div>a>img',
+                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                }
             },
             detailsScope: '#dle-content',
             detailsSelectors: {
