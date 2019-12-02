@@ -1,10 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
 import {
     Button,
-    Menu,
-    MenuItem
+    MenuItem,
+    MenuList,
+    Popover,
+    Paper
 } from '@material-ui/core'
 
 @observer
@@ -16,7 +18,10 @@ class VideoQualitySelector extends Component {
     }
 
     handleClick =(event) => {
-        this.setState({ anchorEl: event.currentTarget })
+        const target = event.currentTarget
+        this.setState(({ anchorEl }) => ({
+            anchorEl: anchorEl ? null : target
+        }))
     }
 
     handleClose = () => {
@@ -33,24 +38,27 @@ class VideoQualitySelector extends Component {
         const { quality, qualities } = this.props.device
 
         return (
-            <span>
+            <Fragment>
                 <Button onClick={this.handleClick}>
                     {quality ? quality : 'Auto'}
                 </Button>
-                <Menu
-                    id="simple-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
+                <Popover 
+                    anchorEl={anchorEl} 
+                    open={Boolean(anchorEl)} 
                     onClose={this.handleClose}
+                    disablePortal style={{ zIndex: 9999 }}
                 >
-                    {qualities.map((id) => (
-                        <MenuItem key={id} selected={id == quality} onClick={() => this.selectQuality(id)}>
-                            {id}
-                        </MenuItem>
-                    ))}
-                </Menu>
-            </span>
+                    <Paper>
+                        <MenuList>
+                            {qualities.map((id) => (
+                                <MenuItem key={id} selected={id == quality} onClick={() => this.selectQuality(id)}>
+                                    {id}
+                                </MenuItem>
+                            ))}
+                        </MenuList>
+                    </Paper>
+                </Popover>
+            </Fragment>
         )
     }
 }

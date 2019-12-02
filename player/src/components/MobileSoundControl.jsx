@@ -66,10 +66,11 @@ class MobileSoundControl extends Component {
                     }}
                     transformOrigin={{
                         vertical: 'bottom',
-                        horizontal: 'left',
+                        horizontal: 'center',
                     }}
                     open={anchorEl != null}
                     onClose={this.handleCloseRequest}
+                    disablePortal style={{ zIndex: 9999 }}
                 >
                     <Paper>
                         <div className="sound-control__mobile">
