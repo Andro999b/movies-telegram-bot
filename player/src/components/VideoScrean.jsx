@@ -56,8 +56,15 @@ class VideoScrean extends BaseScrean {
         this.initVideo()
     }
 
+    onQuality() {
+        if(!this.hls) {
+            this.startNativeVideo()
+            this.restoreVideoState()
+        }
+    }
+
     onAudioTrack(trackId) {
-        if(this.hls) {
+        if (this.hls) {
             this.hls.audioTrack = trackId
         }
     }
@@ -94,14 +101,11 @@ class VideoScrean extends BaseScrean {
                     source: {
                         browserUrl,
                         url,
-                        manifestUrl,
-                        alternativeUrls 
+                        manifestUrl
                     }
-                } 
-            } 
+                }
+            }
         } = this
-
-        this.alternativeUrls = alternativeUrls
 
         const { video } = this
 
@@ -110,7 +114,7 @@ class VideoScrean extends BaseScrean {
         if (browserUrl) {
             video.src = browserUrl
         } else if (url) {
-            this.setVideoSource(url)
+            this.startNativeVideo()
         } else if (manifestUrl) {
             this.startHlsVideo()
         } else {
@@ -124,14 +128,34 @@ class VideoScrean extends BaseScrean {
         this.restoreVideoState()
     }
 
-    setVideoSource(url) {
-        const { props: { device: { source: { extractor } } } } = this
+    startNativeVideo() {
+        const {
+            props: {
+                device: {
+                    source: {
+                        url,
+                        extractor,
+                        alternativeUrls,
+                        qualityUrls
+                    },
+                    quality
+                }
+            }
+        } = this
+
         const { video } = this
+        let targetUrl = url
+
+        if(quality && qualityUrls[quality]) {
+            targetUrl = qualityUrls[quality]
+        } else {
+            this.alternativeUrls = alternativeUrls
+        }        
 
         if (extractor) {
-            video.src = createExtractorUrlBuilder(extractor)(url)
+            video.src = createExtractorUrlBuilder(extractor)(targetUrl)
         } else {
-            video.src = url
+            video.src = targetUrl
         }
     }
 
@@ -152,9 +176,9 @@ class VideoScrean extends BaseScrean {
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
             this.restoreVideoState()
 
-            if(hls.audioTracks && hls.audioTracks.length > 1) {
+            if (hls.audioTracks && hls.audioTracks.length > 1) {
                 device.setAudioTracks(
-                    hls.audioTracks.map(({id, name}) => ({id, name}))
+                    hls.audioTracks.map(({ id, name }) => ({ id, name }))
                 )
             }
         })

@@ -30,6 +30,10 @@ class MPVScrean extends Component {
             reaction(
                 () => this.props.device.audioTrack,
                 (track) => this.onAudioTrack(track)
+            ),
+            reaction(
+                () => this.props.device.quality,
+                (quality) => this.onQuality(quality)
             )
         )
     }
@@ -40,6 +44,7 @@ class MPVScrean extends Component {
     onVolume(volume) {} // eslint-disable-line
     onSource(source) {} // eslint-disable-line
     onAudioTrack(trackId) {} // eslint-disable-line
+    onQuality(quality) {} // eslint-disable-line
 
     componentWillUnmount() {
         this.disposeReactions()
