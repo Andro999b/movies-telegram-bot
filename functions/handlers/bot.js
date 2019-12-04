@@ -115,7 +115,7 @@ bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) =>
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
     const q = inlineQuery.query
 
-    const results = await providersService.search(['seasonvar', 'animeVost', 'kinogo'], q)
+    const results = await providersService.search(['exfs', 'seasonvar', 'animeVost'], q)
 
     await answerInlineQuery(results.map(({ name, image, provider, id }) => ({
         type: 'article',

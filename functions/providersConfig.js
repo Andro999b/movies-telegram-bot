@@ -3,15 +3,15 @@ module.exports = {
     'pageSize': 15,
     'animeVost': {
         'baseUrl': 'https://animevost.org',
-        'searchUrl': 'https://animevost.org/index.php?do=search'
+        'searchUrl': 'https://animevost.org/engine/ajax/search.php'
     },
     'kinogo': {
         'baseUrl': 'https://kinogo.by',
-        'searchUrl': 'https://kinogo.by/index.php?do=search'
+        'searchUrl': 'https://kinogo.by/engine/ajax/search.php'
     },
     'baskino': {
         'baseUrl': 'http://baskino.me',
-        'searchUrl': 'http://baskino.me'
+        'searchUrl': 'http://baskino.me/engine/ajax/search.php'
     },
     'seasonvar': {
         'baseUrl': 'http://seasonvar.ru',
@@ -19,6 +19,6 @@ module.exports = {
     },
     'exfs': {
         'baseUrl': 'http://ex-fs.net',
-        'searchUrl': 'http://ex-fs.net'
+        'searchUrl': 'http://ex-fs.net/engine/ajax/search.php'
     }
 }

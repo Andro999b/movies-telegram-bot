@@ -1,5 +1,4 @@
-const DataLifeProvider = require('./DataLIfeProvider')
-const urlencode = require('urlencode')
+const DataLifeProvider = require('./DataLifeProvider')
 const superagent = require('superagent')
 const cheerio = require('cheerio')
 const getBestPlayerJSQuality = require('../utils/getBestPlayerJSQuality')
@@ -8,15 +7,6 @@ const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 class EXFSProvider extends DataLifeProvider {
     constructor() {
         super('exfs', {
-            scope: '.SeaRchresultPost',
-            selectors: {
-                id: { selector: '.SeaRchresultPostTitle a', transform: ($el) => urlencode($el.attr('href')) },
-                name: '.SeaRchresultPostTitle',
-                image: {
-                    selector: '.SeaRchresultPostPoster img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
-                }
-            },
             detailsScope: '#dle-content',
             detailsSelectors: {
                 title: 'h1.view-caption',

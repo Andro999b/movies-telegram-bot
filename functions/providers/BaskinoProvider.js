@@ -1,17 +1,10 @@
-const DataLifeProvider = require('./DataLIfeProvider')
-const urlencode = require('urlencode')
+const DataLifeProvider = require('./DataLifeProvider')
 const { twoElemetsRowExtractor } = require('../utils/detailsExtractors')
 const superagent = require('superagent')
 
 class BaskinoProvider extends DataLifeProvider {
     constructor() {
         super('baskino', {
-            scope: '.shortpost',
-            selectors: {
-                id: { selector: '.posttitle a', transform: ($el) => urlencode($el.attr('href')) },
-                name: '.posttitle a',
-                image: { selector: '.postcover a img', transform: ($el) => $el.attr('src') }
-            },
             detailsScope: '#dle-content',
             detailsSelectors: {
                 title: '.title_social h1', 
