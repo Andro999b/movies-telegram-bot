@@ -113,7 +113,7 @@ export class LocalDevice {
     }
 
     @action.bound selectFile(fileIndex) {
-        const { files } = this.playlist
+        const { files, title } = this.playlist
 
         if (fileIndex < 0 || fileIndex >= files.length)
             return
@@ -123,7 +123,16 @@ export class LocalDevice {
         localStore.set(`${playlistPrefix}:current`, fileIndex)
 
         this.currentFileIndex = fileIndex
-        this.setSource(files[this.currentFileIndex])
+
+        const file = files[this.currentFileIndex]
+        this.setSource(file)
+
+        ga('send',  {
+            hitType: 'event',
+            eventCategory: 'Video',
+            eventAction: 'selectFile',
+            eventLabel: `${title} - ${file.path ? file.path : file.name}`
+        })
     }
 
     @action.bound setLoading(loading) {
