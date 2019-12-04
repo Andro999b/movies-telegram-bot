@@ -1,4 +1,4 @@
 const providers = require('./providers')
 
-providers.search(['exfs', 'animeVost', 'kinogo', 'baskino'], 'тетрадь')
+providers.searchOne('seasonvar', 'Рик и морти')
     .then(console.log) // eslint-disable-line

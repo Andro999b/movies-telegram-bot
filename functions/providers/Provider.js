@@ -106,7 +106,7 @@ class Provider {
 
     // eslint-disable-next-line no-unused-vars
     getSearchUrl(query, page) {
-        return this.config.searchUrl
+        throw new Error('Provider not implement getSearchUrl()')
     }
 
     getName() {

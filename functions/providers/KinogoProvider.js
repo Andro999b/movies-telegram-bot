@@ -1,11 +1,24 @@
-const DataLifeProvider = require('./DataLifeProvider')
+const DataLifeProvider = require('./DataLIfeProvider')
 const getBestPlayerJSQuality= require('../utils/getBestPlayerJSQuality')
 const convertPlayerJSPlaylist= require('../utils/convertPlayerJSPlaylist')
+const urlencode = require('urlencode')
 const { tableLikeExtractor } = require('../utils/detailsExtractors')
 
 class KinogoProvider extends DataLifeProvider {
     constructor() {
         super('kinogo', {
+            scope: 'div.shortstory',
+            selectors: {
+                id: {
+                    selector: '.zagolovki>a:nth-last-child(1)', 
+                    transform: ($el) => urlencode($el.attr('href'))
+                },
+                name: '.zagolovki>a:nth-last-child(1)',
+                image: {
+                    selector: '.shortimg>div>a>img',
+                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                }
+            },
             detailsScope: '#dle-content',
             detailsSelectors: {
                 title: '.shortstorytitle>h1',
