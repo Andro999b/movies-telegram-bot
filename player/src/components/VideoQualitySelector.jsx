@@ -1,65 +1,37 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
+import BaseSelector from './BaseSelector'
 import {
     Button,
-    MenuItem,
-    MenuList,
-    Popover,
-    Paper
+    MenuItem
 } from '@material-ui/core'
 
 @observer
-class VideoQualitySelector extends Component {
-
-    constructor(props, context) {
-        super(props, context)
-        this.state = { anchorEl: null }
-    }
-
-    handleClick =(event) => {
-        const target = event.currentTarget
-        this.setState(({ anchorEl }) => ({
-            anchorEl: anchorEl ? null : target
-        }))
-    }
-
-    handleClose = () => {
-        this.setState({ anchorEl: null })
-    }
+class VideoQualitySelector extends BaseSelector {
 
     selectQuality = (quality) => {
         this.props.device.setQuality(quality)
-        this.setState({ anchorEl: null })
+        this.handleClose()
     }
 
-    render() {
-        const { anchorEl } = this.state
+    renderButton() {
+        const { quality } = this.props.device
+        return (
+            <Button onClick={this.handleClick}>
+                {quality ? quality : 'Auto'}
+            </Button>
+        )
+    }
+
+    renderList() {
         const { quality, qualities } = this.props.device
 
-        return (
-            <Fragment>
-                <Button onClick={this.handleClick}>
-                    {quality ? quality : 'Auto'}
-                </Button>
-                <Popover 
-                    anchorEl={anchorEl} 
-                    open={Boolean(anchorEl)} 
-                    onClose={this.handleClose}
-                    disablePortal style={{ zIndex: 9999 }}
-                >
-                    <Paper>
-                        <MenuList>
-                            {qualities.map((id) => (
-                                <MenuItem key={id} selected={id == quality} onClick={() => this.selectQuality(id)}>
-                                    {id}
-                                </MenuItem>
-                            ))}
-                        </MenuList>
-                    </Paper>
-                </Popover>
-            </Fragment>
-        )
+        return qualities.map((id) => (
+            <MenuItem key={id} selected={id == quality} onClick={() => this.selectQuality(id)}>
+                {id}
+            </MenuItem>
+        ))
     }
 }
 
