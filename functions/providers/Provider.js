@@ -22,16 +22,6 @@ class Provider {
             },
             config
         )
-        
-        this.config.detailsSelectors = Object.assign(
-            {
-                magnetUrl: {
-                    selector: 'a[href*="magnet:?xt=urn:btih:"]',
-                    transform: ($el) => $el.attr('href')
-                }
-            },
-            this.config.detailsSelectors
-        )
     }
 
     async search(query, page, pageCount) {
