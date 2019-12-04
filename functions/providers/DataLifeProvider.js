@@ -7,12 +7,14 @@ require('superagent-charset')(superagent)
 
 class DataLifeProvider extends Provider {
     async search(query) {
-        const { searchUrl, baseUrl } = this.config
+        const { searchUrl, baseUrl, timeout } = this.config
 
         const res = await superagent
             .post(searchUrl)
             .type('form')
+            .buffer(true)
             .charset()
+            .timeout(timeout)
             .send({ 
                 query
             })
