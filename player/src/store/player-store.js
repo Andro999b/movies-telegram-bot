@@ -204,7 +204,12 @@ class PlayerStore {
     }
 
     @action.bound endFile() {
-        const  {currentFileIndex, playlist: { files }} = this.device
+        const  {currentFileIndex, playlist: { title, files }} = this.device
+
+        gtag && gtag('event', 'endFile', {
+            'event_category': 'video',
+            'event_label': `${title} - ${files[currentFileIndex].name}`
+        })
 
         if(currentFileIndex == files.length - 1) {
             this.device.pause()
