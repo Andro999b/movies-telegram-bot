@@ -25,6 +25,6 @@
         "arrow-parens": ["warn"]
     },
     "globals": {
-        "ga": "readonly"
+        "gtag": "readonly"
     }
 }

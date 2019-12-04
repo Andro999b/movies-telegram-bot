@@ -127,11 +127,9 @@ export class LocalDevice {
         const file = files[this.currentFileIndex]
         this.setSource(file)
 
-        ga('send',  {
-            hitType: 'event',
-            eventCategory: 'Video',
-            eventAction: 'selectFile',
-            eventLabel: `${title} - ${file.path ? file.path : file.name}`
+        gtag && gtag('event', 'selectFile', {
+            'event_category': 'video',
+            'event_label': `${title} - ${file.name}`
         })
     }
 
