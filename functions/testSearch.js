@@ -1,4 +1,4 @@
 const providers = require('./providers')
 
-providers.searchOne('seasonvar', 'Рик и морти')
+providers.searchOne('exfs', 'шазам')
     .then(console.log) // eslint-disable-line

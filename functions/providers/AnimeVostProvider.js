@@ -1,6 +1,5 @@
 const DataLifeProvider = require('./DataLIfeProvider')
 const urlencode = require('urlencode')
-const { rowsLikeExtractor } = require('../utils/detailsExtractors')
 
 class AnimeVostProvider extends DataLifeProvider {
     constructor() {
@@ -20,10 +19,6 @@ class AnimeVostProvider extends DataLifeProvider {
                 image: {
                     selector: '.imgRadius',
                     transform: ($el) => this.config.baseUrl + $el.attr('src')
-                },
-                description: {
-                    selector: 'p',
-                    transform: rowsLikeExtractor
                 },
                 files: {
                     selector: 'script',

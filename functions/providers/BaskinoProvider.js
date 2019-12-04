@@ -1,6 +1,5 @@
 const DataLifeProvider = require('./DataLIfeProvider')
 const urlencode = require('urlencode')
-const { twoElemetsRowExtractor } = require('../utils/detailsExtractors')
 const superagent = require('superagent')
 
 class BaskinoProvider extends DataLifeProvider {
@@ -18,10 +17,6 @@ class BaskinoProvider extends DataLifeProvider {
                 image: {
                     selector: '.mobile_cover img',
                     transform: ($el) => $el.attr('src')
-                },
-                description: {
-                    selector: '.info table tr',
-                    transform: twoElemetsRowExtractor
                 },
                 files: {
                     selector: 'iframe',

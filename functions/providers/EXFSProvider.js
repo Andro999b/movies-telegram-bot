@@ -24,7 +24,6 @@ class EXFSProvider extends DataLifeProvider {
                     selector: '.FullstoryFormLeft img',
                     transform: ($el) => this.config.baseUrl + $el.attr('src')
                 },
-                description: '.FullstorySubFormText',
                 files: {
                     selector: 'iframe',
                     transform: async ($el) => {

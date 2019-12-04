@@ -21,7 +21,6 @@ class SeasonvarProvider extends DirectMediaProvider {
             detailsScope: '.middle',
             detailsSelectors: {
                 title: '.pgs-sinfo-title',
-                description: '.pgs-sinfo-info p:first-child',
                 image: {
                     selector: '.poster img',
                     transform: ($el) => $el.attr('src')

@@ -2,7 +2,6 @@ const DataLifeProvider = require('./DataLIfeProvider')
 const getBestPlayerJSQuality= require('../utils/getBestPlayerJSQuality')
 const convertPlayerJSPlaylist= require('../utils/convertPlayerJSPlaylist')
 const urlencode = require('urlencode')
-const { tableLikeExtractor } = require('../utils/detailsExtractors')
 
 class KinogoProvider extends DataLifeProvider {
     constructor() {
@@ -25,10 +24,6 @@ class KinogoProvider extends DataLifeProvider {
                 image: {
                     selector: '.fullimg>div>a>img',
                     transform: ($el) => this.config.baseUrl + $el.attr('src')
-                },
-                description: {
-                    selector: '.quote',
-                    transform: tableLikeExtractor
                 },
                 files: {
                     selector: '#1212',
