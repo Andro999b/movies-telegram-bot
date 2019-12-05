@@ -163,7 +163,7 @@ class VideoScrean extends BaseScrean {
         this.hlsMode = true
 
         const { props: { device } } = this
-        const { source: { manifestUrl } } = device
+        const { source: { manifestUrl, extractor } } = device
 
         const hls = new Hls({
             startPosition: device.currentTime,
@@ -203,8 +203,12 @@ class VideoScrean extends BaseScrean {
             }
         })
 
-        hls.loadSource(manifestUrl)
-
+        if (extractor) {
+            hls.loadSource(createExtractorUrlBuilder(extractor)(manifestUrl))
+        } else {
+            hls.loadSource(manifestUrl)
+        }
+        
         this.hls = hls
     }
 

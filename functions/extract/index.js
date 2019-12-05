@@ -5,7 +5,7 @@ const extractors = {
     'animevost': require('./animevostExtractor'),
     'ashdi': require('./m3u8Extractor'),
     'tortuga': require('./m3u8Extractor'),
-    'fsst': require('./mp4PlayerJsExtractor')
+    'sst': require('./mp4PlayerJsExtractor')
 }
 
 module.exports = async (parmas) => {

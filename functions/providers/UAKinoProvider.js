@@ -88,11 +88,11 @@ class UAKinoProvider extends DataLifeProvider {
         //         extractor: { type: 'vio' },
         //         manifestUrl: src
         //     }
-        } else if (src.indexOf('fsst.online') != -1) {
-            return {
-                extractor: { type: 'fsst' },
-                manifestUrl: src
-            }
+        // } else if (src.indexOf('sst.online') != -1) {
+        //     return {
+        //         extractor: { type: 'sst' },
+        //         url: src
+        //     }
         }
     }
 
