@@ -109,14 +109,25 @@ html {
 .player__title {
     position: absolute;
     z-index: 1;
-    top: 0;
-    left: 0;
+    top: 5px;
+    left: 5px;
     display: flex;
     align-items: center;
 
     h6 {
         @extend .shadow-border 
     }
+}
+
+.player__share {
+    position: absolute;
+    z-index: 1;
+    top: 5px;
+    right: 5px;
+}
+
+.player__share-content {
+    padding: 10px;
 }
 
 .hide-on-mobile {
@@ -210,5 +221,14 @@ html {
 @media (max-width: 576px) {
     .hide-on-desktop {
         display: inline-block;
+    }
+}
+
+@each $icon in facebook, vkontakte, viber, whatsapp, twitter, telegram {
+    .icon-#{$icon} {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        background: url('./images/#{$icon}.png') no-repeat;
     }
 }

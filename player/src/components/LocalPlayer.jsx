@@ -9,6 +9,7 @@ import PlayerTitle from './PlayerTitle'
 import VideoScrean from './VideoScrean'
 import PlayBackZones from './PlayBackZones'
 import ShowIf from './ShowIf'
+import Share from './Share'
 
 import { Typography, CircularProgress } from '@material-ui/core'
 import { observer, inject } from 'mobx-react'
@@ -109,10 +110,10 @@ class LocalPlayer extends Component {
     }
 
     setIdleTimeout() {
-        this.idleTimeout = setTimeout(
-            () => this.setState({ idle: true }),
-            IDLE_TIMEOUT
-        )
+        // this.idleTimeout = setTimeout(
+        //     () => this.setState({ idle: true }),
+        //     IDLE_TIMEOUT
+        // )
     }
 
     componentWillUnmount() {
@@ -171,6 +172,7 @@ class LocalPlayer extends Component {
                         </ShowIf>
                         <PlayBackZones device={device} onClick={this.handleClick} />
                         <ShowIf mustNot={[hideUi]}>
+                            <Share device={device}/>
                             <PlayerFilesList
                                 open={playlistOpen}
                                 device={device}

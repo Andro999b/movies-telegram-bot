@@ -23,7 +23,10 @@ if (provider && id) {
         .catch((e) => renderError(e))
         .then((playlist) => {
             if (playlist) {
-                playerStore.openPlaylist({ id, provider, ...playlist })
+                const fileIndex = parseInt(urlParams.get('file'))
+                const time = parseFloat(urlParams.get('time'))
+
+                playerStore.openPlaylist({ id, provider, ...playlist }, fileIndex, time)
                 render((<App />), document.getElementById('app'))
             }
         })

@@ -4,7 +4,8 @@ import BaseSelector from './BaseSelector'
 import { observer } from 'mobx-react'
 import {
     IconButton,
-    MenuItem
+    MenuItem,
+    MenuList
 } from '@material-ui/core'
 import { AudiotrackRounded as AudioTrackIcon } from '@material-ui/icons'
 
@@ -27,11 +28,13 @@ class AudioTrackSelector extends BaseSelector {
     renderList() {
         const { audioTrack, audioTracks } = this.props.device
 
-        return audioTracks.map(({id, name}) => (
+        const items = audioTracks.map(({id, name}) => (
             <MenuItem key={id} selected={id == audioTrack} onClick={() => this.selectTrack(id)}>
                 {name}
             </MenuItem>
         ))
+
+        return (<MenuList>{items}</MenuList>)
     }
 }
 

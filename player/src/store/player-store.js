@@ -39,7 +39,7 @@ export class LocalDevice {
         this.audioTrack = null
         this.audioTracks = []
 
-        if(source.url && source.alternativeUrls && !source.qualityUrls) {
+        if (source.url && source.alternativeUrls && !source.qualityUrls) {
             const urls = [source.url].concat(source.alternativeUrls)
 
             source.qualityUrls = urls
@@ -54,10 +54,12 @@ export class LocalDevice {
                 .reduce((acc, { url, quality }) => ({ ...acc, [quality]: url }), {})
         }
 
-        if(source.qualityUrls) {
+        if (source.qualityUrls) {
             this.qualities = Object.keys(source.qualityUrls)
             const storedQuality = localStore.get('quality')
-            this.quality = storedQuality && this.qualities[storedQuality] ? storedQuality : null
+            this.quality = storedQuality && this.qualities.indexOf(storedQuality) != -1 ?
+                storedQuality :
+                null
         } else {
             this.qualities = []
             this.quality = null
@@ -127,7 +129,7 @@ export class LocalDevice {
         const file = files[this.currentFileIndex]
         this.setSource(file)
 
-        gtag && gtag('event', 'selectFile', {
+        window.gtag && gtag('event', 'selectFile', {
             'event_category': 'video',
             'event_label': `${title} - ${file.name}`
         })
@@ -155,12 +157,12 @@ export class LocalDevice {
         localStore.set('quality', quality)
     }
 
-    @action.bound setAudioTracks(audioTracks) { 
-        this.audioTracks = audioTracks 
+    @action.bound setAudioTracks(audioTracks) {
+        this.audioTracks = audioTracks
     }
 
-    @action.bound setShuffle(shuffle) { 
-        this.shuffle = shuffle 
+    @action.bound setShuffle(shuffle) {
+        this.shuffle = shuffle
         localStore.set('shuffle', shuffle)
     }
 
@@ -179,12 +181,17 @@ export class LocalDevice {
 class PlayerStore {
     @observable device
 
-    @action openPlaylist(playlist) {
+    @action openPlaylist(playlist, fileIndex, startTime) {
         this.device = new LocalDevice()
 
-        const fileIndex = localStore.get(`${getPlaylistPrefix(playlist)}:current`)
-        const startTime = parseFloat(localStore.get(`${getPlaylistPrefix(playlist)}:ts`))
-        
+        if(fileIndex == null || isNaN(fileIndex)) {
+            fileIndex = localStore.get(`${getPlaylistPrefix(playlist)}:current`)
+
+            if(startTime == null || isNaN(startTime)) {
+                startTime = parseFloat(localStore.get(`${getPlaylistPrefix(playlist)}:ts`))
+            }
+        }
+
         this.device.setPlaylist(playlist, fileIndex, startTime)
         document.title = this.getPlayerTitle()
     }
@@ -204,14 +211,9 @@ class PlayerStore {
     }
 
     @action.bound endFile() {
-        const  {currentFileIndex, playlist: { title, files }} = this.device
+        const { currentFileIndex, playlist: { files } } = this.device
 
-        gtag && gtag('event', 'endFile', {
-            'event_category': 'video',
-            'event_label': `${title} - ${files[currentFileIndex].name}`
-        })
-
-        if(currentFileIndex == files.length - 1) {
+        if (currentFileIndex == files.length - 1) {
             this.device.pause()
         } else {
             this.switchFileOrShuffle(this.device.currentFileIndex + 1)
@@ -222,13 +224,13 @@ class PlayerStore {
         const { currentFileIndex, shuffle, playlist } = this.device
         const { files } = playlist
 
-        if(files.length > 1 && shuffle) {
+        if (files.length > 1 && shuffle) {
             let next
-            
-            do{
+
+            do {
                 next = Math.round(Math.random() * (files.length - 1))
-            } while(next == currentFileIndex)
-            
+            } while (next == currentFileIndex)
+
             this.device.selectFile(next)
         } else {
             this.device.selectFile(fileIndex)
@@ -246,7 +248,7 @@ class PlayerStore {
 
         if (title && files) {
             const file = files[currentFileIndex]
-            return `${title}${files.length > 1 ?  ' - ' + file.name : ''}`
+            return `${title}${files.length > 1 ? ' - ' + file.name : ''}`
         }
     }
 }

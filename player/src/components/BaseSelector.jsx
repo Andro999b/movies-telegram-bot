@@ -1,12 +1,9 @@
 import React, { Component, Fragment } from 'react'
-import { observer } from 'mobx-react'
 import {
-    MenuList,
     Popover,
     Paper
 } from '@material-ui/core'
 
-@observer
 class BaseSelector extends Component {
 
     constructor(props, context) {
@@ -41,9 +38,7 @@ class BaseSelector extends Component {
                     disablePortal style={{ zIndex: 9999 }}
                 >
                     <Paper>
-                        <MenuList>
-                            {this.renderList()}
-                        </MenuList>
+                        {this.renderList()}
                     </Paper>
                 </Popover>
             </Fragment>
