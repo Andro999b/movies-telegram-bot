@@ -60,12 +60,13 @@ class UAKinoProvider extends DataLifeProvider {
                     const id = $el.attr('data-id') 
                     const name = $el.text()
                     const file = this.getFile(src)
-                    return {
+                    return file && {
                         path: `${playlists[id]} / ${name}`,
                         name: `${playlists[id]} - ${name}`,
                         ...file
                     }
                 })
+                .filter((it) => it)
         }
 
         return []
@@ -82,9 +83,14 @@ class UAKinoProvider extends DataLifeProvider {
                 extractor: { type: 'tortuga' },
                 manifestUrl: src
             }
-        } else if (src.indexOf('vio.to') != -1) {
+        // } else if (src.indexOf('vio.to') != -1) {
+        //     return {
+        //         extractor: { type: 'vio' },
+        //         manifestUrl: src
+        //     }
+        } else if (src.indexOf('fsst.online') != -1) {
             return {
-                extractor: { type: 'vio' },
+                extractor: { type: 'fsst' },
                 manifestUrl: src
             }
         }
