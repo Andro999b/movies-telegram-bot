@@ -9,7 +9,13 @@ class UAKinoProvider extends DataLifeProvider {
             scope: '.movie-item',
             selectors: {
                 id: { selector: '.movie-title', transform: ($el) => urlencode($el.attr('href')) },
-                name: '.movie-title',
+                name: {
+                    transform: ($el) => {
+                        const title = $el.find('.movie-title').text().replace(/[\n\t\r]/g, '')
+                        const seasonInfo = $el.find('.full-season').text()
+                        return `${title} ${seasonInfo}`.trimRight()
+                    }
+                },
                 image: { selector: '.movie-img img', transform: ($el) => this.config.baseUrl + $el.attr('src') }
             },
             detailsScope: '#dle-content',
