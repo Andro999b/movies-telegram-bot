@@ -22,9 +22,11 @@ if (provider && id) {
         .then((response) => response.json())
         .catch((e) => renderError(e))
         .then((playlist) => {
-            if (playlist) {
+            if (playlist && playlist.files && playlist.files.length) {
                 playerStore.openPlaylist({ id, provider, ...playlist })
                 render((<App />), document.getElementById('app'))
+            } else {
+                renderError()
             }
         })
 } else {

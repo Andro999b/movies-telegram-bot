@@ -67,8 +67,8 @@ class UAKinoProvider extends DataLifeProvider {
                     const name = $el.text()
                     const file = this.getFile(src)
                     return file && {
-                        path: `${playlists[id]} / ${name}`,
-                        name: `${playlists[id]} - ${name}`,
+                        path: `${playlists[id]}`,
+                        name: `${playlists[id]} / ${name}`,
                         ...file
                     }
                 })
