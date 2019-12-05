@@ -23,6 +23,11 @@ class PlayerView extends Component {
             this.setState({ initialFullScreen: true })
         }
         this.props.play()
+
+        window.gtag && gtag('event', 'start', {
+            'event_category': 'video',
+            'event_label': document.title
+        })
     }
 
     renderStartScrean = () => {
