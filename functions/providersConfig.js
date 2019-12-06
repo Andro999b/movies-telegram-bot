@@ -20,5 +20,9 @@ module.exports = {
     'exfs': {
         'baseUrl': 'http://ex-fs.net',
         'searchUrl': 'http://ex-fs.net'
+    }, 
+    'uakino': {
+        'baseUrl': 'https://uakino.club',
+        'searchUrl': 'https://uakino.club'
     }
 }

@@ -63,20 +63,28 @@ bot.action(/more_results.+/, async ({
     session,
     editMessageReplyMarkup,
     answerCbQuery,
-    callbackQuery: { data }
+    callbackQuery: { data, message }
 }) => {
     const { searchId, providersResults, page } = session
 
-    if (searchId && providersResults && page) {
+    if (searchId &&
+        providersResults &&
+        page &&
+        data == `more_results#${searchId}`
+    ) {
         session.page = page + 1
 
-        if (data == `more_results#${searchId}`) {
-            const { results, hasMore } = getResults(providersResults, session.page)
+        const { results, hasMore } = getResults(providersResults, session.page)
 
-            await editMessageReplyMarkup(
-                getResultsKeyboad(searchId, results, hasMore, i18n)
-            )
-        }
+        await editMessageReplyMarkup(
+            getResultsKeyboad(searchId, results, hasMore, i18n)
+        )
+    } else { // remove uselsess show more
+        const { inline_keyboard } = message.reply_markup
+        
+        inline_keyboard.pop()
+
+        await editMessageReplyMarkup({ inline_keyboard })
     }
 
     await answerCbQuery()
@@ -128,7 +136,7 @@ bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
         },
         reply_markup: Markup.inlineKeyboard([
             Markup.urlButton(
-                i18n.t('watch'), 
+                i18n.t('watch'),
                 `${process.env.PLAYER_URL}?provider=${provider}&id=${id}`
             )
         ])
