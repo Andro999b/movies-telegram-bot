@@ -1,8 +1,8 @@
 const providers = require('./providers')
 
-const providerName = 'uakino'
+const providerName = 'animevost'
 // const searchQuery = 'веном'
-const searchQuery = 'final space'
+const searchQuery = 'one punch'
 
 providers.searchOne(providerName, searchQuery)
     .then((results) => {

@@ -1,7 +1,7 @@
 module.exports = {
     'timeout': 5,
     'pageSize': 15,
-    'animeVost': {
+    'animevost': {
         'baseUrl': 'https://animevost.org',
         'searchUrl': 'https://animevost.org/index.php?do=search'
     },

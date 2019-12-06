@@ -3,7 +3,7 @@ const urlencode = require('urlencode')
 
 class AnimeVostProvider extends DataLifeProvider {
     constructor() {
-        super('animeVost', {
+        super('animevost', {
             scope: '.shortstory',
             selectors: {
                 id: { selector: '.shortstoryHead a', transform: ($el) => urlencode($el.attr('href')) },

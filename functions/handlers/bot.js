@@ -8,7 +8,8 @@ const Markup = require('telegraf/markup')
 const session = require('telegraf/session')
 const uuid = require('uuid')
 
-const DEFAULT_PROVIDERS = ['exfs', 'seasonvar', 'animeVost', 'kinogo']
+const PROVIDER = process.env.PROVIDER ? process.env.PROVIDER.split(',') : []
+const INLINE_PROVIDERS = process.env.INLINE_PROVIDERS ? process.env.INLINE_PROVIDERS.split(',') : PROVIDER
 const PAGE_SIZE = 3
 
 const i18n = new TelegrafI18n({
@@ -21,43 +22,7 @@ const bot = new Telegraf(process.env.TOKEN)
 
 bot.use(session())
 bot.use(i18n.middleware())
-
 bot.command('start', ({ i18n, reply }) => reply(i18n.t('start')))
-
-bot.command('settings', async ({ i18n, reply, deleteMessage, session: { provider } }) => {
-    await deleteMessage()
-    await reply(
-        // render current settings
-        provider ? i18n.t('settings', { provider }) : i18n.t('settings_default'),
-        // render keyboard
-        Markup.inlineKeyboard(
-            providersService.getProviders().map((provider) =>
-                Markup.callbackButton(`🔍 ${provider}`, provider)
-            ).concat(
-                Markup.callbackButton('🔄 default', 'default')
-            ),
-            { columns: 3 }
-        ).oneTime().extra()
-    )
-})
-
-providersService.getProviders().forEach((provider) =>
-    bot.action(provider, async ({ i18n, session, reply, answerCbQuery, deleteMessage }) => {
-        session.provider = provider
-        await deleteMessage()
-        await reply(i18n.t('provider_answer', { provider }))
-        await answerCbQuery()
-    })
-)
-
-bot.action('default', async ({ i18n, session, reply, answerCbQuery, deleteMessage }) => {
-    session.provider = null
-    await deleteMessage()
-    await reply(i18n.t('provider_default'))
-    await answerCbQuery()
-})
-
-
 bot.action(/more_results.+/, async ({
     i18n,
     session,
@@ -89,17 +54,14 @@ bot.action(/more_results.+/, async ({
 
     await answerCbQuery()
 })
-
 bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) => {
-    const provider = session.provider
-    const providers = provider ? [provider] : DEFAULT_PROVIDERS
     const searchId = uuid.v4()
 
     await replyWithChatAction('typing')
 
     const q = message.text
 
-    let providersResults = await Promise.all(providers.map((providerName) =>
+    let providersResults = await Promise.all(PROVIDER.map((providerName) =>
         providersService.searchOne(providerName, q)
     ))
 
@@ -119,11 +81,10 @@ bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) =>
         getResultsKeyboad(searchId, results, hasMore, i18n).extra()
     )
 })
-
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
     const q = inlineQuery.query
 
-    const results = await providersService.search(['seasonvar', 'animeVost', 'kinogo'], q)
+    const results = await providersService.search(INLINE_PROVIDERS, q)
 
     await answerInlineQuery(results.map(({ name, image, provider, id }) => ({
         type: 'article',

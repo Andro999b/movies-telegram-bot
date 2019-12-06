@@ -2,6 +2,7 @@ service: movies-telegram-bot
 
 custom:
   tableName: 'infoTable'
+  playerUrl: 'https://movies-player.web.app/'
 
 provider:
   name: aws
@@ -72,6 +73,11 @@ functions:
           path: bot
           method: any
           cors: true
+    environment:
+      TOKEN: ${ssm:TOKEN}
+      PLAYER_URL: ${self:custom.playerUrl}
+      PROVIDER: 'exfs,seasonvar,animevost,kinogo'
+      INLINE_PROVIDERS: 'seasonvar,animevost,kinogo'
 
 resources:
   Resources:
