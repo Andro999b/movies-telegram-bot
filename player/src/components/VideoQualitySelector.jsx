@@ -4,7 +4,8 @@ import { observer } from 'mobx-react'
 import BaseSelector from './BaseSelector'
 import {
     Button,
-    MenuItem
+    MenuItem,
+    MenuList
 } from '@material-ui/core'
 
 @observer
@@ -27,11 +28,17 @@ class VideoQualitySelector extends BaseSelector {
     renderList() {
         const { quality, qualities } = this.props.device
 
-        return qualities.map((id) => (
+        const items = qualities.map((id) => (
             <MenuItem key={id} selected={id == quality} onClick={() => this.selectQuality(id)}>
                 {id}
             </MenuItem>
-        ))
+        )).concat([
+            <MenuItem key="auto" selected={quality == null} onClick={() => this.selectQuality(null)}>
+                Auto
+            </MenuItem>
+        ])
+
+        return (<MenuList>{items}</MenuList>)
     }
 }
 

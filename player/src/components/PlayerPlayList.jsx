@@ -3,12 +3,18 @@ import PropTypes from 'prop-types'
 import {
     List,
     ListItem,
+    ListItemIcon,
     ListItemText,
+    ListItemSecondaryAction,
+    IconButton,
     Paper,
     Slide
 } from '@material-ui/core'
 import { grey } from '@material-ui/core/colors'
-import { NavigateBeforeRounded as BackIcon } from '@material-ui/icons'
+import {
+    NavigateBeforeRounded as BackIcon,
+    GetAppRounded as DownloadIcon
+} from '@material-ui/icons'
 import { observer } from 'mobx-react'
 import memoize from 'memoize-one'
 import { fileGroupingFun } from '../utils'
@@ -37,6 +43,15 @@ class PlayerPlayList extends Component {
         this.setState({ selectedGroup, selectGroup: false })
     }
 
+    handleTrackDownload = (file) => {
+        const { device: { playlist: { title } } } = this.props
+       
+        window.gtag && gtag('event', 'downloadFile', {
+            'event_category': 'link',
+            'event_label': `${title} - ${file.name}`
+        })
+    }
+
     getGroups = memoize(fileGroupingFun)
     getFileGroup = memoize((fileId, groups) =>
         groups.find((g) =>
@@ -44,9 +59,43 @@ class PlayerPlayList extends Component {
         )
     )
 
+    renderFiles(groupFiles, currentFileId, files) {
+        const { onFileSelected } = this.props
+
+        return groupFiles.map((file) => {
+            const style = currentFileId == file.id ? { background: grey[600] } : {}
+            const downloadUrl = file.extractor ? null : file.url
+
+            return (
+                <ListItem
+                    button
+                    key={file.id}
+                    style={style}
+                    onClick={() => onFileSelected(files.findIndex(({ id }) => id == file.id))}>
+                    <ListItemText primary={
+                        <span style={{ wordBreak: 'break-all' }}>
+                            {file.name}
+                        </span>
+                    } />
+                    {downloadUrl && <ListItemSecondaryAction>
+                        <IconButton 
+                            component='a' 
+                            href={downloadUrl} 
+                            download={downloadUrl} 
+                            target="_blank" 
+                            onClick={() => this.handleTrackDownload(file)}
+                        >
+                            <DownloadIcon/>
+                        </IconButton>
+                    </ListItemSecondaryAction>}
+                </ListItem>
+            )
+        })
+    }
+
     render() {
         let { selectedGroup, selectGroup } = this.state
-        const { device: { playlist, currentFileIndex }, open, onFileSelected } = this.props
+        const { device: { playlist, currentFileIndex }, open } = this.props
         const { files } = playlist
 
         const groups = this.getGroups(files)
@@ -56,7 +105,6 @@ class PlayerPlayList extends Component {
         selectedGroup = selectedGroup || currentGroup
 
         const groupFiles = groups.length > 1 ? selectedGroup.files : files
-        const sortedFiles = groupFiles
 
         return (
             <Slide direction="left" in={open} mountOnEnter unmountOnExit>
@@ -65,26 +113,13 @@ class PlayerPlayList extends Component {
                         {!selectGroup && <Fragment>
                             {groups.length > 1 &&
                                 <ListItem button onClick={this.handleOpenGroupsMenu}>
-                                    <BackIcon nativeColor="white" />
+                                    <ListItemIcon>
+                                        <BackIcon/>
+                                    </ListItemIcon>
                                     <ListItemText primary={selectedGroup.name} />
                                 </ListItem>
                             }
-                            {sortedFiles.map((file) => {
-                                const style = currentFileId == file.id ? { background: grey[600] } : {}
-                                return (
-                                    <ListItem
-                                        button
-                                        key={file.id}
-                                        style={style}
-                                        onClick={() => onFileSelected(files.findIndex((i) => i.id == file.id))}>
-                                        <ListItemText primary={
-                                            <span style={{ wordBreak: 'break-all' }}>
-                                                {file.name}
-                                            </span>
-                                        } />
-                                    </ListItem>
-                                )
-                            })}
+                            {this.renderFiles(groupFiles, currentFileId, files)}
                         </Fragment>}
                         {selectGroup && groups.map((group) => (
                             <ListItem
