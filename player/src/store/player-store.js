@@ -115,7 +115,7 @@ export class LocalDevice {
     }
 
     @action.bound selectFile(fileIndex) {
-        const { files, title } = this.playlist
+        const { files } = this.playlist
 
         if (fileIndex < 0 || fileIndex >= files.length)
             return
@@ -128,11 +128,6 @@ export class LocalDevice {
 
         const file = files[this.currentFileIndex]
         this.setSource(file)
-
-        window.gtag && gtag('event', 'selectFile', {
-            'event_category': 'video',
-            'event_label': `${title} - ${file.name}`
-        })
     }
 
     @action.bound setLoading(loading) {
@@ -200,6 +195,11 @@ class PlayerStore {
         this.device.selectFile(fileIndex)
         this.device.play()
         document.title = this.getPlayerTitle()
+
+        window.gtag && gtag('event', 'selectFile', {
+            'event_category': 'video',
+            'event_label': document.title 
+        })
     }
 
     @action.bound prevFile() {
@@ -231,13 +231,10 @@ class PlayerStore {
                 next = Math.round(Math.random() * (files.length - 1))
             } while (next == currentFileIndex)
 
-            this.device.selectFile(next)
+            this.switchFile(next)
         } else {
-            this.device.selectFile(fileIndex)
+            this.switchFile(fileIndex)
         }
-
-        this.device.play()
-        document.title = this.getPlayerTitle()
     }
 
     getPlayerTitle() {
