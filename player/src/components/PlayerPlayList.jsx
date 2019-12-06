@@ -64,14 +64,14 @@ class PlayerPlayList extends Component {
 
         return groupFiles.map((file) => {
             const style = currentFileId == file.id ? { background: grey[600] } : {}
-            const downloadUrl = file.url
+            const downloadUrl = file.extractor ? null : file.url
 
             return (
                 <ListItem
                     button
                     key={file.id}
                     style={style}
-                    onClick={() => onFileSelected(files.findIndex((i) => i.id == file.id))}>
+                    onClick={() => onFileSelected(files.findIndex(({ id }) => id == file.id))}>
                     <ListItemText primary={
                         <span style={{ wordBreak: 'break-all' }}>
                             {file.name}
