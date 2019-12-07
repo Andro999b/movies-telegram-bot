@@ -5,7 +5,7 @@ const makeResponse = require('../utils/makeResponse')
 const documentClient = new AWS.DynamoDB.DocumentClient()
 const TTL = 2 * 3600
 
-module.exports = async (event) => {
+module.exports.handler = async (event) => {
     let result = {}
 
     if(event.pathParameters) {

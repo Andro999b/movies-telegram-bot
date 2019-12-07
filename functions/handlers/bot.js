@@ -142,7 +142,7 @@ function getResults(providersResults, page) {
     }
 }
 
-module.exports = async (event) => {
+module.exports.handler = async (event) => {
     const body = JSON.parse(event.body)
 
     await bot.handleUpdate(body)

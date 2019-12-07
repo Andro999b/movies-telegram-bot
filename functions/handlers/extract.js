@@ -1,5 +1,5 @@
 const extractors = require('../extract')
 
-module.exports = async (event) => {
+module.exports.handler = async (event) => {
     return extractors(event.queryStringParameters)
 }

@@ -1,8 +1,11 @@
 const providers = require('./providers')
 
-const providerName = 'animevost'
+const providerName = 'vumoo'
+// const providerName = 'uaserials'
+// const searchQuery = 'Stranger things'
+const searchQuery = 'Vikings season'
+// const searchQuery = 'one punch'
 // const searchQuery = 'веном'
-const searchQuery = 'one punch'
 
 providers.searchOne(providerName, searchQuery)
     .then((results) => {

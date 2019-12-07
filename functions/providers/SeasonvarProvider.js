@@ -4,8 +4,6 @@ const $ = require('cheerio')
 const superagent = require('superagent')
 const convertPlayerJSPlaylist= require('../utils/convertPlayerJSPlaylist')
 
-const ENCRYPT_KEY = 'ololo'
-
 class SeasonvarProvider extends DirectMediaProvider {
     constructor() {
         super('seasonvar', {
@@ -61,7 +59,8 @@ class SeasonvarProvider extends DirectMediaProvider {
 
                                 return files.map((file) => (({
                                     ...file,
-                                    path: `Season ${index + 1}`
+                                    path: `Season ${index + 1}`,
+                                    name: `Season ${index + 1} / ${file.name}`
                                 })))
                             })
                             .reduce((acc, files) => acc.concat(files), [])
@@ -98,10 +97,12 @@ class SeasonvarProvider extends DirectMediaProvider {
 
         const playlist = JSON.parse(plistRes.text)
 
-        return convertPlayerJSPlaylist(playlist, this._decryptFilePath)
+        return convertPlayerJSPlaylist(playlist, (x) => this._decryptFilePath(x))
     }
 
     _decryptFilePath(x) {
+        const { encryptKey } = this.config
+
         let a = x.substr(2)
 
         function b1(str) {
@@ -120,7 +121,7 @@ class SeasonvarProvider extends DirectMediaProvider {
             return decodeURIComponent(encodedUrl)
         }
 
-        a = a.replace('//' + b1(ENCRYPT_KEY), '')
+        a = a.replace('//' + b1(encryptKey), '')
 
         try {
             a = b2(a)

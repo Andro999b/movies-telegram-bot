@@ -22,7 +22,7 @@ provider:
 
 functions:
   search:
-    handler: index.search
+    handler: handlers/search.handler
     events:
       - http: 
           path: api/trackers/{provider}/search
@@ -36,7 +36,7 @@ functions:
                 q: true
 
   provider:
-    handler: index.provider
+    handler: handlers/provider.handler
     events:
       - http: 
           path: api/trackers
@@ -44,7 +44,7 @@ functions:
           cors: true
 
   info:
-    handler: index.info
+    handler: handlers/info.handler
     events:
       - http: 
           path: api/trackers/{provider}/items/{resultId}
@@ -59,7 +59,7 @@ functions:
       TABLE_NAME: ${self:custom.tableName}
 
   extract:
-    handler: index.extract
+    handler: handlers/extract.handler
     events:
       - http: 
           path: api/extract
@@ -67,7 +67,7 @@ functions:
           cors: true
 
   bot:
-    handler: index.bot
+    handler: handlers/bot.handler
     events:
       - http: 
           path: bot

@@ -1,7 +1,7 @@
 const providersService = require('../providers')
 const makeResponse = require('../utils/makeResponse')
 
-module.exports = async (event) => {
+module.exports.handler = async (event) => {
     let results = []
 
     if(event.queryStringParameters) {

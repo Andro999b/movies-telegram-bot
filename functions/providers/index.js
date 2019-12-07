@@ -4,7 +4,9 @@ const providers = [
     new (require('./AnimeVostProvider'))(),
     new (require('./BaskinoProvider'))(),
     new (require('./EXFSProvider'))(),
-    new (require('./UAKinoProvider'))()
+    new (require('./KinoUkrProvider'))(),
+    new (require('./UASerialsProvider'))(),
+    new (require('./VumooProvider'))()
 ]
 
 module.exports = {

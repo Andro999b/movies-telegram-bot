@@ -7,10 +7,8 @@ class Provider {
         this.name = name
         this.config = Object.assign(
             {
-                baseUrl: PROVIDERS_CONFIG[name].baseUrl,
-                searchUrl: PROVIDERS_CONFIG[name].searchUrl,
+                ...PROVIDERS_CONFIG[name],
                 pageSize: PROVIDERS_CONFIG[name].pageSize || PROVIDERS_CONFIG.pageSize || 5,
-                useProxy: PROVIDERS_CONFIG[name].useProxy || PROVIDERS_CONFIG.proxyAll,
                 timeout: (PROVIDERS_CONFIG[name].timeout || PROVIDERS_CONFIG.timeout || 10) * 1000,
                 scope: '',
                 slectors: {},

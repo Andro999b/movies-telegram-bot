@@ -15,7 +15,7 @@ class Share extends BaseSelector {
     constructor(props, context) {
         super(props, context)
 
-        this.state.sharePosition = true;
+        this.state.sharePosition = true
         this.state.shareTime = false
     }
 
@@ -47,15 +47,12 @@ class Share extends BaseSelector {
     }
 
     getTitle = (sharePosition) => {
-        const { device: { playlist: { title, files }, currentFileIndex } } = this.props
-
-        let res = title
-
         if (sharePosition) {
-            res += ` - ${files[currentFileIndex].name}`
+            return encodeURIComponent(document.title)
+        } else {
+            const { device: { playlist: { title } } } = this.props
+            return encodeURIComponent(title)
         }
-
-        return encodeURIComponent(res)
     }
 
     renderList() {
