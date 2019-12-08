@@ -148,6 +148,9 @@ class VideoScrean extends BaseScrean {
 
         if(quality && qualityUrls[quality]) {
             targetUrl = qualityUrls[quality]
+            this.alternativeUrls = alternativeUrls
+                .concat(url)
+                .filter((it) => it != targetUrl)
         } else {
             this.alternativeUrls = alternativeUrls
         }        
@@ -232,7 +235,7 @@ class VideoScrean extends BaseScrean {
         const { props: { device }, alternativeUrls } = this
 
         if (alternativeUrls && alternativeUrls.length > 0) {
-            this.setVideoSource(alternativeUrls.pop())
+            this.video.src = alternativeUrls.pop()
             this.restoreVideoState()
             return
         }

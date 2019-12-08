@@ -170,23 +170,23 @@ class LocalPlayer extends Component {
                                 <CircularProgress color="secondary" />
                             </div>
                         </ShowIf>
-                        <PlayBackZones device={device} onClick={this.handleClick} />
-                        <ShowIf mustNot={[hideUi]}>
-                            <Share device={device}/>
-                            <PlayerFilesList
-                                open={playlistOpen}
-                                device={device}
-                                onFileSelected={this.handleSelectFile}
-                            />
-                            <MediaControls
-                                fullScreen={fullScreen}
-                                device={device}
-                                onNext={() => playerStore.nextFile()}
-                                onPrev={() => playerStore.prevFile()}
-                                onPlaylistToggle={this.handleTogglePlayList}
-                                onFullScreenToggle={this.handleToggleFullscreen}
-                            />
-                        </ShowIf>
+                    </ShowIf>
+                    <PlayBackZones device={device} onClick={this.handleClick} />
+                    <ShowIf mustNot={[hideUi]}>
+                        <Share device={device} />
+                        <PlayerFilesList
+                            open={playlistOpen}
+                            device={device}
+                            onFileSelected={this.handleSelectFile}
+                        />
+                        <MediaControls
+                            fullScreen={fullScreen}
+                            device={device}
+                            onNext={() => playerStore.nextFile()}
+                            onPrev={() => playerStore.prevFile()}
+                            onPlaylistToggle={this.handleTogglePlayList}
+                            onFullScreenToggle={this.handleToggleFullscreen}
+                        />
                     </ShowIf>
                 </div>
             </Fullscreen >
