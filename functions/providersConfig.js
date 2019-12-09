@@ -22,11 +22,6 @@ module.exports = {
         'baseUrl': 'http://ex-fs.net',
         'searchUrl': 'http://ex-fs.net'
     },     
-    'kinotochka': {
-        'todo': true,
-        'baseUrl': 'http://kinotochka.club',
-        'searchUrl': 'http://kinotochka.club'
-    }, 
     'kinoukr': {
         'baseUrl': 'https://kinoukr.com',
         'searchUrl': 'https://kinoukr.com'
@@ -39,5 +34,10 @@ module.exports = {
     'vumoo': {
         'baseUrl': 'http://vumoo.to',
         'searchUrl': 'http://vumoo.to/search?t=2018BC65S4359XSMloz2HpQU2bXW4T_cTmTZFKx_zfeb1NAvH2OpqEK-aJloawZL-xo426IMAVLtpWZ3SK1d=='
-    }
+    },
+    'kinotochka': {
+        'todo': true,
+        'baseUrl': 'http://kinotochka.club',
+        'searchUrl': 'http://kinotochka.club'
+    }, 
 }

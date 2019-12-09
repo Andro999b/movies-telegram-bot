@@ -31,7 +31,15 @@ class EXFSProvider extends DataLifeProvider {
                     selector: 'iframe',
                     transform: async ($el) => {
                         const res = await superagent.get($el.attr('src'))
-                        const { groups: { file } } = res.text.match(/file:'(?<file>.+)'/)
+                        
+                        const { groups: { file } } = res.text.match(/file:['"](?<file>.+)['"]/)
+
+                        if(file.endsWith('m3u8')) {
+                            return [{
+                                id: 0,
+                                manifestUrl: file,
+                            }]
+                        }
 
                         return convertPlayerJSPlaylist(JSON.parse(file))
                             .map((file, id) => ({...file, id}))
@@ -39,6 +47,16 @@ class EXFSProvider extends DataLifeProvider {
                 }
             }
         })
+    }
+
+    async _postProcessResultDetails(details) {
+        details.files = details.files || []
+
+        if(details.files.length == 1) {
+            details.files[0].name = details.title
+        } 
+
+        return details
     }
 }
 
