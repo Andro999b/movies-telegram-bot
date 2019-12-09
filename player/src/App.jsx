@@ -4,6 +4,7 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import { red } from '@material-ui/core/colors'
 import { Provider } from 'mobx-react'
 
+import Notification from './components/Notification'
 import PlayerView from './views/PlayerView'
 import stores from './store'
 
@@ -68,6 +69,7 @@ class App extends Component {
             <ThemeProvider theme={theme}>
                 <Provider {...stores}>
                     <PlayerView/>
+                    <Notification/>
                 </Provider>
             </ThemeProvider>
         )

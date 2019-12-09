@@ -6,8 +6,8 @@ import App from './App'
 import playerStore from './store/player-store'
 
 const urlParams = new URLSearchParams(window.location.search)
-const provider = urlParams.get('provider') || store.get('lastProvider')
-const id = urlParams.get('id') || store.get('lastId')
+const provider = urlParams.get('provider') || store.get('provider')
+const id = urlParams.get('id') || store.get('id')
 
 function renderError(e) {
     if (e) console.error(e)
@@ -15,8 +15,8 @@ function renderError(e) {
 }
 
 if (provider && id) {
-    store.set('lastProvider', provider)
-    store.set('lastId', id)
+    store.set('provider', provider)
+    store.set('id', id)
 
     fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}`)
         .then((response) => response.json())

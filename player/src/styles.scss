@@ -232,3 +232,13 @@ html {
         background: url('./images/#{$icon}.png') no-repeat;
     }
 }
+
+.icon-copy {
+    color: white;
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    vertical-align: top;
+    cursor: pointer;
+    padding: 6px;
+}

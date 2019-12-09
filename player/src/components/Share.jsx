@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import BaseSelector from './BaseSelector'
+import copy from 'clipboard-copy'
+import store from 'store'
 import {
     IconButton,
     Typography,
@@ -8,11 +10,14 @@ import {
     FormControlLabel,
     Switch
 } from '@material-ui/core'
-import { 
-    ShareRounded as ShareIcon, 
-    FileCopyRounded as CopyIcon 
+import {
+    ShareRounded as ShareIcon,
+    FileCopyRounded as CopyIcon
 } from '@material-ui/icons'
+import { inject } from 'mobx-react'
 
+
+@inject(({ notificationStore: { showMessage }}) => ({ showMessage }))
 class Share extends BaseSelector {
 
     constructor(props, context) {
@@ -36,7 +41,13 @@ class Share extends BaseSelector {
     getShareUrl = (sharePosition, shareTime) => {
         const { device: { currentTime, currentFileIndex } } = this.props
 
-        const params = new URLSearchParams(location.search)
+        const params = new URLSearchParams(location.search);
+
+        ['provider', 'id'].forEach((k) => {
+            if (!params.has(k)) {
+                params.set(k, store.get(k))
+            }
+        })
 
         if (sharePosition) {
             params.set('file', currentFileIndex)
@@ -58,6 +69,18 @@ class Share extends BaseSelector {
         }
     }
 
+    handleShare = (network) => {
+        window.gtag && gtag('event', 'share', {
+            'event_category': network,
+            'event_label': document.title
+        })
+    }
+
+    handleCopy = (url) => {
+        copy(decodeURIComponent(url))
+        this.props.showMessage('URL copied!')
+    }
+
     renderList() {
         const { sharePosition, shareTime } = this.state
         const url = this.getShareUrl(sharePosition, shareTime)
@@ -73,31 +96,40 @@ class Share extends BaseSelector {
                         href={`http://vk.com/share.php?url=${url}&title=${title}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => this.handleShare('vk')}
                     />
                     <a className="icon-telegram"
                         href={`https://telegram.me/share/url?url=${url}&text=${title}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => this.handleShare('telegram')}
                     />
                     <a className="icon-facebook" href={`https://www.facebook.com/sharer/sharer.php?u=${url}&t=${title}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => this.handleShare('facebook')}
                     />
-                    <a className="icon-viber" 
+                    <a className="icon-viber"
                         href={`viber://forward?text=${title}%20$${url}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => this.handleShare('viber')}
                     />
-                    <a className="icon-whatsapp" 
+                    <a className="icon-whatsapp"
                         href={`whatsapp://send?text=${title}%20$${url}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                    /> 
-                    <a className="icon-twitter" 
+                        onClick={() => this.handleShare('whatsapp')}
+                    />
+                    <a className="icon-twitter"
                         href={`https://twitter.com/intent/tweet?text=${title}%20${url}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => this.handleShare('twitter')}
                     />
+                    <a className="icon-copy" onClick={() => this.handleCopy(url)}>
+                        <CopyIcon />
+                    </a>
                 </div>
                 <div>
                     <FormGroup>
@@ -137,6 +169,7 @@ class Share extends BaseSelector {
 }
 
 Share.propTypes = {
+    showMessage: PropTypes.func,
     device: PropTypes.any
 }
 

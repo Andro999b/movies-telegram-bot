@@ -17,12 +17,28 @@ import {
 import MobileSoundControl from './MobileSoundControl'
 import SoundControl from './SoundControl'
 import { isTouchDevice } from '../utils'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
 import AudioTrackSelector from './AudioTrackSelector'
 import VideoQualitySelector from './VideoQualitySelector'
 
+@inject(({ notificationStore: { showMessage } }) => ({ showMessage }))
 @observer
 class MediaControls extends Component {
+    handleToggleShuffle = () => {
+        const {
+            device: { shuffle, setShuffle },
+            showMessage
+        } = this.props
+
+        if(shuffle) {
+            showMessage('Shuffle playlist mode OFF')
+            setShuffle(false)
+        } else {
+            showMessage('Shuffle playlist mode ON')
+            setShuffle(true)
+        }
+    }
+
     render() {
         const {
             onPlaylistToggle,
@@ -75,23 +91,17 @@ class MediaControls extends Component {
                                 <NextIcon />
                             </IconButton>
                             {files.length > 1 && <Fragment>
-                                {shuffle &&
-                                    <IconButton onClick={() => device.setShuffle(false)}>
-                                        <PlaylistPlayIcon />
-                                    </IconButton>
-                                }
-                                {!shuffle &&
-                                    <IconButton onClick={() => device.setShuffle(true)}>
-                                        <ShuffleIcon />
-                                    </IconButton>
-                                }
+                                <IconButton onClick={this.handleToggleShuffle}>
+                                    {shuffle && <PlaylistPlayIcon />}
+                                    {!shuffle && <ShuffleIcon />}
+                                </IconButton>
                             </Fragment>}
                             {mobile && <MobileSoundControl device={device} />}
                             {!mobile && <SoundControl device={device} />}
                             {hasAudioTracks && <AudioTrackSelector device={device} />}
                         </div>
                         <div className="player-controls__panel-section">
-                            {hasQualities && <VideoQualitySelector device={device}/>}
+                            {hasQualities && <VideoQualitySelector device={device} />}
                             <IconButton onClick={() => onFullScreenToggle()}>
                                 {!fullScreen && <FullscreenIcon />}
                                 {fullScreen && <FullscreenExitIcon />}
@@ -108,6 +118,7 @@ class MediaControls extends Component {
 }
 
 MediaControls.propTypes = {
+    showMessage: PropTypes.func,
     device: PropTypes.object.isRequired,
     onPlaylistToggle: PropTypes.func.isRequired,
     onFullScreenToggle: PropTypes.func,
