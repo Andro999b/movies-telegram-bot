@@ -8,7 +8,10 @@ import {
     FormControlLabel,
     Switch
 } from '@material-ui/core'
-import { ShareRounded as ShareIcon } from '@material-ui/icons'
+import { 
+    ShareRounded as ShareIcon, 
+    FileCopyRounded as CopyIcon 
+} from '@material-ui/icons'
 
 class Share extends BaseSelector {
 

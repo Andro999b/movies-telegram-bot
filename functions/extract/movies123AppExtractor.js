@@ -1,6 +1,6 @@
 const superagent = require('superagent')
 const CryptoJS = require('crypto-js')
-const m3u8Extractor = require('./m3u8Extractor')
+const makeResponse = require('../utils/makeResponse')
 
 const password = 'iso10126'
 
@@ -14,9 +14,9 @@ module.exports = async (params) => {
 
     for (const video of videos) {
         if(video.url.indexOf('fmoviesfree') != -1) {
-            return await m3u8Extractor(video)
+            return makeResponse(null, 302, {
+                Location: video.url
+            })
         }
     }
-
-    throw Error('Video can`t be extracted')
 }

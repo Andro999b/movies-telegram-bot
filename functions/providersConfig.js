@@ -39,5 +39,10 @@ module.exports = {
         'todo': true,
         'baseUrl': 'http://kinotochka.club',
         'searchUrl': 'http://kinotochka.club'
-    }, 
+    },     
+    'lostfilmon': {
+        'todo': true,
+        'baseUrl': 'http://lostfilmon.club/'
+    }
+
 }

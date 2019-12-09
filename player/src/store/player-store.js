@@ -118,7 +118,7 @@ export class LocalDevice {
         const { files } = this.playlist
 
         if (fileIndex < 0 || fileIndex >= files.length)
-            return
+            return false
 
         const playlistPrefix = getPlaylistPrefix(this.playlist)
 
@@ -128,6 +128,8 @@ export class LocalDevice {
 
         const file = files[this.currentFileIndex]
         this.setSource(file)
+
+        return true
     }
 
     @action.bound setLoading(loading) {
@@ -192,8 +194,11 @@ class PlayerStore {
     }
 
     @action.bound switchFile(fileIndex) {
-        this.device.selectFile(fileIndex)
-        this.device.play()
+        if(this.device.selectFile(fileIndex)){
+            this.device.play()
+        } else {
+            this.device.pause()
+        }
         document.title = this.getPlayerTitle()
 
         window.gtag && gtag('event', 'selectFile', {
@@ -208,16 +213,6 @@ class PlayerStore {
 
     @action.bound nextFile() {
         this.switchFileOrShuffle(this.device.currentFileIndex + 1)
-    }
-
-    @action.bound endFile() {
-        const  {currentFileIndex, playlist: { files }} = this.device
-
-        if(currentFileIndex == files.length - 1) {
-            this.device.pause()
-        } else {
-            this.switchFileOrShuffle(this.device.currentFileIndex + 1)
-        }
     }
 
     @action.bound switchFileOrShuffle(fileIndex) {

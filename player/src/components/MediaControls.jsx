@@ -42,6 +42,8 @@ class MediaControls extends Component {
         const mobile = isTouchDevice()
         const hasAudioTracks = device.audioTracks.length > 1
         const hasQualities = device.qualities.length > 1
+        const disablePrev = shuffle || currentFileIndex == 0
+        const disableNext = currentFileIndex >= files.length - 1 && !shuffle
 
         return (
             <Slide direction="up" in mountOnEnter unmountOnExit>
@@ -56,11 +58,9 @@ class MediaControls extends Component {
                     />
                     <div className="player-controls__panel">
                         <div className="player-controls__panel-section">
-                            {currentFileIndex != 0 &&
-                                <IconButton onClick={onPrev} disabled={shuffle}>
-                                    <PreviousIcon />
-                                </IconButton>
-                            }
+                            <IconButton onClick={onPrev} disabled={disablePrev}>
+                                <PreviousIcon />
+                            </IconButton>
                             {!device.isPlaying &&
                                 <IconButton onClick={() => device.resume()}>
                                     <PlayIcon />
@@ -71,11 +71,9 @@ class MediaControls extends Component {
                                     <PauseIcon />
                                 </IconButton>
                             }
-                            {currentFileIndex < files.length - 1 &&
-                                <IconButton onClick={onNext}>
-                                    <NextIcon />
-                                </IconButton>
-                            }
+                            <IconButton onClick={onNext} disabled={disableNext}>
+                                <NextIcon />
+                            </IconButton>
                             {files.length > 1 && <Fragment>
                                 {shuffle &&
                                     <IconButton onClick={() => device.setShuffle(false)}>
