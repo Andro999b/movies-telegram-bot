@@ -5,8 +5,6 @@ module.exports = (regExps) => async (params) => {
     const { url } = params
     const siteRes = await superagent.get(url).timeout(5000)
 
-    console.log(siteRes.text)
-
     for(let extractExpr of regExps) {
         const matches = siteRes.text.match(extractExpr)
 

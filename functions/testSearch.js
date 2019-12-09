@@ -1,9 +1,9 @@
 const providers = require('./providers')
 
-const providerName = 'kinoukr'
+const providerName = 'vumoo'
 // const providerName = 'uaserials'
-// const searchQuery = 'Stranger things'
-const searchQuery = 'Venom'
+const searchQuery = 'Terminator 1984'
+// const searchQuery = 'Venom'
 // const searchQuery = 'one punch'
 // const searchQuery = 'веном'
 
