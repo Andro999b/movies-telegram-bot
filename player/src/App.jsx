@@ -7,6 +7,7 @@ import { Provider } from 'mobx-react'
 import Notification from './components/Notification'
 import PlayerView from './views/PlayerView'
 import stores from './store'
+import logger from './utils/logger'
 
 import { ThemeProvider } from '@material-ui/styles'
 
@@ -64,6 +65,14 @@ const theme = createMuiTheme({
 })
 
 class App extends Component {
+
+    componentDidCatch(error) {
+        logger.error(error.message, {
+            title: document.title,
+            url: location.href
+        })
+    }
+
     render() {
         return (
             <ThemeProvider theme={theme}>

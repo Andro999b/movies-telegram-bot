@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx'
 import localStore from 'store'
+import logger from '../utils/logger'
 
 const END_FILE_TIME_OFFSET = 60
 const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${playlist.id}`
@@ -138,6 +139,13 @@ export class LocalDevice {
 
     @action.bound setError(error) {
         this.error = error
+
+        if (error) {
+            logger.error(error, {
+                title: document.title,
+                url: location.href
+            })
+        }
     }
 
     @action.bound setVolume(volume) {
@@ -181,10 +189,10 @@ class PlayerStore {
     @action openPlaylist(playlist, fileIndex, startTime) {
         this.device = new LocalDevice()
 
-        if(fileIndex == null || isNaN(fileIndex)) {
+        if (fileIndex == null || isNaN(fileIndex)) {
             fileIndex = localStore.get(`${getPlaylistPrefix(playlist)}:current`)
 
-            if(startTime == null || isNaN(startTime)) {
+            if (startTime == null || isNaN(startTime)) {
                 startTime = parseFloat(localStore.get(`${getPlaylistPrefix(playlist)}:ts`))
             }
         }
@@ -194,7 +202,7 @@ class PlayerStore {
     }
 
     @action.bound switchFile(fileIndex) {
-        if(this.device.selectFile(fileIndex)){
+        if (this.device.selectFile(fileIndex)) {
             this.device.play()
         } else {
             this.device.pause()
@@ -224,8 +232,8 @@ class PlayerStore {
 
             do {
                 next = Math.round(Math.random() * (files.length - 1))
-            } while(next == currentFileIndex)
-            
+            } while (next == currentFileIndex)
+
             this.switchFile(next)
         } else {
             this.switchFile(fileIndex)
