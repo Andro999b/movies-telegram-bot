@@ -45,6 +45,10 @@ class EXFSProvider extends DataLifeProvider {
                                     .filter((it) => it)
                             )
                                 .reduce((acc, item) => acc.concat(item), [])
+                                .map((item, id) => ({
+                                    id,
+                                    ...item
+                                }))
                         } else {
                             return []
                         }
