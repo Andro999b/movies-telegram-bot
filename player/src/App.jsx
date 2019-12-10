@@ -1,7 +1,7 @@
 import './styles.scss'
 import React, { Component } from 'react'
 import { createMuiTheme } from '@material-ui/core/styles'
-import { red } from '@material-ui/core/colors'
+import { red, grey } from '@material-ui/core/colors'
 import { Provider } from 'mobx-react'
 
 import Notification from './components/Notification'
@@ -14,9 +14,9 @@ import { ThemeProvider } from '@material-ui/styles'
 const theme = createMuiTheme({
     palette: {
         secondary: {
-            light: red.A200,
-            main: red[500],
-            dark: red[900],
+            light: grey.A200,
+            main: grey[700],
+            dark: grey[900],
             contrastText: '#fff'
         },
         primary: {

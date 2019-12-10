@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 import {
     List,
     ListItem,
-    ListItemIcon,
     ListItemText,
     ListItemSecondaryAction,
     IconButton,
     Paper,
-    Slide
+    Slide,
+    Toolbar,
+    Typography,
+    AppBar
 } from '@material-ui/core'
 import { grey } from '@material-ui/core/colors'
 import {
@@ -45,7 +47,7 @@ class PlayerPlayList extends Component {
 
     handleTrackDownload = (file) => {
         const { device: { playlist: { title } } } = this.props
-       
+
         window.gtag && gtag('event', 'downloadFile', {
             'event_category': 'link',
             'event_label': `${title} - ${file.name}`
@@ -78,14 +80,14 @@ class PlayerPlayList extends Component {
                         </span>
                     } />
                     {downloadUrl && <ListItemSecondaryAction>
-                        <IconButton 
-                            component='a' 
-                            href={downloadUrl} 
-                            download={downloadUrl} 
-                            target="_blank" 
+                        <IconButton
+                            component='a'
+                            href={downloadUrl}
+                            download={downloadUrl}
+                            target="_blank"
                             onClick={() => this.handleTrackDownload(file)}
                         >
-                            <DownloadIcon/>
+                            <DownloadIcon />
                         </IconButton>
                     </ListItemSecondaryAction>}
                 </ListItem>
@@ -111,13 +113,25 @@ class PlayerPlayList extends Component {
                 <Paper elevation={12} square className="player__file-list">
                     <List>
                         {!selectGroup && <Fragment>
-                            {groups.length > 1 &&
+                            {/* {groups.length > 1 &&
                                 <ListItem button onClick={this.handleOpenGroupsMenu}>
                                     <ListItemIcon>
                                         <BackIcon/>
                                     </ListItemIcon>
                                     <ListItemText primary={selectedGroup.name} />
                                 </ListItem>
+                            } */}
+                            {groups.length > 1 &&
+                                <AppBar position="static" color='secondary'>
+                                    <Toolbar>
+                                        <IconButton edge="start"  onClick={this.handleOpenGroupsMenu}>
+                                            <BackIcon />
+                                        </IconButton>
+                                        <Typography variant="h6">
+                                            {selectedGroup.name}
+                                        </Typography>
+                                    </Toolbar>
+                                </AppBar>
                             }
                             {this.renderFiles(groupFiles, currentFileId, files)}
                         </Fragment>}

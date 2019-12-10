@@ -167,7 +167,7 @@ class LocalPlayer extends Component {
                     <ShowIf mustNot={[error]}>
                         <ShowIf must={[isLoading]}>
                             <div className="center">
-                                <CircularProgress color="secondary" />
+                                <CircularProgress color="primary" />
                             </div>
                         </ShowIf>
                     </ShowIf>
