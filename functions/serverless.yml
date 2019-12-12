@@ -45,6 +45,7 @@ functions:
 
   info:
     handler: handlers/info.handler
+    timeout: 12
     events:
       - http: 
           path: api/trackers/{provider}/items/{resultId}
