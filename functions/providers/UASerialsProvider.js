@@ -1,4 +1,4 @@
-const DataLifeProvider = require('./DataLIfeProvider')
+const DataLifeProvider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
 const CryptoJS = require('crypto-js')
 // const superagent = require('superagent')

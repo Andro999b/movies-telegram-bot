@@ -1,4 +1,4 @@
-const DataLifeProvider = require('./DataLIfeProvider')
+const DataLifeProvider = require('./DataLifeProvider')
 const getBestPlayerJSQuality= require('../utils/getBestPlayerJSQuality')
 const convertPlayerJSPlaylist= require('../utils/convertPlayerJSPlaylist')
 const urlencode = require('urlencode')
