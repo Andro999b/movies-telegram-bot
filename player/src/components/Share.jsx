@@ -70,8 +70,8 @@ class Share extends BaseSelector {
     }
 
     handleShare = (network) => {
-        window.gtag && gtag('event', 'share', {
-            'event_category': network,
+        window.gtag && gtag('event', network, {
+            'event_category': 'share',
             'event_label': document.title
         })
     }

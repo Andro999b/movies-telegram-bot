@@ -145,6 +145,11 @@ export class LocalDevice {
                 title: document.title,
                 url: location.href
             })
+
+            window.gtag && gtag('event', 'play', {
+                'event_category': 'error',
+                'event_label': error
+            })
         }
     }
 

@@ -1,6 +1,6 @@
 const superagent = require('superagent')
 const CryptoJS = require('crypto-js')
-const makeResponse = require('../utils/makeResponse')
+const m3u8Extractor = require('./m3u8Extractor')
 
 const password = 'iso10126'
 
@@ -14,9 +14,7 @@ module.exports = async (params) => {
 
     for (const video of videos) {
         if(video.url.indexOf('fmoviesfree') != -1) {
-            return makeResponse(null, 302, {
-                Location: video.url
-            })
+            return m3u8Extractor(video)
         }
     }
 }

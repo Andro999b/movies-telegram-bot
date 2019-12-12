@@ -17,8 +17,8 @@ function renderError(e, message) {
 
     document.querySelector('#app .loader').textContent = message
 
-    window.gtag && gtag('event', 'error', {
-        'event_category': 'load',
+    window.gtag && gtag('event', 'load', {
+        'event_category': 'error',
         'event_label': message
     })
 
