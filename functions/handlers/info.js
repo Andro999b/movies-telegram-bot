@@ -3,25 +3,39 @@ const providersService = require('../providers')
 const makeResponse = require('../utils/makeResponse')
 
 const documentClient = new AWS.DynamoDB.DocumentClient()
-const TTL = 2 * 3600
+const TTL = 48 * 3600
+const expirationTime = 2 * 3600
+
+async function putToCache(id, result) {
+    const ttl = Math.floor(new Date().getTime() / 1000) + TTL
+    const expired = Math.floor(new Date().getTime() / 1000) + expirationTime
+    const putRequest = { TableName: process.env.TABLE_NAME, Item: { id, result, ttl, expired } }
+    await documentClient.put(putRequest).promise()
+}
 
 module.exports.handler = async (event) => {
     let result = {}
 
-    if(event.pathParameters) {
+    if (event.pathParameters) {
         const { provider, resultId } = event.pathParameters
         const id = `${provider}:${resultId}`
 
         const getRequest = { TableName: process.env.TABLE_NAME, Key: { id } }
         const cache = await documentClient.get(getRequest).promise()
-        if(cache.Item) {
-            result = cache.Item.result
+        if (cache.Item) {
+            if (cache.Item.expired < Date.now() / 1000) {
+                try {
+                    result = await providersService.getInfo(provider, resultId)
+                    putToCache(id, result)
+                } catch (e) {
+                    result = cache.Item.result
+                }
+            } else {
+                result = cache.Item.result
+            } 
         } else {
             result = await providersService.getInfo(provider, resultId)
-
-            const ttl = Math.floor(new Date().getTime() / 1000) + TTL
-            const putRequest = { TableName: process.env.TABLE_NAME, Item: { id, result, ttl } }
-            await documentClient.put(putRequest).promise()
+            putToCache(id, result)
         }
     }
 

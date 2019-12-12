@@ -3,7 +3,7 @@ const urlencode = require('urlencode')
 const superagent = require('superagent')
 const $ = require('cheerio')
 
-class EXFSProvider extends Provider {
+class VumooPlayer extends Provider {
     constructor() {
         super('vumoo', {
             detailsScope: 'body',
@@ -51,4 +51,4 @@ class EXFSProvider extends Provider {
     }
 }
 
-module.exports = EXFSProvider
+module.exports = VumooPlayer

@@ -19,5 +19,5 @@ module.exports = (regExps) => async (params) => {
         })
     }
     
-    throw Error('Video can`t be extracted')
+    throw Error('Video can`t be extracted', params)
 }
