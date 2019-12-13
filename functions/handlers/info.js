@@ -4,7 +4,7 @@ const makeResponse = require('../utils/makeResponse')
 
 const documentClient = new AWS.DynamoDB.DocumentClient()
 const TTL = 48 * 3600
-const expirationTime = 2 * 3600
+const expirationTime = 1 * 3600
 
 async function putToCache(id, result) {
     if(result.files && result.files.length > 0) {
@@ -31,18 +31,18 @@ module.exports.handler = async (event) => {
         const getRequest = { TableName: process.env.TABLE_NAME, Key: { id } }
         const cache = await documentClient.get(getRequest).promise()
         if (cache.Item) {
-            if (cache.Item.expired < Date.now() / 1000) {
+            if (cache.Item.expired < Date.now() / 1000) { //get new resuls if cahce record expired
                 try {
                     result = await providersService.getInfo(provider, resultId)
                     await putToCache(id, result)
-                } catch (e) {
+                } catch (e) {  // if get resource failed exted cahce expiration time 
                     result = cache.Item.result
                     await extendExpire(cache)
                 }
-            } else {
+            } else { // get item from cahce if its not expired
                 result = cache.Item.result
             } 
-        } else {
+        } else { // load item from site if it not in cache
             result = await providersService.getInfo(provider, resultId)
             await putToCache(id, result)
         }
