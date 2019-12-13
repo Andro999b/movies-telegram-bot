@@ -35,7 +35,6 @@ if (provider && id) {
 
     fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}`)
         .then((response) => response.json())
-        .catch((e) => renderError(e))
         .then((playlist) => {
             if (playlist && playlist.files && playlist.files.length) {
                 const fileIndex = parseInt(urlParams.get('file'))
@@ -47,6 +46,7 @@ if (provider && id) {
                 renderError('Video unavalaible')
             }
         })
+        .catch((e) => renderError(e))
 } else {
     renderError()
 }
