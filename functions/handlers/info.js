@@ -13,6 +13,12 @@ async function putToCache(id, result) {
     await documentClient.put(putRequest).promise()
 }
 
+async function extendExpire(cache) {
+    const expired = Math.floor(new Date().getTime() / 1000) + expirationTime
+    const putRequest = { TableName: process.env.TABLE_NAME, Item: { ...cache.Item, expired } }
+    await documentClient.put(putRequest).promise()
+}
+
 module.exports.handler = async (event) => {
     let result = {}
 
@@ -29,6 +35,7 @@ module.exports.handler = async (event) => {
                     putToCache(id, result)
                 } catch (e) {
                     result = cache.Item.result
+                    await extendExpire(cache)
                 }
             } else {
                 result = cache.Item.result
@@ -40,4 +47,5 @@ module.exports.handler = async (event) => {
     }
 
     return makeResponse(result)
+}
 }
