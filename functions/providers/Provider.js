@@ -10,6 +10,7 @@ class Provider {
                 ...PROVIDERS_CONFIG[name],
                 pageSize: PROVIDERS_CONFIG[name].pageSize || PROVIDERS_CONFIG.pageSize || 5,
                 timeout: (PROVIDERS_CONFIG[name].timeout || PROVIDERS_CONFIG.timeout || 10) * 1000,
+                infoTimeout: (PROVIDERS_CONFIG[name].infoTimeout || PROVIDERS_CONFIG.infoTimeout || 10) * 1000,
                 scope: '',
                 slectors: {},
                 pagenatorSelector: '',
@@ -66,7 +67,7 @@ class Provider {
             detailsScope, 
             detailsSelectors, 
             headers, 
-            timeout 
+            infoTimeout 
         } = this.config
 
         let details = await crawler
@@ -74,7 +75,7 @@ class Provider {
                 this.getInfoUrl(resultsId), 
                 this._crawlerInfoRequestGenerator(resultsId)
             )
-            .timeout(timeout)
+            .timeout(infoTimeout)
             .limit(1)
             .headers(headers)
             .scope(detailsScope)

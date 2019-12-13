@@ -5,8 +5,7 @@ const providers = [
     new (require('./BaskinoProvider'))(),
     new (require('./EXFSProvider'))(),
     new (require('./KinoUkrProvider'))(),
-    new (require('./UASerialsProvider'))(),
-    new (require('./VumooProvider'))()
+    new (require('./UASerialsProvider'))()
 ]
 
 module.exports = {

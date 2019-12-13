@@ -1,5 +1,6 @@
 module.exports = {
     'timeout': 5,
+    'infoTimeout': 11,
     'pageSize': 15,
     'animevost': {
         'baseUrl': 'https://animevost.org',
@@ -30,19 +31,5 @@ module.exports = {
         'password': '297796CCB81D2551',
         'baseUrl': 'https://uaserials.pro',
         'searchUrl': 'https://uaserials.pro'
-    },
-    'vumoo': {
-        'baseUrl': 'http://vumoo.to',
-        'searchUrl': 'http://vumoo.to/search?t=2018BC65S4359XSMloz2HpQU2bXW4T_cTmTZFKx_zfeb1NAvH2OpqEK-aJloawZL-xo426IMAVLtpWZ3SK1d=='
-    },
-    'kinotochka': {
-        'todo': true,
-        'baseUrl': 'http://kinotochka.club',
-        'searchUrl': 'http://kinotochka.club'
-    },     
-    'lostfilmon': {
-        'todo': true,
-        'baseUrl': 'http://lostfilmon.club/'
     }
-
 }
