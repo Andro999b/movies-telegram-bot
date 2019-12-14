@@ -44,7 +44,7 @@ class EXFSProvider extends DataLifeProvider {
                         const playlists = JSON.parse(files)
 
                         if(Object.keys(translations).length == 0) {
-                            const translationId = $('#translation_id').attr('value')
+                            const translationId = $('#translation_id').attr('value') || '0'
                             return this._extractNoTranslations(playlists[translationId])
                         }
 
