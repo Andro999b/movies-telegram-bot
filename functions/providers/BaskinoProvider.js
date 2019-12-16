@@ -42,7 +42,7 @@ class BaskinoProvider extends DataLifeProvider {
                                     id: file.id,
                                     manifestUrl: this._getBestQuality(file.urlQuality),
                                     path: `Season ${season}`,
-                                    name: `Season ${season} / Episode ${index + 1}`,
+                                    name: `Episode ${index + 1}`,
                                 }))
                             }))).reducer((acc, files) => acc.concat(files), [])
                         }

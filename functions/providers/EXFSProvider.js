@@ -71,7 +71,7 @@ class EXFSProvider extends DataLifeProvider {
     _extractTranslations(translations, playlists) {
         return Object.keys(translations)
             .map((translation) => {
-                const translationName = translation === '0' ? '' : `[${translations[translation]}] `
+                const translationName = translations[translation] ? translations[translation].trim() : 'Default'
                 const playlist = playlists[translation]
 
                 if (typeof playlist === 'string') {
@@ -86,16 +86,12 @@ class EXFSProvider extends DataLifeProvider {
                     return convertPlayerJSPlaylist(playlist)
                         .map((file) => ({
                             ...file,
-                            name: `${translationName}${file.name}`,
-                            path: `${translationName}${file.path}`
+                            path: `${translationName}/${file.path}`
                         }))
                 }
             })
             .reduce((acc, item) => acc.concat(item), [])
-            .map((file, index) => ({
-                ...file,
-                id: index
-            }))
+            .map((file, index) => ({...file, id: index}))
     }
 
     _postProcessResult(results) {

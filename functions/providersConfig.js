@@ -27,6 +27,10 @@ module.exports = {
         'baseUrl': 'https://kinoukr.com',
         'searchUrl': 'https://kinoukr.com'
     },
+    'uakino': {
+        'baseUrl': 'https://uakino.club',
+        'searchUrl': 'https://uakino.club'
+    },
     'uaserials': {
         'password': '297796CCB81D2551',
         'baseUrl': 'https://uaserials.pro',

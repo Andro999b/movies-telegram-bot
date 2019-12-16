@@ -60,7 +60,7 @@ class SeasonvarProvider extends DirectMediaProvider {
                                 return files.map((file) => (({
                                     ...file,
                                     path: `Season ${index + 1}`,
-                                    name: `Season ${index + 1} / ${file.name}`
+                                    name: `${file.name}`
                                 })))
                             })
                             .reduce((acc, files) => acc.concat(files), [])

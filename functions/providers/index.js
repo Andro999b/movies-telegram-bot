@@ -5,6 +5,7 @@ const providers = [
     new (require('./BaskinoProvider'))(),
     new (require('./EXFSProvider'))(),
     new (require('./KinoUkrProvider'))(),
+    new (require('./UAKinoProvider'))(),
     new (require('./UASerialsProvider'))()
 ]
 

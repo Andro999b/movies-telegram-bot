@@ -38,7 +38,7 @@ class EXFSProvider extends DataLifeProvider {
                                     const file = this._getFile(episode.sounds[0])
                                     return file && {   
                                         ...file,
-                                        name: `${title} / ${episode.title}`,
+                                        name: episode.title,
                                         path: title,
                                     }   
                                 })
@@ -64,11 +64,11 @@ class EXFSProvider extends DataLifeProvider {
                 manifestUrl: url,
                 extractor: { type: 'tortuga' }
             }
-        } else if(url.indexOf('uploadvideo') != -1) {
-            return {
-                url: url,
-                extractor: { type: 'uploadvideo' }
-            }
+        // } else if(url.indexOf('uploadvideo') != -1) {
+        //     return {
+        //         url: url,
+        //         extractor: { type: 'uploadvideo' }
+        //     }
         }
     }
 
