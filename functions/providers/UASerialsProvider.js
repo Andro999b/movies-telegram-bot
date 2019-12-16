@@ -16,7 +16,7 @@ class EXFSProvider extends DataLifeProvider {
                 name: 'a.mov-title-ua',
                 image: {
                     selector: '.img-box img',
-                    transform: ($el) => $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 }
             },
             detailsScope: '#dle-content',
@@ -24,7 +24,7 @@ class EXFSProvider extends DataLifeProvider {
                 title: '.full-title h1',
                 image: {
                     selector: '.mov-img img',
-                    transform: ($el) => $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
                     selector: '.ua-serials',

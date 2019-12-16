@@ -24,7 +24,7 @@ class EXFSProvider extends DataLifeProvider {
                 },
                 image: {
                     selector: '.movie-img img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 }
             },
             detailsScope: '#dle-content',
@@ -32,7 +32,7 @@ class EXFSProvider extends DataLifeProvider {
                 title: '.solototle',
                 image: {
                     selector: '.film-poster img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
                     selector: '#pre',
@@ -46,15 +46,13 @@ class EXFSProvider extends DataLifeProvider {
 
                             const $ = cheerio.load(JSON.parse(res.text).response)
 
-                            // const translations = $('.playlists-lists li')
-                            //     .toArray()
-                            //     .reduce((acc, node) => {
-                            //         const $node = $(node)
-
-                            //         acc[$node.attr('data_id')] = $node.text()
-
-                            //         return acc
-                            //     }, {})
+                            const translations = $('.playlists-lists li')
+                                .toArray()
+                                .reduce((acc, node) => {
+                                    const $node = $(node)
+                                    acc[$node.attr('data_id')] = $node.text()
+                                    return acc
+                                }, {})
 
                             files = $('.playlists-videos li')
                                 .toArray()
@@ -62,9 +60,18 @@ class EXFSProvider extends DataLifeProvider {
                                     const $node = $(node)
                                     const file = this._getFile($node.attr('data-file'))
                                     const name = $node.text()
-                                    // const transLationId = $node.attr('data_id')
+                                    const translationId = $node.attr('data_id')
 
-                                    return file && {...file, name}
+                                    if(file) {
+                                        file.name = name
+
+                                        if(translationId) {
+                                            const translationName = translations[translationId]
+                                            file.path = translationName + (file.path ? '/' + file.path : '')
+                                        }
+
+                                        return file
+                                    }
                                 })
                                 .filter((it) => it)
                         } else {

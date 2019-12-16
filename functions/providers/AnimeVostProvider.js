@@ -10,7 +10,7 @@ class AnimeVostProvider extends DataLifeProvider {
                 name: '.shortstoryHead a',
                 image: {
                     selector: '.shortstoryContent div > a > img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 }
             },
             detailsScope: '#dle-content',
@@ -18,7 +18,7 @@ class AnimeVostProvider extends DataLifeProvider {
                 title: '.shortstoryHead h1',
                 image: {
                     selector: '.imgRadius',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
                     selector: 'script',

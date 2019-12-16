@@ -1,4 +1,3 @@
-import groupBy from 'lodash.groupby'
 
 export function createExtractorUrlBuilder(extractor, additionalParams) {
     let extractorBaseUrl = null

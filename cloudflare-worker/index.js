@@ -3,12 +3,12 @@ addEventListener('fetch', event => {
 })
 
 async function handleRequest(request) {
-  const parts = request.url.split('?')
+  const index = request.url.indexOf('?')
 
-  if(parts.length == 1)
+  if(index == -1)
     return new Response('Not Found', { status: 404 })
 
-  const proxyUrl = decodeURIComponent(parts[1])
+  const proxyUrl = decodeURIComponent(request.url.substr(index + 1))
 
   const res = await fetch(proxyUrl)
 

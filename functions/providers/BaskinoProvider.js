@@ -1,6 +1,6 @@
 const DataLifeProvider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
-const superagent = require('superagent')
+const deliverembed = require('../utils/deliverembed')
 
 class BaskinoProvider extends DataLifeProvider {
     constructor() {
@@ -9,51 +9,18 @@ class BaskinoProvider extends DataLifeProvider {
             selectors: {
                 id: { selector: '.posttitle a', transform: ($el) => urlencode($el.attr('href')) },
                 name: '.posttitle a',
-                image: { selector: '.postcover a img', transform: ($el) => $el.attr('src') }
+                image: { selector: '.postcover a img', transform: ($el) => this._absoluteUrl($el.attr('src')) }
             },
             detailsScope: '#dle-content',
             detailsSelectors: {
                 title: '.title_social h1', 
                 image: {
                     selector: '.mobile_cover img',
-                    transform: ($el) => $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
                     selector: 'iframe',
-                    transform: async ($el) => {
-                        const src = $el.attr('src')
-                        const res = await superagent.get(src)
-
-                        // let parts = res.text.match(/hlsList: (?<hls>{[^}]+}),/)
-                        let parts = res.text.match(/franchise:\s+(?<franchise>\d+)/)
-                        if(parts) {
-                            const { groups: { franchise } } = parts
-                            const { groups: { api } } = res.text.match(/apiBaseUrl:\s+"(?<api>.+)"/)
-                            const { groups: { referer } } = res.text.match(/referer:\s+"(?<referer>.+)"/)
-
-                            const seasonsRes = await superagent.get(api + `season/by-franchise/?id=${franchise}&host=${referer}`)
-                            const seasons = JSON.parse(seasonsRes.text)
-
-                            return (await Promise.all(seasons.map(async ({ id, season }) => {
-                                const seasonsRes = await superagent.get(api + `video/by-season/?id=${id}&host=${referer}`)
-                                const files = JSON.parse(seasonsRes.text)
-
-                                return files.map((file, index) => ({
-                                    id: file.id,
-                                    manifestUrl: this._getBestQuality(file.urlQuality),
-                                    path: `Season ${season}`,
-                                    name: `Episode ${index + 1}`,
-                                }))
-                            }))).reducer((acc, files) => acc.concat(files), [])
-                        }
-
-                        const { groups: { hls } } = res.text.match(/hlsList: (?<hls>{[^}]+}),/)
-
-                        return [{
-                            id: 1,
-                            manifestUrl: this._getBestQuality(JSON.parse(hls)),
-                        }]
-                    }
+                    transform: async ($el) => deliverembed($el.attr('src'))
                 }
             }
         })

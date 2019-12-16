@@ -14,7 +14,7 @@ class EXFSProvider extends DataLifeProvider {
                 name: '.SeaRchresultPostTitle',
                 image: {
                     selector: '.SeaRchresultPostPoster img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 }
             },
             detailsScope: '#dle-content',
@@ -22,7 +22,7 @@ class EXFSProvider extends DataLifeProvider {
                 title: 'h1.view-caption',
                 image: {
                     selector: '.FullstoryFormLeft img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
                     selector: 'iframe',
