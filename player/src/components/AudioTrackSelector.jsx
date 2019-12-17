@@ -13,7 +13,7 @@ import { AudiotrackRounded as AudioTrackIcon } from '@material-ui/icons'
 class AudioTrackSelector extends BaseSelector {
 
     selectTrack = (id) => {
-        this.props.device.audioTrack = id
+        this.props.device.setAudioTrack(id)
         this.handleClose()
     }
 

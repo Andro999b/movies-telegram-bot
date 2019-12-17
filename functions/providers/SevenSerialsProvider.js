@@ -30,14 +30,22 @@ class SevenSerailsProvider extends Provider {
                     transform: async ($el) => {
                         const files = await deliverembed($el.attr('src'))
 
-                        return files.map((file) => ({
-                            ...file,
-                            cors: true
-                        }))
+                        return files.map((file) => {
+                            const parts = file.manifestUrl.split('?video=')
+                            const manifestUrl = decodeURIComponent(parts[1])
+                            return {
+                                ...file,
+                                manifestUrl
+                            }
+                        })
                     }
                 }
             }
         })
+    }
+
+    getInfoUrl(resultId) {
+        return decodeURIComponent(resultId)
     }
 
     getSearchUrl(q) {

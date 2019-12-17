@@ -77,8 +77,8 @@ functions:
     environment:
       TOKEN: ${ssm:bot_ru_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDER: 'exfs,seasonvar,animevost,kinogo'
-      INLINE_PROVIDERS: 'seasonvar,animevost,kinogo'
+      PROVIDER: 'exfs,7serealov,seasonvar,animevost,kinogo'
+      INLINE_PROVIDERS: '7serealov,seasonvar,animevost,kinogo'
 
   uabot:
     handler: handlers/bot.handler

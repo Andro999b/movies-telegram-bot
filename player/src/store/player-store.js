@@ -160,6 +160,7 @@ export class LocalDevice {
 
     @action.bound setAudioTrack(id) {
         this.audioTrack = id
+        localStore.set(`${getPlaylistPrefix(this.playlist)}:audio_track`, id)
     }
 
     @action.bound setQuality(quality) {
@@ -169,6 +170,14 @@ export class LocalDevice {
 
     @action.bound setAudioTracks(audioTracks) {
         this.audioTracks = audioTracks
+
+        const storesAudioTrack = localStore.get(`${getPlaylistPrefix(this.playlist)}:audio_track`)
+        if(storesAudioTrack) {
+            const audioTrack = audioTracks.find(({ id }) => id == storesAudioTrack)
+            if(audioTracks) {
+                this.audioTrack = audioTrack.id
+            }
+        }
     }
 
     @action.bound setShuffle(shuffle) {
