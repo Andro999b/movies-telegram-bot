@@ -67,7 +67,7 @@ class EXFSProvider extends DataLifeProvider {
 
                                         if(translationId) {
                                             const translationName = translations[translationId]
-                                            file.path = translationName + (file.path ? '/' + file.path : '')
+                                            file.path = [translationName, file.path].filter((it) => it).join('/')
                                         }
 
                                         return file

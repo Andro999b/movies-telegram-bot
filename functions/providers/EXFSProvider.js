@@ -71,22 +71,21 @@ class EXFSProvider extends DataLifeProvider {
     _extractTranslations(translations, playlists) {
         return Object.keys(translations)
             .map((translation) => {
-                const translationName = translations[translation] ? translations[translation].trim() : 'Default'
                 const playlist = playlists[translation]
 
                 if (typeof playlist === 'string') {
                     const urls = getBestPlayerJSQuality(playlist)
 
                     return [{
-                        name: translationName,
                         url: urls.pop(),
                         alternativeUrls: urls
                     }]
                 } else {
+                    const translationName = translations[translation]
                     return convertPlayerJSPlaylist(playlist)
                         .map((file) => ({
                             ...file,
-                            path: `${translationName}/${file.path}`
+                            path: [translationName, file.path].filter((it) => it).join('/')
                         }))
                 }
             })
