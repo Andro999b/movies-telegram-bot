@@ -27,7 +27,6 @@ function convertFolder(prefix, items, linksExtractor) {
 
             if(prefix) {
                 item.path = prefix
-                item.name = `${prefix} / ${item.name}`
             }
 
             return [item]
@@ -36,7 +35,7 @@ function convertFolder(prefix, items, linksExtractor) {
             const path = title || comment || `Season ${index + 1}`
  
             return convertFolder(
-                prefix ? prefix + path : path, 
+                prefix ? prefix + '/' + path : path, 
                 folder, 
                 linksExtractor
             )

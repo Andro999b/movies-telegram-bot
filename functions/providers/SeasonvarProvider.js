@@ -13,7 +13,7 @@ class SeasonvarProvider extends DirectMediaProvider {
                 name: '.pgs-search-info a:first-child',
                 image: {
                     selector: '.pst img',
-                    transform: ($el) => $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 }
             },
             detailsScope: '.middle',
@@ -21,7 +21,7 @@ class SeasonvarProvider extends DirectMediaProvider {
                 title: '.pgs-sinfo-title',
                 image: {
                     selector: '.poster img',
-                    transform: ($el) => $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
                     transform: async ($el) => {
@@ -60,7 +60,7 @@ class SeasonvarProvider extends DirectMediaProvider {
                                 return files.map((file) => (({
                                     ...file,
                                     path: `Season ${index + 1}`,
-                                    name: `Season ${index + 1} / ${file.name}`
+                                    name: `${file.name}`
                                 })))
                             })
                             .reduce((acc, files) => acc.concat(files), [])

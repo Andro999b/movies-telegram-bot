@@ -252,8 +252,18 @@ class PlayerStore {
         } = this.device
 
         if (title && files) {
-            const file = files[currentFileIndex]
-            return `${title}${files.length > 1 ? ' - ' + file.name : ''}`
+            let res = title
+
+            if(files.length > 1) {
+                const file = files[currentFileIndex]
+                let currentPath = file.path
+                currentPath = currentPath ? currentPath.split('/') : []
+                currentPath = currentPath.concat(file.name)
+
+                res += ' - ' + currentPath.join(' / ')
+            }
+
+            return res
         }
     }
 }

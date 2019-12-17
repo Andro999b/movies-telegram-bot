@@ -15,7 +15,7 @@ class KinogoProvider extends DataLifeProvider {
                 name: '.zagolovki>a:nth-last-child(1)',
                 image: {
                     selector: '.shortimg>div>a>img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 }
             },
             detailsScope: '#dle-content',
@@ -23,7 +23,7 @@ class KinogoProvider extends DataLifeProvider {
                 title: '.shortstorytitle>h1',
                 image: {
                     selector: '.fullimg>div>a>img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
                     selector: '#1212',

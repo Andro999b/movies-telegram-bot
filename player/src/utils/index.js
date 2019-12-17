@@ -1,4 +1,3 @@
-import groupBy from 'lodash.groupby'
 
 export function createExtractorUrlBuilder(extractor, additionalParams) {
     let extractorBaseUrl = null
@@ -56,33 +55,4 @@ export function toHHMMSS(timestamp) {
         seconds = '0' + seconds
     }
     return hours+':'+minutes+':'+seconds
-}
-
-const MAX_FILES = 50
-
-export function fileGroupingFun(files) {
-    const maxfiles = MAX_FILES
-    const groupedByPath = groupBy(files, (file) => file.path)
-    if(Object.keys(groupedByPath).length == 1 && files.length > maxfiles) { //split by hundreds
-        return files
-            .reduce((acc, item, i) => {
-                const groupIndex = Math.floor(i / maxfiles) 
-
-                if(acc[groupIndex]) {
-                    acc[groupIndex].files.push(item)
-                } else {
-                    acc[groupIndex] = {
-                        name: `${groupIndex * maxfiles} - ${(groupIndex+1) * maxfiles - 1}`,
-                        files: [item]
-                    }
-                }
-
-                return acc
-            }, [])
-    }
-    return Object.keys(groupedByPath)
-        .map((key) => ({
-            name: key,
-            files: groupedByPath[key]
-        }))
 }

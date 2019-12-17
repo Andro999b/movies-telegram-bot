@@ -128,6 +128,10 @@ class Provider {
         const url = urlencode.decode(resultsId)
         return url.startsWith('/') ? this.config.baseUrl + url : url
     }
+
+    _absoluteUrl(url) {
+        return url.startsWith('/') ? this.config.baseUrl + url : url
+    }
 }
 
 module.exports = Provider

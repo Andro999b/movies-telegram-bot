@@ -17,7 +17,7 @@ class EXFSProvider extends DataLifeProvider {
                 name: 'a.short-title',
                 image: {
                     selector: '.short-img img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 }
             },
             detailsScope: '#dle-content',
@@ -25,7 +25,7 @@ class EXFSProvider extends DataLifeProvider {
                 title: '.ftitle h1',
                 image: {
                     selector: '.fposter img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
                     selector: 'iframe',

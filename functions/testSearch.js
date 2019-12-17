@@ -1,9 +1,11 @@
 const providers = require('./providers')
 
-const providerName = 'lostfilmon'
+const providerName = '7serealov'
 // const providerName = 'uaserials'
-const searchQuery = 'Террор'
+// const searchQuery = 'Террор'
 // const searchQuery = 'Venom'
+// const searchQuery = 'Final Space'
+const searchQuery = 'Звездный'
 // const searchQuery = 'one punch'
 // const searchQuery = 'веном'
 

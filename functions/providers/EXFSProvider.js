@@ -14,7 +14,7 @@ class EXFSProvider extends DataLifeProvider {
                 name: '.SeaRchresultPostTitle',
                 image: {
                     selector: '.SeaRchresultPostPoster img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 }
             },
             detailsScope: '#dle-content',
@@ -22,7 +22,7 @@ class EXFSProvider extends DataLifeProvider {
                 title: 'h1.view-caption',
                 image: {
                     selector: '.FullstoryFormLeft img',
-                    transform: ($el) => this.config.baseUrl + $el.attr('src')
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
                     selector: 'iframe',
@@ -44,7 +44,7 @@ class EXFSProvider extends DataLifeProvider {
                         const playlists = JSON.parse(files)
 
                         if(Object.keys(translations).length == 0) {
-                            const translationId = $('#translation_id').attr('value')
+                            const translationId = $('#translation_id').attr('value') || '0'
                             return this._extractNoTranslations(playlists[translationId])
                         }
 
@@ -71,7 +71,7 @@ class EXFSProvider extends DataLifeProvider {
     _extractTranslations(translations, playlists) {
         return Object.keys(translations)
             .map((translation) => {
-                const translationName = translation === '0' ? '' : `[${translations[translation]}] `
+                const translationName = translations[translation] ? translations[translation].trim() : 'Default'
                 const playlist = playlists[translation]
 
                 if (typeof playlist === 'string') {
@@ -86,16 +86,12 @@ class EXFSProvider extends DataLifeProvider {
                     return convertPlayerJSPlaylist(playlist)
                         .map((file) => ({
                             ...file,
-                            name: `${translationName}${file.name}`,
-                            path: `${translationName}${file.path}`
+                            path: `${translationName}/${file.path}`
                         }))
                 }
             })
             .reduce((acc, item) => acc.concat(item), [])
-            .map((file, index) => ({
-                ...file,
-                id: index
-            }))
+            .map((file, index) => ({...file, id: index}))
     }
 
     _postProcessResult(results) {
