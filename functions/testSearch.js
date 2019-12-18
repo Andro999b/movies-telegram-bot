@@ -5,7 +5,7 @@ const providerName = '7serealov'
 // const searchQuery = 'Террор'
 // const searchQuery = 'Venom'
 // const searchQuery = 'Final Space'
-const searchQuery = 'рик и морти'
+const searchQuery = 'Экспансия'
 // const searchQuery = 'one punch'
 // const searchQuery = 'веном'
 
