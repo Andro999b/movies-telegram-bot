@@ -86,16 +86,8 @@ class KinogoProvider extends DataLifeProvider {
             eval(`config = ${parts[1]}`)
             
             const { file } = config
-            if(typeof file === 'string') {
-                const urls = getBestPlayerJSQuality(file)
 
-                return [{ 
-                    url: urls.pop(), 
-                    alternativeUrls: urls 
-                }]
-            } else {
-                return convertPlayerJSPlaylist(file)
-            }
+            return convertPlayerJSPlaylist(file)
         }
     }
 

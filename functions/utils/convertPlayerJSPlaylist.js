@@ -1,14 +1,16 @@
 const getBestPlayerJSQuality = require('./getBestPlayerJSQuality')
 
 function extractFile(file, linksExtractor) {
-    if (file.endsWith('m3u8')) {
+    const urls = [].concat(linksExtractor(file))
+    const mainUrl = urls.pop()
+    if (mainUrl.endsWith('m3u8')) {
         return {
-            manifestUrl: file
+            manifestUrl: mainUrl
         }
     } else {
-        const urls = [].concat(linksExtractor(file))
+        
         const item = {
-            url: urls.pop()
+            url: mainUrl
         }
 
         if (urls.length > 0) {
@@ -45,5 +47,9 @@ function convertFolder(prefix, items, linksExtractor) {
 }
 
 module.exports = function (playlist, linksExtractor = getBestPlayerJSQuality) {
-    return convertFolder(null, playlist, linksExtractor)
+    if(typeof playlist === 'string') {
+        return extractFile(playlist, linksExtractor)
+    } else {
+        return convertFolder(null, playlist, linksExtractor)
+    }
 }

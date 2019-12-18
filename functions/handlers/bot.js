@@ -5,6 +5,7 @@ const path = require('path')
 const Telegraf = require('telegraf')
 const TelegrafI18n = require('telegraf-i18n')
 const Markup = require('telegraf/markup')
+const Extra = require('telegraf/extra')
 const session = require('telegraf/session')
 const uuid = require('uuid')
 
@@ -22,7 +23,16 @@ const bot = new Telegraf(process.env.TOKEN)
 
 bot.use(session())
 bot.use(i18n.middleware())
-bot.command('start', ({ i18n, reply }) => reply(i18n.t('start')))
+bot.command('start', ({ i18n, reply }) => reply(
+    i18n.t(
+        'start',
+        {
+            sample: PROVIDER[0],
+            providers: PROVIDER.map((it) => ` - ${it}`).join('\n')
+        }
+    ),
+    Extra.HTML()
+))
 bot.action(/more_results.+/, async ({
     i18n,
     session,
@@ -46,7 +56,7 @@ bot.action(/more_results.+/, async ({
         )
     } else { // remove uselsess show more
         const { inline_keyboard } = message.reply_markup
-        
+
         inline_keyboard.pop()
 
         await editMessageReplyMarkup({ inline_keyboard })
@@ -59,16 +69,16 @@ bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) =>
 
     await replyWithChatAction('typing')
 
-    const q = message.text
+    const { query, providers } = getQueryAndProviders(message.text, PROVIDER)
 
-    let providersResults = await Promise.all(PROVIDER.map((providerName) =>
-        providersService.searchOne(providerName, q)
+    let providersResults = await Promise.all(providers.map((providerName) =>
+        providersService.searchOne(providerName, query)
     ))
 
     providersResults = providersResults.filter((res) => res && res.length)
 
     if (!providersResults.length)
-        return await reply(i18n.t('no_results', { q }))
+        return await reply(i18n.t('no_results', { query }))
 
     session.providersResults = providersResults
     session.page = 1
@@ -77,14 +87,14 @@ bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) =>
     const { results, hasMore } = getResults(providersResults, 1)
 
     await reply(
-        i18n.t('results', { q }),
+        i18n.t('results', { query }),
         getResultsKeyboad(searchId, results, hasMore, i18n).extra()
     )
 })
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
-    const q = inlineQuery.query
+    const { query, providers } = getQueryAndProviders(inlineQuery.query, INLINE_PROVIDERS)
 
-    const results = await providersService.search(INLINE_PROVIDERS, q)
+    const results = await providersService.search(providers, query)
 
     await answerInlineQuery(results.map(({ name, image, provider, id }) => ({
         type: 'article',
@@ -103,6 +113,22 @@ bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
         ])
     })))
 })
+
+function getQueryAndProviders(query, avaliableProviders) {
+    if (query.startsWith('#')) {
+        const sepIndex = query.indexOf(' ')
+        if (sepIndex != -1) {
+            const provider = query.substr(1, sepIndex - 1)
+            const q = query.substr(sepIndex + 1)
+
+            if (avaliableProviders.indexOf(provider) != -1) {
+                return { query: q, providers: [provider] }
+            }
+        }
+    }
+
+    return { query, providers: avaliableProviders }
+}
 
 function getResultsKeyboad(searchId, results, hasMore, i18n) {
     let buttons = results.map((result) =>
