@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path')
 
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
                 use: ['babel-loader']
             },
             {
-                test: /\.(jpe?g|png|gif|svg)$/i, 
+                test: /\.(jpe?g|png|gif|svg)$/i,
                 use: ['file-loader']
             },
             {
@@ -50,9 +51,12 @@ module.exports = {
         }
     },
     plugins: [
-        new HtmlWebpackPlugin({ 
+        new HtmlWebpackPlugin({
             template: path.join(__dirname, 'src', 'index.html'),
             favicon: path.join(__dirname, 'src', 'favicon.ico')
-        })
+        }),
+        new CopyPlugin([
+            { from: '.well-known', to: '.well-known' },
+        ])
     ]
 }

@@ -72,16 +72,17 @@ class EXFSProvider extends DataLifeProvider {
         return Object.keys(translations)
             .map((translation) => {
                 const playlist = playlists[translation]
+                const translationName = translations[translation]
 
                 if (typeof playlist === 'string') {
                     const urls = getBestPlayerJSQuality(playlist)
 
                     return [{
+                        name: translationName,
                         url: urls.pop(),
                         alternativeUrls: urls
                     }]
                 } else {
-                    const translationName = translations[translation]
                     return convertPlayerJSPlaylist(playlist)
                         .map((file) => ({
                             ...file,
