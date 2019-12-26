@@ -5,7 +5,8 @@ import logger from '../utils/logger'
 const END_FILE_TIME_OFFSET = 60
 const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${playlist.id}`
 
-export class LocalDevice {
+
+export class Device {
     @observable playlist = { name: '', files: [] }
     @observable currentFileIndex = 0
     @observable currentTime = 0
@@ -20,16 +21,65 @@ export class LocalDevice {
     @observable audioTrack = null
     @observable shuffle = false
     @observable seekTime = null
-    @observable url = null
+    @observable quality = null
+    @observable qualities = []
+    
+    isLocal() {
+        return true
+    }
+
+    /* eslint-disable no-unused-vars */
+    resume() { }
+    pause() { }
+    play(currentTime) { }
+    seek(currentTime) { }
+    disconnect() { }
+    setVolume(volume) { }
+    selectFile(fileIndex) { }
+    setPlaylist(playlist, fileIndex, marks) { }
+    setAudioTrack(id) { }
+    setAudioTracks(audioTracks) { }
+    /* eslint-enable */
+
+    @action.bound seeking(seekTime) {
+        this.seekTime = seekTime
+    }
+
+    @action.bound setQuality(quality) {
+        this.quality = quality
+        localStore.set('quality', quality)
+    }
+
+    @action.bound setShuffle(shuffle) {
+        this.shuffle = shuffle
+        localStore.set('shuffle', shuffle)
+    }
+    
+    skip(sec) {
+        if (this.duration) {
+            const seekTo = this.currentTime + sec
+            this.seek(Math.min(Math.max(seekTo, 0), this.duration))
+        }
+    }
+}
+
+export class LocalDevice extends Device {
     @observable seekTo = null
     @observable source = null
-    @observable progress = null
-    @observable qualities = []
-    @observable quality = null
 
     constructor() {
+        super()
         this.volume = localStore.get('volume') || 1
         this.shuffle = localStore.get('shuffle') || false
+    }
+
+    @action.bound play(currentTime) {
+        this.isPlaying = true
+        if (currentTime !== null && !isNaN(currentTime)) {
+            this.currentTime = currentTime
+            this.seekTo = currentTime
+        }
+        this.seekTime = null
     }
 
     @action.bound setSource(source) {
@@ -67,22 +117,9 @@ export class LocalDevice {
         }
     }
 
-    @action.bound play(currentTime) {
-        this.isPlaying = true
-        if (currentTime !== null && !isNaN(currentTime)) {
-            this.currentTime = currentTime
-            this.seekTo = currentTime
-        }
-        this.seekTime = null
-    }
-
     @action.bound seek(seekTo) {
         this.seekTo = seekTo
         this.seekTime = null
-    }
-
-    @action.bound seeking(seekTime) {
-        this.seekTime = seekTime
     }
 
     @action.bound resume() {
@@ -163,11 +200,6 @@ export class LocalDevice {
         localStore.set(`${getPlaylistPrefix(this.playlist)}:audio_track`, id)
     }
 
-    @action.bound setQuality(quality) {
-        this.quality = quality
-        localStore.set('quality', quality)
-    }
-
     @action.bound setAudioTracks(audioTracks) {
         this.audioTracks = audioTracks
 
@@ -180,27 +212,29 @@ export class LocalDevice {
         }
     }
 
-    @action.bound setShuffle(shuffle) {
-        this.shuffle = shuffle
-        localStore.set('shuffle', shuffle)
-    }
-
     @action.bound toggleMute() {
         this.isMuted = !this.isMuted
-    }
-
-    skip(sec) {
-        if (this.duration) {
-            const seekTo = this.currentTime + sec
-            this.seek(Math.min(Math.max(seekTo, 0), this.duration))
-        }
     }
 }
 
 class PlayerStore {
-    @observable device
+    @observable device = null
 
-    @action openPlaylist(playlist, fileIndex, startTime) {
+    @action.bound switchToLocalDevice() {
+        this.switchDevice(new LocalDevice())
+    }
+
+    @action.bound switchDevice (device) {
+        const prevDevice = this.device
+        const { playlist, currentFileIndex, currentTime } = prevDevice
+
+        if (prevDevice) prevDevice.disconnect()
+
+        this.device = device
+        this.device.setPlaylist(playlist, currentFileIndex, currentTime)
+    }
+
+    @action.bound openPlaylist(playlist, fileIndex, startTime) {
         this.device = new LocalDevice()
 
         if (fileIndex == null || isNaN(fileIndex)) {

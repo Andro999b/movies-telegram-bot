@@ -1,11 +1,19 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import LocalPlayer from '../components/LocalPlayer'
+import LocalPlayer from '../components/Player'
 import { inject, observer } from 'mobx-react'
 import { PlayCircleFilled as PlayIcon } from '@material-ui/icons'
 import { isTouchDevice } from '../utils'
+import CastDialog from '../components/CastDialog'
 
-@inject(({ playerStore: { device: { playlist, play }}}) => ({ playlist, play }))
+@inject(
+    ({ 
+        playerStore: { device: { playlist, play }}
+    }) => ({ 
+        playlist, 
+        play 
+    })
+)
 @observer
 class PlayerView extends Component {
     constructor(props, context) {
@@ -53,6 +61,7 @@ class PlayerView extends Component {
                 {started && <div className="screan-content">
                     <LocalPlayer initialFullScreen={initialFullScreen} />
                 </div>}
+                <CastDialog/>
             </Fragment>
         )
     }
@@ -60,7 +69,8 @@ class PlayerView extends Component {
 
 PlayerView.propTypes = {
     playlist: PropTypes.object,
-    play: PropTypes.func
+    play: PropTypes.func,
+    isLocal: PropTypes.func
 }
 
 export default PlayerView

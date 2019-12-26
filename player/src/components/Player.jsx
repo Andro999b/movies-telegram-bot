@@ -20,7 +20,7 @@ const IDLE_TIMEOUT = 3000
 
 @inject('playerStore')
 @observer
-class LocalPlayer extends Component {
+class Player extends Component {
 
     constructor(props, context) {
         super(props, context)
@@ -147,20 +147,32 @@ class LocalPlayer extends Component {
         const { playerStore } = this.props
         const { playlistOpen, idle, fullScreen } = this.state
         const { device } = playerStore
-        const { isLoading, error, seekTime } = device
+        const { isLoading, error, seekTime, isLocal } = device
+        const { playlist: { image } } = device
 
         const hideUi = idle && seekTime == null
+        const local = isLocal()
 
         return (
             <Fullscreen
-                enabled={fullScreen}
+                enabled={fullScreen && local}
                 onChange={this.handleSetFullScreen}
             >
                 <div className={hideUi ? 'idle' : ''}>
                     <ShowIf mustNot={[hideUi]}>
                         <PlayerTitle title={playerStore.getPlayerTitle()} />
                     </ShowIf>
-                    <VideoScrean device={device} onEnded={playerStore.nextFile} />
+                    {local && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
+                    {!local && <ShowIf mustNot={[error]}>
+                        <div
+                            className="player__pause-cover player__background-cover"
+                            style={{ backgroundImage: `url(${image})` }}
+                        >
+                            <Typography className="center shadow-border" variant="h4">
+                                {device.getName()}
+                            </Typography>
+                        </div>
+                    </ShowIf>}
                     <ShowIf must={[error]}>
                         <Typography className="center shadow-border" variant="h4">{error}</Typography>
                     </ShowIf>
@@ -194,9 +206,9 @@ class LocalPlayer extends Component {
     }
 }
 
-LocalPlayer.propTypes = {
+Player.propTypes = {
     playerStore: PropTypes.object,
     initialFullScreen: PropTypes.bool
 }
 
-export default LocalPlayer
+export default Player

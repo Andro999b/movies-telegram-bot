@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
     List,
@@ -12,7 +12,6 @@ import {
     Typography,
     AppBar
 } from '@material-ui/core'
-import { grey } from '@material-ui/core/colors'
 import {
     NavigateBeforeRounded as BackIcon,
     GetAppRounded as DownloadIcon
