@@ -1,15 +1,21 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import LocalPlayer from '../components/Player'
+import Player from '../components/Player'
 import { inject, observer } from 'mobx-react'
-import { PlayCircleFilled as PlayIcon } from '@material-ui/icons'
+import { IconButton } from '@material-ui/core'
+import { 
+    PlayCircleFilled as PlayIcon,
+    Cast as CastIcon,
+} from '@material-ui/icons'
 import { isTouchDevice } from '../utils'
 import CastDialog from '../components/CastDialog'
 
 @inject(
     ({ 
+        castStore: { showCastDialog },
         playerStore: { device: { playlist, play }}
     }) => ({ 
+        showCastDialog,
         playlist, 
         play 
     })
@@ -38,6 +44,13 @@ class PlayerView extends Component {
         })
     }
 
+    handleCastClick = (e) => {
+        e.stopPropagation()
+        this.props.showCastDialog(() => {
+            this.setState({ started: true })
+        })
+    }
+
     renderStartScrean = () => {
         const { playlist: { image } } = this.props
 
@@ -48,6 +61,11 @@ class PlayerView extends Component {
                 onClick={this.handleStartClick}
             >
                 <PlayIcon className="center" fontSize="inherit"/>
+                <div className="player__start-cast-button">
+                    <IconButton onClick={this.handleCastClick}>
+                        <CastIcon/>
+                    </IconButton>
+                </div>
             </div>
         )
     }
@@ -59,7 +77,7 @@ class PlayerView extends Component {
             <Fragment>
                 {!started && this.renderStartScrean()}
                 {started && <div className="screan-content">
-                    <LocalPlayer initialFullScreen={initialFullScreen} />
+                    <Player initialFullScreen={initialFullScreen} />
                 </div>}
                 <CastDialog/>
             </Fragment>
@@ -68,6 +86,7 @@ class PlayerView extends Component {
 }
 
 PlayerView.propTypes = {
+    showCastDialog: PropTypes.func,
     playlist: PropTypes.object,
     play: PropTypes.func,
     isLocal: PropTypes.func

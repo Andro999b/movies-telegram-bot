@@ -62,6 +62,14 @@ class PlayerPlayList extends Component {
         })
     }
 
+    handleMobileDownload = (downloadUrl, file) => {
+        const { device: { playlist: { title } } } = this.props
+
+        const name = [file.path, file.name].filter((it) => it).join(' - ')
+        
+        mobileApp.downloadFile(downloadUrl, title, name)
+    }
+
 
     getTreeNode = (root, path) => {
         let node = root
@@ -121,15 +129,22 @@ class PlayerPlayList extends Component {
             if (downloadUrl)
                 return (
                     <ListItemSecondaryAction>
-                        <IconButton
-                            component='a'
-                            href={downloadUrl}
-                            download={downloadUrl}
-                            target="_blank"
-                            onClick={() => this.handleTrackDownload(file)}
-                        >
-                            <DownloadIcon />
-                        </IconButton>
+                        {window.mobileApp &&
+                            <IconButton onClick={() => this.handleMobileDownload(downloadUrl, file)}>
+                                <DownloadIcon />
+                            </IconButton>
+                        }
+                        {!window.mobileApp &&
+                            <IconButton
+                                component='a'
+                                href={downloadUrl}
+                                download={downloadUrl}
+                                target="_blank"
+                                onClick={() => this.handleTrackDownload(file)}
+                            >
+                                <DownloadIcon />
+                            </IconButton>
+                        }
                     </ListItemSecondaryAction>
                 )
         }

@@ -155,6 +155,8 @@ class VideoScrean extends BaseScrean {
             this.alternativeUrls = alternativeUrls
         }        
 
+        if(targetUrl.startsWith('//')) targetUrl = 'http:' + targetUrl
+
         if (extractor) {
             video.src = createExtractorUrlBuilder(extractor)(targetUrl)
         } else {

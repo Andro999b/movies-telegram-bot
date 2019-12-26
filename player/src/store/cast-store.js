@@ -8,11 +8,13 @@ class CastStore {
     castAvalaible = remote != null
     @observable castDialog = null
 
-    @action.bound showCastDialog() {
+    @action.bound showCastDialog(cb) {
         const onDeviceSelected = (device) => {
             playerStore.switchDevice(remote.getRemoteDevice(device))
             this.closeCastDailog()
             notifications.showMessage(`Connected to: ${device.name}`)
+
+            if(cb) cb()
         }
 
         this.castDialog = { onDeviceSelected }

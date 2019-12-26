@@ -5,6 +5,8 @@
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev-server.config.js",
+    "watch": "webpack --config webpack.watch.js",
+    "sync-files": "copy-and-watch --watch dist/*.{html,js,png,ico} C:\\Users\\Andrii\\AndroidStudioProjects\\CastPlayer\\app\\src\\main\\assets",
     "build": "rm -rf dist/* && webpack --mode production"
   },
   "keywords": [],
@@ -21,6 +23,7 @@
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
+    "copy-and-watch": "^0.1.4",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.2.1",
     "eslint": "^6.7.2",
