@@ -1,6 +1,6 @@
 const extract = require('./extract')
 
-const url = decodeURIComponent('https://play.roomfish.ru/2147395654')
+const url = decodeURIComponent('https%3A%2F%2Fplay.roomfish.ru%2F2147395654')
 console.log(url)
 
 extract({
