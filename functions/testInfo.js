@@ -1,7 +1,7 @@
 const providers = require('./providers')
 
-const provider = 'exfs'
-const id = 'http://ex-fs.net/films/3804-garri-potter-i-princ-polukrovka.html'
+const provider = 'animevost'
+const id = 'https%3A%2F%2Fanimevost.org%2Ftip%2Ftv%2F1324-witchblade.html'
 
 providers.getInfo(provider, id)
     .then((details) => console.log('details', details))// eslint-disable-line
