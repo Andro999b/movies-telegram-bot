@@ -86,6 +86,7 @@ class PlayerPlayList extends Component {
 
     getTree = memoize(({ title, files }) => {
         const root = {
+            id: '_root',
             name: title,
             files: []
         }
@@ -114,7 +115,7 @@ class PlayerPlayList extends Component {
         }
 
         files.forEach((file) => {
-            const path = file.path ? file.path.split('/') : []
+            const path = file.path ? file.path.split('/') : [file.name]
             const node = getNode(path)
 
             node.files.push(file)
