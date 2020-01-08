@@ -1,8 +1,6 @@
 const DataLifeProvider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
 const CryptoJS = require('crypto-js')
-// const superagent = require('superagent')
-// const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 
 class EXFSProvider extends DataLifeProvider {
     constructor() {

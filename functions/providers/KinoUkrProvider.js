@@ -1,8 +1,6 @@
 const DataLifeProvider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
-// const cheerio = require('cheerio')
-// const getBestPlayerJSQuality = require('../utils/getBestPlayerJSQuality')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 
 class EXFSProvider extends DataLifeProvider {
