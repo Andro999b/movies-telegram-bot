@@ -1,9 +1,6 @@
 const DataLifeProvider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
-const superagent = require('superagent')
-const cheerio = require('cheerio')
-const getBestPlayerJSQuality = require('../utils/getBestPlayerJSQuality')
-const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
+const videocdnembed = require('../utils/videocdnembed')
 
 class EXFSProvider extends DataLifeProvider {
     constructor() {
@@ -26,72 +23,10 @@ class EXFSProvider extends DataLifeProvider {
                 },
                 files: {
                     selector: 'iframe',
-                    transform: async ($el) => {
-                        const res = await superagent.get($el.attr('src'))
-                        const $ = cheerio.load(res.text)
-
-                        const translations = $('.translations > select > option')
-                            .toArray()
-                            .reduce((acc, el) => {
-                                const $el = $(el)
-
-                                return Object.assign(acc, {
-                                    [$el.attr('value')]: $el.text().replace(/[\n]/g, '').trim()
-                                })
-                            }, {})
-
-                        const files = $('#files').attr('value')
-                        const playlists = JSON.parse(files)
-
-                        if(Object.keys(translations).length == 0) {
-                            const translationId = $('#translation_id').attr('value') || '0'
-                            return this._extractNoTranslations(playlists[translationId])
-                        }
-
-                        return this._extractTranslations(translations, playlists)
-                    }
+                    transform: ($el) => videocdnembed($el.attr('src'))
                 }
             }
         })
-    }
-
-    _extractNoTranslations(playlist) {
-        if (typeof playlist === 'string') {
-            const urls = getBestPlayerJSQuality(playlist)
-
-            return [{
-                url: urls.pop(),
-                alternativeUrls: urls
-            }]
-        } else {
-            return convertPlayerJSPlaylist(playlist)
-        }
-    }
-
-    _extractTranslations(translations, playlists) {
-        return Object.keys(translations)
-            .map((translation) => {
-                const playlist = playlists[translation]
-                const translationName = translations[translation]
-
-                if (typeof playlist === 'string') {
-                    const urls = getBestPlayerJSQuality(playlist)
-
-                    return [{
-                        name: translationName,
-                        url: urls.pop(),
-                        alternativeUrls: urls
-                    }]
-                } else {
-                    return convertPlayerJSPlaylist(playlist)
-                        .map((file) => ({
-                            ...file,
-                            path: [translationName, file.path].filter((it) => it).join('/')
-                        }))
-                }
-            })
-            .reduce((acc, item) => acc.concat(item), [])
-            .map((file, index) => ({...file, id: index}))
     }
 
     _postProcessResult(results) {

@@ -2,6 +2,11 @@ module.exports = {
     'timeout': 5,
     'infoTimeout': 11,
     'pageSize': 15,
+    'videocdn': {
+        'baseUrl': 'https://videocdn.tv/api',
+        'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
+        'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE'
+    },
     'animevost': {
         'baseUrl': 'https://animevost.org',
         'searchUrl': 'https://animevost.org/index.php?do=search'

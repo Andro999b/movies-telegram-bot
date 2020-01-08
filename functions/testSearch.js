@@ -1,11 +1,11 @@
 const providers = require('./providers')
 
-const providerName = 'animevost'
+const providerName = 'videocdn'
 // const providerName = 'uaserials'
 // const searchQuery = 'Террор'
 // const searchQuery = 'Venom'
-// const searchQuery = 'Final Space'
-const searchQuery = 'Клинок ведьм'
+const searchQuery = 'Final Space'
+// const searchQuery = 'Клинок ведьм'
 // const searchQuery = 'one punch'
 // const searchQuery = 'веном'
 
