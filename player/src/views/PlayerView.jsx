@@ -57,7 +57,7 @@ class PlayerView extends Component {
         return (
             <div 
                 className="player__pause-cover player__background-cover" 
-                style={{ backgroundImage: `url(${image})`, cursor: 'pointer' }}
+                style={{ backgroundImage: image ? `url(${image})`: null, cursor: 'pointer' }}
                 onClick={this.handleStartClick}
             >
                 <PlayIcon className="center" fontSize="inherit"/>

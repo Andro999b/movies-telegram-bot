@@ -166,7 +166,7 @@ class Player extends Component {
                     {!local && <ShowIf mustNot={[error]}>
                         <div
                             className="player__pause-cover player__background-cover"
-                            style={{ backgroundImage: `url(${image})` }}
+                            style={{ backgroundImage: image ? `url(${image})`: null }}
                         >
                             <Typography className="center shadow-border" variant="h4">
                                 {device.getName()}

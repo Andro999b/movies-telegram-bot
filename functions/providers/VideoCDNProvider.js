@@ -35,14 +35,16 @@ class VideoCDNProvider extends Provider {
         if(res.body.data.length == 0)
             return null
 
-        const { title, iframe_src } = res.body.data[0]
+        const { title, iframe_src, kp_id } = res.body.data[0]
         const url = iframe_src.startsWith('//') ? 'https:' + iframe_src: iframe_src
 
         const files = await videocdnembed(url)
+        
 
         return {
             title,
-            files
+            files,
+            image: `https://st.kp.yandex.net/images/film_big/${kp_id}.jpg`
         }
     }
 }
