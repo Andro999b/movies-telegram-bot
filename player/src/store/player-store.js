@@ -180,7 +180,8 @@ export class LocalDevice extends Device {
         if (error) {
             logger.error(error, {
                 title: document.title,
-                url: location.href
+                url: location.href,
+                source: this.source
             })
 
             window.gtag && gtag('event', 'play', {
@@ -220,6 +221,13 @@ export class LocalDevice extends Device {
 class PlayerStore {
     @observable device = null
 
+    @action.bound setDevice(device) {
+        const prevDevice = this.device
+        if (prevDevice) prevDevice.disconnect()
+
+        this.device = device
+    }
+
     @action.bound switchToLocalDevice() {
         this.switchDevice(new LocalDevice())
     }
@@ -234,8 +242,8 @@ class PlayerStore {
         this.device.setPlaylist(playlist, currentFileIndex, currentTime)
     }
 
-    @action.bound openPlaylist(device, playlist, fileIndex, startTime) {
-        this.device = device
+    @action.bound openPlaylist(playlist, fileIndex, startTime) {
+        this.device = new LocalDevice()
 
         if (fileIndex == null || isNaN(fileIndex)) {
             fileIndex = localStore.get(`${getPlaylistPrefix(playlist)}:current`)

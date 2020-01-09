@@ -1,8 +1,7 @@
 import { observable, action } from 'mobx'
 import BaseRemoteDevice from './BaseRemoteDevice'
 import playerStore, { LocalDevice } from '../player-store'
-
-class MobileAppRemoteDevice extends BaseRemoteDevice {
+export class MobileAppRemoteDevice extends BaseRemoteDevice {
     isLocal = () => false
 
     constructor(device, state) {
@@ -38,35 +37,44 @@ export default (() => {
         return currentRemoteDevice
     }
 
-    if (window.mobileApp != null) {
-        mobileApp.setCommandListener('commandListener')
+    const restoreDevice = () => {
+        const deviceInfo = JSON.parse(mobileApp.lastDeviceInfo())
+        const deviceState = JSON.parse(mobileApp.lastDeviceState())
 
-        window.commandListener = ({ action, payload }) => {
+        currentRemoteDevice = new MobileAppRemoteDevice(deviceInfo, deviceState)
+
+        return currentRemoteDevice
+    }
+
+    mobileApp.setCommandListener('commandListener')
+
+    window.commandListener = ({ action, payload }) => {
+        switch (action) {
+            case 'devicesList': {
+                devices.replace(payload)
+                return
+            }
+        }
+
+        if (currentRemoteDevice) {
             switch (action) {
-                case 'devicesList': {
-                    devices.replace(payload)
+                case 'disconnected': {
+                    playerStore.switchDevice(new LocalDevice())
+                    currentRemoteDevice = null
                     return
                 }
-            }
-
-            if (currentRemoteDevice) {
-                switch (action) {
-                    case 'disconnected': {
-                        playerStore.switchDevice(new LocalDevice())
-                        currentRemoteDevice = null
-                        return
-                    }
-                    case 'sync': {
-                        currentRemoteDevice.onSync(payload)
-                        return
-                    }
+                case 'sync': {
+                    currentRemoteDevice.onSync(payload)
+                    return
                 }
             }
         }
     }
 
+
     return {
         devices,
+        restoreDevice,
         getRemoteDevice
     }
 })()

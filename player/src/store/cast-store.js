@@ -14,7 +14,7 @@ class CastStore {
             this.closeCastDailog()
             notifications.showMessage(`Connected to: ${device.name}`)
 
-            if(cb) cb()
+            if(typeof cb == 'function') cb()
         }
 
         this.castDialog = { onDeviceSelected }

@@ -54,7 +54,6 @@ class CastDialog extends Component {
 
 CastDialog.propTypes = {
     options: PropTypes.shape({
-        filter: PropTypes.func,
         onDeviceSelected: PropTypes.func
     }),
     devices: PropTypes.array,

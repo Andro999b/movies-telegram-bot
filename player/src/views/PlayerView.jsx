@@ -26,7 +26,7 @@ class PlayerView extends Component {
         super(props, context)
 
         this.state = {
-            started: false,
+            started: props.started,
             initialFullScreen: false
         }
     }
@@ -89,7 +89,8 @@ PlayerView.propTypes = {
     showCastDialog: PropTypes.func,
     playlist: PropTypes.object,
     play: PropTypes.func,
-    isLocal: PropTypes.func
+    isLocal: PropTypes.func,
+    started: PropTypes.bool,
 }
 
 export default PlayerView

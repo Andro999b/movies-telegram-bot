@@ -77,7 +77,7 @@ class App extends Component {
         return (
             <ThemeProvider theme={theme}>
                 <Provider {...stores}>
-                    <PlayerView/>
+                    <PlayerView {...this.props}/>
                     <Notification/>
                 </Provider>
             </ThemeProvider>
