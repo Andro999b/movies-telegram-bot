@@ -12,10 +12,11 @@ import CastDialog from '../components/CastDialog'
 
 @inject(
     ({ 
-        castStore: { showCastDialog },
+        castStore: { showCastDialog, castAvalaible },
         playerStore: { device: { playlist, play }}
     }) => ({ 
         showCastDialog,
+        castAvalaible,
         playlist, 
         play 
     })
@@ -52,7 +53,7 @@ class PlayerView extends Component {
     }
 
     renderStartScrean = () => {
-        const { playlist: { image } } = this.props
+        const { playlist: { image }, castAvalaible } = this.props
 
         return (
             <div 
@@ -61,11 +62,11 @@ class PlayerView extends Component {
                 onClick={this.handleStartClick}
             >
                 <PlayIcon className="center" fontSize="inherit"/>
-                <div className="player__start-cast-button">
+                {castAvalaible && <div className="player__start-cast-button">
                     <IconButton onClick={this.handleCastClick}>
                         <CastIcon/>
                     </IconButton>
-                </div>
+                </div>}
             </div>
         )
     }
@@ -91,6 +92,7 @@ PlayerView.propTypes = {
     play: PropTypes.func,
     isLocal: PropTypes.func,
     started: PropTypes.bool,
+    castAvalaible: PropTypes.bool
 }
 
 export default PlayerView
