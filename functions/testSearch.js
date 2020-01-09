@@ -1,6 +1,6 @@
 const providers = require('./providers')
 
-const providerName = 'seasonvar'
+const providerName = 'videocdn'
 // const providerName = 'uaserials'
 // const searchQuery = 'Террор'
 // const searchQuery = 'Venom'

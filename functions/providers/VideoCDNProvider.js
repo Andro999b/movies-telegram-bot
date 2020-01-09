@@ -48,11 +48,12 @@ class VideoCDNProvider extends Provider {
         const url = iframe_src.startsWith('//') ? 'https:' + iframe_src: iframe_src
 
         const files = await videocdnembed(url)
-    
+        const kinopoiskPoster = `https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`
+
         return {
             title: ru_title,
             files,
-            image: `https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`
+            image: `https://corsproxy.movies-player.workers.dev/?${encodeURIComponent(kinopoiskPoster)}`
         }
     }
 }

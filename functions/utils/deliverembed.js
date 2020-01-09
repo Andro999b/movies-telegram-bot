@@ -16,7 +16,7 @@ function getBestQuality(input) {
 
 module.exports = async (src) => {
     const proxy = 'https://corsproxy.movies-player.workers.dev/?'
-    const res = await superagent.get(`${proxy}${src}`)
+    const res = await superagent.get(`${proxy}${encodeURIComponent(src)}`)
 
     let parts = res.text.match(/franchise:\s+(?<franchise>\d+)/)
     if(parts) {
