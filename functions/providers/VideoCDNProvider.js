@@ -8,45 +8,51 @@ class VideoCDNProvider extends Provider {
     }
 
     async search(query) {
-        const { baseUrl, token, types, timeout } = this.config
+        const { baseUrl, token, types, timeout, pageSize } = this.config
 
-        const promices = types.map((type) => {
+        const promices = types.map(async (type) => {
             const ordering = type.endsWith('series') ? 'last_episode_accepted' : 'last_media_accepted'
 
-            return superagent
-                .get(`${baseUrl}/${type}?direction=desc&field=global&limit=10&ordering=${ordering}&page=1&query=${encodeURIComponent(query)}&api_token=${token}`)
+            const res = await superagent
+                .get(`${baseUrl}/${type}?direction=desc&field=global&limit=${pageSize}&ordering=${ordering}&query=${encodeURIComponent(query)}&api_token=${token}`)
                 .timeout(timeout)
+
+            return { res, type}
         })
 
         const results = await Promise.all(promices)
         
         return results
-            .map((res) => JSON.parse(res.text).data)
+            .map(({ res, type }) => 
+                JSON.parse(res.text).data.map((item) => ({...item, type}))
+            )
             .reduce((acc, item) => acc.concat(item), [])
-            .map(({ id, ru_title}) => ({
+            .map(({ id, ru_title, type }) => ({
                 provider: this.name, 
-                id,
+                id: `${type}_${id}`,
                 name: ru_title
             }))
     }
 
-    async getInfo(id) {
+    async getInfo(typeAndId) {
+        const [type, id] = typeAndId.split('_')
+
         const { baseUrl, token } = this.config
 
-        const res = await superagent.get(`${baseUrl}/short?api_token=${token}&id=${id}`)
+        const res = await superagent.get(`${baseUrl}/${type}?api_token=${token}&id=${id}`)
 
         if(res.body.data.length == 0)
             return null
 
-        const { title, iframe_src, kp_id } = res.body.data[0]
+        const { ru_title, iframe_src, kinopoisk_id } = res.body.data[0]
         const url = iframe_src.startsWith('//') ? 'https:' + iframe_src: iframe_src
 
         const files = await videocdnembed(url)
     
         return {
-            title,
+            title: ru_title,
             files,
-            image: `https://st.kp.yandex.net/images/film_big/${kp_id}.jpg`
+            image: `https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`
         }
     }
 }

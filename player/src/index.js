@@ -3,12 +3,13 @@ import { render } from 'react-dom'
 import store from 'store'
 
 import App from './App'
-import playerStore from './store/player-store'
+import playerStore, { LocalDevice } from './store/player-store'
 import logger from './utils/logger'
 
 const urlParams = new URLSearchParams(window.location.search)
 const provider = urlParams.get('provider') || store.get('provider')
 const id = urlParams.get('id') || store.get('id')
+
 
 function renderError(e, message) {
     if (e) console.error(e)
@@ -29,6 +30,7 @@ function renderError(e, message) {
     })
 }
 
+
 if (provider && id) {
     store.set('provider', provider)
     store.set('id', id)
@@ -40,7 +42,7 @@ if (provider && id) {
                 const fileIndex = parseInt(urlParams.get('file'))
                 const time = parseFloat(urlParams.get('time'))
 
-                playerStore.openPlaylist({ id, provider, ...playlist }, fileIndex, time)
+                playerStore.openPlaylist(new LocalDevice(), { id, provider, ...playlist }, fileIndex, time)
                 render((<App />), document.getElementById('app'))
             } else {
                 renderError('Video unavalaible')

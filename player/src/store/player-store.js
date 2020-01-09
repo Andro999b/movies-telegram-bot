@@ -234,8 +234,8 @@ class PlayerStore {
         this.device.setPlaylist(playlist, currentFileIndex, currentTime)
     }
 
-    @action.bound openPlaylist(playlist, fileIndex, startTime) {
-        this.device = new LocalDevice()
+    @action.bound openPlaylist(device, playlist, fileIndex, startTime) {
+        this.device = device
 
         if (fileIndex == null || isNaN(fileIndex)) {
             fileIndex = localStore.get(`${getPlaylistPrefix(playlist)}:current`)

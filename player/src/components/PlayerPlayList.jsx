@@ -66,6 +66,8 @@ class PlayerPlayList extends Component {
         const { device: { playlist: { title } } } = this.props
 
         const name = [file.path, file.name].filter((it) => it).join(' - ')
+
+        downloadUrl = downloadUrl.startsWith('//') ? 'https:' + downloadUrl: downloadUrl
         
         mobileApp.downloadFile(downloadUrl, title, name)
     }
