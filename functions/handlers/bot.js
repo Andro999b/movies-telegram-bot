@@ -11,7 +11,7 @@ const uuid = require('uuid')
 
 const PROVIDER = process.env.PROVIDER ? process.env.PROVIDER.split(',') : []
 const INLINE_PROVIDERS = process.env.INLINE_PROVIDERS ? process.env.INLINE_PROVIDERS.split(',') : PROVIDER
-const PAGE_SIZE = 3
+const MAX_UNFOLD_RESULTS = 3
 
 const i18n = new TelegrafI18n({
     defaultLanguage: 'ru',
@@ -36,30 +36,24 @@ bot.command('start', ({ i18n, reply }) => reply(
 bot.action(/more_results.+/, async ({
     i18n,
     session,
-    editMessageReplyMarkup,
     answerCbQuery,
-    callbackQuery: { data, message }
+    callbackQuery: { data }
 }) => {
-    const { searchId, providersResults, page } = session
+    const { query, searchId, providersResults } = session
 
-    if (searchId &&
-        providersResults &&
-        page &&
-        data == `more_results#${searchId}`
-    ) {
-        session.page = page + 1
+    if (query && providersResults && searchId) {
+        const [_, requestSearchId, provider] = data.split('#')
 
-        const { results, hasMore } = getResults(providersResults, session.page)
+        if (requestSearchId == searchId) {
+            const res = providersResults.filter((res) => 
+                res[0].provider == provider
+            )
 
-        await editMessageReplyMarkup(
-            getResultsKeyboad(searchId, results, hasMore, i18n)
-        )
-    } else { // remove uselsess show more
-        const { inline_keyboard } = message.reply_markup
-
-        inline_keyboard.pop()
-
-        await editMessageReplyMarkup({ inline_keyboard })
+            await reply(
+                i18n.t('provider_results', { query, provider }),
+                Markup.inlineKeyboard(createResultButtons(res))
+            )
+        }
     }
 
     await answerCbQuery()
@@ -81,14 +75,12 @@ bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) =>
         return await reply(i18n.t('no_results', { query }))
 
     session.providersResults = providersResults
-    session.page = 1
+    session.query = query
     session.searchId = searchId
-
-    const { results, hasMore } = getResults(providersResults, 1)
 
     await reply(
         i18n.t('results', { query }),
-        getResultsKeyboad(searchId, results, hasMore, i18n).extra()
+        getResultsKeyboad(results, searchId, i18n).extra()
     )
 })
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
@@ -130,42 +122,34 @@ function getQueryAndProviders(query, avaliableProviders) {
     return { query, providers: avaliableProviders }
 }
 
-function getResultsKeyboad(searchId, results, hasMore, i18n) {
-    let buttons = results.map((result) =>
+function getResultsKeyboad(providersResults, searchId, i18n) {
+    return Markup.inlineKeyboard(
+        providersResults
+            .sort((a, b) => b.length - a.length)
+            .map((res) => {
+                if (res.length > MAX_UNFOLD_RESULTS) {
+                    const provider = res[0]
+                    return [
+                        Markup.callbackButton(
+                            i18n.t('more_results', { count: res.length, provider }),
+                            `more_results#${searchId}#${provider}`
+                        )
+                    ]
+                } else {
+                    return createResultButtorns(res)
+                }
+            })
+            .reduce((acc, items) => acc.concat(items), [])
+    )
+}
+
+function createResultButtons(res) {
+    return res.map((results) =>
         Markup.urlButton(
             `[${result.provider}] ${result.name}`,
             `${process.env.PLAYER_URL}?provider=${result.provider}&id=${result.id}`
         )
     )
-
-    if (hasMore) {
-        buttons = buttons.concat(Markup.callbackButton(
-            i18n.t('more_results'),
-            `more_results#${searchId}`
-        ))
-    }
-
-    return Markup.inlineKeyboard(buttons, { columns: 1 })
-}
-
-function getResults(providersResults, page) {
-    const chunks = []
-
-    for (let cur = 0; cur < page; cur++) {
-        providersResults
-            .map((res) => res.slice(cur * PAGE_SIZE, (cur + 1) * PAGE_SIZE))
-            .filter((chunk) => chunk.length)
-            .forEach((chunk) => chunks.push(chunk))
-    }
-
-    const totalItems = providersResults.reduce((acc, items) => acc + items.length, 0)
-    const results = chunks.reduce((acc, items) => acc.concat(items), [])
-    const hasMore = totalItems > results.length
-
-    return {
-        results,
-        hasMore
-    }
 }
 
 module.exports.handler = async (event) => {

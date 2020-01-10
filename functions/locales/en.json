@@ -1,7 +1,8 @@
 {
     "start": "🤖 Just type Movie, TV Show or Cartoon name and i will try to find something for you",
     "results": "📽 Results for: \"${query}\"",
-    "more_results": "⬇️ More results",
+    "provider_results": "📽 Results for: \"${query}\" on ${provider}",
+    "more_results": "[${provider}] Show all ${count} results",
     "no_results": "🤷‍♂️ No results for: \"${query}\"",
     "watch": "👉Watch"
 }
