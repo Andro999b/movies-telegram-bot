@@ -15,8 +15,7 @@ function getBestQuality(input) {
 }
 
 module.exports = async (src) => {
-    const proxy = 'https://corsproxy.movies-player.workers.dev/?'
-    const res = await superagent.get(`${proxy}${encodeURIComponent(src)}`)
+    const res = await superagent.get(src)
 
     let parts = res.text.match(/franchise:\s+(?<franchise>\d+)/)
     if(parts) {
@@ -24,13 +23,13 @@ module.exports = async (src) => {
         const { groups: { api } } = res.text.match(/apiBaseUrl:\s+"(?<api>.+)"/)
         const { groups: { referer } } = res.text.match(/referer:\s+"(?<referer>.+)"/)
 
-        const seasonsRes = await superagent.get(proxy + api + `season/by-franchise/?id=${franchise}&host=${referer}`)
+        const seasonsRes = await superagent.get(api + `season/by-franchise/?id=${franchise}&host=${referer}`)
         const seasons = JSON.parse(seasonsRes.text)
 
         seasons.sort((a, b) => a.season - b.season)
 
         return (await Promise.all(seasons.map(async ({ id, season }) => {
-            const seasonsRes = await superagent.get(proxy +api + `video/by-season/?id=${id}&host=${referer}`)
+            const seasonsRes = await superagent.get(api + `video/by-season/?id=${id}&host=${referer}`)
             const files = JSON.parse(seasonsRes.text)
 
             return files.map((file, index) => ({
