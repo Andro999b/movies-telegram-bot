@@ -45,7 +45,7 @@ bot.action(/more_results.+/, async ({
         const [_, requestSearchId, provider] = data.split('#')
 
         if (requestSearchId == searchId) {
-            const res = providersResults.filter((res) => 
+            const res = providersResults.filter((res) =>
                 res[0].provider == provider
             )
 
@@ -79,7 +79,10 @@ bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) =>
     session.searchId = searchId
 
     await reply(
-        i18n.t('results', { query }),
+        i18n.t(
+            providers.length == 1 ? 'provider_results' : 'results',
+            { query, provider: providers[0] }
+        ),
         getResultsKeyboad(results, searchId, i18n).extra()
     )
 })
