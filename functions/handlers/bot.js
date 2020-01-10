@@ -37,7 +37,8 @@ bot.action(/more_results.+/, async ({
     i18n,
     session,
     answerCbQuery,
-    callbackQuery: { data }
+    callbackQuery: { data },
+    reply
 }) => {
     const { query, searchId, providersResults } = session
 
@@ -45,18 +46,19 @@ bot.action(/more_results.+/, async ({
         const [_, requestSearchId, provider] = data.split('#')
 
         if (requestSearchId == searchId) {
-            const res = providersResults.filter((res) =>
+            const results = providersResults.find((res) =>
                 res[0].provider == provider
             )
 
             await reply(
                 i18n.t('provider_results', { query, provider }),
-                Markup.inlineKeyboard(createResultButtons(res))
+                Markup.inlineKeyboard(createResultButtons(results), { columns: 1 }).extra()
             )
+            return await answerCbQuery()
         }
     }
 
-    await answerCbQuery()
+    return await answerCbQuery(i18n.t('results_expired'))
 })
 bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) => {
     const searchId = uuid.v4()
@@ -78,13 +80,24 @@ bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) =>
     session.query = query
     session.searchId = searchId
 
-    await reply(
-        i18n.t(
-            providers.length == 1 ? 'provider_results' : 'results',
-            { query, provider: providers[0] }
-        ),
-        getResultsKeyboad(results, searchId, i18n).extra()
-    )
+    if(providers.length == 1) {
+        await reply(
+            i18n.t('provider_results', { query, provider: providers[0] }),
+            Markup.inlineKeyboard(
+                createResultButtons(providersResults[0]),
+                { columns: 1 }
+            ).extra()
+        )
+    } else {
+        await reply(
+            i18n.t(
+                'results',
+                { query }
+            ),
+            getResultsKeyboard(providersResults, searchId, i18n).extra()
+        )
+    }
+
 })
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
     const { query, providers } = getQueryAndProviders(inlineQuery.query, INLINE_PROVIDERS)
@@ -125,13 +138,13 @@ function getQueryAndProviders(query, avaliableProviders) {
     return { query, providers: avaliableProviders }
 }
 
-function getResultsKeyboad(providersResults, searchId, i18n) {
+function getResultsKeyboard(providersResults, searchId, i18n) {
     return Markup.inlineKeyboard(
         providersResults
-            .sort((a, b) => b.length - a.length)
+            .sort((a, b) => a.length - b.length)
             .map((res) => {
                 if (res.length > MAX_UNFOLD_RESULTS) {
-                    const provider = res[0]
+                    const provider = res[0].provider
                     return [
                         Markup.callbackButton(
                             i18n.t('more_results', { count: res.length, provider }),
@@ -139,15 +152,16 @@ function getResultsKeyboad(providersResults, searchId, i18n) {
                         )
                     ]
                 } else {
-                    return createResultButtorns(res)
+                    return createResultButtons(res)
                 }
             })
-            .reduce((acc, items) => acc.concat(items), [])
+            .reduce((acc, items) => acc.concat(items), []),
+        { columns: 1 }
     )
 }
 
 function createResultButtons(res) {
-    return res.map((results) =>
+    return res.map((result) =>
         Markup.urlButton(
             `[${result.provider}] ${result.name}`,
             `${process.env.PLAYER_URL}?provider=${result.provider}&id=${result.id}`

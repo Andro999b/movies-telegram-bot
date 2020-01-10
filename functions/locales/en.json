@@ -4,5 +4,6 @@
     "provider_results": "📽 Results for: \"${query}\" from ${provider}",
     "more_results": "[${provider}] Show all ${count} results",
     "no_results": "🤷‍♂️ No results for: \"${query}\"",
-    "watch": "👉Watch"
+    "watch": "👉Watch",
+    "results_expired": "❌ Results expired. Try search again. ❌"
 }
