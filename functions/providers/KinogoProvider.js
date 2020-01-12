@@ -1,6 +1,6 @@
 const DataLifeProvider = require('./DataLifeProvider')
-const getBestPlayerJSQuality= require('../utils/getBestPlayerJSQuality')
-const convertPlayerJSPlaylist= require('../utils/convertPlayerJSPlaylist')
+const getBestPlayerJSQuality = require('../utils/getBestPlayerJSQuality')
+const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const urlencode = require('urlencode')
 
 class KinogoProvider extends DataLifeProvider {
@@ -9,7 +9,7 @@ class KinogoProvider extends DataLifeProvider {
             scope: 'div.shortstory',
             selectors: {
                 id: {
-                    selector: '.zagolovki>a:nth-last-child(1)', 
+                    selector: '.zagolovki>a:nth-last-child(1)',
                     transform: ($el) => urlencode($el.attr('href'))
                 },
                 name: '.zagolovki>a:nth-last-child(1)',
@@ -32,11 +32,11 @@ class KinogoProvider extends DataLifeProvider {
 
                         var files = this._tryExtractMp4(script)
 
-                        if(!files) {
+                        if (!files) {
                             files = this._tryExtractHls(script)
                         }
 
-                        if(!files) {
+                        if (!files) {
                             files = this._tryExtractFiles(script)
                         }
 
@@ -55,10 +55,10 @@ class KinogoProvider extends DataLifeProvider {
     _tryExtractHls(script) {
         const parts = script.match(/fhls = "([^"]+)"/)
 
-        if(parts && parts.length > 1) {
+        if (parts && parts.length > 1) {
             const manifestUrl = this._extractManifest(parts[1])
 
-            return [{ 
+            return [{
                 manifestUrl
             }]
         }
@@ -67,24 +67,32 @@ class KinogoProvider extends DataLifeProvider {
     _tryExtractMp4(script) {
         const parts = script.match(/fmp4 = "([^"]+)"/)
 
-        if(parts && parts.length > 1) {
+        if (parts && parts.length > 1) {
             const urls = getBestPlayerJSQuality(parts[1])
 
-            return [{ 
-                url: urls.pop(), 
-                alternativeUrls: urls 
-            }]
+            const url = url.pop()
+
+            if (url.endsWith('m3u8')) { // not actual mp4 lol
+                return [{
+                    manifestUrl: url
+                }]
+            } else {
+                return [{
+                    url: url,
+                    alternativeUrls: urls
+                }]
+            }
         }
     }
 
     _tryExtractFiles(script) {
         const parts = script.match(/new Playerjs\((.+)\)/)
 
-        if(parts) {
+        if (parts) {
             let config
 
             eval(`config = ${parts[1]}`)
-            
+
             const { file } = config
 
             return convertPlayerJSPlaylist(file)
@@ -94,9 +102,9 @@ class KinogoProvider extends DataLifeProvider {
     async _postProcessResultDetails(details) {
         details.files = details.files || []
 
-        if(details.files.length == 1) {
+        if (details.files.length == 1) {
             details.files[0].name = details.title
-        } 
+        }
 
         return details
     }

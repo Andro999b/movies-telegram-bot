@@ -14,7 +14,7 @@ const id = urlParams.get('id') || store.get('id')
 function renderError(e, message) {
     if (e) console.error(e)
 
-    message = 'Can`t load playlist' || message
+    message = message || 'Can`t load playlist'
 
     document.querySelector('#app .loader').textContent = message
 
@@ -46,7 +46,7 @@ export default function () {
                     playerStore.openPlaylist({ id, provider, ...playlist }, fileIndex, time)
                     render((<App />), document.getElementById('app'))
                 } else {
-                    renderError('Video unavalaible')
+                    renderError('No video avalaible')
                 }
             })
             .catch((e) => renderError(e))
