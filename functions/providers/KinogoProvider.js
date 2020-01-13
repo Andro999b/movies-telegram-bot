@@ -70,7 +70,7 @@ class KinogoProvider extends DataLifeProvider {
         if (parts && parts.length > 1) {
             const urls = getBestPlayerJSQuality(parts[1])
 
-            const url = url.pop()
+            const url = urls.pop()
 
             if (url.endsWith('m3u8')) { // not actual mp4 lol
                 return [{
