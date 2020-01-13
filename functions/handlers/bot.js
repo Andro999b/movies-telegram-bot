@@ -33,59 +33,27 @@ bot.command('start', ({ i18n, reply }) => reply(
     ),
     Extra.HTML()
 ))
-bot.action(/more_results.+/, async ({
-    i18n,
-    session,
-    answerCbQuery,
-    callbackQuery: { data }
-}) => {
-    const { query, searchId, providersResults } = session
 
-    if (query && providersResults && searchId) {
-        const [_, requestSearchId, provider] = data.split('#')
-
-        if (requestSearchId == searchId) {
-            const res = providersResults.filter((res) =>
-                res[0].provider == provider
-            )
-
-            await reply(
-                i18n.t('provider_results', { query, provider }),
-                Markup.inlineKeyboard(createResultButtons(res))
-            )
-        }
-    }
-
-    await answerCbQuery()
-})
 bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) => {
-    const searchId = uuid.v4()
-
     await replyWithChatAction('typing')
 
-    const { query, providers } = getQueryAndProviders(message.text, PROVIDER)
-
-    let providersResults = await Promise.all(providers.map((providerName) =>
-        providersService.searchOne(providerName, query)
-    ))
-
-    providersResults = providersResults.filter((res) => res && res.length)
+    const { query, providersResults, keyboard } = doSearch(message.text, i18n)
 
     if (!providersResults.length)
         return await reply(i18n.t('no_results', { query }))
 
     session.providersResults = providersResults
     session.query = query
-    session.searchId = searchId
 
     await reply(
         i18n.t(
             providers.length == 1 ? 'provider_results' : 'results',
             { query, provider: providers[0] }
         ),
-        getResultsKeyboad(results, searchId, i18n).extra()
+        keyboard.extra()
     )
 })
+
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
     const { query, providers } = getQueryAndProviders(inlineQuery.query, INLINE_PROVIDERS)
 
@@ -109,6 +77,26 @@ bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
     })))
 })
 
+function doSearch(text, i18n) {
+    const { query, providers } = getQueryAndProviders(text, PROVIDER)
+
+    let providersResults = await Promise.all(providers.map((providerName) =>
+        providersService.searchOne(providerName, query)
+    ))
+
+    providersResults = providersResults.filter((res) => res && res.length)
+
+    if (!providersResults.length) {
+        return { query, providersResults }
+    } else {
+        return {
+            query,
+            providersResults,
+            keyboard: getResultsKeyboad(results, query, i18n)
+        }
+    }
+}
+
 function getQueryAndProviders(query, avaliableProviders) {
     if (query.startsWith('#')) {
         const sepIndex = query.indexOf(' ')
@@ -125,7 +113,7 @@ function getQueryAndProviders(query, avaliableProviders) {
     return { query, providers: avaliableProviders }
 }
 
-function getResultsKeyboad(providersResults, searchId, i18n) {
+function getResultsKeyboad(providersResults, query, i18n) {
     return Markup.inlineKeyboard(
         providersResults
             .sort((a, b) => b.length - a.length)
@@ -135,7 +123,7 @@ function getResultsKeyboad(providersResults, searchId, i18n) {
                     return [
                         Markup.callbackButton(
                             i18n.t('more_results', { count: res.length, provider }),
-                            `more_results#${searchId}#${provider}`
+                            `#${provider} ${query}`
                         )
                     ]
                 } else {
