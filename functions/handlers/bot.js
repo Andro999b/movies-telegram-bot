@@ -34,7 +34,7 @@ bot.command('start', ({ i18n, reply }) => reply(
     Extra.HTML()
 ))
 
-bot.action('callback_query', async ({
+bot.on('callback_query', async ({
     i18n,
     session,
     reply,
@@ -42,7 +42,7 @@ bot.action('callback_query', async ({
     answerCbQuery,
     callbackQuery: { data }
 }) => {
-    doSearch({
+    await doSearch({
         i18n,
         session,
         reply,
@@ -63,13 +63,16 @@ bot.on('text', async ({
     session.query = null
     session.providersResults = null
 
-    doSearch({
+    const { query, providersResults } = await doSearch({
         i18n,
         session,
         reply,
         replyWithChatAction,
         text: message.text
     })
+
+    session.query = query
+    session.providersResults = providersResults
 })
 
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
@@ -96,15 +99,18 @@ bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
 })
 
 async function doSearch({ i18n, session, reply, replyWithChatAction, text }) {
-    await replyWithChatAction('typing')
-
     const { query, providers } = getQueryAndProviders(text, PROVIDER)
 
     let providersResults
 
     if (session.providersResults && session.query == query) {
-        providersResults = session.providersResults
+        providersResults = session.providersResults.filter((res) => {
+            const { provider } = res[0]
+            return providers.indexOf(provider) != -1
+        })
     } else {
+        await replyWithChatAction('typing')
+
         providersResults = await Promise.all(providers.map((providerName) =>
             providersService.searchOne(providerName, query)
         ))
@@ -115,16 +121,23 @@ async function doSearch({ i18n, session, reply, replyWithChatAction, text }) {
     if (!providersResults.length)
         return await reply(i18n.t('no_results', { query }))
 
-    session.providersResults = providersResults
-    session.query = query
 
-    await reply(
-        i18n.t(
-            providers.length == 1 ? 'provider_results' : 'results',
-            { query, provider: providers[0] }
-        ),
-        getResultsKeyboad(providersResults, query, i18n).extra()
-    )
+    if(providers.length == 1) {
+        await reply(
+            i18n.t('provider_results', { query, provider: providers[0] }),
+            Markup.inlineKeyboard(createResultButtons(providersResults[0]), { columns: 1 }).extra()
+        )
+    } else {
+        await reply(
+            i18n.t('results', { query }),
+            getResultsKeyboad(providersResults, query, i18n).extra()
+        )
+    }
+
+    return {
+        providersResults,
+        query
+    }
 }
 
 function getQueryAndProviders(query, avaliableProviders) {
