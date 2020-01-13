@@ -2,7 +2,8 @@
     "start": "🤖 Just type Movie, TV Show or Cartoon name and i will try to find something for you",
     "results": "📽 Results for: \"${query}\"",
     "provider_results": "📽 Results for: \"${query}\" from ${provider}",
-    "more_results": "[${provider}] Show all ${count} results",
+    "more_results": "[${provider}] Show all ${count} results ➡️",
     "no_results": "🤷‍♂️ No results for: \"${query}\"",
-    "watch": "👉Watch"
+    "watch": "👉Watch",
+    "results_expired": "‼️ Results expired. Try search again.  ‼️"
 }

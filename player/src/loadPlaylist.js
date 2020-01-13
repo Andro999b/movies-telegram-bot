@@ -11,10 +11,8 @@ const provider = urlParams.get('provider') || store.get('provider')
 const id = urlParams.get('id') || store.get('id')
 
 
-function renderError(e, message) {
-    if (e) console.error(e)
-
-    message = 'Can`t load playlist' || message
+function renderError(message, err) {
+    message = message || 'Can`t load playlist'
 
     document.querySelector('#app .loader').textContent = message
 
@@ -26,7 +24,8 @@ function renderError(e, message) {
     logger.error(message, {
         provider,
         id,
-        href: location.href
+        href: location.href,
+        err
     })
 }
 
@@ -46,10 +45,10 @@ export default function () {
                     playerStore.openPlaylist({ id, provider, ...playlist }, fileIndex, time)
                     render((<App />), document.getElementById('app'))
                 } else {
-                    renderError('Video unavalaible')
+                    renderError('Video not found')
                 }
             })
-            .catch((e) => renderError(e))
+            .catch((e) => renderError(null, e))
     } else {
         renderError()
     }

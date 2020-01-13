@@ -33,7 +33,6 @@ bot.command('start', ({ i18n, reply }) => reply(
     ),
     Extra.HTML()
 ))
-
 bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) => {
     await replyWithChatAction('typing')
 
@@ -116,10 +115,10 @@ function getQueryAndProviders(query, avaliableProviders) {
 function getResultsKeyboad(providersResults, query, i18n) {
     return Markup.inlineKeyboard(
         providersResults
-            .sort((a, b) => b.length - a.length)
+            .sort((a, b) => a.length - b.length)
             .map((res) => {
                 if (res.length > MAX_UNFOLD_RESULTS) {
-                    const provider = res[0]
+                    const provider = res[0].provider
                     return [
                         Markup.callbackButton(
                             i18n.t('more_results', { count: res.length, provider }),
@@ -127,15 +126,16 @@ function getResultsKeyboad(providersResults, query, i18n) {
                         )
                     ]
                 } else {
-                    return createResultButtorns(res)
+                    return createResultButtons(res)
                 }
             })
-            .reduce((acc, items) => acc.concat(items), [])
+            .reduce((acc, items) => acc.concat(items), []),
+        { columns: 1 }
     )
 }
 
 function createResultButtons(res) {
-    return res.map((results) =>
+    return res.map((result) =>
         Markup.urlButton(
             `[${result.provider}] ${result.name}`,
             `${process.env.PLAYER_URL}?provider=${result.provider}&id=${result.id}`

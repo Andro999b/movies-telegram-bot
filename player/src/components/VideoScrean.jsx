@@ -114,7 +114,11 @@ class VideoScrean extends BaseScrean {
         if (browserUrl) {
             video.src = browserUrl
         } else if (url) {
-            this.startNativeVideo()
+            if(url.endsWith('m3u8')) {
+                this.startHlsVideo(url)
+            } else {
+                this.startNativeVideo()
+            }
         } else if (manifestUrl) {
             this.startHlsVideo()
         } else {
@@ -164,11 +168,13 @@ class VideoScrean extends BaseScrean {
         }
     }
 
-    startHlsVideo() {
+    startHlsVideo(manifestUrl) {
         this.hlsMode = true
 
         const { props: { device } } = this
-        const { source: { manifestUrl, extractor } } = device
+        const { source: { extractor } } = device
+
+        manifestUrl = manifestUrl || device.source.manifestUrl
 
         const hls = new Hls({
             startPosition: device.currentTime,
