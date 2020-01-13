@@ -34,28 +34,39 @@ bot.command('start', ({ i18n, reply }) => reply(
     Extra.HTML()
 ))
 
-bot.action(/.+/, async ({ i18n, session, reply, replyWithChatAction, answerCbQuery, match }) => {
-    const text = match[0]
-
+bot.action('callback_query', async ({
+    i18n,
+    session,
+    reply,
+    replyWithChatAction,
+    answerCbQuery,
+    callbackQuery: { data }
+}) => {
     doSearch({
-        i18n, 
-        session, 
-        reply, 
+        i18n,
+        session,
+        reply,
         replyWithChatAction,
-        text
+        text: data
     })
 
     await answerCbQuery()
 })
 
-bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) => {
+bot.on('text', async ({ 
+    i18n, 
+    session, 
+    reply, 
+    replyWithChatAction, 
+    message 
+}) => {
     session.query = null
     session.providersResults = null
 
     doSearch({
-        i18n, 
-        session, 
-        reply, 
+        i18n,
+        session,
+        reply,
         replyWithChatAction,
         text: message.text
     })
@@ -88,10 +99,10 @@ async function doSearch({ i18n, session, reply, replyWithChatAction, text }) {
     await replyWithChatAction('typing')
 
     const { query, providers } = getQueryAndProviders(text, PROVIDER)
-    
+
     let providersResults
 
-    if(session.query == query) {
+    if (session.providersResults && session.query == query) {
         providersResults = session.providersResults
     } else {
         providersResults = await Promise.all(providers.map((providerName) =>
