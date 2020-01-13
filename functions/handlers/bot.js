@@ -33,24 +33,32 @@ bot.command('start', ({ i18n, reply }) => reply(
     ),
     Extra.HTML()
 ))
+
+bot.action(/.+/, async ({ i18n, session, reply, replyWithChatAction, answerCbQuery, match }) => {
+    const text = match[0]
+
+    doSearch({
+        i18n, 
+        session, 
+        reply, 
+        replyWithChatAction,
+        text
+    })
+
+    await answerCbQuery()
+})
+
 bot.on('text', async ({ i18n, session, reply, replyWithChatAction, message }) => {
-    await replyWithChatAction('typing')
+    session.query = null
+    session.providersResults = null
 
-    const { query, providersResults, keyboard } = doSearch(message.text, i18n)
-
-    if (!providersResults.length)
-        return await reply(i18n.t('no_results', { query }))
-
-    session.providersResults = providersResults
-    session.query = query
-
-    await reply(
-        i18n.t(
-            providers.length == 1 ? 'provider_results' : 'results',
-            { query, provider: providers[0] }
-        ),
-        keyboard.extra()
-    )
+    doSearch({
+        i18n, 
+        session, 
+        reply, 
+        replyWithChatAction,
+        text: message.text
+    })
 })
 
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
@@ -76,24 +84,36 @@ bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
     })))
 })
 
-function doSearch(text, i18n) {
-    const { query, providers } = getQueryAndProviders(text, PROVIDER)
+async function doSearch({ i18n, session, reply, replyWithChatAction, text }) {
+    await replyWithChatAction('typing')
 
-    let providersResults = await Promise.all(providers.map((providerName) =>
-        providersService.searchOne(providerName, query)
-    ))
+    const { query, providers } = getQueryAndProviders(text, PROVIDER)
+    
+    let providersResults
+
+    if(session.query == query) {
+        providersResults = session.providersResults
+    } else {
+        providersResults = await Promise.all(providers.map((providerName) =>
+            providersService.searchOne(providerName, query)
+        ))
+    }
 
     providersResults = providersResults.filter((res) => res && res.length)
 
-    if (!providersResults.length) {
-        return { query, providersResults }
-    } else {
-        return {
-            query,
-            providersResults,
-            keyboard: getResultsKeyboad(results, query, i18n)
-        }
-    }
+    if (!providersResults.length)
+        return await reply(i18n.t('no_results', { query }))
+
+    session.providersResults = providersResults
+    session.query = query
+
+    await reply(
+        i18n.t(
+            providers.length == 1 ? 'provider_results' : 'results',
+            { query, provider: providers[0] }
+        ),
+        getResultsKeyboad(providersResults, query, i18n).extra()
+    )
 }
 
 function getQueryAndProviders(query, avaliableProviders) {
