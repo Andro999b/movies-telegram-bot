@@ -1,6 +1,5 @@
 import { observable, action } from 'mobx'
 import localStore from 'store'
-import logger from '../utils/logger'
 
 const END_FILE_TIME_OFFSET = 60
 const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${playlist.id}`
@@ -176,19 +175,6 @@ export class LocalDevice extends Device {
 
     @action.bound setError(error) {
         this.error = error
-
-        if (error) {
-            logger.error(error, {
-                title: document.title,
-                url: location.href,
-                source: this.source
-            })
-
-            window.gtag && gtag('event', 'play', {
-                'event_category': 'error',
-                'event_label': error
-            })
-        }
     }
 
     @action.bound setVolume(volume) {

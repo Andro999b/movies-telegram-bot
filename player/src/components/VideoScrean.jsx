@@ -4,6 +4,7 @@ import { observer } from 'mobx-react'
 import Hls from 'hls.js'
 import BaseScrean from './BaseScrean'
 import { createExtractorUrlBuilder } from '../utils'
+import logger from '../utils/logger'
 
 @observer
 class VideoScrean extends BaseScrean {
@@ -126,6 +127,7 @@ class VideoScrean extends BaseScrean {
 
             device.setLoading(false)
             device.setError('No suitable video source')
+            this.logError('No suitable video source')
             return
         }
 
@@ -209,6 +211,7 @@ class VideoScrean extends BaseScrean {
                         // cannot recover
                         device.setError('Can`t play media')
                         hls.destroy()
+                        this.logError(data)
                         break
                 }
             }
@@ -255,6 +258,28 @@ class VideoScrean extends BaseScrean {
 
         device.setError('Could not play media')
         device.setLoading(false)
+
+        let code;
+
+        switch(this.video.error.code) {
+            case MediaError.MEDIA_ERR_ABORTED:
+                code = 'MEDIA_ERR_ABORTED'
+                break            
+            case MediaError.MEDIA_ERR_NETWORK:
+                code = 'MEDIA_ERR_NETWORK'
+                break    
+            case MediaError.MEDIA_ERR_DECODE:
+                code = 'MEDIA_ERR_DECODE'
+                break            
+            case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                code = 'MEDIA_ERR_SRC_NOT_SUPPORTED'
+                break
+        }
+
+        this.logError({ 
+            code,
+            message: this.video.error.message 
+        })
     }
 
     handleLoadedMetadata = () => {
@@ -309,6 +334,22 @@ class VideoScrean extends BaseScrean {
             return 'vert'
 
         return 'hor'
+    }
+
+    logError(errorData) {
+        const { props: { device: { source } }} = this
+
+        logger.error('Can`t play media', {
+            title: document.title,
+            url: location.href,
+            source: source,
+            data: errorData
+        })
+
+        window.gtag && gtag('event', 'play', {
+            'event_category': 'error',
+            'event_label': 'Can`t play media'
+        })
     }
 
     render() {

@@ -122,10 +122,12 @@ async function doSearch({ i18n, session, reply, replyWithChatAction, text }) {
         return await reply(i18n.t('no_results', { query }))
 
 
-    if(providers.length == 1) {
+    if(providersResults.length == 1) {
+        const results = providersResults[0]
+        const provider = results[0].provider
         await reply(
-            i18n.t('provider_results', { query, provider: providers[0] }),
-            Markup.inlineKeyboard(createResultButtons(providersResults[0]), { columns: 1 }).extra()
+            i18n.t('provider_results', { query, provider }),
+            Markup.inlineKeyboard(createResultButtons(results), { columns: 1 }).extra()
         )
     } else {
         await reply(
