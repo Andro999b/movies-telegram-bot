@@ -86,7 +86,7 @@ class KinogoProvider extends DataLifeProvider {
     }
 
     _tryExtractFiles(script) {
-        const parts = script.match(/new Playerjs\((.+)\)/)
+        const parts = script.match(/new Playerjs\(([^)]+)\);/)
 
         if (parts) {
             let config

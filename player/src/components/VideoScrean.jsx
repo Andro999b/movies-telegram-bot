@@ -259,7 +259,7 @@ class VideoScrean extends BaseScrean {
         device.setError('Could not play media')
         device.setLoading(false)
 
-        let code;
+        let code
 
         switch(this.video.error.code) {
             case MediaError.MEDIA_ERR_ABORTED:
