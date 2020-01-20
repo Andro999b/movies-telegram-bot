@@ -28,7 +28,7 @@ class KinogoProvider extends DataLifeProvider {
                 files: {
                     selector: '#1212',
                     transform: ($el) => {
-                        const script = $el.next().toArray()[0].children[0].data
+                        const script = $el.nextAll(':not([src])').toArray()[0].children[0].data
 
                         var files = this._tryExtractMp4(script)
 
