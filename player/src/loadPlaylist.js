@@ -48,7 +48,7 @@ export default function () {
                     renderError('Video not found')
                 }
             })
-            .catch((e) => renderError(null, e))
+            .catch((e) => renderError(null, { message: e.message }))
     } else {
         renderError()
     }
