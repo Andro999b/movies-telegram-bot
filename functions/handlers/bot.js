@@ -6,7 +6,6 @@ const Telegraf = require('telegraf')
 const TelegrafI18n = require('telegraf-i18n')
 const Markup = require('telegraf/markup')
 const Extra = require('telegraf/extra')
-const session = require('telegraf/session')
 const uuid = require('uuid')
 
 const PROVIDER = process.env.PROVIDER ? process.env.PROVIDER.split(',') : []
@@ -21,7 +20,6 @@ const i18n = new TelegrafI18n({
 
 const bot = new Telegraf(process.env.TOKEN)
 
-bot.use(session())
 bot.use(i18n.middleware())
 bot.command('start', ({ i18n, reply }) => reply(
     i18n.t(
@@ -36,7 +34,6 @@ bot.command('start', ({ i18n, reply }) => reply(
 
 bot.on('callback_query', async ({
     i18n,
-    session,
     reply,
     replyWithChatAction,
     answerCbQuery,
@@ -44,7 +41,6 @@ bot.on('callback_query', async ({
 }) => {
     await doSearch({
         i18n,
-        session,
         reply,
         replyWithChatAction,
         text: data
@@ -55,24 +51,16 @@ bot.on('callback_query', async ({
 
 bot.on('text', async ({ 
     i18n, 
-    session, 
     reply, 
     replyWithChatAction, 
     message 
 }) => {
-    session.query = null
-    session.providersResults = null
-
-    const { query, providersResults } = await doSearch({
+    await doSearch({
         i18n,
-        session,
         reply,
         replyWithChatAction,
         text: message.text
     })
-
-    session.query = query
-    session.providersResults = providersResults
 })
 
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
@@ -98,23 +86,14 @@ bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
     })))
 })
 
-async function doSearch({ i18n, session, reply, replyWithChatAction, text }) {
+async function doSearch({ i18n, reply, replyWithChatAction, text }) {
     const { query, providers } = getQueryAndProviders(text, PROVIDER)
 
-    let providersResults
+    await replyWithChatAction('typing')
 
-    if (session.providersResults && session.query == query) {
-        providersResults = session.providersResults.filter((res) => {
-            const { provider } = res[0]
-            return providers.indexOf(provider) != -1
-        })
-    } else {
-        await replyWithChatAction('typing')
-
-        providersResults = await Promise.all(providers.map((providerName) =>
-            providersService.searchOne(providerName, query)
-        ))
-    }
+    let providersResults = await Promise.all(providers.map((providerName) =>
+        providersService.searchOne(providerName, query)
+    ))
 
     providersResults = providersResults.filter((res) => res && res.length)
 
