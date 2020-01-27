@@ -18,6 +18,7 @@ module.exports = async (src) => {
     const res = await superagent.get(src)
 
     let parts = res.text.match(/franchise:\s+(?<franchise>\d+)/)
+
     if(parts) {
         const { groups: { franchise } } = parts
         const { groups: { api } } = res.text.match(/apiBaseUrl:\s+"(?<api>.+)"/)

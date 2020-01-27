@@ -1,6 +1,7 @@
 const Provider = require('./Provider')
 const urlencode = require('urlencode')
 const deliverembed = require('../utils/deliverembed')
+const $ = require('cheerio')
 
 class SevenSerailsProvider extends Provider {
     constructor() {
@@ -26,18 +27,23 @@ class SevenSerailsProvider extends Provider {
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
-                    selector: 'iframe',
-                    transform: async ($el) => {
-                        const files = await deliverembed($el.attr('src'))
+                    transform: async (_, $root) => {
+                        const parts = $root.html().match(/(https:\/\/api[0-9]+\.delivembed\.cc\/embed\/movie\/[0-9]+)/)
 
-                        return files.map((file) => {
-                            const parts = file.manifestUrl.split('?video=')
-                            const manifestUrl = decodeURIComponent(parts[1])
-                            return {
-                                ...file,
-                                manifestUrl
-                            }
-                        })
+                        if(parts && parts.length > 1) {
+                            const files = await deliverembed(parts[1])
+
+                            return files.map((file) => {
+                                const parts = file.manifestUrl.split('?video=')
+                                const manifestUrl = decodeURIComponent(parts[1])
+                                return {
+                                    ...file,
+                                    manifestUrl
+                                }
+                            })
+                        }
+
+                        return []
                     }
                 }
             }
