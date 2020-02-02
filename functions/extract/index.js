@@ -7,7 +7,8 @@ const extractors = {
     '123moviesapp': require('./movies123AppExtractor'),
     'tortuga': require('./m3u8Extractor'),
     'sst': require('./mp4PlayerJsExtractor'),
-    'uploadvideo': require('./uploadvideoExtractor')
+    'uploadvideo': require('./uploadvideoExtractor'),
+    'sibnet': require('./sibnetExtractor')
 }
 
 module.exports = async (parmas) => {

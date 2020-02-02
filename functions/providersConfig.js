@@ -6,6 +6,10 @@ module.exports = {
         'baseUrl': 'https://videocdn.tv/api',
         'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
         'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE'
+    },    
+    'yummyanime': {
+        'baseUrl': 'https://yummyanime.club',
+        'searchUrl': 'https://yummyanime.club/search'
     },
     'animevost': {
         'baseUrl': 'https://animevost.org',

@@ -1,14 +1,14 @@
 const providers = require('./providers')
 
-const providerName = 'videocdn'
+const providerName = 'yummyanime'
 // const providerName = 'uaserials'
 // const searchQuery = 'Террор'
 // const searchQuery = 'Venom'
-const searchQuery = 'Мистер Робот'
+// const searchQuery = 'Мистер Робот'
 // const searchQuery = 'Клинок ведьм'
 // const searchQuery = 'one punch'
 // const searchQuery = 'веном'
-const searchQuery = 'Мандалорец'
+const searchQuery = 'ванпанчмен'
 
 providers.searchOne(providerName, searchQuery)
     .then((results) => {

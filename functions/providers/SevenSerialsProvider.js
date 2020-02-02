@@ -1,7 +1,6 @@
 const Provider = require('./Provider')
 const urlencode = require('urlencode')
 const deliverembed = require('../utils/deliverembed')
-const $ = require('cheerio')
 
 class SevenSerailsProvider extends Provider {
     constructor() {

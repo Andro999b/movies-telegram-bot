@@ -117,17 +117,20 @@ class PlayerPlayList extends Component {
         }
 
         files.forEach((file) => {
-            const path = file.path ? file.path.split('/') : [file.name]
-            const node = getNode(path)
-
-            node.files.push(file)
+            if(file.path) {
+                const path = file.path.split('/')
+                const node = getNode(path)
+                node.files.push(file)
+            } else {
+                root.files.push(file) 
+            }
         })
 
         return root
     })
 
     renderDownload(file) {
-        if (!file.files) {
+        if (file.url) {
             const downloadUrl = file.extractor ? null : file.url
             if (downloadUrl)
                 return (
