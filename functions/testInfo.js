@@ -1,7 +1,7 @@
 const providers = require('./providers')
 
-const provider = 'yummyanime'
-const id = '/catalog/item/vanpanchmen'
+const provider = 'videocdn'
+const id = 'movies_34656'
 
 providers.getInfo(provider, id)
     .then((details) => console.log('details', details))// eslint-disable-line

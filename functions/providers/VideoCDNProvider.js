@@ -50,6 +50,10 @@ class VideoCDNProvider extends Provider {
         const files = await videocdnembed(url)
         const kinopoiskPoster = `https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`
 
+        if(files.length == 1) {
+            files[0].name = ru_title
+        }
+
         return {
             title: ru_title,
             files,
