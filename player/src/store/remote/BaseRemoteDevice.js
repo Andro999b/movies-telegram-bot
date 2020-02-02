@@ -1,5 +1,8 @@
 import { Device } from '../player-store'
 import { action } from 'mobx'
+import localStore from 'store'
+import { getPlaylistPrefix } from '../../utils'
+
 import pick from 'lodash.pick'
 
 const ALLOWED_REMOTE_STATE_FIELDS = [
@@ -76,8 +79,14 @@ export default class BaseRemoteDevice extends Device {
     
     @action.bound onSync(state) {
         const filteredState = pick(state, ALLOWED_REMOTE_STATE_FIELDS)
+
         Object.keys(filteredState).forEach((key) => {
             this[key] = state[key]
         })
+
+        if(filteredState.indexOf('currentFileIndex') != -1) {
+            const playlistPrefix = getPlaylistPrefix(this.playlist)
+            localStore.set(`${playlistPrefix}:current`, this.currentFileIndex)
+        }
     }
 }

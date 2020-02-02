@@ -56,3 +56,5 @@ export function toHHMMSS(timestamp) {
     }
     return hours+':'+minutes+':'+seconds
 }
+
+export const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${playlist.id}`

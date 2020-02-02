@@ -1,9 +1,8 @@
 import { observable, action } from 'mobx'
 import localStore from 'store'
+import { getPlaylistPrefix } from '../utils'
 
 const END_FILE_TIME_OFFSET = 60
-const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${playlist.id}`
-
 
 export class Device {
     @observable playlist = { name: '', files: [] }
