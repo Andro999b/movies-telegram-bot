@@ -8,19 +8,4 @@ module.exports = async (params) => {
         .timeout(5000)
 
     return makeResponse(siteRes.text, 302)
-
-        // for(let extractExpr of regExps) {
-        //     const matches = siteRes.text.match(extractExpr)
-
-        //     if(matches == null || matches.length < 1)
-        //         continue
-
-        //     const videoUrl = matches[matches.length - 1]        
-
-        //     return makeResponse(null, 302, {
-        //         Location: videoUrl
-        //     })
-        // }
-
-        // throw Error('Video can`t be extracted', params)
-    }
+}
