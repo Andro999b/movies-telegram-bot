@@ -49,11 +49,11 @@ bot.on('callback_query', async ({
     await answerCbQuery()
 })
 
-bot.on('text', async ({ 
-    i18n, 
-    reply, 
-    replyWithChatAction, 
-    message 
+bot.on('text', async ({
+    i18n,
+    reply,
+    replyWithChatAction,
+    message
 }) => {
     await doSearch({
         i18n,
@@ -86,6 +86,14 @@ bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
     })))
 })
 
+bot.catch((err) => {
+    if (err.response && err.response.error_code === 403) {
+        // noop
+    } else {
+        console.error('Fail process bot command', err)
+    }
+})
+
 async function doSearch({ i18n, reply, replyWithChatAction, text }) {
     const { query, providers } = getQueryAndProviders(text, PROVIDER)
 
@@ -101,7 +109,7 @@ async function doSearch({ i18n, reply, replyWithChatAction, text }) {
         return await reply(i18n.t('no_results', { query }))
 
 
-    if(providersResults.length == 1) {
+    if (providersResults.length == 1) {
         const results = providersResults[0]
         const provider = results[0].provider
         await reply(
@@ -113,11 +121,6 @@ async function doSearch({ i18n, reply, replyWithChatAction, text }) {
             i18n.t('results', { query }),
             getResultsKeyboad(providersResults, query, i18n).extra()
         )
-    }
-
-    return {
-        providersResults,
-        query
     }
 }
 
