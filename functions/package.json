@@ -16,6 +16,7 @@
     "superagent-charset": "^1.2.0",
     "telegraf": "^3.33.3",
     "telegraf-i18n": "^6.6.0",
+    "telegraf-mixpanel": "^1.0.0",
     "urlencode": "^1.1.0",
     "uuid": "^3.3.3"
   },

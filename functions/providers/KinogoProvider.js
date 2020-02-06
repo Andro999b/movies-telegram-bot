@@ -1,6 +1,7 @@
 const DataLifeProvider = require('./DataLifeProvider')
 const getBestPlayerJSQuality = require('../utils/getBestPlayerJSQuality')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
+const stripPlayerJSConfig = require('../utils/stripPlayerJSConfig')
 const urlencode = require('urlencode')
 
 class KinogoProvider extends DataLifeProvider {
@@ -86,15 +87,10 @@ class KinogoProvider extends DataLifeProvider {
     }
 
     _tryExtractFiles(script) {
-        const parts = script.match(/new Playerjs\(([^)]+)\);/)
+        const config = stripPlayerJSConfig(script)
 
-        if (parts) {
-            let config
-
-            eval(`config = ${parts[1]}`)
-
+        if (config) {
             const { file } = config
-
             return convertPlayerJSPlaylist(file)
         }
     }

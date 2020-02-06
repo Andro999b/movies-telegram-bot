@@ -4,9 +4,9 @@ const providers = [
     new (require('./KinogoProvider'))(),
     new (require('./AnimeVostProvider'))(),
     new (require('./EXFSProvider'))(),
+    new (require('./Kino4UaProvider'))(),
     new (require('./VideoCDNProvider'))(),
     new (require('./KinoUkrProvider'))(),
-    new (require('./UAKinoProvider'))(),
     new (require('./UASerialsProvider'))(),
     new (require('./YummyanimeProvider'))()
 ]

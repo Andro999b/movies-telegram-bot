@@ -6,6 +6,7 @@ const Telegraf = require('telegraf')
 const TelegrafI18n = require('telegraf-i18n')
 const Markup = require('telegraf/markup')
 const Extra = require('telegraf/extra')
+const TelegrafMixpanel = require('telegraf-mixpanel')
 const uuid = require('uuid')
 
 const PROVIDER = process.env.PROVIDER ? process.env.PROVIDER.split(',') : []
@@ -19,49 +20,35 @@ const i18n = new TelegrafI18n({
 })
 
 const bot = new Telegraf(process.env.TOKEN)
+const mixpanel = new TelegrafMixpanel(process.env.MIXPANEL_TOKEN)
 
 bot.use(i18n.middleware())
-bot.command('start', ({ i18n, reply }) => reply(
-    i18n.t(
-        'start',
-        {
-            sample: PROVIDER[0],
-            providers: PROVIDER.map((it) => ` - ${it}`).join('\n')
-        }
-    ),
-    Extra.HTML()
-))
+bot.use(mixpanel.middleware())
 
-bot.on('callback_query', async ({
-    i18n,
-    reply,
-    replyWithChatAction,
-    answerCbQuery,
-    callbackQuery: { data }
-}) => {
-    await doSearch({
-        i18n,
-        reply,
-        replyWithChatAction,
-        text: data
+bot.command('start', async ({ i18n, reply, mixpanel }) => {
+    mixpanel.track('register')
+    mixpanel.people.set({
+        $created: new Date().toISOString()
     })
 
-    await answerCbQuery()
+    await reply(
+        i18n.t(
+            'start',
+            {
+                sample: PROVIDER[0],
+                providers: PROVIDER.map((it) => ` - ${it}`).join('\n')
+            }
+        ),
+        Extra.HTML()
+    )
 })
 
-bot.on('text', async ({
-    i18n,
-    reply,
-    replyWithChatAction,
-    message
-}) => {
-    await doSearch({
-        i18n,
-        reply,
-        replyWithChatAction,
-        text: message.text
-    })
+bot.on('callback_query', async (ctx) => {
+    await doSearch(ctx, ctx.callbackQuery.data)
+    await ctx.answerCbQuery()
 })
+
+bot.on('text', async (ctx) => doSearch(ctx, ctx.message.text))
 
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
     const { query, providers } = getQueryAndProviders(inlineQuery.query, INLINE_PROVIDERS)
@@ -94,8 +81,12 @@ bot.catch((err) => {
     }
 })
 
-async function doSearch({ i18n, reply, replyWithChatAction, text }) {
-    const { query, providers } = getQueryAndProviders(text, PROVIDER)
+async function doSearch({ i18n, reply, replyWithChatAction, mixpanel }, text) {
+    mixpanel.track('search', { query: text })
+
+    let { query, providers } = getQueryAndProviders(text, PROVIDER)
+
+    query = query.replace(/http?s:\/\/[^\s]*/g, '') // strip links
 
     await replyWithChatAction('typing')
 

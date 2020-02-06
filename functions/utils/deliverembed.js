@@ -14,8 +14,10 @@ function getBestQuality(input) {
         .pop()
 }
 
-module.exports = async (src) => {
-    const res = await superagent.get(src)
+module.exports = async (url) => {
+    console.log(url);
+
+    const res = await superagent.get(url.startsWith('//') ? 'https:' + url : url)
 
     let parts = res.text.match(/franchise:\s+(?<franchise>\d+)/)
 

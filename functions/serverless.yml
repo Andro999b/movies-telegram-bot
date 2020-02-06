@@ -76,6 +76,7 @@ functions:
           cors: true
     environment:
       TOKEN: ${ssm:bot_ru_TOKEN}
+      MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
       PROVIDER: 'videocdn,7serealov,seasonvar,animevost,kinogo'
       INLINE_PROVIDERS: 'videocdn,7serealov,seasonvar,animevost,kinogo'
@@ -89,8 +90,9 @@ functions:
           cors: true
     environment:
       TOKEN: ${ssm:bot_ua_TOKEN}
+      MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDER: 'kinoukr,uaserials'
+      PROVIDER: 'kinoukr,kino4ua,uaserials'
       INLINE_PROVIDERS: 'kinoukr,uaserials'
 
   # vumoobot:

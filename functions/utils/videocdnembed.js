@@ -43,7 +43,7 @@ function _extractTranslations(translations, playlists) {
 }
 
 module.exports = async (url) => {
-    const res = await superagent.get(url)
+    const res = await superagent.get(url.startsWith('//') ? 'https:' + url : url)
     const $ = cheerio.load(res.text)
 
     const translations = $('.translations > select > option')
