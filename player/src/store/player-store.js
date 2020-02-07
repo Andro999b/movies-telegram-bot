@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx'
 import localStore from 'store'
 import { getPlaylistPrefix } from '../utils'
+import analytics from '../utils/analytics'
 
 const END_FILE_TIME_OFFSET = 60
 
@@ -250,10 +251,7 @@ class PlayerStore {
         }
         document.title = this.getPlayerTitle()
 
-        window.gtag && gtag('event', 'selectFile', {
-            'event_category': 'video',
-            'event_label': document.title
-        })
+        analytics('selectFile', 'video', document.title)
     }
 
     @action.bound prevFile() {

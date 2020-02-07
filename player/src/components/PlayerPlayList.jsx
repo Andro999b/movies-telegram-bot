@@ -18,6 +18,7 @@ import {
 } from '@material-ui/icons'
 import { observer } from 'mobx-react'
 import memoize from 'memoize-one'
+import analytics from '../utils/analytics'
 
 @observer
 class PlayerPlayList extends Component {
@@ -56,10 +57,7 @@ class PlayerPlayList extends Component {
     handleTrackDownload = (file) => {
         const { device: { playlist: { title } } } = this.props
 
-        window.gtag && gtag('event', 'downloadFile', {
-            'event_category': 'link',
-            'event_label': `${title} - ${file.name}`
-        })
+        analytics('downloadFile', 'downloadFile', `${title} - ${file.name}`)
     }
 
     handleMobileDownload = (downloadUrl, file) => {

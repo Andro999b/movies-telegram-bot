@@ -27,9 +27,7 @@ bot.use(mixpanel.middleware())
 
 bot.command('start', async ({ i18n, reply, mixpanel }) => {
     mixpanel.track('register')
-    mixpanel.people.set({
-        $created: new Date().toISOString()
-    })
+    mixpanel.people.set({ $created: new Date().toISOString() })
 
     await reply(
         i18n.t(
@@ -42,14 +40,11 @@ bot.command('start', async ({ i18n, reply, mixpanel }) => {
         Extra.HTML()
     )
 })
-
 bot.on('callback_query', async (ctx) => {
     await doSearch(ctx, ctx.callbackQuery.data)
     await ctx.answerCbQuery()
 })
-
 bot.on('text', async (ctx) => doSearch(ctx, ctx.message.text))
-
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
     const { query, providers } = getQueryAndProviders(inlineQuery.query, INLINE_PROVIDERS)
 
@@ -81,8 +76,11 @@ bot.catch((err) => {
     }
 })
 
-async function doSearch({ i18n, reply, replyWithChatAction, mixpanel }, text) {
+async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, text) {
     mixpanel.track('search', { query: text })
+    mixpanel.people.set({ $last_seen: new Date().toISOString() })
+
+    const uid = from.id
 
     let { query, providers } = getQueryAndProviders(text, PROVIDER)
 
@@ -96,8 +94,10 @@ async function doSearch({ i18n, reply, replyWithChatAction, mixpanel }, text) {
 
     providersResults = providersResults.filter((res) => res && res.length)
 
-    if (!providersResults.length)
+    if (!providersResults.length) {
+        mixpanel.track('noresults', { query: text })
         return await reply(i18n.t('no_results', { query }))
+    }
 
 
     if (providersResults.length == 1) {
@@ -105,12 +105,12 @@ async function doSearch({ i18n, reply, replyWithChatAction, mixpanel }, text) {
         const provider = results[0].provider
         await reply(
             i18n.t('provider_results', { query, provider }),
-            Markup.inlineKeyboard(createResultButtons(results), { columns: 1 }).extra()
+            Markup.inlineKeyboard(createResultButtons(results, uid), { columns: 1 }).extra()
         )
     } else {
         await reply(
             i18n.t('results', { query }),
-            getResultsKeyboad(providersResults, query, i18n).extra()
+            getResultsKeyboad(providersResults, query, uid, i18n).extra()
         )
     }
 }
@@ -131,7 +131,7 @@ function getQueryAndProviders(query, avaliableProviders) {
     return { query, providers: avaliableProviders }
 }
 
-function getResultsKeyboad(providersResults, query, i18n) {
+function getResultsKeyboad(providersResults, query, uid, i18n) {
     return Markup.inlineKeyboard(
         providersResults
             .sort((a, b) => a.length - b.length)
@@ -145,7 +145,7 @@ function getResultsKeyboad(providersResults, query, i18n) {
                         )
                     ]
                 } else {
-                    return createResultButtons(res)
+                    return createResultButtons(res, uid)
                 }
             })
             .reduce((acc, items) => acc.concat(items), []),
@@ -153,11 +153,11 @@ function getResultsKeyboad(providersResults, query, i18n) {
     )
 }
 
-function createResultButtons(res) {
+function createResultButtons(res, uid) {
     return res.map((result) =>
         Markup.urlButton(
             `[${result.provider}] ${result.name}`,
-            `${process.env.PLAYER_URL}?provider=${result.provider}&id=${result.id}`
+            `${process.env.PLAYER_URL}?provider=${result.provider}&id=${result.id}&uid=${uid}`
         )
     )
 }

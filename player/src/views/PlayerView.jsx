@@ -8,6 +8,8 @@ import {
     Cast as CastIcon,
 } from '@material-ui/icons'
 import { isTouchDevice } from '../utils'
+import analytics from '../utils/analytics'
+
 import CastDialog from '../components/CastDialog'
 
 @inject(
@@ -38,11 +40,7 @@ class PlayerView extends Component {
             this.setState({ initialFullScreen: true })
         }
         this.props.play()
-
-        window.gtag && gtag('event', 'start', {
-            'event_category': 'video',
-            'event_label': document.title
-        })
+        analytics('start', 'video', document.title)
     }
 
     handleCastClick = (e) => {

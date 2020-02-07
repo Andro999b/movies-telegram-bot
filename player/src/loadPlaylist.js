@@ -5,6 +5,7 @@ import store from 'store'
 import App from './App'
 import playerStore from './store/player-store'
 import logger from './utils/logger'
+import analytics from './utils/analytics'
 
 const urlParams = new URLSearchParams(window.location.search)
 const provider = urlParams.get('provider') || store.get('provider')
@@ -16,10 +17,7 @@ function renderError(message, err) {
 
     document.querySelector('#app .loader').textContent = message
 
-    window.gtag && gtag('event', 'load', {
-        'event_category': 'error',
-        'event_label': message
-    })
+    analytics('load', 'error', message)
 
     logger.error(message, {
         provider,
@@ -31,6 +29,13 @@ function renderError(message, err) {
 
 
 export default function () {
+    if (window.mixpanel) {
+        const uid = urlParams.get('uid') 
+        if(uid) {
+            mixpanel.identify(uid)
+        }
+    }
+
     if (provider && id) {
         store.set('provider', provider)
         store.set('id', id)

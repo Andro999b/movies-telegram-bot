@@ -26,6 +26,7 @@
     },
     "globals": {
         "gtag": "readonly",
+        "mixpanel": "readonly",
         "mobileApp": "readonly"
     }
 }

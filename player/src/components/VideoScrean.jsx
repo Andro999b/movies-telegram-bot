@@ -5,6 +5,7 @@ import Hls from 'hls.js'
 import BaseScrean from './BaseScrean'
 import { createExtractorUrlBuilder } from '../utils'
 import logger from '../utils/logger'
+import analytics from '../utils/analytics'
 
 @observer
 class VideoScrean extends BaseScrean {
@@ -346,10 +347,7 @@ class VideoScrean extends BaseScrean {
             data: errorData
         })
 
-        window.gtag && gtag('event', 'play', {
-            'event_category': 'error',
-            'event_label': 'Can`t play media'
-        })
+        analytics('play', 'error', 'Can`t play media')
     }
 
     render() {

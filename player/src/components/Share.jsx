@@ -16,6 +16,8 @@ import {
 } from '@material-ui/icons'
 import { inject } from 'mobx-react'
 
+import analytics from '../utils/analytics'
+
 
 @inject(({ notificationStore: { showMessage }}) => ({ showMessage }))
 class Share extends BaseSelector {
@@ -70,10 +72,7 @@ class Share extends BaseSelector {
     }
 
     handleShare = (network) => {
-        window.gtag && gtag('event', network, {
-            'event_category': 'share',
-            'event_label': document.title
-        })
+        analytics(network, 'share', document.title)
     }
 
     handleCopy = (url) => {
