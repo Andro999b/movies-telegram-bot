@@ -4,7 +4,14 @@ const convertPlayerJSPlaylist = require('./convertPlayerJSPlaylist')
 const stripPlayerJSConfig = require('./stripPlayerJSConfig')
 
 module.exports = async (url) => {
-    const res = await superagent.get(url.startsWith('//') ? 'https:' + url : url)
+    let res
+    try {
+        res = await superagent.get(url.startsWith('//') ? 'https:' + url : url)
+    } catch (e) {
+        console.error('Fail get iframe', url, e)
+        return []
+    }
+    
     const $ = cheerio.load(res.text)
 
     const script = $('script:not([src])').nextAll('')

@@ -43,7 +43,14 @@ function _extractTranslations(translations, playlists) {
 }
 
 module.exports = async (url) => {
-    const res = await superagent.get(url.startsWith('//') ? 'https:' + url : url)
+    let res
+    try {
+        res = await superagent.get(url.startsWith('//') ? 'https:' + url : url)
+    } catch (e) {
+        console.error('Fail get iframe', url, e)
+        return []
+    }
+    
     const $ = cheerio.load(res.text)
 
     const translations = $('.translations > select > option')

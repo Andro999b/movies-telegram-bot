@@ -39,6 +39,8 @@ class Provider {
 
         const limit = pageCount * pageSize
 
+        query = this._prepareQuery(query)
+
         let results = await crawler
             .get(
                 this.getSearchUrl(query, page),
@@ -91,6 +93,10 @@ class Provider {
         }
 
         return details
+    }
+
+    _prepareQuery(query) {
+        return query.replace(/[^a-zA-Z0-9\u0400-\u04FF\s]/g, '')
     }
 
     // eslint-disable-next-line no-unused-vars

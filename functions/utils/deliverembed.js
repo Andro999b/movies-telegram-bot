@@ -15,9 +15,13 @@ function getBestQuality(input) {
 }
 
 module.exports = async (url) => {
-    console.log(url);
-
-    const res = await superagent.get(url.startsWith('//') ? 'https:' + url : url)
+    let res
+    try {
+        res = await superagent.get(url.startsWith('//') ? 'https:' + url : url)
+    } catch (e) {
+        console.error('Fail get iframe', url, e)
+        return []
+    }
 
     let parts = res.text.match(/franchise:\s+(?<franchise>\d+)/)
 

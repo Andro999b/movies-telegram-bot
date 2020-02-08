@@ -78,8 +78,8 @@ functions:
       TOKEN: ${ssm:bot_ru_TOKEN}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDER: 'videocdn,7serealov,seasonvar,animevost,kinogo'
-      INLINE_PROVIDERS: 'videocdn,7serealov,seasonvar,animevost,kinogo'
+      PROVIDER: '7serealov,seasonvar,animevost,kinogo'
+      INLINE_PROVIDERS: '7serealov,seasonvar,animevost,kinogo'
 
   uabot:
     handler: handlers/bot.handler
