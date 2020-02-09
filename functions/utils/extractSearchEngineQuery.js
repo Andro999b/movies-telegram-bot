@@ -10,7 +10,7 @@ module.exports = async (link) => {
         link = res.header['location']
     }
 
-    const parts = link.match(/&q=([^&]+)/)
+    const parts = link.match(/&q|text=([^&]+)/)
 
     if(parts && parts.length > 1) {
         const query = parts[1]
