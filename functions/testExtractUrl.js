@@ -1,6 +1,6 @@
 const extractSearchEngineQuery = require('./utils/extractSearchEngineQuery')
 
-const searchQuery = 'sadas  https://g.co/kgs/dpWNZE  zczxc'
+const searchQuery = 'https://g.co/kgs/bP1q8D'
 
 async function test(query){
     const parts = query.match(/http?s:\/\/[^\s]+/)

@@ -89,7 +89,7 @@ async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, te
     let { query, providers } = getQueryAndProviders(text, PROVIDER)
 
     // check link
-    const parts = query.match(/(http?s:\/\/[^\s]+)/)
+    const parts = query.match(/http?s:\/\/[^\s]+/)
 
     if(parts && parts.length > 0) {
         const searchEngineQuery = await extractSearchEngineQuery(parts[0])

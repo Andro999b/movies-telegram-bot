@@ -10,10 +10,10 @@ module.exports = async (link) => {
         link = res.header['location']
     }
 
-    const parts = link.match(/&q|text=([^&]+)/)
+    const parts = link.match(/&(q|text)=([^&]+)/)
 
-    if(parts && parts.length > 1) {
-        const query = parts[1]
+    if(parts && parts.length > 2) {
+        const query = parts[2]
 
         return decodeURIComponent(query).replace(/\+/g, ' ')
     }
