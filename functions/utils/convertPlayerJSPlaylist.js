@@ -65,10 +65,10 @@ module.exports = function (playlist, linksExtractor = getBestPlayerJSQuality) {
             if(playlist.startsWith('[{')) {
                 return convertFolder(null, JSON.parse(playlist), linksExtractor)
             } else {
-                return extractFile(playlist, linksExtractor)
+                return [extractFile(playlist, linksExtractor)]
             }
         }
-        return extractFile(playlist, linksExtractor)
+        return [extractFile(playlist, linksExtractor)]
     } else {
         return convertFolder(null, playlist, linksExtractor)
     }
