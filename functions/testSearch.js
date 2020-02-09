@@ -1,8 +1,8 @@
 const providers = require('./providers')
 
-const providerName = 'kinogo'
-const searchQuery = 'синяя книга'
-// const searchQuery = 'Venom'
+const providerName = 'videocdn'
+// const searchQuery = 'синяя книга'
+const searchQuery = 'Venom'
 // const searchQuery = 'Мистер Робот'
 // const searchQuery = 'Клинок ведьм'
 // const searchQuery = 'one punch'
