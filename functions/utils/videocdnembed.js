@@ -1,19 +1,9 @@
 const superagent = require('superagent')
 const cheerio = require('cheerio')
-const getBestPlayerJSQuality = require('./getBestPlayerJSQuality')
 const convertPlayerJSPlaylist = require('./convertPlayerJSPlaylist')
 
 function _extractNoTranslations(playlist) {
-    if (typeof playlist === 'string') {
-        const urls = getBestPlayerJSQuality(playlist)
-
-        return [{
-            url: urls.pop(),
-            alternativeUrls: urls
-        }]
-    } else {
-        return convertPlayerJSPlaylist(playlist)
-    }
+    return convertPlayerJSPlaylist(playlist)
 }
 
 function _extractTranslations(translations, playlists) {
@@ -22,21 +12,11 @@ function _extractTranslations(translations, playlists) {
             const playlist = playlists[translation]
             const translationName = translations[translation]
 
-            if (typeof playlist === 'string') {
-                const urls = getBestPlayerJSQuality(playlist)
-
-                return [{
-                    name: translationName,
-                    url: urls.pop(),
-                    alternativeUrls: urls
-                }]
-            } else {
-                return convertPlayerJSPlaylist(playlist)
-                    .map((file) => ({
-                        ...file,
-                        path: [translationName, file.path].filter((it) => it).join('/')
-                    }))
-            }
+            return convertPlayerJSPlaylist(playlist)
+                .map((file) => ({
+                    ...file,
+                    path: [translationName, file.path].filter((it) => it).join('/')
+                }))
         })
         .reduce((acc, item) => acc.concat(item), [])
         .map((file, index) => ({ ...file, id: index }))
@@ -50,7 +30,7 @@ module.exports = async (url) => {
         console.error('Fail get iframe', url, e)
         return []
     }
-    
+
     const $ = cheerio.load(res.text)
 
     const translations = $('.translations > select > option')
