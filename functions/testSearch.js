@@ -2,7 +2,7 @@ const providers = require('./providers')
 
 const providerName = 'videocdn'
 // const searchQuery = 'синяя книга'
-const searchQuery = 'Venom'
+const searchQuery = 'терминатор          '
 // const searchQuery = 'Мистер Робот'
 // const searchQuery = 'Клинок ведьм'
 // const searchQuery = 'one punch'

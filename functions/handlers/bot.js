@@ -1,5 +1,6 @@
 
 const makeResponse = require('../utils/makeResponse')
+const extractSearchEngineQuery = require('../utils/extractSearchEngineQuery')
 const providersService = require('../providers')
 const path = require('path')
 const Telegraf = require('telegraf')
@@ -8,6 +9,7 @@ const Markup = require('telegraf/markup')
 const Extra = require('telegraf/extra')
 const TelegrafMixpanel = require('telegraf-mixpanel')
 const uuid = require('uuid')
+
 
 const PROVIDER = process.env.PROVIDER ? process.env.PROVIDER.split(',') : []
 const INLINE_PROVIDERS = process.env.INLINE_PROVIDERS ? process.env.INLINE_PROVIDERS.split(',') : PROVIDER
@@ -84,7 +86,14 @@ async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, te
 
     let { query, providers } = getQueryAndProviders(text, PROVIDER)
 
-    query = query.replace(/http?s:\/\/[^\s]*/g, '') // strip links
+    // check link
+    const parts = query.match(/(http?s:\/\/[^\s]+)/)
+
+    if(parts && parts.length > 0) {
+        const searchEngineQuery = await extractSearchEngineQuery(parts[0])
+        query = searchEngineQuery
+    }
+    // check link ends
 
     await replyWithChatAction('typing')
 

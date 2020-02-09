@@ -10,6 +10,8 @@ class VideoCDNProvider extends Provider {
     async search(query) {
         const { baseUrl, token, types, timeout, pageSize } = this.config
 
+        query = this._prepareQuery(query)
+
         const promices = types.map(async (type) => {
             const ordering = type.endsWith('series') ? 'last_episode_accepted' : 'last_media_accepted'
 
