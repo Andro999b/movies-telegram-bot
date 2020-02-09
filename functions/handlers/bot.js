@@ -79,6 +79,8 @@ bot.catch((err) => {
 })
 
 async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, text) {
+    await replyWithChatAction('typing')
+
     mixpanel.track('search', { query: text })
     mixpanel.people.set({ $last_seen: new Date().toISOString() })
 
@@ -95,8 +97,6 @@ async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, te
             query = searchEngineQuery
     }
     // check link ends
-
-    await replyWithChatAction('typing')
 
     let providersResults = await Promise.all(providers.map((providerName) =>
         providersService.searchOne(providerName, query)
