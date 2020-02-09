@@ -29,10 +29,17 @@ function renderError(message, err) {
 
 
 export default function () {
-    if (window.mixpanel) {
-        const uid = urlParams.get('uid') 
+    const uid = urlParams.get('uid') 
+    if (window.mixpanel && uid) {
+        mixpanel.identify(uid)
+    }
+
+    if (window.gtag) {
+        gtag('js', new Date())
         if(uid) {
-            mixpanel.identify(uid)
+            gtag('config', 'UA-153629378-1', { 'user_id': uid })
+        } else {
+            gtag('config', 'UA-153629378-1')
         }
     }
 
