@@ -91,7 +91,8 @@ async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, te
 
     if(parts && parts.length > 0) {
         const searchEngineQuery = await extractSearchEngineQuery(parts[0])
-        query = searchEngineQuery
+        if(searchEngineQuery)
+            query = searchEngineQuery
     }
     // check link ends
 
