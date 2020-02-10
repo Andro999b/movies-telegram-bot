@@ -1,11 +1,8 @@
-const superagent = require('superagent')
-const makeResponse = require('../utils/makeResponse')
+const regExprExtractor = require('./regExprExtractor')
 
-module.exports = async (params) => {
-    const { url } = params
-
-    const siteRes = await superagent.get(url)
-        .timeout(5000)
-
-    return makeResponse(siteRes.text, 302)
-}
+module.exports = regExprExtractor([
+    {
+        expression: /\/[0-9A_Za-z/]+\.m3u8/,
+        transform: (m) => `https://video.sibnet.ru${m[0]}`  
+    }
+])

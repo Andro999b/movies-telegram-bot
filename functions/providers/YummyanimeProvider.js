@@ -48,7 +48,7 @@ class YummyanimeProvider extends Provider {
                             return playlists[0].map(({ links }) =>
                                 links.map((link, index) => ({
                                     extractor: { type: 'sibnet' },
-                                    url: link,
+                                    manifestUrl: link,
                                     name: `Episode ${1 + index}`
                                 }))
                             )
@@ -58,7 +58,7 @@ class YummyanimeProvider extends Provider {
                             .map(({ title, links }) =>
                                 links.map((link, index) => ({
                                     extractor: { type: 'sibnet' },
-                                    url: link,
+                                    manifestUrl: link,
                                     name: `${title}/Episode ${1 + index}`,
                                     path: title
                                 }))

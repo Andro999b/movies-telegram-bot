@@ -1,6 +1,6 @@
 const extract = require('./extract')
 
-const url = decodeURIComponent('https://video.sibnet.ru/shell.php?videoid=2024994')
+const url = decodeURIComponent('https://video.sibnet.ru/shell.php?videoid=3563047')
 console.log(url)
 
 extract({

@@ -1,21 +1,31 @@
 const superagent = require('superagent')
 const makeResponse = require('../utils/makeResponse')
 
-module.exports = (regExps) => async (params) => {
+module.exports = (patterns) => async (params) => {
     const { url } = params
 
-    const siteRes = await superagent.get(url).timeout(5000)
+    const siteRes = await superagent
+        .get(url)
+        .timeout(5000)
 
-    for(let extractExpr of regExps) {
-        const matches = siteRes.text.match(extractExpr)
+    for(let pattern of patterns) {
+        let expression
+        let transform = (m) => m[m.length - 1]  
+
+        if(typeof config === 'string') {
+            expression = pattern
+        } else {
+            expression = pattern.expression
+            transform = pattern.transform
+        }
+
+        const matches = siteRes.text.match(expression)
 
         if(matches == null || matches.length < 1)
-            continue
-
-        const videoUrl = matches[matches.length - 1]        
+            continue    
 
         return makeResponse(null, 302, {
-            Location: videoUrl
+            Location: transform(matches)
         })
     }
     

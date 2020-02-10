@@ -169,6 +169,8 @@ class VideoScrean extends BaseScrean {
         } else {
             video.src = targetUrl
         }
+
+        this.errorRetries = 5
     }
 
     startHlsVideo(manifestUrl) {
@@ -196,27 +198,7 @@ class VideoScrean extends BaseScrean {
                 )
             }
         })
-        hls.on(Hls.Events.ERROR, (_, data) => {
-            if (data.fatal) {
-                switch (data.type) {
-                    case Hls.ErrorTypes.NETWORK_ERROR:
-                        // try to recover network error
-                        console.log('fatal network error encountered, try to recover') // eslint-disable-line
-                        hls.startLoad()
-                        break
-                    case Hls.ErrorTypes.MEDIA_ERROR:
-                        console.log('fatal media error encountered, try to recover') // eslint-disable-line
-                        hls.recoverMediaError()
-                        break
-                    default:
-                        // cannot recover
-                        device.setError('Can`t play media')
-                        hls.destroy()
-                        this.logError(data)
-                        break
-                }
-            }
-        })
+        hls.on(Hls.Events.ERROR, this.handleHLSError)
 
         if (extractor) {
             hls.loadSource(createExtractorUrlBuilder(extractor)(manifestUrl))
@@ -243,28 +225,52 @@ class VideoScrean extends BaseScrean {
         device.setError(null)
     }
 
+    handleHLSError = (_, data) => {
+        if (data.fatal) {
+            switch (data.type) {
+                case Hls.ErrorTypes.NETWORK_ERROR:
+                    // try to recover network error
+                    console.log('fatal network error encountered, try to recover') // eslint-disable-line
+                    this.hls.startLoad()
+                    break
+                case Hls.ErrorTypes.MEDIA_ERROR:
+                    console.log('fatal media error encountered, try to recover') // eslint-disable-line
+                    this.hls.recoverMediaError()
+                    break
+                default:
+                    // cannot recover
+                    this.props.device.setError('Can`t play media')
+                    this.hls.destroy()
+                    this.logError(data)
+                    break
+            }
+        }
+    }
+
     handleError = () => {
         const { props: { device }, alternativeUrls } = this
 
+        //try alternative urls
         if (alternativeUrls && alternativeUrls.length > 0) {
             this.video.src = alternativeUrls.pop()
             this.restoreVideoState()
             return
         }
 
+        //try hls
         if (!this.hlsMode && this.isHlsAvaliable()) { // retry with hls
             this.startHlsVideo()
             return
         }
 
-        device.setError('Could not play media')
-        device.setLoading(false)
 
         let code
+        let retry = true
 
         switch(this.video.error.code) {
             case MediaError.MEDIA_ERR_ABORTED:
                 code = 'MEDIA_ERR_ABORTED'
+                retry = false
                 break            
             case MediaError.MEDIA_ERR_NETWORK:
                 code = 'MEDIA_ERR_NETWORK'
@@ -276,6 +282,18 @@ class VideoScrean extends BaseScrean {
                 code = 'MEDIA_ERR_SRC_NOT_SUPPORTED'
                 break
         }
+
+        if(retry) {
+            this.errorRetries--
+            if(this.errorRetries > 0) {
+                console.log('Do retry on error') // eslint-disable-line 
+                this.restoreVideoState()
+                return
+            }
+        }
+
+        device.setError('Could not play media')
+        device.setLoading(false)
 
         this.logError({ 
             code,

@@ -97,19 +97,6 @@ functions:
       PROVIDER: 'kinoukr,kino4ua,uaserials'
       INLINE_PROVIDERS: 'kinoukr,kino4ua,uaserials'
 
-  # vumoobot:
-  #   handler: handlers/bot.handler
-  #   events:
-  #     - http: 
-  #         path: bot/vumoo
-  #         method: any
-  #         cors: true
-  #   environment:
-  #     TOKEN: ${ssm:bot_vumoo_TOKEN}
-  #     PLAYER_URL: ${self:custom.playerUrl}
-  #     PROVIDER: 'vumoo'
-  #     INLINE_PROVIDERS: 'vumoo'
-
 resources:
   Resources:
     InfoTable:
