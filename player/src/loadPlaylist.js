@@ -29,7 +29,7 @@ function renderError(message, err) {
 
 
 export default function () {
-    const uid = urlParams.get('uid') 
+    const uid = store.get('uid') 
     if (window.mixpanel && uid) {
         mixpanel.identify(uid)
     }

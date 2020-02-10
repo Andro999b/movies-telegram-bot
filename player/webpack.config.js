@@ -52,10 +52,12 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src', 'index.html'),
+            filename: 'watch.html',
+            template: path.join(__dirname, 'src', 'watch.html'),
             favicon: path.join(__dirname, 'src', 'favicon.ico')
         }),
         new CopyPlugin([
+            'src/index.html',
             { from: '.well-known', to: '.well-known' },
         ])
     ]
