@@ -13,10 +13,19 @@ function _extractTranslations(translations, playlists) {
             const translationName = translations[translation]
 
             return convertPlayerJSPlaylist(playlist)
-                .map((file) => ({
-                    ...file,
-                    path: [translationName, file.path].filter((it) => it).join('/')
-                }))
+                .map((file) => {
+                    if(file.name) {
+                        return {
+                            ...file,
+                            path: [translationName, file.path].filter((it) => it).join('/')
+                        }
+                    } else {
+                        return {
+                            ...file,
+                            name: translationName
+                        }
+                    }
+                })
         })
         .reduce((acc, item) => acc.concat(item), [])
         .map((file, index) => ({ ...file, id: index }))

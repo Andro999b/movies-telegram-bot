@@ -68,7 +68,7 @@ class PlayBackZones extends Component {
         }
     }
 
-    handleSeekEnd = (e) => {
+    handleSeekEnd = () => {
         if(this.lastTs) { // seeking started
             const { device } = this.props
 
