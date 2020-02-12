@@ -12,8 +12,10 @@ module.exports = (patterns) => async (params) => {
         let expression
         let transform = (m) => m[m.length - 1]  
 
-        if(typeof config === 'string') {
+        if(pattern instanceof RegExp) {
             expression = pattern
+        } else if(typeof pattern === 'string') {
+            expression = new RegExp(pattern)
         } else {
             expression = pattern.expression
             transform = pattern.transform

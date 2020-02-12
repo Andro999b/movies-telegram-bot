@@ -3,12 +3,8 @@ const makeResponse = require('../utils/makeResponse')
 
 const extractors = {
     'animevost': require('./animevostExtractor'),
-    'ashdi': require('./m3u8Extractor'),
-    '123moviesapp': require('./movies123AppExtractor'),
     'tortuga': require('./m3u8Extractor'),
-    'sst': require('./mp4PlayerJsExtractor'),
-    'uploadvideo': require('./uploadvideoExtractor'),
-    'sibnet': require('./sibnetExtractor')
+    'kodik': require('./kodikExtractor')
 }
 
 module.exports = async (parmas) => {
