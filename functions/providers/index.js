@@ -8,7 +8,7 @@ const providers = [
     new (require('./VideoCDNProvider'))(),
     new (require('./KinoUkrProvider'))(),
     new (require('./UASerialsProvider'))(),
-    new (require('./YummyanimeProvider'))()
+    new (require('./NekomoriProvider'))()
 ]
 
 module.exports = {

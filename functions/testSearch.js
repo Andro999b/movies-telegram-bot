@@ -1,6 +1,6 @@
 const providers = require('./providers')
 
-const providerName = 'yummyanime'
+const providerName = 'nekomori'
 // const searchQuery = 'синяя книга'
 // const searchQuery = 'терминатор          '
 // const searchQuery = 'Мистер Робот'
@@ -11,7 +11,7 @@ const searchQuery = 'ванпанчмен'
 
 providers.searchOne(providerName, searchQuery)
     .then((results) => {
-        // console.log('results', results)// eslint-disable-line
+        console.log('results', results)// eslint-disable-line
 
         return results[0]
     }) 

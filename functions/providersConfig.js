@@ -7,9 +7,14 @@ module.exports = {
         'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
         'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE'
     },    
-    'yummyanime': {
-        'baseUrl': 'https://yummyanime.club',
-        'searchUrl': 'https://yummyanime.club/search'
+    'nekomori': {
+        'baseUrl': 'https://api.nekomori.ch',
+        'postersCDNUrl': 'https://cdn.nekomori.ch/art/poster',
+        'playersConfig': {
+            'Sibnet': { 'extractor': 'sibnet', 'hls': true },
+            'AniMedia': { 'extractor': 'animedia', 'hls': true },
+            'SovetRomantica': { 'extractor': 'sovetromantica' }
+        }
     },
     'animevost': {
         'baseUrl': 'https://animevost.org',
