@@ -18,7 +18,7 @@ const MAX_UNFOLD_RESULTS = 3
 const i18n = new TelegrafI18n({
     defaultLanguage: 'ru',
     allowMissing: false, // Default true
-    directory: path.resolve(__dirname, '..', 'locales')
+    directory: path.resolve(__dirname, '..', process.env.LOCALIZATION_TYPE || 'localization')
 })
 
 const bot = new Telegraf(process.env.TOKEN)

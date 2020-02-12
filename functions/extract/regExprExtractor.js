@@ -27,7 +27,7 @@ module.exports = (patterns) => async (params) => {
             continue    
 
         return makeResponse(null, 302, {
-            Location: transform(matches)
+            Location: await transform(matches)
         })
     }
     

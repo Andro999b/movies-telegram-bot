@@ -105,6 +105,7 @@ functions:
           method: any
           cors: true
     environment:
+      LOCALIZATION_TYPE: 'localization/anime'
       TOKEN: ${ssm:bot_anime_TOKEN}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}

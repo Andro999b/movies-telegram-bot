@@ -12,8 +12,7 @@ module.exports = {
         'postersCDNUrl': 'https://cdn.nekomori.ch/art/poster',
         'playersConfig': {
             'Sibnet': { 'extractor': 'sibnet', 'hls': true },
-            'AniMedia': { 'extractor': 'animedia', 'hls': true },
-            'SovetRomantica': { 'extractor': 'sovetromantica' }
+            'AniMedia': { 'extractor': 'animedia', 'hls': true }
         }
     },
     'animevost': {
