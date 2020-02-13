@@ -29,10 +29,11 @@ class VideoCDNProvider extends Provider {
                 JSON.parse(res.text).data.map((item) => ({...item, type}))
             )
             .reduce((acc, item) => acc.concat(item), [])
-            .map(({ id, ru_title, orig_title, type }) => ({
+            .map(({ id, ru_title, kinopoisk_id, orig_title, type }) => ({
                 provider: this.name, 
                 id: `${type}_${id}`,
-                name: `${ru_title} (${orig_title})`
+                name: `${ru_title} (${orig_title})`,
+                image: `https://corsproxy.movies-player.workers.dev/?${encodeURIComponent(`https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`)}`
             }))
     }
 
