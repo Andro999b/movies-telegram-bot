@@ -42,17 +42,27 @@ class NekomoriProvider extends Provider {
             1: 'Оригинал',
         }
 
-        const files = ret.body
+        const files = []
+        const uids = new Set()
+
+        ret.body
             // eslint-disable-next-line no-prototype-builtins
             .filter(({ player }) => playersConfig.hasOwnProperty(player) )
             .sort((a, b) => a.ep - b.ep)
-            .map(({ id, author, kind, player, link, ep }) => {
-                return {
-                    id,
-                    extractor: { type: playersConfig[player].extractor },
-                    [playersConfig[player].hls ? 'manifestUrl' : 'url'] : link,
-                    name: `Episode ${ep}`,
-                    path: `${kindTranslation[kind]}/${author ? author : 'Неизвестно'}/${player}`
+            .forEach(({ id, author, kind, player, link, ep }) => {
+                const name = `Episode ${ep}`
+                const path = `${kindTranslation[kind]}/${author ? author : 'Неизвестно'}/${player}`
+                const uid = `${path}/${name}`
+
+                if(!uids.has(uid)) {
+                    uids.add(uid)
+                    files.push({
+                        id,
+                        extractor: { type: playersConfig[player].extractor },
+                        [playersConfig[player].hls ? 'manifestUrl' : 'url'] : link,
+                        name,
+                        path
+                    })
                 }
             })
 

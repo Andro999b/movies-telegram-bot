@@ -15,6 +15,10 @@ module.exports = {
             'AniMedia': { 'extractor': 'animedia', 'hls': true }
         }
     },
+    'yummy': {
+        'baseUrl': 'https://yummyanime.club',
+        'searchUrl': 'https://yummyanime.club/search'
+    },
     'animevost': {
         'baseUrl': 'https://animevost.org',
         'searchUrl': 'https://animevost.org/index.php?do=search'

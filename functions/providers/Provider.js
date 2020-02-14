@@ -56,6 +56,7 @@ class Provider {
 
         results = await this._postProcessResult(results)
 
+        console.log(name);
         return results
             .filter((item) => item.id)
             .map((item) => {
