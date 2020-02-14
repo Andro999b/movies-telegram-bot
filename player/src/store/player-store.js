@@ -208,9 +208,6 @@ class PlayerStore {
     @observable device = null
 
     @action.bound setDevice(device) {
-        const prevDevice = this.device
-        if (prevDevice) prevDevice.disconnect()
-
         this.device = device
     }
 
@@ -218,7 +215,7 @@ class PlayerStore {
         this.switchDevice(new LocalDevice())
     }
 
-    @action.bound switchDevice (device) {
+    @action.bound switchDevice(device) {
         const prevDevice = this.device
         const { playlist, currentFileIndex, currentTime } = prevDevice
 
