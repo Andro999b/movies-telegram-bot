@@ -1,6 +1,6 @@
 const providers = require('./providers')
 
-const providerName = 'nekomori'
+const providerName = 'yammy'
 // const searchQuery = 'синяя книга'
 // const searchQuery = 'терминатор          '
 // const searchQuery = 'Мистер Робот'
