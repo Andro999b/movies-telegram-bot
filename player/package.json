@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev-server.config.js",
     "watch": "webpack --config webpack.watch.js",
-    "sync-files": "copy-and-watch --watch dist/*.{html,js,png,ico} C:\\Users\\Andrii\\AndroidStudioProjects\\CastPlayer\\app\\src\\main\\assets",
+    "sync-files": "copy-and-watch --watch dist/*.{js,png,ico} dist/mobile.html C:\\Users\\Andrii\\AndroidStudioProjects\\CastPlayer\\app\\src\\main\\assets",
     "build": "rm -rf dist/* && webpack --mode production"
   },
   "keywords": [],
