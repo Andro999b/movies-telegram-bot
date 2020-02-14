@@ -252,7 +252,16 @@ class VideoScrean extends BaseScrean {
 
         //try alternative urls
         if (alternativeUrls && alternativeUrls.length > 0) {
-            this.video.src = alternativeUrls.pop()
+            const targetUrl = alternativeUrls.pop()
+
+            const { extractor } = device
+            if (extractor) {
+                this.video.src = createExtractorUrlBuilder(extractor)(targetUrl)
+            } else {
+                this.video.src = targetUrl
+            }
+    
+
             this.restoreVideoState()
             return
         }

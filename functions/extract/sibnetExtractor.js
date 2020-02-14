@@ -1,4 +1,3 @@
-const makeResponse = require('../utils/makeResponse')
 const superagent = require('superagent')
 
 module.exports = async (params) => {
