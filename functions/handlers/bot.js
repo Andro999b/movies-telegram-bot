@@ -42,13 +42,35 @@ bot.command('start', async ({ i18n, reply, mixpanel }) => {
         Extra.HTML()
     )
 })
+bot.action('helpsearch', async ({ i18n, reply, replyWithMediaGroup, answerCbQuery, mixpanel }) => {
+    mixpanel.track('helpsearch')
+
+    await reply(i18n.t('help_search_text'))
+    await replyWithMediaGroup([
+        {
+            type: 'photo',
+            media: 'https://films-seach-bot-images.s3.eu-central-1.amazonaws.com/1.png'
+        },
+        {
+            type: 'photo',
+            media: 'https://films-seach-bot-images.s3.eu-central-1.amazonaws.com/2.png'
+        },
+        {
+            type: 'photo',
+            media: 'https://films-seach-bot-images.s3.eu-central-1.amazonaws.com/3.png'
+        },
+    ])
+    await answerCbQuery()
+})
 bot.on('callback_query', async (ctx) => {
     await doSearch(ctx, ctx.callbackQuery.data)
     await ctx.answerCbQuery()
 })
 bot.on('text', async (ctx) => doSearch(ctx, ctx.message.text))
-bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
+bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery, mixpanel }) => {
     const { query, providers } = getQueryAndProviders(inlineQuery.query, INLINE_PROVIDERS)
+
+    mixpanel.track('inlinesearch', { query: inlineQuery.query })
 
     const results = await providersService.search(providers, query)
 
@@ -91,9 +113,9 @@ async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, te
     // check link
     const parts = query.match(/http?s:\/\/[^\s]+/)
 
-    if(parts && parts.length > 0) {
+    if (parts && parts.length > 0) {
         const searchEngineQuery = await extractSearchEngineQuery(parts[0])
-        if(searchEngineQuery)
+        if (searchEngineQuery)
             query = searchEngineQuery
     }
     // check link ends
@@ -115,7 +137,13 @@ async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, te
         const provider = results[0].provider
         await reply(
             i18n.t('provider_results', { query, provider }),
-            Markup.inlineKeyboard(createResultButtons(results, uid), { columns: 1 }).extra()
+            Markup.inlineKeyboard(
+                createResultButtons(results, uid)
+                    .concat(
+                        [Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch')]
+                    ),
+                { columns: 1 }
+            ).extra()
         )
     } else {
         await reply(
@@ -158,7 +186,8 @@ function getResultsKeyboad(providersResults, query, uid, i18n) {
                     return createResultButtons(res, uid)
                 }
             })
-            .reduce((acc, items) => acc.concat(items), []),
+            .reduce((acc, items) => acc.concat(items), [])
+            .concat([Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch')]),
         { columns: 1 }
     )
 }

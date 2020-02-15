@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx'
 import BaseRemoteDevice from './BaseRemoteDevice'
-import playerStore, { LocalDevice } from '../player-store'
+import playerStore from '../player-store'
 export class MobileAppRemoteDevice extends BaseRemoteDevice {
     isLocal = () => false
 
@@ -16,10 +16,12 @@ export class MobileAppRemoteDevice extends BaseRemoteDevice {
     getName = () => this.device.name
 
     disconnect() {
+        console.log('disconnect')
         mobileApp.sendDeviceAction('disconnect', '')
     }
 
     @action sendAction(action, payload) {
+        console.log('sendAction', action, JSON.stringify(payload))
         mobileApp.sendDeviceAction(action, JSON.stringify(payload))
     }
 }
@@ -49,6 +51,8 @@ export default (() => {
     mobileApp.setCommandListener('commandListener')
 
     window.commandListener = ({ action, payload }) => {
+        console.log('commandListener', action, JSON.stringify(payload))
+
         switch (action) {
             case 'devicesList': {
                 devices.replace(payload)
@@ -59,7 +63,7 @@ export default (() => {
         if (currentRemoteDevice) {
             switch (action) {
                 case 'disconnected': {
-                    playerStore.switchDevice(new LocalDevice())
+                    playerStore.switchToLocalDevice(false)
                     currentRemoteDevice = null
                     return
                 }

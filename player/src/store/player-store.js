@@ -211,15 +211,15 @@ class PlayerStore {
         this.device = device
     }
 
-    @action.bound switchToLocalDevice() {
-        this.switchDevice(new LocalDevice())
+    @action.bound switchToLocalDevice(callDisconnect = true) {
+        this.switchDevice(new LocalDevice(), callDisconnect)
     }
 
-    @action.bound switchDevice(device) {
+    @action.bound switchDevice(device, callDisconnect = true) {
         const prevDevice = this.device
         const { playlist, currentFileIndex, currentTime } = prevDevice
 
-        if (prevDevice) prevDevice.disconnect()
+        if (callDisconnect && prevDevice) prevDevice.disconnect()
 
         this.device = device
         this.device.setPlaylist(playlist, currentFileIndex, currentTime)

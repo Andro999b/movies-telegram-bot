@@ -84,7 +84,8 @@ export default class BaseRemoteDevice extends Device {
             this[key] = state[key]
         })
 
-        if(filteredState.indexOf('currentFileIndex') != -1) {
+        // eslint-disable-next-line no-prototype-builtins
+        if(filteredState.hasOwnProperty('currentFileIndex')) {
             const playlistPrefix = getPlaylistPrefix(this.playlist)
             localStore.set(`${playlistPrefix}:current`, this.currentFileIndex)
         }
