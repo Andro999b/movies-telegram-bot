@@ -1,7 +1,5 @@
 import { Device } from '../player-store'
 import { action } from 'mobx'
-import localStore from 'store'
-import { getPlaylistPrefix } from '../../utils'
 
 import pick from 'lodash.pick'
 
@@ -66,6 +64,7 @@ export default class BaseRemoteDevice extends Device {
             return false
 
         this.currentFileIndex = fileIndex
+        this.isLoading = true
 
         this.sendAction('selectFile', fileIndex)
 
@@ -74,6 +73,7 @@ export default class BaseRemoteDevice extends Device {
 
     @action.bound setPlaylist(playlist, fileIndex, startTime) {
         this.playlist = playlist
+        this.isLoading = true
         this.sendAction('setPlaylist', { playlist, fileIndex, startTime })
     }
     
@@ -83,11 +83,5 @@ export default class BaseRemoteDevice extends Device {
         Object.keys(filteredState).forEach((key) => {
             this[key] = state[key]
         })
-
-        // eslint-disable-next-line no-prototype-builtins
-        if(filteredState.hasOwnProperty('currentFileIndex')) {
-            const playlistPrefix = getPlaylistPrefix(this.playlist)
-            localStore.set(`${playlistPrefix}:current`, this.currentFileIndex)
-        }
     }
 }

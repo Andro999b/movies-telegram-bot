@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import BaseSelector from './BaseSelector'
 import copy from 'clipboard-copy'
-import store from 'store'
 import {
     IconButton,
     Typography,
@@ -17,6 +16,7 @@ import {
 import { inject } from 'mobx-react'
 
 import analytics from '../utils/analytics'
+import store from '../utils/storage'
 
 
 @inject(({ notificationStore: { showMessage }}) => ({ showMessage }))

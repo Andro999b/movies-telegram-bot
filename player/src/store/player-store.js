@@ -1,7 +1,8 @@
 import { observable, action } from 'mobx'
-import localStore from 'store'
+
 import { getPlaylistPrefix } from '../utils'
 import analytics from '../utils/analytics'
+import store from '../utils/storage'
 
 const END_FILE_TIME_OFFSET = 60
 
@@ -46,12 +47,12 @@ export class Device {
 
     @action.bound setQuality(quality) {
         this.quality = quality
-        localStore.set('quality', quality)
+        store.set('quality', quality)
     }
 
     @action.bound setShuffle(shuffle) {
         this.shuffle = shuffle
-        localStore.set('shuffle', shuffle)
+        store.set('shuffle', shuffle)
     }
     
     skip(sec) {
@@ -68,8 +69,8 @@ export class LocalDevice extends Device {
 
     constructor() {
         super()
-        this.volume = localStore.get('volume') || 1
-        this.shuffle = localStore.get('shuffle') || false
+        this.volume = store.get('volume') || 1
+        this.shuffle = store.get('shuffle') || false
     }
 
     @action.bound play(currentTime) {
@@ -106,7 +107,7 @@ export class LocalDevice extends Device {
 
         if (source.qualityUrls) {
             this.qualities = Object.keys(source.qualityUrls)
-            const storedQuality = localStore.get('quality')
+            const storedQuality = store.get('quality')
             this.quality = storedQuality && this.qualities.indexOf(storedQuality) != -1 ?
                 storedQuality :
                 null
@@ -139,7 +140,7 @@ export class LocalDevice extends Device {
             if (this.duration) {
                 const timeLimit = Math.max(0, this.duration - END_FILE_TIME_OFFSET)
                 const mark = Math.min(timeLimit, currentTime)
-                localStore.set(`${getPlaylistPrefix(this.playlist)}:ts`, mark)
+                store.set(`${getPlaylistPrefix(this.playlist)}:ts`, mark)
             }
         }
     }
@@ -159,7 +160,7 @@ export class LocalDevice extends Device {
 
         const playlistPrefix = getPlaylistPrefix(this.playlist)
 
-        localStore.set(`${playlistPrefix}:current`, fileIndex)
+        store.set(`${playlistPrefix}:current`, fileIndex)
 
         this.currentFileIndex = fileIndex
 
@@ -179,18 +180,18 @@ export class LocalDevice extends Device {
 
     @action.bound setVolume(volume) {
         this.volume = volume
-        localStore.set('volume', volume)
+        store.set('volume', volume)
     }
 
     @action.bound setAudioTrack(id) {
         this.audioTrack = id
-        localStore.set(`${getPlaylistPrefix(this.playlist)}:audio_track`, id)
+        store.set(`${getPlaylistPrefix(this.playlist)}:audio_track`, id)
     }
 
     @action.bound setAudioTracks(audioTracks) {
         this.audioTracks = audioTracks
 
-        const storesAudioTrack = localStore.get(`${getPlaylistPrefix(this.playlist)}:audio_track`)
+        const storesAudioTrack = store.get(`${getPlaylistPrefix(this.playlist)}:audio_track`)
         if(storesAudioTrack) {
             const audioTrack = audioTracks.find(({ id }) => id == storesAudioTrack)
             if(audioTracks) {
@@ -229,10 +230,10 @@ class PlayerStore {
         this.device = new LocalDevice()
 
         if (fileIndex == null || isNaN(fileIndex)) {
-            fileIndex = localStore.get(`${getPlaylistPrefix(playlist)}:current`)
+            fileIndex = store.get(`${getPlaylistPrefix(playlist)}:current`)
 
             if (startTime == null || isNaN(startTime)) {
-                startTime = parseFloat(localStore.get(`${getPlaylistPrefix(playlist)}:ts`))
+                startTime = parseFloat(store.get(`${getPlaylistPrefix(playlist)}:ts`))
             }
         }
 

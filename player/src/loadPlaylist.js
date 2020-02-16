@@ -1,11 +1,11 @@
 import React from 'react'
 import { render } from 'react-dom'
-import store from 'store'
 
 import App from './App'
 import playerStore from './store/player-store'
 import logger from './utils/logger'
 import analytics from './utils/analytics'
+import store from './utils/storage'
 
 const urlParams = new URLSearchParams(window.location.search)
 const provider = urlParams.get('provider') || store.get('provider')

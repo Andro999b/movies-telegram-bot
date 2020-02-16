@@ -11,6 +11,7 @@ export class MobileAppRemoteDevice extends BaseRemoteDevice {
         if(state) {
             this.onSync(state)
         }
+        this.isLoading = true
     }
 
     getName = () => this.device.name

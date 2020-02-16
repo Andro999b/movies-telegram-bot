@@ -159,31 +159,25 @@ class Player extends Component {
                 onChange={this.handleSetFullScreen}
             >
                 <div className={hideUi ? 'idle' : ''}>
-                    <ShowIf mustNot={[hideUi]}>
-                        <PlayerTitle title={playerStore.getPlayerTitle()} />
-                    </ShowIf>
+                    {hideUi && <PlayerTitle title={playerStore.getPlayerTitle()} />}
                     {local && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
-                    {!local && <ShowIf mustNot={[error]}>
+                    {(!local && !error) &&
                         <div
                             className="player__pause-cover player__background-cover"
-                            style={{ backgroundImage: image ? `url(${image})`: null }}
+                            style={{ backgroundImage: image ? `url(${image})` : null }}
                         >
                             <Typography className="center shadow-border" variant="h4">
                                 {device.getName()}
                             </Typography>
                         </div>
-                    </ShowIf>}
-                    <ShowIf must={[error]}>
-                        <Typography className="center shadow-border" variant="h4">{error}</Typography>
-                    </ShowIf>
-                    <ShowIf mustNot={[error]}>
-                        <ShowIf must={[isLoading]}>
-                            <div className="center">
-                                <CircularProgress color="primary" />
-                            </div>
-                        </ShowIf>
-                    </ShowIf>
-                    <PlayBackZones device={device} onClick={this.handleClick} />
+                    }
+                    {error && <Typography className="center shadow-border" variant="h4">{error}</Typography>}
+                    {(isLoading && !error) &&
+                        <div className="center">
+                            <CircularProgress color="primary" />
+                        </div>
+                    }
+                    {(!isLoading && !error) && <PlayBackZones device={device} onClick={this.handleClick} />}
                     <ShowIf mustNot={[hideUi]}>
                         <Share device={device} />
                         <PlayerFilesList
