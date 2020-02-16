@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 import Fullscreen from 'react-full-screen'
@@ -8,7 +8,6 @@ import PlayerFilesList from './PlayerPlayList'
 import PlayerTitle from './PlayerTitle'
 import VideoScrean from './VideoScrean'
 import PlayBackZones from './PlayBackZones'
-import ShowIf from './ShowIf'
 import Share from './Share'
 
 import { Typography, CircularProgress } from '@material-ui/core'
@@ -159,7 +158,7 @@ class Player extends Component {
                 onChange={this.handleSetFullScreen}
             >
                 <div className={hideUi ? 'idle' : ''}>
-                    {hideUi && <PlayerTitle title={playerStore.getPlayerTitle()} />}
+                    {!hideUi && <PlayerTitle title={playerStore.getPlayerTitle()} />}
                     {local && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
                     {(!local && !error) &&
                         <div
@@ -178,7 +177,7 @@ class Player extends Component {
                         </div>
                     }
                     {(!isLoading && !error) && <PlayBackZones device={device} onClick={this.handleClick} />}
-                    <ShowIf mustNot={[hideUi]}>
+                    {!hideUi && <Fragment>
                         <Share device={device} />
                         <PlayerFilesList
                             open={playlistOpen}
@@ -193,7 +192,7 @@ class Player extends Component {
                             onPlaylistToggle={this.handleTogglePlayList}
                             onFullScreenToggle={this.handleToggleFullscreen}
                         />
-                    </ShowIf>
+                    </Fragment>}
                 </div>
             </Fullscreen >
         )
