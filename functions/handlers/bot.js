@@ -27,9 +27,11 @@ const mixpanel = new TelegrafMixpanel(process.env.MIXPANEL_TOKEN)
 bot.use(i18n.middleware())
 bot.use(mixpanel.middleware())
 
-bot.command('start', async ({ i18n, reply, mixpanel }) => {
-    mixpanel.track('register')
-    mixpanel.people.set({ $created: new Date().toISOString() })
+bot.command(['start', 'help'], async ({ i18n, reply, mixpanel, message: { text } }) => {
+    if(text.endsWith('start')) {
+        mixpanel.track('register')
+        mixpanel.people.set({ $created: new Date().toISOString() })
+    }
 
     await reply(
         i18n.t(
