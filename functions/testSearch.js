@@ -1,13 +1,13 @@
 const providers = require('./providers')
 
-const providerName = 'yammy'
+const providerName = 'exfs'
 // const searchQuery = 'синяя книга'
 // const searchQuery = 'терминатор          '
 // const searchQuery = 'Мистер Робот'
 // const searchQuery = 'Клинок ведьм'
 // const searchQuery = 'one punch'
 // const searchQuery = 'ID: Вторжение'
-const searchQuery = 'Тетрадь смерти'
+const searchQuery = 'Сыщик'
 // const searchQuery = 'веном'
 // const searchQuery = 'ванпанчмен'
 
