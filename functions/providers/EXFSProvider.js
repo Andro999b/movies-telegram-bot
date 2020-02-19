@@ -8,7 +8,14 @@ class EXFSProvider extends DataLifeProvider {
             scope: '.SeaRchresultPost',
             selectors: {
                 id: { selector: '.SeaRchresultPostTitle a', transform: ($el) => urlencode($el.attr('href')) },
-                name: '.SeaRchresultPostTitle',
+                name: {
+                    transform: ($el) => {
+                        const title = $el.find('.SeaRchresultPostTitle').text().replace(/\n/g, '')
+                        const year = $el.find('.SeaRchresultPostInfo a').eq(0).text()
+
+                        return `${title} (${year})`
+                    }
+                },
                 image: {
                     selector: '.SeaRchresultPostPoster img',
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
