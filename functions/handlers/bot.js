@@ -130,7 +130,13 @@ async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, te
 
     if (!providersResults.length) {
         mixpanel.track('noresults', { query: text })
-        return await reply(i18n.t('no_results', { query }))
+        return await reply(
+            i18n.t('no_results', { query }),
+            Markup.inlineKeyboard(
+                [Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch')],
+                { columns: 1 }
+            ).extra()
+        )
     }
 
 
