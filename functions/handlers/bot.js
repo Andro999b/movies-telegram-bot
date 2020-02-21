@@ -10,7 +10,6 @@ const Extra = require('telegraf/extra')
 const TelegrafMixpanel = require('telegraf-mixpanel')
 const uuid = require('uuid')
 
-
 const PROVIDER = process.env.PROVIDER ? process.env.PROVIDER.split(',') : []
 const INLINE_PROVIDERS = process.env.INLINE_PROVIDERS ? process.env.INLINE_PROVIDERS.split(',') : PROVIDER
 const MAX_UNFOLD_RESULTS = 3
