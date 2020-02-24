@@ -55,6 +55,9 @@ export default function () {
                     const time = parseFloat(urlParams.get('time'))
 
                     playerStore.openPlaylist({ id, provider, ...playlist }, fileIndex, time)
+
+                    analytics('openPlaylist', 'video', document.title)
+
                     render((<App />), document.getElementById('app'))
                 } else {
                     renderError('Video not found')
