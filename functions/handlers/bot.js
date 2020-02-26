@@ -13,6 +13,7 @@ const uuid = require('uuid')
 const PROVIDER = process.env.PROVIDER ? process.env.PROVIDER.split(',') : []
 const INLINE_PROVIDERS = process.env.INLINE_PROVIDERS ? process.env.INLINE_PROVIDERS.split(',') : PROVIDER
 const MAX_UNFOLD_RESULTS = 3
+const BOT_TYPE = process.env.BOT_TYPE || 'default'
 
 const i18n = new TelegrafI18n({
     defaultLanguage: 'ru',
@@ -71,7 +72,7 @@ bot.on('text', async (ctx) => doSearch(ctx, ctx.message.text))
 bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery, mixpanel }) => {
     const { query, providers } = getQueryAndProviders(inlineQuery.query, INLINE_PROVIDERS)
 
-    mixpanel.track('inlinesearch', { query: inlineQuery.query })
+    mixpanel.track('inlinesearch', { query: inlineQuery.query, bot: BOT_TYPE })
 
     const results = await providersService.search(providers, query)
 
@@ -104,7 +105,7 @@ bot.catch((err) => {
 async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, text) {
     await replyWithChatAction('typing')
 
-    mixpanel.track('search', { query: text })
+    mixpanel.track('search', { query: text, bot: BOT_TYPE })
     mixpanel.people.set({ $last_seen: new Date().toISOString() })
 
     const uid = from.id
@@ -128,7 +129,7 @@ async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, te
     providersResults = providersResults.filter((res) => res && res.length)
 
     if (!providersResults.length) {
-        mixpanel.track('noresults', { query: text })
+        mixpanel.track('noresults', { query: text, bot: BOT_TYPE })
         return await reply(
             i18n.t('no_results', { query }),
             Markup.inlineKeyboard(

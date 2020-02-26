@@ -77,25 +77,12 @@ functions:
           method: any
           cors: true
     environment:
+      BOT_TYPE: 'films'
       TOKEN: ${ssm:bot_ru_TOKEN}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
       PROVIDER: 'exfs,videocdn,7serealov,seasonvar,kinogo'
       INLINE_PROVIDERS: 'exfs,videocdn,7serealov,seasonvar,kinogo'
-
-  uabot:
-    handler: handlers/bot.handler
-    events:
-      - http: 
-          path: bot/ua
-          method: any
-          cors: true
-    environment:
-      TOKEN: ${ssm:bot_ua_TOKEN}
-      MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
-      PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDER: 'kinoukr,kino4ua,uaserials'
-      INLINE_PROVIDERS: 'kinoukr,kino4ua,uaserials'  
 
   animebot:
     handler: handlers/bot.handler
@@ -105,6 +92,7 @@ functions:
           method: any
           cors: true
     environment:
+      BOT_TYPE: 'anime'
       LOCALIZATION_TYPE: 'localization/anime'
       TOKEN: ${ssm:bot_anime_TOKEN}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}

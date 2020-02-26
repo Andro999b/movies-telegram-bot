@@ -56,7 +56,7 @@ export default function () {
 
                     playerStore.openPlaylist({ id, provider, ...playlist }, fileIndex, time)
 
-                    analytics('openPlaylist', 'video', document.title)
+                    analytics('open', 'playlist', document.title)
 
                     render((<App />), document.getElementById('app'))
                 } else {
