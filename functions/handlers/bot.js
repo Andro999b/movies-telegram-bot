@@ -29,7 +29,7 @@ bot.use(mixpanel.middleware())
 
 bot.command(['start', 'help'], async ({ i18n, reply, mixpanel, message: { text } }) => {
     if(text.endsWith('start')) {
-        mixpanel.track('register')
+        mixpanel.track('register', { bot: BOT_TYPE })
         mixpanel.people.set({ $created: new Date().toISOString() })
     }
 
@@ -45,7 +45,7 @@ bot.command(['start', 'help'], async ({ i18n, reply, mixpanel, message: { text }
     )
 })
 bot.action('helpsearch', async ({ i18n, reply, replyWithMediaGroup, answerCbQuery, mixpanel }) => {
-    mixpanel.track('helpsearch')
+    mixpanel.track('helpsearch', { bot: BOT_TYPE })
 
     await reply(i18n.t('help_search_text'))
     await replyWithMediaGroup([
