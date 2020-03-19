@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "name": "corsproxy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Andrii Pyvovarov <andro999b@gmail.com>",
+  "license": "MIT"
+}

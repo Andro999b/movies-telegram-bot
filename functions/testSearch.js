@@ -1,13 +1,14 @@
 const providers = require('./providers')
 
-const providerName = 'exfs'
+const providerName = 'nekomori'
+// const providerName = 'exfs'
 // const searchQuery = 'синяя книга'
 // const searchQuery = 'терминатор          '
 // const searchQuery = 'Мистер Робот'
 // const searchQuery = 'Клинок ведьм'
 // const searchQuery = 'one punch'
 // const searchQuery = 'ID: Вторжение'
-const searchQuery = 'Сыщик'
+const searchQuery = 'Дорохедоро'
 // const searchQuery = 'веном'
 // const searchQuery = 'ванпанчмен'
 

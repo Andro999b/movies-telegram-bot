@@ -1,0 +1,6 @@
+name = "sibnet"
+type = "javascript"
+account_id = "4e0511f5085e354d72d0e08d8a99c89b"
+workers_dev = true
+route = ""
+zone_id = ""
