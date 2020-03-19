@@ -169,8 +169,6 @@ class VideoScrean extends BaseScrean {
         } else {
             video.src = targetUrl
         }
-
-        this.errorRetries = 5
     }
 
     startHlsVideo(manifestUrl) {
@@ -274,12 +272,9 @@ class VideoScrean extends BaseScrean {
 
 
         let code
-        let retry = true
-
         switch(this.video.error.code) {
             case MediaError.MEDIA_ERR_ABORTED:
                 code = 'MEDIA_ERR_ABORTED'
-                retry = false
                 break            
             case MediaError.MEDIA_ERR_NETWORK:
                 code = 'MEDIA_ERR_NETWORK'
@@ -290,15 +285,6 @@ class VideoScrean extends BaseScrean {
             case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
                 code = 'MEDIA_ERR_SRC_NOT_SUPPORTED'
                 break
-        }
-
-        if(retry) {
-            this.errorRetries--
-            if(this.errorRetries > 0) {
-                console.log('Do retry on error') // eslint-disable-line 
-                this.restoreVideoState()
-                return
-            }
         }
 
         device.setError('Could not play media')
