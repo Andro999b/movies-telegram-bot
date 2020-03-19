@@ -1,7 +1,7 @@
 const providers = require('./providers')
 
-const provider = 'kinogo'
-const id = 'https://kinogo.by/5808-watch-online-movie-boycovskiy-klub_fight-club_1999.html'
+const provider = 'animevost'
+const id = 'https%3A%2F%2Fanimevost.org%2Ftip%2Ftv%2F2383-idinvaded.html'
 
 providers.getInfo(provider, id)
     .then((details) => console.log('details', details))// eslint-disable-line

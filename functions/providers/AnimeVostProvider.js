@@ -26,10 +26,13 @@ class AnimeVostProvider extends DataLifeProvider {
                         let matches
 
                         for(const item of $el.toArray()) {
-                            const script = item.children[0].data
-                            matches = script.match(/var data = ([^;]+);/)
+                            if(item.children.length != 0) {
+                                const script = item.children[0].data
 
-                            if(matches) break
+                                matches = script.match(/var data = ([^;]+);/)
+
+                                if(matches)  break
+                            }
                         }
 
                         if(!matches) return []
