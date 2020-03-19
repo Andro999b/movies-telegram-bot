@@ -7,6 +7,7 @@ module.exports = async (params) => {
         .get(url.startsWith('//') ? 'https:' + url : url)
         .timeout(5000)
 
+    // const matches = res.text.match(/\/[0-9A_Za-z/]+\.mp4/)
     const matches = res.text.match(/\/[0-9A_Za-z/]+\.m3u8/)
 
     if(!matches)

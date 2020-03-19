@@ -6,7 +6,8 @@ const extractors = {
     'tortuga': require('./m3u8Extractor'),
     'kodik': require('./kodikExtractor'),
     'animedia': require('./m3u8Extractor'),
-    'sibnet': require('./sibnetExtractor')
+    'sibnet': require('./sibnetExtractor'),
+    'stormo': require('./mp4PlayerJsExtractor'),
 }
 
 module.exports = async (parmas) => {

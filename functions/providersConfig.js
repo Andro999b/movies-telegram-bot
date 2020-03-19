@@ -11,8 +11,9 @@ module.exports = {
         'baseUrl': 'https://api.nekomori.ch',
         'postersCDNUrl': 'https://cdn.nekomori.ch/art/poster',
         'playersConfig': {
-            'Sibnet': { 'extractor': 'sibnet', 'hls': true },
-            'AniMedia': { 'extractor': 'animedia', 'hls': true }
+            // 'Sibnet': { 'extractor': 'sibnet', 'hls': true },
+            'AniMedia': { 'extractor': 'animedia', 'hls': true },
+            'Stormo': { 'extractor': 'stormo', 'hls': false }
         }
     },
     'yummy': {
