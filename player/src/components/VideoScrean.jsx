@@ -248,6 +248,39 @@ class VideoScrean extends BaseScrean {
     handleError = () => {
         const { props: { device }, alternativeUrls } = this
 
+        
+        let code
+        let retry = false
+
+        switch(this.video.error.code) {
+            case MediaError.MEDIA_ERR_ABORTED:
+                code = 'MEDIA_ERR_ABORTED'
+                break            
+            case MediaError.MEDIA_ERR_NETWORK:
+                code = 'MEDIA_ERR_NETWORK'
+                retry = true
+                break    
+            case MediaError.MEDIA_ERR_DECODE:
+                code = 'MEDIA_ERR_DECODE'
+                retry = true
+                break            
+            case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                code = 'MEDIA_ERR_SRC_NOT_SUPPORTED'
+                break
+        }
+
+        console.log(code, retry);
+
+        if(retry) {
+            this.errorRetries--
+            if(this.errorRetries > 0) {
+                console.log('Do retry on error') // eslint-disable-line 
+                this.restoreVideoState()
+                return
+            }
+        }
+
+
         //try alternative urls
         if (alternativeUrls && alternativeUrls.length > 0) {
             const targetUrl = alternativeUrls.pop()
@@ -268,23 +301,6 @@ class VideoScrean extends BaseScrean {
         if (!this.hlsMode && this.isHlsAvaliable()) { // retry with hls
             this.startHlsVideo()
             return
-        }
-
-
-        let code
-        switch(this.video.error.code) {
-            case MediaError.MEDIA_ERR_ABORTED:
-                code = 'MEDIA_ERR_ABORTED'
-                break            
-            case MediaError.MEDIA_ERR_NETWORK:
-                code = 'MEDIA_ERR_NETWORK'
-                break    
-            case MediaError.MEDIA_ERR_DECODE:
-                code = 'MEDIA_ERR_DECODE'
-                break            
-            case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-                code = 'MEDIA_ERR_SRC_NOT_SUPPORTED'
-                break
         }
 
         device.setError('Could not play media')
