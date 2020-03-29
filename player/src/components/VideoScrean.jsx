@@ -59,7 +59,7 @@ class VideoScrean extends BaseScrean {
     }
 
     onQuality() {
-        if(!this.hls) {
+        if (!this.hls) {
             this.startNativeVideo()
             this.restoreVideoState()
         }
@@ -116,7 +116,7 @@ class VideoScrean extends BaseScrean {
         if (browserUrl) {
             video.src = browserUrl
         } else if (url) {
-            if(url.endsWith('m3u8')) {
+            if (url.endsWith('m3u8')) {
                 this.startHlsVideo(url)
             } else {
                 this.startNativeVideo()
@@ -153,16 +153,16 @@ class VideoScrean extends BaseScrean {
         const { video } = this
         let targetUrl = url
 
-        if(quality && qualityUrls[quality]) {
+        if (quality && qualityUrls[quality]) {
             targetUrl = qualityUrls[quality]
             this.alternativeUrls = alternativeUrls
                 .concat(url)
                 .filter((it) => it != targetUrl)
         } else {
             this.alternativeUrls = alternativeUrls
-        }        
+        }
 
-        if(targetUrl.startsWith('//')) targetUrl = 'http:' + targetUrl
+        if (targetUrl.startsWith('//')) targetUrl = 'http:' + targetUrl
 
         if (extractor) {
             video.src = createExtractorUrlBuilder(extractor)(targetUrl)
@@ -203,7 +203,7 @@ class VideoScrean extends BaseScrean {
         } else {
             hls.loadSource(manifestUrl)
         }
-        
+
         this.hls = hls
     }
 
@@ -248,22 +248,22 @@ class VideoScrean extends BaseScrean {
     handleError = () => {
         const { props: { device }, alternativeUrls } = this
 
-        
+
         let code
         let retry = false
 
-        switch(this.video.error.code) {
+        switch (this.video.error.code) {
             case MediaError.MEDIA_ERR_ABORTED:
                 code = 'MEDIA_ERR_ABORTED'
-                break            
+                break
             case MediaError.MEDIA_ERR_NETWORK:
                 code = 'MEDIA_ERR_NETWORK'
                 retry = true
-                break    
+                break
             case MediaError.MEDIA_ERR_DECODE:
                 code = 'MEDIA_ERR_DECODE'
                 retry = true
-                break            
+                break
             case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
                 code = 'MEDIA_ERR_SRC_NOT_SUPPORTED'
                 break
@@ -271,11 +271,13 @@ class VideoScrean extends BaseScrean {
 
         console.log(code, retry);
 
-        if(retry) {
+        if (retry) {
             this.errorRetries--
-            if(this.errorRetries > 0) {
+            if (this.errorRetries > 0) {
                 console.log('Do retry on error') // eslint-disable-line 
-                this.restoreVideoState()
+                setTimeout(() => {
+                    this.restoreVideoState()
+                }, 1)
                 return
             }
         }
@@ -286,14 +288,17 @@ class VideoScrean extends BaseScrean {
             const targetUrl = alternativeUrls.pop()
 
             const { extractor } = device
-            if (extractor) {
-                this.video.src = createExtractorUrlBuilder(extractor)(targetUrl)
-            } else {
-                this.video.src = targetUrl
-            }
-    
 
-            this.restoreVideoState()
+            setTimeout(() => {
+                if (extractor) {
+                    this.video.src = createExtractorUrlBuilder(extractor)(targetUrl)
+                } else {
+                    this.video.src = targetUrl
+                }
+
+                this.restoreVideoState()
+            }, 1)
+
             return
         }
 
@@ -306,9 +311,9 @@ class VideoScrean extends BaseScrean {
         device.setError('Could not play media')
         device.setLoading(false)
 
-        this.logError({ 
+        this.logError({
             code,
-            message: this.video.error.message 
+            message: this.video.error.message
         })
     }
 
@@ -367,7 +372,7 @@ class VideoScrean extends BaseScrean {
     }
 
     logError(errorData) {
-        const { props: { device: { source } }} = this
+        const { props: { device: { source } } } = this
 
         logger.error('Can`t play media', {
             title: document.title,
