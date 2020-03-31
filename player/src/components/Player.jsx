@@ -99,13 +99,19 @@ class Player extends Component {
     }
 
     // --- idle checking ---
-    handleActivity = () => {
+    handleActivity = (e) => {
         const { state: { idle }, idleTimeout } = this
 
         clearTimeout(idleTimeout)
         this.setIdleTimeout()
 
-        if (idle) this.setState({ idle: false })
+        if (idle) {
+            this.setState({ idle: false })
+            if (!(e instanceof KeyboardEvent)){
+                e.stopImmediatePropagation()
+                e.preventDefault()
+            }
+        }
     }
 
     setIdleTimeout() {
@@ -119,7 +125,7 @@ class Player extends Component {
         const { idleTimeout } = this
         clearTimeout(idleTimeout);
 
-        ['pointerdown', 'pointermove', 'mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
+        ['pointerdown', 'pointermove', 'pointerup', 'mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
             (event) => window.removeEventListener(event, this.handleActivity)
         )
 
@@ -129,8 +135,8 @@ class Player extends Component {
     componentDidMount() {
         this.setIdleTimeout()
         if (isTouchDevice()) {
-            ['pointerdown', 'pointermove', 'scroll'].forEach(
-                (event) => window.addEventListener(event, this.handleActivity)
+            ['pointerdown', 'pointermove', 'pointerup', 'scroll'].forEach(
+                (event) => window.addEventListener(event, this.handleActivity, { capture: true })
             )
         } else {
             ['mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
