@@ -3,6 +3,7 @@ const getBestPlayerJSQuality = require('../utils/getBestPlayerJSQuality')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const stripPlayerJSConfig = require('../utils/stripPlayerJSConfig')
 const urlencode = require('urlencode')
+const { extractString } = require('../utils/extractScriptVariable')
 
 class KinogoProvider extends DataLifeProvider {
     constructor() {
@@ -54,9 +55,9 @@ class KinogoProvider extends DataLifeProvider {
     }
 
     _tryExtractHls(script) {
-        const parts = script.match(/fhls = "([^"]+)"/)
+        const fhls = extractString(script, 'fhls')
 
-        if (parts && parts.length > 1) {
+        if (fhls) {
             const manifestUrl = this._extractManifest(parts[1])
 
             return [{
@@ -66,9 +67,9 @@ class KinogoProvider extends DataLifeProvider {
     }
 
     _tryExtractMp4(script) {
-        const parts = script.match(/fmp4 = "([^"]+)"/)
+        const fmp4 = extractString(script, 'fmp4')
 
-        if (parts && parts.length > 1) {
+        if (fmp4) {
             const urls = getBestPlayerJSQuality(parts[1])
 
             const url = urls.pop()

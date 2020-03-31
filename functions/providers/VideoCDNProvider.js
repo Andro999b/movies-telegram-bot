@@ -40,9 +40,10 @@ class VideoCDNProvider extends Provider {
     async getInfo(typeAndId) {
         const [type, id] = typeAndId.split('_')
 
-        const { baseUrl, token } = this.config
+        const { baseUrl, token, timeout } = this.config
 
         const res = await superagent.get(`${baseUrl}/${type}?api_token=${token}&id=${id}`)
+            .timeout(timeout)
 
         if(res.body.data.length == 0)
             return null

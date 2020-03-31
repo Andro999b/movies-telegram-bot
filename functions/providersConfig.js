@@ -20,6 +20,10 @@ module.exports = {
         'baseUrl': 'https://yummyanime.club',
         'searchUrl': 'https://yummyanime.club/search'
     },
+    'kinovod': {
+        'baseUrl': 'http://kinovod129.cc',
+        'searchUrl': 'http://kinovod129.cc/search'
+    },
     'animevost': {
         'baseUrl': 'https://animevost.org',
         'searchUrl': 'https://animevost.org/index.php?do=search'

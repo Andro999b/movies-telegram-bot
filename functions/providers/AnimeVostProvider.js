@@ -1,4 +1,5 @@
 const DataLifeProvider = require('./DataLifeProvider')
+const { extractObject } = require('../utils/extractScriptVariable')
 const urlencode = require('urlencode')
 
 class AnimeVostProvider extends DataLifeProvider {
@@ -23,25 +24,19 @@ class AnimeVostProvider extends DataLifeProvider {
                 files: {
                     selector: 'script',
                     transform: ($el) => {
-                        let matches
+                        let episodesData
 
                         for(const item of $el.toArray()) {
                             if(item.children.length != 0) {
                                 const script = item.children[0].data
 
-                                matches = script.match(/var data = ([^;]+);/)
+                                episodesData = extractObject(script, 'data')
 
-                                if(matches)  break
+                                if(episodesData)  break
                             }
                         }
 
-                        if(!matches) return []
-
-                        const episodesDataStr = matches[1]
-
-                        if(!episodesDataStr) return []
-
-                        const episodesData = JSON.parse(episodesDataStr.replace(',}', '}'))
+                        if(!episodesData) return []
 
                         return Object.keys(episodesData)
                             .map((key, index) => {

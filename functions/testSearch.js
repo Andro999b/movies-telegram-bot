@@ -1,14 +1,16 @@
 const providers = require('./providers')
 
-const providerName = 'nekomori'
-// const providerName = 'exfs'
-// const searchQuery = 'синяя книга'
+const providerName = 'kinovod'
+// const providerName = 'seasonvar'
+// const providerName = 'videocdn'
+// const providerName = 'animevost'
+const searchQuery = 'синяя книга'
 // const searchQuery = 'терминатор          '
 // const searchQuery = 'Мистер Робот'
 // const searchQuery = 'Клинок ведьм'
 // const searchQuery = 'one punch'
 // const searchQuery = 'ID: Вторжение'
-const searchQuery = 'Дорохедоро'
+// const searchQuery = 'Дорохедоро'
 // const searchQuery = 'веном'
 // const searchQuery = 'ванпанчмен'
 

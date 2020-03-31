@@ -8,10 +8,11 @@ module.exports = (input) => {
 
     return urls
         .map((link) => {
-            const res = link.match(/(\[.+\])(?<url>.*[^\d](?<quality>\d+).(?:mp4|m3u8))/)
+            const res = link.match(/(\[(?<quality>[0-9]+)p?\])?(?<url>.*(?:mp4|m3u8))/)
+
             return res && {
                 url: res.groups.url,
-                quality: parseInt(res.groups.quality)
+                quality: res.groups.quality ? parseInt(res.groups.quality) : 0
             }
         })
         .filter((it) => it)

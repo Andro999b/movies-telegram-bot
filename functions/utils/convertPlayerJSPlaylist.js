@@ -33,12 +33,12 @@ function convertFolder(prefix, items, linksExtractor) {
 
             return [item]
         } else {
-            const { title, comment, folder } = it
+            const { title, comment, folder, playlist } = it
             const path = title || comment || `Season ${index + 1}`
  
             return convertFolder(
                 prefix ? prefix + '/' + path : path, 
-                folder, 
+                folder || playlist, 
                 linksExtractor
             )
         }
@@ -62,13 +62,12 @@ module.exports = function (playlist, linksExtractor = getBestPlayerJSQuality) {
     if(typeof playlist === 'string') {
         if (playlist.startsWith('#0')) {
             playlist = decode0(playlist)
-            if(playlist.startsWith('[{')) {
-                return convertFolder(null, JSON.parse(playlist), linksExtractor)
-            } else {
-                return [extractFile(playlist, linksExtractor)]
-            }
         }
-        return [extractFile(playlist, linksExtractor)]
+        if(playlist.startsWith('[{')) {
+            return convertFolder(null, JSON.parse(playlist), linksExtractor)
+        } else {
+            return [extractFile(playlist, linksExtractor)]
+        }
     } else {
         return convertFolder(null, playlist, linksExtractor)
     }
