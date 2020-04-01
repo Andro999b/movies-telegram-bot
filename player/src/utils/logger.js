@@ -1,6 +1,8 @@
 const TOKEN = 'rOjDKFokkakyfdLplhQfxIPmyLATZKoq'
 
 function log(level, message, data) {
+    console.error(level, message, data)
+
     if (!location.host.startsWith('localhost') && !window.mobileApp) {
         fetch(`https://listener-eu.logz.io:8071/?token=${TOKEN}&type=web`, {
             method: 'POST',

@@ -1,20 +1,19 @@
-const getBestPlayerJSQuality = require('./getBestPlayerJSQuality')
+const getBestPlayerJSQuality = require('./parsePlayerJSFile')
 
 function extractFile(file, linksExtractor) {
-    const urls = [].concat(linksExtractor(file))
+    const qualityUrls = linksExtractor(file)
+    
+    const urls = qualityUrls.map((it) => it.url)
     const mainUrl = urls.pop()
+
     if (mainUrl.endsWith('m3u8')) {
-        return {
-            manifestUrl: mainUrl
-        }
+        return { manifestUrl: mainUrl }
     } else {
-        
-        const item = {
-            url: mainUrl
-        }
+        const item = { url: mainUrl }
 
         if (urls.length > 0) {
             item.alternativeUrls = urls
+            item.qualitiesUrls = qualityUrls
         }
 
         return item

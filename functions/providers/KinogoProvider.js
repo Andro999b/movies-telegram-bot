@@ -1,5 +1,5 @@
 const DataLifeProvider = require('./DataLifeProvider')
-const getBestPlayerJSQuality = require('../utils/getBestPlayerJSQuality')
+const parsePlayerJSFile = require('../utils/parsePlayerJSFile')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const stripPlayerJSConfig = require('../utils/stripPlayerJSConfig')
 const urlencode = require('urlencode')
@@ -70,7 +70,7 @@ class KinogoProvider extends DataLifeProvider {
         const fmp4 = extractString(script, 'fmp4')
 
         if (fmp4) {
-            const urls = getBestPlayerJSQuality(fmp4)
+            const urls = parsePlayerJSFile(fmp4)
 
             const url = urls.pop()
 

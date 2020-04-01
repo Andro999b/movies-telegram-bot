@@ -90,25 +90,11 @@ export class LocalDevice extends Device {
         this.audioTrack = null
         this.audioTracks = []
 
-        if (source.url && source.alternativeUrls && !source.qualityUrls) {
-            const urls = [source.url].concat(source.alternativeUrls)
-
-            source.qualityUrls = urls
-                .map((link) => {
-                    const res = link.match(/(?<url>.*[^\d](?<quality>\d+).mp4)/)
-                    return res && {
-                        url: res.groups.url,
-                        quality: res.groups.quality
-                    }
-                })
-                .filter((it) => it)
-                .reduce((acc, { url, quality }) => ({ ...acc, [quality]: url }), {})
-        }
-
-        if (source.qualityUrls) {
-            this.qualities = Object.keys(source.qualityUrls)
+        if (source.qualitiesUrls) {
+            const qualities = new Set(source.qualitiesUrls.map((it) => it.quality))
+            this.qualities = [...qualities]
             const storedQuality = store.get('quality')
-            this.quality = storedQuality && this.qualities.indexOf(storedQuality) != -1 ?
+            this.quality = storedQuality && qualities.has(storedQuality) != -1 ?
                 storedQuality :
                 null
         } else {

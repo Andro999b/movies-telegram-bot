@@ -2,7 +2,8 @@ const DirectMediaProvider = require('./Provider')
 const urlencode = require('urlencode')
 const $ = require('cheerio')
 const superagent = require('superagent')
-const convertPlayerJSPlaylist= require('../utils/convertPlayerJSPlaylist')
+const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
+const parsePlayerJSFile = require('../utils/parsePlayerJSFile')
 
 class SeasonvarProvider extends DirectMediaProvider {
     constructor() {
@@ -54,7 +55,7 @@ class SeasonvarProvider extends DirectMediaProvider {
                             await this._extractSeasonFiles(serialId, seasonId, secureMark)
                         )))
                             .map((files, index) => {
-                                if(files.length && files[0].path)
+                                if (files.length && files[0].path)
                                     return files
 
                                 return files.map((file) => (({
@@ -68,7 +69,7 @@ class SeasonvarProvider extends DirectMediaProvider {
                                 ...file,
                                 id: index + 1
                             }))
-                        
+
                         return files
                     }
                 }
@@ -106,18 +107,19 @@ class SeasonvarProvider extends DirectMediaProvider {
         let a = x.substr(2)
 
         function b1(str) {
-            const binary = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-                function toSolidBytes(match, p1) {
-                    return String.fromCharCode('0x' + p1)
-                })
+            const binary = encodeURIComponent(str)
+                .replace(/%([0-9A-F]{2})/g, (_, p1)  => String.fromCharCode('0x' + p1))
 
             return Buffer.from(binary, 'binary').toString('base64')
         }
 
         function b2(str) {
-            const encodedUrl = Buffer.from(str, 'base64').toString('binary').split('').map(function (c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-            }).join('')
+            const encodedUrl = Buffer.from(str, 'base64')
+                .toString('binary')
+                .split('')
+                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+
             return decodeURIComponent(encodedUrl)
         }
 
@@ -129,7 +131,7 @@ class SeasonvarProvider extends DirectMediaProvider {
             a = ''
         }
 
-        return a
+        return parsePlayerJSFile(a)
     }
 
     getSearchUrl(q) {

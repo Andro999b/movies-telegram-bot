@@ -1,4 +1,5 @@
 const providers = require('./providers')
+const util = require('util')
 
 const providerName = 'kinovod'
 // const providerName = 'seasonvar'
@@ -23,4 +24,4 @@ providers.searchOne(providerName, searchQuery)
     .then(({ id, provider }) => 
         providers.getInfo(provider, id)
     )
-    .then((details) => console.log('details', details))// eslint-disable-line
+    .then((details) => console.log(details, util.inspect(details, false, null, true)))// eslint-disable-line
