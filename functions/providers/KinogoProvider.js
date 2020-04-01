@@ -58,7 +58,7 @@ class KinogoProvider extends DataLifeProvider {
         const fhls = extractString(script, 'fhls')
 
         if (fhls) {
-            const manifestUrl = this._extractManifest(parts[1])
+            const manifestUrl = this._extractManifest(fhls)
 
             return [{
                 manifestUrl
@@ -70,7 +70,7 @@ class KinogoProvider extends DataLifeProvider {
         const fmp4 = extractString(script, 'fmp4')
 
         if (fmp4) {
-            const urls = getBestPlayerJSQuality(parts[1])
+            const urls = getBestPlayerJSQuality(fmp4)
 
             const url = urls.pop()
 
