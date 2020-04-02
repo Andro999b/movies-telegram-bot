@@ -10,7 +10,7 @@ let cachedDb = null;
 
 async function connectToDatabase() {
     if (!cachedDb) {
-        const client = await MongoClient.connect(MONGODB_URI)
+        const client = await MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true })
         cachedDb = client.db("test")
     }
 
@@ -37,7 +37,7 @@ class MongoDBCache extends Cache {
     }
 
     async extendExpire(id) {
-        const expired = Math.floor( Date.now()) / 1000) + expirationTime
+        const expired = Math.floor(Date.now() / 1000) + expirationTime
         await this.collection.updateOne({ _id: id }, { $set: { expired } })
     }
 
