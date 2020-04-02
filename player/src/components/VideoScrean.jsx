@@ -164,7 +164,7 @@ class VideoScrean extends BaseScrean {
             const urlsSet = new Set(urls)
             this.alternativeUrls =
                 [...urls].concat(
-                    alternativeUrls.filter(it => urlsSet.has(it))
+                    alternativeUrls.filter(it => !urlsSet.has(it))
                 )
         } else {
             this.alternativeUrls = alternativeUrls
@@ -289,7 +289,6 @@ class VideoScrean extends BaseScrean {
                 return
             }
         }
-
 
         //try alternative urls
         if (alternativeUrls && alternativeUrls.length > 0) {
