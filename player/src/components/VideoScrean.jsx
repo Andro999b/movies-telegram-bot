@@ -155,17 +155,16 @@ class VideoScrean extends BaseScrean {
         const alternativeUrls = qualitiesUrls ? qualitiesUrls.map((it) => it.url) : []
 
         if (quality) {
-            const urls = new Set(
-                qualitiesUrls
-                    .filter(it => it.quality == quality)
-                    .map(it => it.url)
-            )
+            const urls = qualitiesUrls
+                .filter(it => it.quality == quality)
+                .map(it => it.url)
 
             targetUrl = urls.shift()
 
+            const urlsSet = new Set(urls)
             this.alternativeUrls =
                 [...urls].concat(
-                    alternativeUrls.filter(it => urls.has(it))
+                    alternativeUrls.filter(it => urlsSet.has(it))
                 )
         } else {
             this.alternativeUrls = alternativeUrls
