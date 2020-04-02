@@ -70,9 +70,9 @@ class KinogoProvider extends DataLifeProvider {
         const fmp4 = extractString(script, 'fmp4')
 
         if (fmp4) {
-            const urls = parsePlayerJSFile(fmp4)
-
-            const url = urls.pop()
+            const urls = parsePlayerJSFile(fmp4).map((it) => it.url)
+            
+            const url = urls.shift()
 
             if (url.endsWith('m3u8')) { // not actual mp4 lol
                 return [{
@@ -80,8 +80,7 @@ class KinogoProvider extends DataLifeProvider {
                 }]
             } else {
                 return [{
-                    url: url,
-                    alternativeUrls: urls
+                    url: url
                 }]
             }
         }

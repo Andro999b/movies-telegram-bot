@@ -142,7 +142,6 @@ class VideoScrean extends BaseScrean {
                     source: {
                         url,
                         extractor,
-                        alternativeUrls,
                         qualitiesUrls
                     },
                     quality
@@ -153,16 +152,20 @@ class VideoScrean extends BaseScrean {
         const { video } = this
         let targetUrl = url
 
+        const alternativeUrls = qualitiesUrls ? qualitiesUrls.map((it) => it.url) : []
+
         if (quality) {
-            const urls = qualitiesUrls
-                .filter(it => it.quality == quality)
-                .map(it => it.url)
+            const urls = new Set(
+                qualitiesUrls
+                    .filter(it => it.quality == quality)
+                    .map(it => it.url)
+            )
 
-            targetUrl = urls.pop()
+            targetUrl = urls.shift()
 
-            this.alternativeUrls = 
-                urls.concat(
-                    alternativeUrls.filter(it => urls.indexOf(it) == -1)
+            this.alternativeUrls =
+                [...urls].concat(
+                    alternativeUrls.filter(it => urls.has(it))
                 )
         } else {
             this.alternativeUrls = alternativeUrls
@@ -291,7 +294,7 @@ class VideoScrean extends BaseScrean {
 
         //try alternative urls
         if (alternativeUrls && alternativeUrls.length > 0) {
-            const targetUrl = alternativeUrls.pop()
+            const targetUrl = alternativeUrls.shift()
 
             const { extractor } = device
 

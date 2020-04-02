@@ -4,17 +4,16 @@ function extractFile(file, linksExtractor) {
     const qualityUrls = linksExtractor(file)
     
     const urls = qualityUrls.map((it) => it.url)
-    const mainUrl = urls.pop()
+    const mainUrl = urls.shift()
 
     if (mainUrl.endsWith('m3u8')) {
         return { manifestUrl: mainUrl }
     } else {
         const item = { url: mainUrl }
 
-        if (urls.length > 0) {
-            item.alternativeUrls = urls
-            item.qualitiesUrls = qualityUrls
-        }
+        // if (qualityUrls.length > 0) {
+        //     item.qualitiesUrls = qualityUrls
+        // }
 
         return item
     }

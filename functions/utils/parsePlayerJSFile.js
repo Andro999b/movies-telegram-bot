@@ -14,7 +14,7 @@ module.exports = (input) => {
         })
         .reduce((acc, it) => acc.concat(it), [])
         .filter((it) => it)
-        .sort((a, b) => a.quality - b.quality)
+        .sort((a, b) => b.quality - a.quality)
 
     return urls
 }

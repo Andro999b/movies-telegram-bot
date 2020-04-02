@@ -82,6 +82,7 @@ class SeasonvarProvider extends DirectMediaProvider {
             .post(`${this.config.baseUrl}/player.php`)
             .set('X-Requested-With', 'XMLHttpRequest')
             .type('form')
+            .timeout(this.config.timeout)
             .send({
                 id: seasonId,
                 serial: serialId,
@@ -95,6 +96,7 @@ class SeasonvarProvider extends DirectMediaProvider {
 
         const plistRes = await superagent
             .get(`${this.config.baseUrl}${plist}`)
+            .timeout(this.config.timeout)
 
         const playlist = JSON.parse(plistRes.text)
 
