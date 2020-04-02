@@ -2,7 +2,7 @@ service: movies-telegram-bot
 
 custom:
   tableName: 'infoTable'
-  playerUrl: 'https://movies-player.surge.sh/'
+  playerUrl: 'https://movie-player.surge.sh/'
 
 provider:
   name: aws

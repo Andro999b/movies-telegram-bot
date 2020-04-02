@@ -51,6 +51,9 @@ class KinovodProvider extends Provider {
                         const playerJsPlaylist = res.text.split('|')[1]
 
                         return convertPlayerJSPlaylist(playerJsPlaylist)
+                            .map((item, id) => ({
+                                id, ...item
+                            }))
                     }
                 }
             }

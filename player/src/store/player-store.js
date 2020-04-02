@@ -94,7 +94,8 @@ export class LocalDevice extends Device {
             const qualities = new Set(source.qualitiesUrls.map((it) => it.quality))
             this.qualities = [...qualities]
             const storedQuality = store.get('quality')
-            this.quality = storedQuality && qualities.has(storedQuality) != -1 ?
+            
+            this.quality = storedQuality && qualities.has(storedQuality)  ?
                 storedQuality :
                 null
         } else {
