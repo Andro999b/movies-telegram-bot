@@ -1,3 +1,3 @@
-const mongoDBCache = require('./dynamoDBCache')
+const mongoDBCache = require('./mongoDBCache')
 
 module.exports = async () => mongoDBCache()
