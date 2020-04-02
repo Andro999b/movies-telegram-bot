@@ -4,7 +4,6 @@ const MongoClient = require('mongodb').MongoClient;
 const COLLECTION_NAME = process.env.TABLE_NAME
 const MONGODB_URI = process.env.MONGODB_URI
 
-const TTL = 48 * 3600
 const expirationTime = 1 * 3600
 
 let cachedDb = null;
@@ -27,12 +26,12 @@ class MongoDBCache extends Cache {
 
     async putToCache(id, result) {
         if (result.files && result.files.length > 0) {
-            const ttl = Math.floor(new Date().getTime() / 1000) + TTL
-            const expired = Math.floor(new Date().getTime() / 1000) + expirationTime
+            const lastModifiedDate = new Date().getTime()
+            const expired = Math.floor(lastModifiedDate / 1000) + expirationTime
 
             await this.collection.updateOne(
-                { id },
-                { $set: { result, ttl, expired } },
+                { _id: id },
+                { $set: { result, lastModifiedDate, expired } },
                 { upsert: true }
             )
         }
@@ -40,7 +39,7 @@ class MongoDBCache extends Cache {
 
     async extendExpire(id) {
         const expired = Math.floor(new Date().getTime() / 1000) + expirationTime
-        await this.collection.updateOne({ id }, { $set: { expired } })
+        await this.collection.updateOne({ _id: id }, { $set: { expired } })
     }
 
     async getOrCompute(keys, compute) {
