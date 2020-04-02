@@ -11,9 +11,9 @@ function extractFile(file, linksExtractor) {
     } else {
         const item = { url: mainUrl }
 
-        // if (qualityUrls.length > 0) {
-        //     item.qualitiesUrls = qualityUrls
-        // }
+        if (qualityUrls.length > 0) {
+            item.qualitiesUrls = qualityUrls
+        }
 
         return item
     }
