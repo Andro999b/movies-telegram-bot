@@ -37,7 +37,7 @@ class MongoDBCache extends Cache {
     }
 
     async extendExpire(id) {
-        const expired = Math.floor(new Date().getTime() / 1000) + expirationTime
+        const expired = Math.floor( Date.now()) / 1000) + expirationTime
         await this.collection.updateOne({ _id: id }, { $set: { expired } })
     }
 

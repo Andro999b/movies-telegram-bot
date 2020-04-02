@@ -14,15 +14,15 @@ class DynamoDBCache extends Cache {
     
     async putToCache(id, result) {
         if(result.files && result.files.length > 0) {
-            const ttl = Math.floor(new Date().getTime() / 1000) + TTL
-            const expired = Math.floor(new Date().getTime() / 1000) + expirationTime
+            const ttl = Math.floor(Date.now() / 1000) + TTL
+            const expired = Math.floor(Date.now() / 1000) + expirationTime
             const putRequest = { TableName: process.env.TABLE_NAME, Item: { id, result, ttl, expired } }
             await this.documentClient.put(putRequest).promise() 
         }
     }
     
     async extendExpire(cache) {
-        const expired = Math.floor(new Date().getTime() / 1000) + expirationTime
+        const expired = Math.floor( Date.now() / 1000) + expirationTime
         const putRequest = { TableName: process.env.TABLE_NAME, Item: { ...cache.Item, expired } }
         await this.documentClient.put(putRequest).promise()
     }
