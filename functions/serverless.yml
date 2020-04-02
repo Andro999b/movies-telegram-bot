@@ -60,6 +60,7 @@ functions:
                 - resultId: true 
     environment:
       TABLE_NAME: ${self:custom.tableName}
+      MONGODB_URI: mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test
 
   extract:
     handler: handlers/extract.handler
