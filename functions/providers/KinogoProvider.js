@@ -72,7 +72,7 @@ class KinogoProvider extends DataLifeProvider {
         if (fmp4) {
             const qualitiesUrls = parsePlayerJSFile(fmp4)
             
-            const url = qualitiesUrls.shift().url
+            const url = qualitiesUrls[0].url
 
             if (url.endsWith('m3u8')) { // not actual mp4 lol
                 return [{

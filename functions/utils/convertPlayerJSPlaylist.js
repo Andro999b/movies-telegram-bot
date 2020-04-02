@@ -4,7 +4,7 @@ function extractFile(file, linksExtractor) {
     const qualityUrls = linksExtractor(file)
     
     const urls = qualityUrls.map((it) => it.url)
-    const mainUrl = urls.shift()
+    const mainUrl = urls[0]
 
     if (mainUrl.endsWith('m3u8')) {
         return { manifestUrl: mainUrl }
