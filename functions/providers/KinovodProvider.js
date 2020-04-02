@@ -46,7 +46,15 @@ class KinovodProvider extends Provider {
 
                         const url = `${this.config.baseUrl}/vod/${movieId}?identifier=${identifier}&st=${vodHash}&e=${vodTime}`
 
-                        const res = await superagent.get(url)
+                        let res
+                        
+                        try{
+                            res = await superagent
+                                .get(url)
+                                .timeout(this.config.timeout)
+                        } catch {
+                            return []
+                        }
 
                         const playerJsPlaylist = res.text.split('|')[1]
 
