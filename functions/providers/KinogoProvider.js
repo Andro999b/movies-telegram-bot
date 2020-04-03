@@ -49,6 +49,10 @@ class KinogoProvider extends DataLifeProvider {
                             ...item
                         }))
                     }
+                },
+                trailer: {
+                    selector: 'video>source',
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 }
             }
         })

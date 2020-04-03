@@ -28,9 +28,11 @@ class SevenSerailsProvider extends Provider {
                 files: {
                     transform: async (_, $root) => {
                         const parts = $root.html().match(/(https:\/\/api[0-9]+[a-z\-\.]+\/embed\/movie\/[0-9]+)/)
+
                         
                         if(parts && parts.length > 1) {
-                            const files = await deliverembed(parts[1])
+                            const url = ""
+                            const files = await deliverembed(`https://corsproxy.movies-player.workers.dev/?${encodeURIComponent(parts[1])}`)
 
                             return files.map((file) => {
                                 const parts = file.manifestUrl.split('?video=')
