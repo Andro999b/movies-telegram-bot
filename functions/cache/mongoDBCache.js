@@ -26,8 +26,8 @@ class MongoDBCache extends Cache {
 
     async putToCache(id, result) {
         if (result.files && result.files.length > 0) {
-            const lastModifiedDate = Date.now()
-            const expired = Math.floor(lastModifiedDate / 1000) + expirationTime
+            const lastModifiedDate = Math.floor(Date.now() / 1000)
+            const expired = lastModifiedDate + expirationTime
             await this.collection.updateOne(
                 { _id: id },
                 { $set: { result, lastModifiedDate, expired } },

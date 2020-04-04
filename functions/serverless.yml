@@ -82,7 +82,7 @@ functions:
       TOKEN: ${ssm:bot_ru_TOKEN}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDER: 'videocdn,kinogo,kinovod,seasonvar,7serealov'
+      PROVIDERS: 'videocdn,kinogo,kinovod,seasonvar,7serealov'
 
   animebot:
     handler: handlers/bot.handler
@@ -97,7 +97,7 @@ functions:
       TOKEN: ${ssm:bot_anime_TOKEN}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDER: 'animevost,nekomori'
+      PROVIDERS: 'animevost,nekomori'
 
 resources:
   Resources:
