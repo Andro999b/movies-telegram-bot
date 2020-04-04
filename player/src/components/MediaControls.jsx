@@ -22,6 +22,7 @@ import { isTouchDevice } from '../utils'
 import { observer, inject } from 'mobx-react'
 import AudioTrackSelector from './AudioTrackSelector'
 import VideoQualitySelector from './VideoQualitySelector'
+import localization from '../localization'
 
 @inject(
     ({
@@ -43,10 +44,10 @@ class MediaControls extends Component {
         } = this.props
 
         if (shuffle) {
-            showMessage('Shuffle playlist mode OFF')
+            showMessage(localization.shuffleOff)
             setShuffle(false)
         } else {
-            showMessage('Shuffle playlist mode ON')
+            showMessage(localization.shuffleOn)
             setShuffle(true)
         }
     }

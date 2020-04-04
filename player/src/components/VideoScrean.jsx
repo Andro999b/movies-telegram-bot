@@ -6,6 +6,7 @@ import BaseScrean from './BaseScrean'
 import { createExtractorUrlBuilder } from '../utils'
 import logger from '../utils/logger'
 import analytics from '../utils/analytics'
+import localization from '../localization'
 
 @observer
 class VideoScrean extends BaseScrean {
@@ -127,7 +128,7 @@ class VideoScrean extends BaseScrean {
             const { device } = this.props
 
             device.setLoading(false)
-            device.setError('No suitable video source')
+            device.setError(localization.cantPlayMedia)
             this.logError('No suitable video source')
             return
         }
@@ -245,7 +246,7 @@ class VideoScrean extends BaseScrean {
                     break
                 default:
                     // cannot recover
-                    this.props.device.setError('Can`t play media')
+                    this.props.device.setError(localization.cantPlayMedia)
                     this.hls.destroy()
                     this.logError(data)
                     break
@@ -315,7 +316,7 @@ class VideoScrean extends BaseScrean {
             return
         }
 
-        device.setError('Could not play media')
+        device.setError(localization.cantPlayMedia)
         device.setLoading(false)
 
         this.logError({
