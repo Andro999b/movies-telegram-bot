@@ -6,7 +6,7 @@ const uuid = require('uuid')
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
 const PLAYER_URL = process.env.PLAYER_URL
 
-module.exports = (bot, defaultProviders, inlineProviders) => {
+module.exports = (bot, defaultProviders, inlineProviders, botType) => {
     bot.on('callback_query', async (ctx) => {
         await doSearch(ctx, ctx.callbackQuery.data)
         await ctx.answerCbQuery()
@@ -15,7 +15,7 @@ module.exports = (bot, defaultProviders, inlineProviders) => {
     bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery, mixpanel }) => {
         const { query, providers } = getQueryAndProviders(inlineQuery.query, inlineProviders)
     
-        mixpanel.track('inlinesearch', { query: inlineQuery.query, bot: BOT_TYPE })
+        mixpanel.track('inlinesearch', { query: inlineQuery.query, bot: botType })
     
         const results = await providersService.search(providers, query)
     
@@ -40,7 +40,7 @@ module.exports = (bot, defaultProviders, inlineProviders) => {
     async function doSearch({ i18n, reply, replyWithChatAction, mixpanel, from }, text) {
         await replyWithChatAction('typing')
     
-        mixpanel.track('search', { query: text, bot: BOT_TYPE })
+        mixpanel.track('search', { query: text, bot: botType })
         mixpanel.people.set({ $last_seen: new Date().toISOString() })
     
         const uid = from.id
@@ -64,7 +64,7 @@ module.exports = (bot, defaultProviders, inlineProviders) => {
         providersResults = providersResults.filter((res) => res && res.length)
     
         if (!providersResults.length) {
-            mixpanel.track('noresults', { query: text, bot: BOT_TYPE })
+            mixpanel.track('noresults', { query: text, bot: botType })
             return await reply(
                 i18n.t('no_results', { query }),
                 Markup.inlineKeyboard(

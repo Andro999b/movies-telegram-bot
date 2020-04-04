@@ -1,9 +1,9 @@
 const Extra = require('telegraf/extra')
 
-module.exports = (bot, providers) => {
+module.exports = (bot, providers, botType) => {
     bot.command(['start', 'help'], async ({ i18n, reply, mixpanel, message: { text } }) => {
         if(text.endsWith('start')) {
-            mixpanel.track('register', { bot: BOT_TYPE })
+            mixpanel.track('register', { bot: botType })
             mixpanel.people.set({ $created: new Date().toISOString() })
         }
     
