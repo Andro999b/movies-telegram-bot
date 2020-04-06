@@ -48,7 +48,7 @@ class NekomoriProvider extends Provider {
         ret.body
             // eslint-disable-next-line no-prototype-builtins
             .filter(({ player }) => playersConfig.hasOwnProperty(player) )
-            .sort((a, b) => a.ep - b.ep)
+            .sort((a, b) => b.kind - a.kind || a.ep - b.ep)
             .forEach(({ id, author, kind, player, link, ep }) => {
                 const name = `Episode ${ep}`
                 const path = `${kindTranslation[kind]}/${author ? author : 'Неизвестно'}/${player}`
