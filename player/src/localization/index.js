@@ -16,7 +16,7 @@ export default new LocalizedStrings({
     ru: {
         cantLoadPLaylist: 'Ощибка загрузки',
         cantPlayMedia: 'Невозможно возпроизвести видео',
-        videoNotFound: 'Видео не найдено',
+        videoNotFound: 'Видео недоступно',
         urlCopied: 'URL скопирован',
         shareWith: 'Поделится в...',
         curPlaylistPos: 'Серия',

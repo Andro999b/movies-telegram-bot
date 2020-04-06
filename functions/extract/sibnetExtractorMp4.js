@@ -1,10 +1,22 @@
 
 const regExprExtractor = require('./regExprExtractor')
+const superagent = require('superagent')
 
 module.exports = regExprExtractor([{
     expression: /\/[0-9A_Za-z/]+\.mp4/,
-    transform: (matches) => {
-        const sibnetUrl = encodeURIComponent(`https://video.sibnet.ru${matches[0]}`)
-        return `https://sibnet.movies-player.workers.dev/?${sibnetUrl}`
+    transform: async (matches) => {
+        const sibnetUrl = `https://video.sibnet.ru${matches[0]}`
+
+        console.log(sibnetUrl);
+
+        const res = await superagent
+            .head(sibnetUrl)
+            .set('Referer', 'https://video.sibnet.ru')
+            .redirects(0)
+            .ok(res => res.status == 302)
+
+        const { location } = res.header
+
+        return location.startsWith('//') ? `https:${location}` : location
     }
 }])
