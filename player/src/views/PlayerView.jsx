@@ -62,7 +62,7 @@ class PlayerView extends Component {
                 <PlayIcon className="center" fontSize="inherit"/>
                 {castAvalaible && <div className="player__start-cast-button">
                     <IconButton onClick={this.handleCastClick}>
-                        <CastIcon/>
+                        <CastIcon fontSize="inherit"/>
                     </IconButton>
                 </div>}
             </div>

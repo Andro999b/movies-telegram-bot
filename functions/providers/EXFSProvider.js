@@ -41,14 +41,6 @@ class EXFSProvider extends DataLifeProvider {
             results.filter(({ id }) => id.indexOf('actors') === -1)
         )
     }
-
-    async _postProcessResultDetails(details) {
-        if(details.files.length == 1) {
-            details.files[0].name = details.title
-        } 
-
-        return details
-    }
 }
 
 module.exports = EXFSProvider

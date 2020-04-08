@@ -120,6 +120,13 @@ class Provider {
     }
 
     async _postProcessResultDetails(details) {
+        details.files = details.files || []
+
+        if (details.files.length == 1) {
+            const file = details.files[0]
+            if(!file.name) file.name = details.title
+        }
+
         return details
     }
 

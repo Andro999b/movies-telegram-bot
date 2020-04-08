@@ -97,16 +97,6 @@ class KinogoProvider extends DataLifeProvider {
         }
     }
 
-    async _postProcessResultDetails(details) {
-        details.files = details.files || []
-
-        if (details.files.length == 1) {
-            details.files[0].name = details.title
-        }
-
-        return details
-    }
-
     _getSiteEncoding() {
         return 'windows-1251'
     }
