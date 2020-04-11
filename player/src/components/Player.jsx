@@ -155,9 +155,9 @@ class Player extends Component {
         const { isLoading, error, seekTime, isLocal } = device
         const { playlist: { image } } = device
 
-        const hideUi = idle && seekTime == null
         const local = isLocal()
-
+        const hideUi = local && idle && seekTime == null
+        
         return (
             <Fullscreen
                 enabled={fullScreen && local}
@@ -170,11 +170,7 @@ class Player extends Component {
                         <div
                             className="player__pause-cover player__background-cover"
                             style={{ backgroundImage: image ? `url(${image})` : null }}
-                        >
-                            <Typography className="center shadow-border" variant="h4">
-                                {device.getName()}
-                            </Typography>
-                        </div>
+                        ></div>
                     }
                     {error && <Typography className="center shadow-border" variant="h4">{error}</Typography>}
                     {(isLoading && !error) &&
