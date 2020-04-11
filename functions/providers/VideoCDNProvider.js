@@ -59,6 +59,7 @@ class VideoCDNProvider extends Provider {
         }
 
         return {
+            provider: this.name, 
             title: ru_title,
             files,
             image: `https://corsproxy.movies-player.workers.dev/?${encodeURIComponent(kinopoiskPoster)}`
