@@ -31,10 +31,18 @@ function convertPlaylist(playlist) {
         .reduce((acc, item) => acc.concat(item), [])
 }
 
-module.exports = async (url) => {
+module.exports = async (url, referer) => {
     let res
     try {
-        res = await superagent.get(url.startsWith('//') ? 'https:' + url : url)
+        let request = superagent.get(url.startsWith('//') ? 'https:' + url : url)
+
+        if(referer) {
+            request = request.set({
+                'Referer': referer
+            })
+        }
+
+        res = await request
     } catch (e) {
         console.error('Fail get iframe', url, e)
         return []
