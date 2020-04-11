@@ -133,17 +133,21 @@ class Player extends Component {
     }
 
     componentDidMount() {
-        this.setIdleTimeout()
-        if (isTouchDevice()) {
-            ['pointerdown', 'pointermove', 'pointerup', 'scroll'].forEach(
-                (event) => window.addEventListener(event, this.handleActivity, { capture: true })
-            )
-        } else {
-            ['mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
-                (event) => window.addEventListener(event, this.handleActivity)
-            )
+        const { device: { isLocal } } = this.props
 
-            window.addEventListener('keyup', this.handleKeyUp)
+        if(isLocal()) {
+            this.setIdleTimeout()
+            if (isTouchDevice()) {
+                ['pointerdown', 'pointermove', 'pointerup', 'scroll'].forEach(
+                    (event) => window.addEventListener(event, this.handleActivity, { capture: true })
+                )
+            } else {
+                ['mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
+                    (event) => window.addEventListener(event, this.handleActivity)
+                )
+    
+                window.addEventListener('keyup', this.handleKeyUp)
+            }
         }
     }
     // --- idle checking ---
@@ -156,7 +160,7 @@ class Player extends Component {
         const { playlist: { image } } = device
 
         const local = isLocal()
-        const hideUi = local && idle && seekTime == null
+        const hideUi = idle && seekTime == null
         
         return (
             <Fullscreen

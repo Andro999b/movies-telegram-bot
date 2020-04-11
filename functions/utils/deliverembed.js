@@ -14,6 +14,23 @@ function getBestQuality(input) {
         .pop()
 }
 
+function convertPlaylist(playlist) {
+    const { seasons } = playlist
+
+    return seasons
+        .sort((a, b) => a.season - b.season)
+        .map(({ season, episodes }) => {
+            
+            return episodes.map(({ episode, id, hlsList }) => ({
+                path: `Season ${season}`,
+                name: `Episode ${episode}`,
+                id,
+                manifestUrl: getBestQuality(hlsList),
+            }))
+        })
+        .reduce((acc, item) => acc.concat(item), [])
+}
+
 module.exports = async (url) => {
     let res
     try {
@@ -23,11 +40,11 @@ module.exports = async (url) => {
         return []
     }
 
-    let parts = res.text.match(/franchise:\s+(?<franchise>\d+)/)
+    let parts = res.text.match(/apiBaseUrl:\s+"(?<api>.+)"/)
 
     if(parts) {
-        const { groups: { franchise } } = parts
-        const { groups: { api } } = res.text.match(/apiBaseUrl:\s+"(?<api>.+)"/)
+        const { groups: { api } } = parts
+        const { groups: { franchise } } = res.text.match(/franchise:\s+(?<franchise>\d+)/)
         const { groups: { referer } } = res.text.match(/referer:\s+"(?<referer>.+)"/)
 
         const seasonsRes = await superagent.get(api + `season/by-franchise/?id=${franchise}&host=${referer}`)
@@ -46,6 +63,15 @@ module.exports = async (url) => {
                 name: `Episode ${index + 1}`,
             }))
         }))).reduce((acc, files) => acc.concat(files), [])
+    }
+
+    parts = res.text.match(/playlist: (?<playlist>.+),/)
+    if(parts) {
+        let playlist
+
+        eval(`playlist = ${parts.groups.playlist}`)
+
+        return convertPlaylist(playlist)
     }
 
     const { groups: { hls } } = res.text.match(/hlsList: (?<hls>{[^}]+}),/)
