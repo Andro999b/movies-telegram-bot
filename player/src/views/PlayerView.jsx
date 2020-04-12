@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Player from '../components/Player'
 import { inject, observer } from 'mobx-react'
-import { IconButton } from '@material-ui/core'
+import { IconButton, Fab } from '@material-ui/core'
 import { 
     PlayCircleFilled as PlayIcon,
     Cast as CastIcon,
@@ -59,11 +59,11 @@ class PlayerView extends Component {
                 style={{ backgroundImage: image ? `url(${image})`: null, cursor: 'pointer' }}
                 onClick={this.handleStartClick}
             >
-                <PlayIcon className="center" fontSize="inherit"/>
+                <PlayIcon className="center shadow-icon" fontSize="inherit"/>
                 {castAvalaible && <div className="player__start-cast-button">
-                    <IconButton onClick={this.handleCastClick}>
-                        <CastIcon fontSize="inherit"/>
-                    </IconButton>
+                    <Fab onClick={this.handleCastClick} size="large">
+                        <CastIcon/>
+                    </Fab>
                 </div>}
             </div>
         )

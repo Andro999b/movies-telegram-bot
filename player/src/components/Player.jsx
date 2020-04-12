@@ -107,7 +107,7 @@ class Player extends Component {
 
         if (idle) {
             this.setState({ idle: false })
-            if (!(e instanceof KeyboardEvent)){
+            if (!(e instanceof KeyboardEvent)) {
                 e.stopImmediatePropagation()
                 e.preventDefault()
             }
@@ -133,21 +133,17 @@ class Player extends Component {
     }
 
     componentDidMount() {
-        const { device: { isLocal } } = this.props
+        this.setIdleTimeout()
+        if (isTouchDevice()) {
+            ['pointerdown', 'pointermove', 'pointerup', 'scroll'].forEach(
+                (event) => window.addEventListener(event, this.handleActivity, { capture: true })
+            )
+        } else {
+            ['mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
+                (event) => window.addEventListener(event, this.handleActivity)
+            )
 
-        if(isLocal()) {
-            this.setIdleTimeout()
-            if (isTouchDevice()) {
-                ['pointerdown', 'pointermove', 'pointerup', 'scroll'].forEach(
-                    (event) => window.addEventListener(event, this.handleActivity, { capture: true })
-                )
-            } else {
-                ['mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
-                    (event) => window.addEventListener(event, this.handleActivity)
-                )
-    
-                window.addEventListener('keyup', this.handleKeyUp)
-            }
+            window.addEventListener('keyup', this.handleKeyUp)
         }
     }
     // --- idle checking ---
@@ -160,8 +156,8 @@ class Player extends Component {
         const { playlist: { image } } = device
 
         const local = isLocal()
-        const hideUi = idle && seekTime == null
-        
+        const hideUi = local && idle && seekTime == null
+
         return (
             <Fullscreen
                 enabled={fullScreen && local}
