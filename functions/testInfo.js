@@ -1,8 +1,8 @@
 const providers = require('./providers')
 const util = require('util')
 
-const provider = '7serealov'
-const id = 'http%3A%2F%2F7serialov.net%2Fload%2Fdrama%2Fdoktor_khaus_1%2F8-1-0-47'
+const provider = 'videocdn'
+const id = 'tv-series_2965'
 
 console.log(decodeURIComponent(id));
 

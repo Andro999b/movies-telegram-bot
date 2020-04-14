@@ -19,22 +19,25 @@ class VideoCDNProvider extends Provider {
                 .get(`${baseUrl}/${type}?direction=desc&field=global&limit=${pageSize}&ordering=${ordering}&query=${encodeURIComponent(query)}&api_token=${token}`)
                 .timeout(timeout)
 
-            return { res, type}
+            return { res, type }
         })
 
         const results = await Promise.all(promices)
-        
+
         return results
-            .map(({ res, type }) => 
-                JSON.parse(res.text).data.map((item) => ({...item, type}))
+            .map(({ res, type }) =>
+                JSON.parse(res.text).data.map((item) => ({ ...item, type }))
             )
             .reduce((acc, item) => acc.concat(item), [])
-            .map(({ id, ru_title, kinopoisk_id, orig_title, type }) => ({
-                provider: this.name, 
-                id: `${type}_${id}`,
-                name: `${ru_title} (${orig_title})`,
-                image: `https://corsproxy.movies-player.workers.dev/?${encodeURIComponent(`https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`)}`
-            }))
+            .map(({ id, ru_title, kinopoisk_id, orig_title, type, year }) => {
+                year = year ? year.split('-') [0] : ''
+                return {
+                    provider: this.name,
+                    id: `${type}_${id}`,
+                    name: `${ru_title} (${year || orig_title})`,
+                    image: `https://corsproxy.movies-player.workers.dev/?${encodeURIComponent(`https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`)}`
+                }
+            })
     }
 
     async getInfo(typeAndId) {
@@ -45,21 +48,24 @@ class VideoCDNProvider extends Provider {
         const res = await superagent.get(`${baseUrl}/${type}?api_token=${token}&id=${id}`)
             .timeout(timeout)
 
-        if(res.body.data.length == 0)
+        if (res.body.data.length == 0)
             return null
 
         const { ru_title, iframe_src, kinopoisk_id } = res.body.data[0]
-        const url = iframe_src.startsWith('//') ? 'https:' + iframe_src: iframe_src
+        const url = iframe_src.startsWith('//') ? 'https:' + iframe_src : iframe_src
 
-        const files = await videocdnembed(url)
+        const files = (await videocdnembed(url))
+            .map((file, id) => ({ id, ...file }))
+
         const kinopoiskPoster = `https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`
 
-        if(files.length == 1) {
+
+        if (files.length == 1) {
             files[0].name = ru_title
         }
 
         return {
-            provider: this.name, 
+            provider: this.name,
             title: ru_title,
             files,
             image: `https://corsproxy.movies-player.workers.dev/?${encodeURIComponent(kinopoiskPoster)}`

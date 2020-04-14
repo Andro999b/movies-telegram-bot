@@ -1,11 +1,11 @@
 const providers = require('./providers')
 const util = require('util')
 
-const providerName = 'kinovod'
+// const providerName = 'kinovod'
 // const providerName = 'seasonvar'
-// const providerName = 'videocdn'
+const providerName = 'videocdn'
 // const providerName = 'animevost'
-const searchQuery = 'синяя книга'
+const searchQuery = 'Звездный путь'
 // const searchQuery = 'терминатор          '
 // const searchQuery = 'Мистер Робот'
 // const searchQuery = 'Клинок ведьм'

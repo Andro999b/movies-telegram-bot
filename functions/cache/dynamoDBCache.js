@@ -13,12 +13,10 @@ class DynamoDBCache extends Cache {
     }
     
     async putToCache(id, result) {
-        if(result.files && result.files.length > 0) {
-            const ttl = Math.floor(Date.now() / 1000) + TTL
-            const expired = Math.floor(Date.now() / 1000) + expirationTime
-            const putRequest = { TableName: process.env.TABLE_NAME, Item: { id, result, ttl, expired } }
-            await this.documentClient.put(putRequest).promise() 
-        }
+        const ttl = Math.floor(Date.now() / 1000) + TTL
+        const expired = Math.floor(Date.now() / 1000) + expirationTime
+        const putRequest = { TableName: process.env.TABLE_NAME, Item: { id, result, ttl, expired } }
+        await this.documentClient.put(putRequest).promise() 
     }
     
     async extendExpire(cache) {
@@ -37,8 +35,12 @@ class DynamoDBCache extends Cache {
         if (cache.Item) {
             if (cache.Item.expired < Date.now() / 1000) { //get new resuls if cahce record expired
                 try {
-                    result = await compute(keys)
-                    await this.putToCache(id, result)
+                    if (result.files && result.files.length > 0) { // if results unavaliable taking from cache
+                        await this.putToCache(id, result)
+                    } else {
+                        result = cacheItem.result
+                        await this.extendExpire(id)
+                    }
                 } catch (e) {  // if get resource failed exted cahce expiration time 
                     result = cache.Item.result
                     await this.extendExpire(cache)
