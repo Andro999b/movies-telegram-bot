@@ -1,4 +1,4 @@
-const providers = require('./providers')
+const providers = require('../providers')
 const util = require('util')
 
 // const providerName = 'kinovod'

@@ -117,3 +117,7 @@ resources:
         TimeToLiveSpecification:
           AttributeName: ttl
           Enabled: TRUE
+
+package:
+  exclude:
+   - test/**

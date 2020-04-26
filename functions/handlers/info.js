@@ -7,7 +7,7 @@ module.exports.handler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false
 
     let result = {}
-
+    
     if (event.pathParameters) {
         const { provider, resultId } = event.pathParameters
 

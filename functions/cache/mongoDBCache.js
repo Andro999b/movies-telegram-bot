@@ -42,7 +42,10 @@ class MongoDBCache extends Cache {
         const id = keys.join(':')
 
         let result = {}
-        const cacheItem = await this.collection.findOne({ _id: id })
+        const cacheItem = await this.collection.findOne(
+            { _id: id },
+            { $inc: { hit: 1 } }
+        )
 
         if (cacheItem) {
             if (cacheItem.expired.getTime() < Date.now()) {
