@@ -14,7 +14,7 @@ export default new LocalizedStrings({
         videoNotReleased: 'Video not released yet<br/><a href="{0}">Watch trailer</>'
     },
     ru: {
-        cantLoadPLaylist: 'Ощибка загрузки',
+        cantLoadPLaylist: 'Ошибка загрузки',
         cantPlayMedia: 'Невозможно возпроизвести видео',
         videoNotFound: 'Видео недоступно',
         urlCopied: 'URL скопирован',

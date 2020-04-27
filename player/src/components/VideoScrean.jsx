@@ -321,7 +321,9 @@ class VideoScrean extends BaseScrean {
 
         this.logError({
             code,
-            message: this.video.error.message
+            message: this.video.error.message,
+            alternativeUrls,
+            videoSrc: this.video.src
         })
     }
 
@@ -386,7 +388,7 @@ class VideoScrean extends BaseScrean {
             title: document.title,
             url: location.href,
             source: source,
-            data: errorData
+            details: errorData,
         })
 
         analytics('play', 'error', 'Can`t play media')

@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'videocdn'
-const id = 'tv-series_2965'
+const provider = 'seasonvar'
+const id = '/serial-24215-Svyatoj_Majk-2-season.html'
 
 console.log(decodeURIComponent(id));
 
