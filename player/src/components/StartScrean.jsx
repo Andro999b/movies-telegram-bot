@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { Fab } from '@material-ui/core'
+import { Fab, Typography } from '@material-ui/core'
 import {
     PlayCircleFilled as PlayIcon,
     Cast as CastIcon,
@@ -35,6 +35,17 @@ class StartScrean extends Component {
                         <CastIcon />
                     </Fab>
                 </div>}
+                <div className="player__telegram-links shadow-border">
+                    <Typography>
+                        <a href="https://telegram.me/films_search_bot">
+                            <span className="icon-telegram vmiddle"/>@films_search_bot
+                        </a>
+                        <br/>
+                        <a href="https://telegram.me/anime_tube_bot">
+                            <span className="icon-telegram vmiddle"/>@anime_tube_bot
+                        </a>
+                    </Typography>
+                </div>
             </div>
         )
     }

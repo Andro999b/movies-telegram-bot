@@ -226,6 +226,16 @@ html {
     bottom: 20px;
 }
 
+.player__telegram-links {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    
+    a, a:hover, a:active, a:visited {
+        text-decoration: none;
+    }
+}
+
 @media (min-width: 576px) {
     .hide-on-mobile {
         display: inline-block;
