@@ -12,10 +12,39 @@
             background: #000;
             color: #fff;
         }
+
+        html, body {
+            height: 100%;
+        }
+
+        #links {
+            position: absolute;
+            display: none;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: #fff;
+            line-height: 25px;
+        }
+
+        a, a:active, a:hover, a:visited {
+            text-decoration: none;
+            color: #fff;
+        }
     </style>
 </head>
 
 <body>
+    <div id="links">
+        <a href="https://telegram.me/films_search_bot">
+            @films_search_bot
+        </a>
+        <br/>
+        <a href="https://telegram.me/anime_tube_bot">
+            @anime_tube_bot
+        </a>
+    </div>
     <script>
         const params = new URLSearchParams(window.location.search)
 
@@ -25,6 +54,10 @@
             params.delete('uid')
         }
 
-        location.href = 'watch.html?' + params.toString()
+        if(params.has('provider') && params.has('id')) {
+            location.href = 'watch.html?' + params.toString()
+        } else {
+            document.getElementById("links").style["display"] = "block"
+        }
     </script>
 </html>
