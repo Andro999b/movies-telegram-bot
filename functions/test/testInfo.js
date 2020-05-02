@@ -2,7 +2,7 @@ const providers = require('../providers')
 const util = require('util')
 
 const provider = 'seasonvar'
-const id = '/serial-24215-Svyatoj_Majk-2-season.html'
+const id = '%2Fserial-24137-Grand_Tur-4-sezon.html'
 
 console.log(decodeURIComponent(id));
 

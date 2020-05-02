@@ -78,29 +78,34 @@ class SeasonvarProvider extends DirectMediaProvider {
     }
 
     async _extractSeasonFiles(serialId, seasonId, secureMark) {
-        const res = await superagent
-            .post(`${this.config.baseUrl}/player.php`)
-            .set('X-Requested-With', 'XMLHttpRequest')
-            .type('form')
-            .timeout(this.config.timeout)
-            .send({
-                id: seasonId,
-                serial: serialId,
-                secure: secureMark,
-                time: Date.now(),
-                type: 'html5'
-            })
+        try{
+            const res = await superagent
+                .post(`${this.config.baseUrl}/player.php`)
+                .set('X-Requested-With', 'XMLHttpRequest')
+                .type('form')
+                .timeout(this.config.timeout)
+                .send({
+                    id: seasonId,
+                    serial: serialId,
+                    secure: secureMark,
+                    time: Date.now(),
+                    type: 'html5'
+                })
 
-        const matches = res.text.match(/'0': "(.+)"/)
-        const plist = matches[1]
+            const matches = res.text.match(/'0': "(.+)"/)
+            const plist = matches[1]
 
-        const plistRes = await superagent
-            .get(`${this.config.baseUrl}${plist}`)
-            .timeout(this.config.timeout)
+            const plistRes = await superagent
+                .get(`https://corsproxy.movies-player.workers.dev/?${this.config.baseUrl}${plist}`)
+                .timeout(this.config.timeout)
 
-        const playlist = JSON.parse(plistRes.text)
+            const playlist = JSON.parse(plistRes.text)
 
-        return convertPlayerJSPlaylist(playlist, (x) => this._decryptFilePath(x))
+            return convertPlayerJSPlaylist(playlist, (x) => this._decryptFilePath(x))
+        } catch(e) {
+            console.error(e)
+            return []
+        }
     }
 
     _decryptFilePath(x) {
