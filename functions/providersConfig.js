@@ -13,8 +13,8 @@ module.exports = {
         'playersConfig': {
             'Sibnet': { 'extractor': 'sibnetmp4', 'hls': false },
             // 'AniMedia': { 'extractor': 'animedia', 'hls': true },
-            'Stormo': { 'extractor': 'stormo', 'hls': false },
-            'Stormo.TV': { 'extractor': 'stormo', 'hls': false },
+            // 'Stormo': { 'extractor': 'stormo', 'hls': false },
+            // 'Stormo.TV': { 'extractor': 'stormo', 'hls': false },
             'Kodik': { 'extractor': 'aniqit', 'hls': false }
         }
     },
