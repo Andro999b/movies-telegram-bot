@@ -15,7 +15,7 @@ module.exports = {
             // 'AniMedia': { 'extractor': 'animedia', 'hls': true },
             // 'Stormo': { 'extractor': 'stormo', 'hls': false },
             // 'Stormo.TV': { 'extractor': 'stormo', 'hls': false },
-            'Kodik': { 'extractor': 'aniqit', 'hls': false }
+            'Kodik': { 'extractor': 'anigit', 'hls': false }
         }
     },
     'yummy': {
