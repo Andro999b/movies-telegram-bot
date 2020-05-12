@@ -2,7 +2,8 @@ service: movies-telegram-bot
 
 custom:
   tableName: 'infoTable'
-  playerUrl: 'http://movie-player.surge.sh/'
+  playerUrl: 'http://movie-player.surge.sh/watch.html'
+  helpImages: 'https://movie-player.surge.sh/images/help/1.png,https://movie-player.surge.sh/images/help/2.png,https://movie-player.surge.sh/images/help/3.png'
 
 provider:
   name: aws
@@ -82,6 +83,7 @@ functions:
       TOKEN: ${ssm:bot_ru_TOKEN}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
+      HELP_IMAGES: ${self:custom.helpImages}
       PROVIDERS: 'videocdn,kinogo,kinovod,seasonvar,7serealov'
 
   animebot:
@@ -97,6 +99,7 @@ functions:
       TOKEN: ${ssm:bot_anime_TOKEN}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
+      HELP_IMAGES: ${self:custom.helpImages}
       PROVIDERS: 'animevost,nekomori'
 
 resources:

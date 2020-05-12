@@ -48,12 +48,6 @@ module.exports = {
             }
         }
     },
-    performance: {
-        maxEntrypointSize: 300000,
-        assetFilter: function (assetFilename) {
-            return !assetFilename.endsWith('.js')
-        }
-    },
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'watch.html',
@@ -67,6 +61,7 @@ module.exports = {
         new CopyPlugin([
             'src/index.html',
             { from: '.well-known', to: '.well-known' },
+            { from: path.join('src', 'images', 'help'), to: path.join('images', 'help') }
         ])
     ]
 }
