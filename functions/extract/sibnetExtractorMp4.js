@@ -7,8 +7,6 @@ module.exports = regExprExtractor([{
     transform: async (matches) => {
         const sibnetUrl = `https://video.sibnet.ru${matches[0]}`
 
-        console.log(sibnetUrl);
-
         const res = await superagent
             .head(sibnetUrl)
             .set('Referer', 'https://video.sibnet.ru')

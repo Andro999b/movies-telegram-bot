@@ -62,6 +62,6 @@ module.exports = {
     },
     '7serealov': {
         'baseUrl': 'http://7serialov.net',
-        'searchUrl': 'http://7serialov.net/search/'
+        'searchUrl': 'https://7serialov.net'
     }
 }

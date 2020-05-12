@@ -27,6 +27,8 @@ class SevenSerailsProvider extends Provider {
                 },
                 files: {
                     transform: async (_, $root) => {
+                        
+
                         const parts = $root.html().match(/(https:\/\/api[0-9]+[a-z\-\.]+\/embed\/movie\/[0-9]+)/g)
                         
                         if(parts && parts.length > 1) {

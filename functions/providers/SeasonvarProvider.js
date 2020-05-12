@@ -103,7 +103,7 @@ class SeasonvarProvider extends DirectMediaProvider {
 
             return convertPlayerJSPlaylist(playlist, (x) => this._decryptFilePath(x))
         } catch(e) {
-            console.error(e)
+            console.error('Seasonvar sesson extractor failed', e)
             return []
         }
     }
