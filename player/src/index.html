@@ -37,22 +37,16 @@
 
 <body>
     <div id="links">
-        <a href="https://telegram.me/films_search_bot">
+        Фильмы и сериалы: <a href="https://telegram.me/films_search_bot">
             @films_search_bot
         </a>
         <br/>
-        <a href="https://telegram.me/anime_tube_bot">
+        Поиск аниме: <a href="https://telegram.me/anime_tube_bot">
             @anime_tube_bot
         </a>
     </div>
     <script>
         const params = new URLSearchParams(window.location.search)
-
-        const uid = params.get('uid')
-        if(uid) {
-            localStorage.setItem('uid', JSON.stringify(uid))
-            params.delete('uid')
-        }
 
         if(params.has('provider') && params.has('id')) {
             location.href = 'watch.html?' + params.toString()

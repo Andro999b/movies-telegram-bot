@@ -11,7 +11,9 @@ export default new LocalizedStrings({
         curTimePos: 'Current time',
         shuffleOn: 'Shuffle playlist mode ON',
         shuffleOff: 'Shuffle playlist mode OFF',
-        videoNotReleased: 'Video not released yet<br/><a href="{0}">Watch trailer</>'
+        videoNotReleased: 'Video not released yet<br/><a href="{0}">Watch trailer</>',
+        moviesBotTip: 'movies and tv shows',
+        animeBotTip: 'search anime'
     },
     ru: {
         cantLoadPLaylist: 'Ошибка загрузки',
@@ -23,6 +25,8 @@ export default new LocalizedStrings({
         curTimePos: 'Время',
         shuffleOn: 'Случаный режим включен',
         shuffleOff: 'Случаный режим выключен',
-        videoNotReleased: 'Видео еще не доступно<br/><a href="{0}">Смотреть трейлер</>'
+        videoNotReleased: 'Видео еще не доступно<br/><a href="{0}">Смотреть трейлер</>',
+        moviesBotTip: 'фильмы и сериалы',
+        animeBotTip: 'поиск аниме'
     }
 });

@@ -35,18 +35,9 @@ function renderVideoNotReleased(trailerUrl) {
 
 
 export default function () {
-    const uid = store.get('uid') 
-    if (window.mixpanel && uid) {
-        mixpanel.identify(uid)
-    }
-
     if (window.gtag) {
         gtag('js', new Date())
-        if(uid) {
-            gtag('config', 'UA-153629378-1', { 'user_id': uid })
-        } else {
-            gtag('config', 'UA-153629378-1')
-        }
+        gtag('config', 'UA-153629378-1')
     }
 
     if (provider && id) {

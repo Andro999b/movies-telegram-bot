@@ -42,8 +42,7 @@ module.exports = (bot, defaultProviders, inlineProviders, botType) => {
     
         mixpanel.track('search', { query: text, bot: botType })
         mixpanel.people.set({ $last_seen: new Date().toISOString() })
-    
-        const uid = from.id
+
     
         let { query, providers } = getQueryAndProviders(text, defaultProviders)
     
@@ -81,7 +80,7 @@ module.exports = (bot, defaultProviders, inlineProviders, botType) => {
             await reply(
                 i18n.t('provider_results', { query, provider }),
                 Markup.inlineKeyboard(
-                    createResultButtons(results, uid)
+                    createResultButtons(results)
                         .concat(
                             [Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch')]
                         ),
@@ -91,7 +90,7 @@ module.exports = (bot, defaultProviders, inlineProviders, botType) => {
         } else {
             await reply(
                 i18n.t('results', { query }),
-                getResultsKeyboad(providersResults, query, uid, i18n).extra()
+                getResultsKeyboad(providersResults, query, i18n).extra()
             )
         }
     }
@@ -112,7 +111,7 @@ module.exports = (bot, defaultProviders, inlineProviders, botType) => {
         return { query, providers: avaliableProviders }
     }
     
-    function getResultsKeyboad(providersResults, query, uid, i18n) {
+    function getResultsKeyboad(providersResults, query, i18n) {
         return Markup.inlineKeyboard(
             providersResults
                 .sort((a, b) => a.length - b.length)
@@ -126,7 +125,7 @@ module.exports = (bot, defaultProviders, inlineProviders, botType) => {
                             )
                         ]
                     } else {
-                        return createResultButtons(res, uid)
+                        return createResultButtons(res)
                     }
                 })
                 .reduce((acc, items) => acc.concat(items), [])
@@ -135,11 +134,11 @@ module.exports = (bot, defaultProviders, inlineProviders, botType) => {
         )
     }
     
-    function createResultButtons(res, uid) {
+    function createResultButtons(res) {
         return res.map((result) =>
             Markup.urlButton(
                 `[${result.provider}] ${result.name}`,
-                `${PLAYER_URL}?provider=${result.provider}&id=${result.id}&uid=${uid}`
+                `${PLAYER_URL}?provider=${result.provider}&id=${result.id}`
             )
         )
     }
