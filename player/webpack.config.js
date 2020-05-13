@@ -6,7 +6,6 @@ module.exports = {
     entry: path.join(__dirname, 'src', 'index'),
     output: {
         filename: '[name].bundle.js',
-        chunkFilename: '[name].bundle.js',
         path: path.join(__dirname, 'dist')
     },
     module: {
@@ -16,10 +15,6 @@ module.exports = {
                 exclude: /(node_modules|bower_components)/,
                 use: ['babel-loader']
             },
-            // {
-            //     test: /\.(jpe?g|png|gif)$/i,
-            //     use: ['file-loader']
-            // },
             {
 				test: /\.(jpe?g|png)(\?[a-z0-9=&.]+)?$/,
 				use: 'base64-inline-loader?limit=1000&name=[name].[ext]'
@@ -39,13 +34,7 @@ module.exports = {
     },
     optimization: {
         splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'vendors',
-                    chunks: 'all'
-                },
-            }
+            chunks: 'all'
         }
     },
     plugins: [
