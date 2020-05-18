@@ -102,7 +102,7 @@ class Provider {
 
     // eslint-disable-next-line no-unused-vars
     getSearchUrl(query, page) {
-        throw new Error('Provider not implement getSearchUrl()')
+        throw new Error('Provider do not implement getSearchUrl()')
     }
 
     getName() {
@@ -120,6 +120,13 @@ class Provider {
     }
 
     async _postProcessResultDetails(details) {
+        details.files = details.files || []
+
+        if (details.files.length == 1) {
+            const file = details.files[0]
+            if(!file.name) file.name = details.title
+        }
+
         return details
     }
 
@@ -133,7 +140,7 @@ class Provider {
 
     getInfoUrl(resultsId) {
         const url = urlencode.decode(resultsId)
-        return url.startsWith('/') ? this.config.baseUrl + url : url
+        return this._absoluteUrl(url)
     }
 
     _absoluteUrl(url) {

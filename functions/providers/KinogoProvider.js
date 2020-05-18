@@ -1,8 +1,9 @@
 const DataLifeProvider = require('./DataLifeProvider')
-const getBestPlayerJSQuality = require('../utils/getBestPlayerJSQuality')
+const parsePlayerJSFile = require('../utils/parsePlayerJSFile')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const stripPlayerJSConfig = require('../utils/stripPlayerJSConfig')
 const urlencode = require('urlencode')
+const { extractString } = require('../utils/extractScriptVariable')
 
 class KinogoProvider extends DataLifeProvider {
     constructor() {
@@ -48,16 +49,20 @@ class KinogoProvider extends DataLifeProvider {
                             ...item
                         }))
                     }
+                },
+                trailer: {
+                    selector: 'video>source',
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
                 }
             }
         })
     }
 
     _tryExtractHls(script) {
-        const parts = script.match(/fhls = "([^"]+)"/)
+        const fhls = extractString(script, 'fhls')
 
-        if (parts && parts.length > 1) {
-            const manifestUrl = this._extractManifest(parts[1])
+        if (fhls) {
+            const manifestUrl = this._extractManifest(fhls)
 
             return [{
                 manifestUrl
@@ -66,22 +71,19 @@ class KinogoProvider extends DataLifeProvider {
     }
 
     _tryExtractMp4(script) {
-        const parts = script.match(/fmp4 = "([^"]+)"/)
+        const fmp4 = extractString(script, 'fmp4')
 
-        if (parts && parts.length > 1) {
-            const urls = getBestPlayerJSQuality(parts[1])
-
-            const url = urls.pop()
+        if (fmp4) {
+            const qualitiesUrls = parsePlayerJSFile(fmp4)
+            
+            const url = qualitiesUrls[0].url
 
             if (url.endsWith('m3u8')) { // not actual mp4 lol
                 return [{
                     manifestUrl: url
                 }]
             } else {
-                return [{
-                    url: url,
-                    alternativeUrls: urls
-                }]
+                return [{ url, qualitiesUrls }]
             }
         }
     }
@@ -93,16 +95,6 @@ class KinogoProvider extends DataLifeProvider {
             const { file } = config
             return convertPlayerJSPlaylist(file)
         }
-    }
-
-    async _postProcessResultDetails(details) {
-        details.files = details.files || []
-
-        if (details.files.length == 1) {
-            details.files[0].name = details.title
-        }
-
-        return details
     }
 
     _getSiteEncoding() {

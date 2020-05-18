@@ -99,13 +99,19 @@ class Player extends Component {
     }
 
     // --- idle checking ---
-    handleActivity = () => {
+    handleActivity = (e) => {
         const { state: { idle }, idleTimeout } = this
 
         clearTimeout(idleTimeout)
         this.setIdleTimeout()
 
-        if (idle) this.setState({ idle: false })
+        if (idle) {
+            this.setState({ idle: false })
+            if (!(e instanceof KeyboardEvent)) {
+                e.stopImmediatePropagation()
+                e.preventDefault()
+            }
+        }
     }
 
     setIdleTimeout() {
@@ -119,7 +125,7 @@ class Player extends Component {
         const { idleTimeout } = this
         clearTimeout(idleTimeout);
 
-        ['pointerdown', 'pointermove', 'mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
+        ['pointerdown', 'pointermove', 'pointerup', 'mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
             (event) => window.removeEventListener(event, this.handleActivity)
         )
 
@@ -129,8 +135,8 @@ class Player extends Component {
     componentDidMount() {
         this.setIdleTimeout()
         if (isTouchDevice()) {
-            ['pointerdown', 'pointermove', 'scroll'].forEach(
-                (event) => window.addEventListener(event, this.handleActivity)
+            ['pointerdown', 'pointermove', 'pointerup', 'scroll'].forEach(
+                (event) => window.addEventListener(event, this.handleActivity, { capture: true })
             )
         } else {
             ['mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
@@ -149,8 +155,8 @@ class Player extends Component {
         const { isLoading, error, seekTime, isLocal } = device
         const { playlist: { image } } = device
 
-        const hideUi = idle && seekTime == null
         const local = isLocal()
+        const hideUi = local && idle && seekTime == null
 
         return (
             <Fullscreen
@@ -164,11 +170,7 @@ class Player extends Component {
                         <div
                             className="player__pause-cover player__background-cover"
                             style={{ backgroundImage: image ? `url(${image})` : null }}
-                        >
-                            <Typography className="center shadow-border" variant="h4">
-                                {device.getName()}
-                            </Typography>
-                        </div>
+                        ></div>
                     }
                     {error && <Typography className="center shadow-border" variant="h4">{error}</Typography>}
                     {(isLoading && !error) &&

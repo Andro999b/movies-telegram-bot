@@ -45,21 +45,27 @@ class NekomoriProvider extends Provider {
         const files = []
         const uids = new Set()
 
+        const getAuthor = (author) => author ? author : 'Неизвестно'
+
         ret.body
             // eslint-disable-next-line no-prototype-builtins
-            .filter(({ player }) => playersConfig.hasOwnProperty(player) )
-            .sort((a, b) => a.ep - b.ep)
+            .filter(({ player }) => playersConfig.hasOwnProperty(player))
+            .sort((a, b) =>
+                b.kind - a.kind ||
+                getAuthor(a.author).localeCompare(getAuthor(b.author)) ||
+                a.ep - b.ep
+            )
             .forEach(({ id, author, kind, player, link, ep }) => {
                 const name = `Episode ${ep}`
-                const path = `${kindTranslation[kind]}/${author ? author : 'Неизвестно'}/${player}`
+                const path = `${kindTranslation[kind]}/${getAuthor(author)}/${player}`
                 const uid = `${path}/${name}`
 
-                if(!uids.has(uid)) {
+                if (!uids.has(uid)) {
                     uids.add(uid)
                     files.push({
                         id,
                         extractor: { type: playersConfig[player].extractor },
-                        [playersConfig[player].hls ? 'manifestUrl' : 'url'] : link,
+                        [playersConfig[player].hls ? 'manifestUrl' : 'url']: link,
                         name,
                         path
                     })

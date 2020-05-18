@@ -6,7 +6,6 @@ module.exports = {
     entry: path.join(__dirname, 'src', 'index'),
     output: {
         filename: '[name].bundle.js',
-        chunkFilename: '[name].bundle.js',
         path: path.join(__dirname, 'dist')
     },
     module: {
@@ -17,9 +16,9 @@ module.exports = {
                 use: ['babel-loader']
             },
             {
-                test: /\.(jpe?g|png|gif|svg)$/i,
-                use: ['file-loader']
-            },
+				test: /\.(jpe?g|png)(\?[a-z0-9=&.]+)?$/,
+				use: 'base64-inline-loader?limit=1000&name=[name].[ext]'
+			},
             {
                 test: /\.s?css$/,
                 use: [
@@ -35,19 +34,7 @@ module.exports = {
     },
     optimization: {
         splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'vendors',
-                    chunks: 'all'
-                },
-            }
-        }
-    },
-    performance: {
-        maxEntrypointSize: 300000,
-        assetFilter: function (assetFilename) {
-            return !assetFilename.endsWith('.js')
+            chunks: 'all'
         }
     },
     plugins: [
@@ -63,6 +50,7 @@ module.exports = {
         new CopyPlugin([
             'src/index.html',
             { from: '.well-known', to: '.well-known' },
+            { from: path.join('src', 'images', 'help'), to: path.join('images', 'help') }
         ])
     ]
 }

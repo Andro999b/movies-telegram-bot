@@ -13,30 +13,45 @@
             color: #fff;
         }
 
-        .loader {
-            font-size: 32px;
-            font-family: Helvetica, Arial, sans-serif;
-            color: #fff;
-            margin: 0;
+        html, body {
+            height: 100%;
+        }
+
+        #links {
             position: absolute;
-            top: 50%;
+            display: none;
             left: 50%;
+            top: 50%;
             transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: #fff;
+            line-height: 25px;
+        }
+
+        a, a:active, a:hover, a:visited {
+            text-decoration: none;
+            color: #fff;
         }
     </style>
 </head>
 
 <body>
-    <div class="loader">Loading...</div>
+    <div id="links">
+        Фильмы и сериалы: <a href="https://telegram.me/films_search_bot">
+            @films_search_bot
+        </a>
+        <br/>
+        Поиск аниме: <a href="https://telegram.me/anime_tube_bot">
+            @anime_tube_bot
+        </a>
+    </div>
     <script>
         const params = new URLSearchParams(window.location.search)
 
-        const uid = params.get('uid')
-        if(uid) {
-            localStorage.setItem('uid', JSON.stringify(uid))
-            params.delete('uid')
+        if(params.has('provider') && params.has('id')) {
+            location.href = 'watch.html?' + params.toString()
+        } else {
+            document.getElementById("links").style["display"] = "block"
         }
-
-        location.href = 'watch.html?' + params.toString()
     </script>
 </html>

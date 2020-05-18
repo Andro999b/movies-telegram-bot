@@ -32,6 +32,9 @@ html {
     text-align: center;
 }
 
+.no-events {
+    pointer-events: none;
+}
 
 .vmiddle {
     vertical-align: middle;
@@ -156,8 +159,12 @@ html {
     }
 }
 
-.playback-skip__indicator {
+.shadow-icon {
     filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.8));
+}
+
+.playback-skip__indicator {
+    @extend .shadow-icon;
     color: white;
     pointer-events: none;
     position: absolute;
@@ -214,8 +221,19 @@ html {
 
 .player__start-cast-button {
     position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+}
+
+.player__telegram-links {
+    position: absolute;
     top: 10px;
-    right: 10px;
+    left: 10px;
+    
+    a, a:hover, a:active, a:visited {
+        text-decoration: none;
+    }
 }
 
 @media (min-width: 576px) {

@@ -17,7 +17,7 @@ import { inject } from 'mobx-react'
 
 import analytics from '../utils/analytics'
 import store from '../utils/storage'
-
+import localization from '../localization'
 
 @inject(({ notificationStore: { showMessage }}) => ({ showMessage }))
 class Share extends BaseSelector {
@@ -77,7 +77,7 @@ class Share extends BaseSelector {
 
     handleCopy = (url) => {
         copy(decodeURIComponent(url))
-        this.props.showMessage('URL copied!')
+        this.props.showMessage(localization.urlCopied)
     }
 
     renderList() {
@@ -88,7 +88,7 @@ class Share extends BaseSelector {
         return (
             <div className="player__share-content">
                 <Typography>
-                    Share with...
+                    {localization.shareWith}
                 </Typography>
                 <div>
                     <a className="icon-vkontakte"
@@ -140,7 +140,7 @@ class Share extends BaseSelector {
                                     color="primary"
                                 />
                             }
-                            label="Current playlist position"
+                            label={localization.curPlaylistPos}
                         />
                         <FormControlLabel
                             control={
@@ -150,7 +150,7 @@ class Share extends BaseSelector {
                                     color="primary"
                                 />
                             }
-                            label="Current time"
+                            label={localization.curTimePos}
                         />
                     </FormGroup>
                 </div>

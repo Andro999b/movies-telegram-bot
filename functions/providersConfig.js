@@ -11,13 +11,20 @@ module.exports = {
         'baseUrl': 'https://api.nekomori.ch',
         'postersCDNUrl': 'https://cdn.nekomori.ch/art/poster',
         'playersConfig': {
-            'Sibnet': { 'extractor': 'sibnet', 'hls': true },
-            'AniMedia': { 'extractor': 'animedia', 'hls': true }
+            'Sibnet': { 'extractor': 'sibnetmp4', 'hls': false },
+            // 'AniMedia': { 'extractor': 'animedia', 'hls': true },
+            // 'Stormo': { 'extractor': 'stormo', 'hls': false },
+            // 'Stormo.TV': { 'extractor': 'stormo', 'hls': false },
+            'Kodik': { 'extractor': 'anigit', 'hls': false }
         }
     },
     'yummy': {
         'baseUrl': 'https://yummyanime.club',
         'searchUrl': 'https://yummyanime.club/search'
+    },
+    'kinovod': {
+        'baseUrl': 'http://kinovod129.cc',
+        'searchUrl': 'http://kinovod129.cc/search'
     },
     'animevost': {
         'baseUrl': 'https://animevost.org',
@@ -55,6 +62,6 @@ module.exports = {
     },
     '7serealov': {
         'baseUrl': 'http://7serialov.net',
-        'searchUrl': 'http://7serialov.net/search/'
+        'searchUrl': 'https://7serialov.net'
     }
 }

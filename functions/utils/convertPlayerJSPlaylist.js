@@ -1,20 +1,18 @@
-const getBestPlayerJSQuality = require('./getBestPlayerJSQuality')
+const getBestPlayerJSQuality = require('./parsePlayerJSFile')
 
 function extractFile(file, linksExtractor) {
-    const urls = [].concat(linksExtractor(file))
-    const mainUrl = urls.pop()
-    if (mainUrl.endsWith('m3u8')) {
-        return {
-            manifestUrl: mainUrl
-        }
-    } else {
-        
-        const item = {
-            url: mainUrl
-        }
+    const qualityUrls = linksExtractor(file)
+    
+    const urls = qualityUrls.map((it) => it.url)
+    const mainUrl = urls[0]
 
-        if (urls.length > 0) {
-            item.alternativeUrls = urls
+    if (mainUrl.endsWith('m3u8')) {
+        return { manifestUrl: mainUrl }
+    } else {
+        const item = { url: mainUrl }
+
+        if (qualityUrls.length > 0) {
+            item.qualitiesUrls = qualityUrls
         }
 
         return item
@@ -33,12 +31,12 @@ function convertFolder(prefix, items, linksExtractor) {
 
             return [item]
         } else {
-            const { title, comment, folder } = it
+            const { title, comment, folder, playlist } = it
             const path = title || comment || `Season ${index + 1}`
  
             return convertFolder(
                 prefix ? prefix + '/' + path : path, 
-                folder, 
+                folder || playlist, 
                 linksExtractor
             )
         }
@@ -62,13 +60,12 @@ module.exports = function (playlist, linksExtractor = getBestPlayerJSQuality) {
     if(typeof playlist === 'string') {
         if (playlist.startsWith('#0')) {
             playlist = decode0(playlist)
-            if(playlist.startsWith('[{')) {
-                return convertFolder(null, JSON.parse(playlist), linksExtractor)
-            } else {
-                return [extractFile(playlist, linksExtractor)]
-            }
         }
-        return [extractFile(playlist, linksExtractor)]
+        if(playlist.startsWith('[{')) {
+            return convertFolder(null, JSON.parse(playlist), linksExtractor)
+        } else {
+            return [extractFile(playlist, linksExtractor)]
+        }
     } else {
         return convertFolder(null, playlist, linksExtractor)
     }

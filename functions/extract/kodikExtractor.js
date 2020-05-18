@@ -4,11 +4,11 @@ const makeResponse = require('../utils/makeResponse')
 const hash2 = 'OErmnYyYA4wHwOP'
 
 module.exports = async (params) => {
-    const { url, referer, hls } = params
+    const { url, referer, hls, linksApi } = params
 
     const res = await superagent
         .get(url.startsWith('//') ? 'https:' + url : url)
-        .set({ 'Referer': referer })
+        .set({ 'Referer': referer || url })
         .timeout(5000)
 
     const matches = res.text.match(/iframe\.src = "([^"]+)"/)
@@ -36,7 +36,7 @@ module.exports = async (params) => {
     }
 
     const videoInfoRes = await superagent
-        .post('https://kodik.info/video-links')
+        .post(linksApi || 'https://kodik.info/video-links')
         .type('form')
         .set({ 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0' })
         .send(videoInfoParams)

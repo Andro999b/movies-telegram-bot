@@ -2,7 +2,8 @@ service: movies-telegram-bot
 
 custom:
   tableName: 'infoTable'
-  playerUrl: 'https://movies-player.web.app/'
+  playerUrl: 'http://movie-player.surge.sh/watch.html'
+  helpImages: 'https://movie-player.surge.sh/images/help/1.png,https://movie-player.surge.sh/images/help/2.png,https://movie-player.surge.sh/images/help/3.png'
 
 provider:
   name: aws
@@ -60,6 +61,7 @@ functions:
                 - resultId: true 
     environment:
       TABLE_NAME: ${self:custom.tableName}
+      MONGODB_URI: mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test
 
   extract:
     handler: handlers/extract.handler
@@ -81,8 +83,8 @@ functions:
       TOKEN: ${ssm:bot_ru_TOKEN}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDER: 'exfs,videocdn,7serealov,seasonvar,kinogo'
-      INLINE_PROVIDERS: 'exfs,videocdn,7serealov,seasonvar,kinogo'
+      HELP_IMAGES: ${self:custom.helpImages}
+      PROVIDERS: 'videocdn,kinogo,kinovod,seasonvar,7serealov'
 
   animebot:
     handler: handlers/bot.handler
@@ -97,8 +99,8 @@ functions:
       TOKEN: ${ssm:bot_anime_TOKEN}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDER: 'animevost,nekomori'
-      INLINE_PROVIDERS: 'animevost,nekomori'
+      HELP_IMAGES: ${self:custom.helpImages}
+      PROVIDERS: 'animevost,nekomori'
 
 resources:
   Resources:
@@ -118,3 +120,7 @@ resources:
         TimeToLiveSpecification:
           AttributeName: ttl
           Enabled: TRUE
+
+package:
+  exclude:
+   - test/**

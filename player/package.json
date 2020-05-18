@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev-server.config.js",
     "watch": "webpack --config webpack.watch.js",
-    "sync-files": "copy-and-watch --watch dist/*.{js,png,ico} dist/mobile.html C:\\Users\\User\\StudioProjects\\UtilmateDLNAPlayer\\app\\src\\main\\assets",
+    "sync-files": "copy-and-watch --watch dist/*.{js,png,ico} dist/mobile.html C:\\Users\\Andrii\\AndroidStudioProjects\\CastPlayer\\app\\src\\main\\assets",
     "build": "rm -rf dist/* && webpack --mode production"
   },
   "keywords": [],
@@ -42,6 +42,7 @@
   "dependencies": {
     "@material-ui/core": "4.8.3",
     "@material-ui/icons": "^4.5.1",
+    "base64-inline-loader": "^1.1.1",
     "clipboard-copy": "^3.1.0",
     "fscreen": "^1.0.2",
     "hls.js": "^0.13.1",
@@ -55,6 +56,7 @@
     "react-dom": "^16.12.0",
     "react-full-screen": "^0.2.4",
     "react-jss": "^10.0.3",
+    "react-localization": "^1.0.15",
     "react-resize-detector": "^4.2.1",
     "store": "^2.0.12",
     "superagent": "^5.2.1",

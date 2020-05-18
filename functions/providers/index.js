@@ -2,6 +2,7 @@ const providers = [
     new (require('./SeasonvarProvider'))(),
     new (require('./SevenSerialsProvider'))(),
     new (require('./KinogoProvider'))(),
+    new (require('./KinovodProvider'))(),
     new (require('./AnimeVostProvider'))(),
     new (require('./EXFSProvider'))(),
     new (require('./Kino4UaProvider'))(),

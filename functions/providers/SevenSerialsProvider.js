@@ -27,10 +27,10 @@ class SevenSerailsProvider extends Provider {
                 },
                 files: {
                     transform: async (_, $root) => {
-                        const parts = $root.html().match(/(https:\/\/api[0-9]+[a-z\-.]+\/embed\/movie\/[0-9]+)/)
-
+                        const parts = $root.html().match(/(https:\/\/api[0-9]+[a-z\-\.]+\/embed\/movie\/[0-9]+)/g)
+                        
                         if(parts && parts.length > 1) {
-                            const files = await deliverembed(parts[1])
+                            const files = await deliverembed(parts[1], this.config.baseUrl)
 
                             return files.map((file) => {
                                 const parts = file.manifestUrl.split('?video=')
@@ -55,16 +55,6 @@ class SevenSerailsProvider extends Provider {
 
     getSearchUrl(q) {
         return `${this.config.searchUrl}?q=${encodeURIComponent(q)}`
-    }
-
-    async _postProcessResultDetails(details) {
-        details.files = details.files || []
-
-        if (details.files.length == 1) {
-            details.files[0].name = details.title
-        }
-
-        return details
     }
 }
 

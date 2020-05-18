@@ -90,16 +90,6 @@ class YummyanimeProvider extends Provider {
     getSearchUrl(q) {
         return `${this.config.searchUrl}?word=${encodeURIComponent(q)}`
     }
-
-    async _postProcessResultDetails(details) {
-        details.files = details.files || []
-
-        if (details.files.length == 1) {
-            details.files[0].name = details.title
-        }
-
-        return details
-    }
 }
 
 module.exports = YummyanimeProvider
