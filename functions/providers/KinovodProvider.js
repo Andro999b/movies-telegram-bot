@@ -22,7 +22,7 @@ class KinovodProvider extends Provider {
             },
             detailsScope: '.content',
             detailsSelectors: {
-                title: '#movie>h1',
+                title: '#movie>div>h1',
                 image: {
                     selector: '.poster img',
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
