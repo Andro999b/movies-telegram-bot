@@ -12,13 +12,10 @@ import {
     Typography,
     AppBar
 } from '@material-ui/core'
-import {
-    NavigateBeforeRounded as BackIcon,
-    GetAppRounded as DownloadIcon
-} from '@material-ui/icons'
+import { NavigateBeforeRounded as BackIcon } from '@material-ui/icons'
+import DownloadSelector from './DownloadSelector'
 import { observer } from 'mobx-react'
 import memoize from 'memoize-one'
-import analytics from '../utils/analytics'
 
 @observer
 class PlayerPlayList extends Component {
@@ -53,23 +50,6 @@ class PlayerPlayList extends Component {
             onFileSelected(files.findIndex(({ id }) => id == file.id))
         }
     }
-
-    handleTrackDownload = (file) => {
-        const { device: { playlist: { title } } } = this.props
-
-        analytics('downloadFile', 'downloadFile', `${title} - ${file.name}`)
-    }
-
-    handleMobileDownload = (downloadUrl, file) => {
-        const { device: { playlist: { title } } } = this.props
-
-        const name = [file.path, file.name].filter((it) => it).join(' - ')
-
-        downloadUrl = downloadUrl.startsWith('//') ? 'https:' + downloadUrl: downloadUrl
-        
-        mobileApp.downloadFile(downloadUrl, title, name)
-    }
-
 
     getTreeNode = (root, path) => {
         let node = root
@@ -115,12 +95,12 @@ class PlayerPlayList extends Component {
         }
 
         files.forEach((file) => {
-            if(file.path) {
+            if (file.path) {
                 const path = file.path.split('/')
                 const node = getNode(path)
                 node.files.push(file)
             } else {
-                root.files.push(file) 
+                root.files.push(file)
             }
         })
 
@@ -128,30 +108,12 @@ class PlayerPlayList extends Component {
     })
 
     renderDownload(file) {
-        if (file.url) {
-            const downloadUrl = file.extractor ? null : file.url
-            if (downloadUrl)
-                return (
-                    <ListItemSecondaryAction>
-                        {window.mobileApp &&
-                            <IconButton onClick={() => this.handleMobileDownload(downloadUrl, file)}>
-                                <DownloadIcon />
-                            </IconButton>
-                        }
-                        {!window.mobileApp &&
-                            <IconButton
-                                component='a'
-                                href={downloadUrl}
-                                download={downloadUrl}
-                                target="_blank"
-                                onClick={() => this.handleTrackDownload(file)}
-                            >
-                                <DownloadIcon />
-                            </IconButton>
-                        }
-                    </ListItemSecondaryAction>
-                )
-        }
+        const { device: { title } } = this.props
+        return file.url ? (
+            <ListItemSecondaryAction>
+                <DownloadSelector file={file} title={title} />
+            </ListItemSecondaryAction>
+        ) : null
     }
 
     render() {

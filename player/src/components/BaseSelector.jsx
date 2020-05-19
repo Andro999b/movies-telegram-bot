@@ -11,8 +11,8 @@ class BaseSelector extends Component {
         this.state = { anchorEl: null }
     }
 
-    handleClick =(event) => {
-        const target = event.currentTarget
+    handleClick = (e) => {
+        const target = e.currentTarget
         this.setState(({ anchorEl }) => ({
             anchorEl: anchorEl ? null : target
         }))
@@ -35,7 +35,7 @@ class BaseSelector extends Component {
                     anchorEl={anchorEl} 
                     open={Boolean(anchorEl)} 
                     onClose={this.handleClose}
-                    disablePortal style={{ zIndex: 9999 }}
+                    style={{ zIndex: 9999 }}
                 >
                     <Paper>
                         {this.renderList()}

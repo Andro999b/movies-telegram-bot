@@ -157,8 +157,8 @@ class VideoScrean extends BaseScrean {
 
         if (quality) {
             const urls = qualitiesUrls
-                .filter(it => it.quality == quality)
-                .map(it => it.url)
+                .filter((it) => it.quality == quality)
+                .map((it) => it.url)
                 
             targetUrl = urls.shift()
 

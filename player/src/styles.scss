@@ -8,12 +8,10 @@ html {
     min-height: 100%;
 }
 
-.MuiButtonBase-root {
-    a {
-        color: rgba(0, 0, 0, 0.87);
-        text-decoration: none;
-    }
+.MuiButtonBase-root a {
+    text-decoration: none;
 }
+
 
 .screan-content {
     position: fixed;
