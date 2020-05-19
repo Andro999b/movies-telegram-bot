@@ -16,9 +16,9 @@ module.exports = {
                 use: ['babel-loader']
             },
             {
-				test: /\.(jpe?g|png)(\?[a-z0-9=&.]+)?$/,
-				use: 'base64-inline-loader?limit=1000&name=[name].[ext]'
-			},
+                test: /\.(jpe?g|png)(\?[a-z0-9=&.]+)?$/,
+                use: 'base64-inline-loader?limit=1000&name=[name].[ext]'
+            },
             {
                 test: /\.s?css$/,
                 use: [
@@ -47,10 +47,12 @@ module.exports = {
             filename: 'mobile.html',
             template: path.join(__dirname, 'src', 'mobile.html')
         }),
-        new CopyPlugin([
-            'src/index.html',
-            { from: '.well-known', to: '.well-known' },
-            { from: path.join('src', 'images', 'help'), to: path.join('images', 'help') }
-        ])
+        new CopyPlugin({
+            patterns: [
+                'src/index.html',
+                { from: '.well-known', to: '.well-known' },
+                { from: path.join('src', 'images', 'help'), to: path.join('images', 'help') }
+            ]
+        })
     ]
 }

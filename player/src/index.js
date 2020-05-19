@@ -1,3 +1,5 @@
+import 'mobx-react-lite/batchingForReactDom'
+
 import loadPlaylist from './loadPlaylist.js'
 import restoreMobileApp from './restoreMobileApp.js'
 
