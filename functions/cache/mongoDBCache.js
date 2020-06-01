@@ -67,7 +67,9 @@ class MongoDBCache extends Cache {
             }
         } else {
             result = await compute(keys)
-            await this.putToCache(id, result)
+            if (result.files && result.files.length > 0) {
+                await this.putToCache(id, result)
+            }
         }
 
         return result
