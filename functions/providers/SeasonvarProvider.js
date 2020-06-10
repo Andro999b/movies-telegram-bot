@@ -138,7 +138,10 @@ class SeasonvarProvider extends DirectMediaProvider {
             a = ''
         }
 
-        return parsePlayerJSFile(a)
+        return [{
+            url: a,
+            quality: 0
+        }]
     }
 
     getSearchUrl(q) {
