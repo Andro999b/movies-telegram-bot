@@ -38,13 +38,13 @@ class StartScrean extends Component {
                 </div>}
                 <div className="player__telegram-links shadow-border">
                     <Typography>
-                        <a href="https://telegram.me/films_search_bot">
-                            <span className="icon-telegram vmiddle"/>@films_search_bot 
-                        </a> - {localization.moviesBotTip}
-                        <br/>
                         <a href="https://telegram.me/anime_tube_bot">
                             <span className="icon-telegram vmiddle"/>@anime_tube_bot
                         </a> - {localization.animeBotTip}
+                        <br/>
+                        <a href="https://telegram.me/films_search_bot">
+                            <span className="icon-telegram vmiddle"/>@films_search_bot 
+                        </a> - {localization.moviesBotTip}                        
                     </Typography>
                 </div>
             </div>

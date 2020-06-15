@@ -3,7 +3,7 @@ const urlencode = require('urlencode')
 const $ = require('cheerio')
 const superagent = require('superagent')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
-const parsePlayerJSFile = require('../utils/parsePlayerJSFile')
+const { base64encode, base64decode } = require('../utils/base64')
 
 class SeasonvarProvider extends DirectMediaProvider {
     constructor() {
@@ -113,27 +113,25 @@ class SeasonvarProvider extends DirectMediaProvider {
 
         let a = x.substr(2)
 
-        function b1(str) {
-            const binary = encodeURIComponent(str)
-                .replace(/%([0-9A-F]{2})/g, (_, p1)  => String.fromCharCode('0x' + p1))
+        // function b1(str) {
+        //     const binary = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1)  => String.fromCharCode('0x' + p1))
+        //     return Buffer.from(binary, 'binary').toString('base64')
+        // }
 
-            return Buffer.from(binary, 'binary').toString('base64')
-        }
+        // function b2(str) {
+        //     const encodedUrl = Buffer.from(str, 'base64')
+        //         .toString('binary')
+        //         .split('')
+        //         .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        //         .join('')
 
-        function b2(str) {
-            const encodedUrl = Buffer.from(str, 'base64')
-                .toString('binary')
-                .split('')
-                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-                .join('')
+        //     return decodeURIComponent(encodedUrl)
+        // }
 
-            return decodeURIComponent(encodedUrl)
-        }
-
-        a = a.replace('//' + b1(encryptKey), '')
+        a = a.replace('//' + base64encode(encryptKey), '')
 
         try {
-            a = b2(a)
+            a = base64decode(a)
         } catch (e) {
             a = ''
         }

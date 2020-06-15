@@ -6,20 +6,46 @@ import playerStore from './store/player-store'
 import logger from './utils/logger'
 import analytics from './utils/analytics'
 import store from './utils/storage'
+import { base64UrlEncode } from './utils/base64'
 import localization from './localization'
 
 const urlParams = new URLSearchParams(window.location.search)
 const provider = urlParams.get('provider') || store.get('provider')
 const id = urlParams.get('id') || store.get('id')
+const query = urlParams.get('query') || store.get('query')
 
+function getAlternativeUrl() {
+    let bot
+    switch(provider) {
+        case "animevost": 
+        case "nekomori": 
+            bot = "anime_tube_bot"
+            break 
+        default:
+            bot = "films_search_bot"
+    }
+
+    return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`
+}
 
 function renderError(message, err) {
     message = message || localization.cantLoadPLaylist
 
-    document.querySelector('#app .loader').textContent = message
+    if(query) {
+        document.querySelector('#app .loader').innerHTML = localization.formatString(
+            localization.searchAlternatives, 
+            message,
+            getAlternativeUrl()
+        )
+        document.getElementById("altenativeLink").addEventListener('click', () => {
+            analytics('load', 'alternativeLink', query)
+        })
+    } else {
+        document.querySelector('#app .loader').textContent = message
+    }
+    
 
     analytics('load', 'error', message)
-
     logger.error(message, {
         provider,
         id,
@@ -29,8 +55,10 @@ function renderError(message, err) {
 }
 
 function renderVideoNotReleased(trailerUrl) {
-    document.querySelector('#app .loader').innerHTML = 
-        localization.formatString(localization.videoNotReleased, trailerUrl)
+    document.querySelector('#app .loader').innerHTML = localization.formatString(
+        localization.videoNotReleased, 
+        trailerUrl
+    )
 }
 
 
@@ -43,6 +71,7 @@ export default function () {
     if (provider && id) {
         store.set('provider', provider)
         store.set('id', id)
+        store.set('query', query)
 
         fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}`)
             .then((response) => response.json())

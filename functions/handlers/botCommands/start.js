@@ -1,13 +1,29 @@
 const Extra = require('telegraf/extra')
+const doSearch = require('./functions/doSearch')
+const { base64UrlDecode } = require('../../utils/base64')
 
 module.exports = (bot, providers, botType) => {
-    bot.command(['start', 'help'], async ({ i18n, reply, mixpanel, message: { text } }) => {
-        if(text.endsWith('start')) {
+    bot.hears(/^\/(start|help)(.*)$/, async (ctx) => {
+        const { i18n, reply, mixpanel, match } = ctx
+        const command = match[1]
+
+        console.log(match);
+
+        if (command == 'start') {
+            let query = match[2]
+
+            if(query) {
+                query = query.trim()
+                if(query) {
+                    return doSearch(ctx, providers, botType, base64UrlDecode(query))
+                } 
+            }    
+
             mixpanel.track('register', { bot: botType })
             mixpanel.people.set({ $created: new Date().toISOString() })
         }
-    
-        await reply(
+
+        return reply(
             i18n.t(
                 'start',
                 {

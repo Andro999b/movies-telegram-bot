@@ -9,6 +9,6 @@ module.exports = (bot, botType) => {
             type: 'photo',
             media: url
         })))
-        await answerCbQuery()
+        return answerCbQuery()
     })
 }
