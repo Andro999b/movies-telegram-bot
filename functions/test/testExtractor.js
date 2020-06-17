@@ -1,9 +1,9 @@
 const extract = require('../extract')
 
-const url = decodeURIComponent('https://www.stormo.online/embed/593318/')
+const url = decodeURIComponent('https://play.roomfish.ru/2147406642')
 console.log(url)
 
 extract({
     url,
-    type: 'stormo'
+    type: 'animevost'
 }).then(console.log) // eslint-disable-line 

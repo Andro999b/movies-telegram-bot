@@ -21,6 +21,7 @@ class Crawler {
                 .buffer(true)
                 .charset()
                 .timeout(this._timeoutMs)
+                .disableTLSCerts()
                 .set(this._headers)
         })
         this._url = url

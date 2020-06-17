@@ -7,6 +7,7 @@ module.exports = (patterns) => async (params) => {
     const siteRes = await superagent
         .get(url)
         .timeout(5000)
+        .disableTLSCerts()
 
     for(let pattern of patterns) {
         let expression
