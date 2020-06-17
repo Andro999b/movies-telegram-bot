@@ -32,6 +32,7 @@ class BaseSelector extends Component {
             <Fragment>
                 {this.renderButton()}
                 <Popover 
+                    container={document.getElementById('player_root')}
                     anchorEl={anchorEl} 
                     open={Boolean(anchorEl)} 
                     onClose={this.handleClose}

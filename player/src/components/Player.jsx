@@ -163,7 +163,7 @@ class Player extends Component {
                 enabled={fullScreen && local}
                 onChange={this.handleSetFullScreen}
             >
-                <div className={hideUi ? 'idle' : ''}>
+                <div id="player_root" className={hideUi ? 'idle' : ''}>
                     {!hideUi && <PlayerTitle title={playerStore.getPlayerTitle()} />}
                     {local && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
                     {(!local && !error) &&
