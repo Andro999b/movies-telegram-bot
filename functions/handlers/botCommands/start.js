@@ -7,7 +7,8 @@ module.exports = (bot, providers, botType) => {
         const { i18n, reply, mixpanel, match } = ctx
         const command = match[1]
 
-        console.log(match);
+        // eslint-disable-next-line no-console
+        console.log(match)
 
         if (command == 'start') {
             let query = match[2]
@@ -15,6 +16,9 @@ module.exports = (bot, providers, botType) => {
             if(query) {
                 query = query.trim()
                 if(query) {
+                    mixpanel.track('alternativeLinks', { bot: botType })
+                    mixpanel.people.set({ $created: new Date().toISOString() })
+
                     return doSearch(ctx, providers, botType, base64UrlDecode(query))
                 } 
             }    
