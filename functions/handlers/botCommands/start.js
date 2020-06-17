@@ -13,18 +13,18 @@ module.exports = (bot, providers, botType) => {
         if (command == 'start') {
             let query = match[2]
 
+            mixpanel.people.set({ $created: new Date().toISOString() })
+
             if(query) {
                 query = query.trim()
                 if(query) {
                     mixpanel.track('alternativeLinks', { bot: botType })
-                    mixpanel.people.set({ $created: new Date().toISOString() })
-
+                    
                     return doSearch(ctx, providers, botType, base64UrlDecode(query))
                 } 
             }    
 
             mixpanel.track('register', { bot: botType })
-            mixpanel.people.set({ $created: new Date().toISOString() })
         }
 
         return reply(
