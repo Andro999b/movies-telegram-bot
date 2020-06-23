@@ -26,7 +26,10 @@ function getResultsKeyboad(providersResults, query, i18n) {
                 }
             })
             .reduce((acc, items) => acc.concat(items), [])
-            .concat([Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch')]),
+            .concat([
+                Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
+                Markup.callbackButton(i18n.t('repeat_search'), query)
+            ]),
         { columns: 1 }
     )
 }
@@ -70,7 +73,10 @@ module.exports = async ({ i18n, reply, replyWithChatAction, mixpanel }, defaultP
         return await reply(
             i18n.t('no_results', { query }),
             Markup.inlineKeyboard(
-                [Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch')],
+                [
+                    Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
+                    Markup.callbackButton(i18n.t('repeat_search'), query)
+                ],
                 { columns: 1 }
             ).extra()
         )
@@ -83,10 +89,11 @@ module.exports = async ({ i18n, reply, replyWithChatAction, mixpanel }, defaultP
         await reply(
             i18n.t('provider_results', { query, provider }),
             Markup.inlineKeyboard(
-                createResultButtons(results)
-                    .concat(
-                        [Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch')]
-                    ),
+                createResultButtons(results, query)
+                    .concat([
+                        Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
+                        Markup.callbackButton(i18n.t('repeat_search'), query)
+                    ]),
                 { columns: 1 }
             ).extra()
         )

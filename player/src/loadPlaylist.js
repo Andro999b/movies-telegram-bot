@@ -12,17 +12,17 @@ import localization from './localization'
 const urlParams = new URLSearchParams(window.location.search)
 const provider = urlParams.get('provider') || store.get('provider')
 const id = urlParams.get('id') || store.get('id')
-const query = urlParams.get('query') || store.get('query')
+const query = urlParams.get('query')
 
 function getAlternativeUrl() {
     let bot
     switch(provider) {
-        case "animevost": 
-        case "nekomori": 
-            bot = "anime_tube_bot"
+        case 'animevost': 
+        case 'nekomori': 
+            bot = 'anime_tube_bot'
             break 
         default:
-            bot = "films_search_bot"
+            bot = 'films_search_bot'
     }
 
     return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`
@@ -37,7 +37,7 @@ function renderError(message, err) {
             message,
             getAlternativeUrl()
         )
-        document.getElementById("altenativeLink").addEventListener('click', () => {
+        document.getElementById('altenativeLink').addEventListener('click', () => {
             analytics('load', 'alternativeLink', query)
         })
     } else {
@@ -71,7 +71,6 @@ export default function () {
     if (provider && id) {
         store.set('provider', provider)
         store.set('id', id)
-        store.set('query', query)
 
         fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}`)
             .then((response) => response.json())
