@@ -33,8 +33,8 @@ class KinovodProvider extends Provider {
                         const targetScripts = $el
                             .filter(':not([src])')
                             .toArray()
-                            .map(el => el.children[0].data)
-                            .filter(text => text.startsWith('\nvar MOVIE_ID'))
+                            .map((el) => el.children[0].data)
+                            .filter((text) => text.startsWith('\nvar MOVIE_ID'))
 
                         if(targetScripts.length != 1)
                             return []
@@ -53,7 +53,7 @@ class KinovodProvider extends Provider {
                             res = await superagent
                                 .get(url)
                                 .timeout(this.config.timeout)
-                        } catch {
+                        } catch(e) {
                             return []
                         }
 
@@ -66,7 +66,7 @@ class KinovodProvider extends Provider {
                     }
                 },
                 trailer: {
-                    selector: "iframe.embed-responsive-item",
+                    selector: 'iframe.embed-responsive-item',
                     transform: ($el) => {
                         const src = $el.toArray()
                             .map((el) => $(el).attr('src'))

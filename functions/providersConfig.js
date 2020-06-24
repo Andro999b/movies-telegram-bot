@@ -18,6 +18,10 @@ module.exports = {
             'Kodik': { 'extractor': 'anigit', 'hls': false }
         }
     },
+    'animego': {
+        'baseUrl': 'https://animego.org',
+        'searchUrl': 'https://animego.org/search/anime'
+    },
     'yummy': {
         'baseUrl': 'https://yummyanime.club',
         'searchUrl': 'https://yummyanime.club/search'
@@ -47,19 +51,6 @@ module.exports = {
         'baseUrl': 'http://ex-fs.net',
         'searchUrl': 'http://ex-fs.net'
     },     
-    'kinoukr': {
-        'baseUrl': 'https://kinoukr.com',
-        'searchUrl': 'https://kinoukr.com'
-    },
-    'kino4ua': {
-        'baseUrl': 'https://kino4ua.net',
-        'searchUrl': 'https://kino4ua.net'
-    },
-    'uaserials': {
-        'password': '297796CCB81D2551',
-        'baseUrl': 'https://uaserials.pro',
-        'searchUrl': 'https://uaserials.pro'
-    },
     '7serealov': {
         'baseUrl': 'http://7serialov.net',
         'searchUrl': 'https://7serialov.net'

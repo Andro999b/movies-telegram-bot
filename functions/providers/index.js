@@ -4,13 +4,11 @@ const providers = [
     new (require('./KinogoProvider'))(),
     new (require('./KinovodProvider'))(),
     new (require('./AnimeVostProvider'))(),
+    // new (require('./AnimeGOProvider'))(),
+    new (require('./YummyanimeProvider'))(),
     new (require('./EXFSProvider'))(),
-    new (require('./Kino4UaProvider'))(),
     new (require('./VideoCDNProvider'))(),
-    new (require('./KinoUkrProvider'))(),
-    new (require('./UASerialsProvider'))(),
-    new (require('./NekomoriProvider'))(),
-    new (require('./YummyanimeProvider'))()
+    new (require('./NekomoriProvider'))()
 ]
 
 module.exports = {

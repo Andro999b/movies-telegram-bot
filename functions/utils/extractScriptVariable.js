@@ -9,7 +9,7 @@ function extractString(script, varName) {
 }
 
 function extractObject(script, varName) {
-    const parts = script.match(new RegExp(`${varName} = (\{[^\}]+\})`))
+    const parts = script.match(new RegExp(`${varName} = ({[^}]+})`))
 
     if (parts && parts.length > 1) {
         return JSON.parse(parts[1].replace(',}', '}'))
