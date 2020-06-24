@@ -100,7 +100,7 @@ functions:
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
       HELP_IMAGES: ${self:custom.helpImages}
-      PROVIDERS: 'animevost,nekomori'
+      PROVIDERS: 'yummy,animevost,nekomori'
 
 resources:
   Resources:

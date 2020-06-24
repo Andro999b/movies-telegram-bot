@@ -1,8 +1,8 @@
-const Provider = require('./Provider')
+const DataLifeProvider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
 const deliverembed = require('../utils/deliverembed')
 
-class SevenSerailsProvider extends Provider {
+class SevenSerailsProvider extends DataLifeProvider {
     constructor() {
         super('7serealov', {
             scope: '.eTitle',
@@ -14,7 +14,7 @@ class SevenSerailsProvider extends Provider {
                         this._absoluteUrl($el.nextAll('.bl2')
                             .first()
                             .find('img')
-                            .attr('src')
+                            .attr('data-src')
                         )
                 }
             },
@@ -27,7 +27,7 @@ class SevenSerailsProvider extends Provider {
                 },
                 files: {
                     transform: async (_, $root) => {
-                        const parts = $root.html().match(/(https:\/\/api[0-9]+[a-z\-\.]+\/embed\/movie\/[0-9]+)/g)
+                        const parts = $root.html().match(/(https:\/\/api[0-9]+[a-z\-.]+\/embed\/movie\/[0-9]+)/g)
                         
                         if(parts && parts.length > 1) {
                             const files = await deliverembed(parts[1], this.config.baseUrl)
@@ -51,10 +51,6 @@ class SevenSerailsProvider extends Provider {
 
     getInfoUrl(resultId) {
         return decodeURIComponent(resultId)
-    }
-
-    getSearchUrl(q) {
-        return `${this.config.searchUrl}?q=${encodeURIComponent(q)}`
     }
 }
 
