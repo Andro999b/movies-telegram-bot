@@ -11,20 +11,17 @@ module.exports = {
         'baseUrl': 'https://api.nekomori.ch',
         'postersCDNUrl': 'https://cdn.nekomori.ch/art/poster',
         'playersConfig': {
-            'Sibnet': { 'extractor': 'sibnetmp4', 'hls': false },
-            // 'AniMedia': { 'extractor': 'animedia', 'hls': true },
-            // 'Stormo': { 'extractor': 'stormo', 'hls': false },
-            // 'Stormo.TV': { 'extractor': 'stormo', 'hls': false },
-            'Kodik': { 'extractor': 'anigit', 'hls': false }
+            'Sibnet': { 'extractor': 'sibnetmp4' },
+            'Kodik': { 'extractor': 'anigit' }
         }
     },
-    'animego': {
-        'baseUrl': 'https://animego.org',
-        'searchUrl': 'https://animego.org/search/anime'
+    'anidub': {
+        'baseUrl': 'https://online.anidub.com/',
+        'baseUrl': 'https://online.anidub.com/index.php?do=search',
     },
-    'yummy': {
-        'baseUrl': 'https://yummyanime.club',
-        'searchUrl': 'https://yummyanime.club/search'
+    'animedia': {
+        'baseUrl': 'https://online.animedia.pro',
+        'searchUrl': 'https://online.animedia.pro//ajax/search_result_search_page_2/P0'
     },
     'kinovod': {
         'baseUrl': 'http://kinovod129.cc',

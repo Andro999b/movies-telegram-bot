@@ -42,7 +42,7 @@ class NekomoriProvider extends Provider {
             1: 'Оригинал',
         }
 
-        const files = []
+        const filesByKey = {}
         const uids = new Set()
 
         const getAuthor = (author) => author ? author : 'Неизвестно'
@@ -50,32 +50,39 @@ class NekomoriProvider extends Provider {
         ret.body
             // eslint-disable-next-line no-prototype-builtins
             .filter(({ player }) => playersConfig.hasOwnProperty(player))
-            .sort((a, b) =>
-                b.kind - a.kind ||
-                getAuthor(a.author).localeCompare(getAuthor(b.author)) ||
-                a.ep - b.ep
-            )
-            .forEach(({ id, author, kind, player, link, ep }) => {
+            .forEach(({ author, kind, player, link, ep }) => {
                 const name = `Episode ${ep}`
-                const path = `${kindTranslation[kind]}/${getAuthor(author)}/${player}`
-                const uid = `${path}/${name}`
+                const audio = `${kindTranslation[kind]} - ${getAuthor(author)} - ${player}`
 
-                if (!uids.has(uid)) {
-                    uids.add(uid)
-                    files.push({
-                        id,
-                        extractor: { type: playersConfig[player].extractor },
-                        [playersConfig[player].hls ? 'manifestUrl' : 'url']: link,
-                        name,
-                        path
-                    })
+                const uid = `${audio}/${name}`
+                if (uids.has(uid)) return
+                uids.add(uid)
+
+                const file = { 
+                    id: ep,
+                    name, 
+                    urls: [{ 
+                        url: link,
+                        audio,
+                        extractor: { type: playersConfig[player].extractor }
+                    }] 
+                }
+
+                if (filesByKey[name]) {
+                    const currentFile = filesByKey[name]
+                    const newUrls = currentFile.urls.concat(
+                        file.urls.map((u) => ({...u, audio}))
+                    )
+                    filesByKey[name] = { ...currentFile, urls: newUrls }
+                } else {
+                    filesByKey[name] = file
                 }
             })
 
         return {
             title,
             image: `${postersCDNUrl}/${artId}.jpg`,
-            files
+            files: Object.values(filesByKey).sort((a, b) => a.id - b.id)
         }
     }
 }

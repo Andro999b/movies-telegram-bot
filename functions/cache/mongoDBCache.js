@@ -19,9 +19,9 @@ async function connectToDatabase() {
 
 class MongoDBCache extends Cache {
 
-    constructor(db) {
+    constructor(name, db) {
         super()
-        this.collection = db.collection(COLLECTION_NAME)
+        this.collection = db.collection(`${COLLECTION_NAME}-${name}`)
     }
 
     async putToCache(id, result) {
@@ -38,7 +38,7 @@ class MongoDBCache extends Cache {
         await this.collection.updateOne({ _id: id }, { $set: { expired } })
     }
 
-    async getOrCompute(keys, compute) {
+    async getOrCompute(keys, compute, isEmpty = () => false) {
         const id = keys.join(':')
 
         let result = {}
@@ -52,7 +52,7 @@ class MongoDBCache extends Cache {
                 try {
                     result = await compute(keys)
 
-                    if (result.files && result.files.length > 0) { // if results unavaliable taking from cache
+                    if (!isEmpty(result)) { // if results unavaliable taking from cache
                         await this.putToCache(id, result)
                     } else {
                         result = cacheItem.result
@@ -67,7 +67,7 @@ class MongoDBCache extends Cache {
             }
         } else {
             result = await compute(keys)
-            if (result.files && result.files.length > 0) {
+            if (!isEmpty(result)) {
                 await this.putToCache(id, result)
             }
         }
@@ -76,7 +76,7 @@ class MongoDBCache extends Cache {
     }
 }
 
-module.exports = async () => {
+module.exports = async (name) => {
     const db = await connectToDatabase()
-    return new MongoDBCache(db)
+    return new MongoDBCache(name, db)
 }

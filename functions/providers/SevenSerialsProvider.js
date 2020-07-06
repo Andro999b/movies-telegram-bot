@@ -35,10 +35,7 @@ class SevenSerailsProvider extends DataLifeProvider {
                             return files.map((file) => {
                                 const parts = file.manifestUrl.split('?video=')
                                 const manifestUrl = decodeURIComponent(parts[1])
-                                return {
-                                    ...file,
-                                    manifestUrl
-                                }
+                                return { ...file, manifestUrl }
                             })
                         }
 

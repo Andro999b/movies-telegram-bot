@@ -23,7 +23,7 @@ export class Device {
     @observable seekTime = null
     @observable quality = null
     @observable qualities = []
-    
+
     isLocal() {
         return true
     }
@@ -54,7 +54,7 @@ export class Device {
         this.shuffle = shuffle
         store.set('shuffle', shuffle)
     }
-    
+
     skip(sec) {
         if (this.duration) {
             const seekTo = this.currentTime + sec
@@ -89,18 +89,25 @@ export class LocalDevice extends Device {
         this.buffered = 0
         this.audioTrack = null
         this.audioTracks = []
+        this.quality = null
 
-        if (source.qualitiesUrls) {
-            const qualities = new Set(source.qualitiesUrls.map((it) => it.quality))
-            this.qualities = [...qualities]
-            const storedQuality = store.get('quality')
-            
-            this.quality = storedQuality && qualities.has(storedQuality)  ?
-                storedQuality :
-                null
-        } else {
-            this.qualities = []
-            this.quality = null
+        if (source.urls) {
+            this.qualities = Array.from(new Set(
+                source.urls
+                    .map((it) => it.quality)
+                    .filter((it) => it)
+            ))
+
+            this.setAudioTracks(
+                Array.from(
+                    new Set(
+                        source.urls
+                            .map((it) => it.audio)
+                            .filter((it) => it)
+                    )
+                )
+                    .map((it) => ({ id: it, name: it }))
+            )
         }
     }
 
@@ -152,7 +159,22 @@ export class LocalDevice extends Device {
         this.currentFileIndex = fileIndex
 
         const file = files[this.currentFileIndex]
-        this.setSource(file)
+
+        if (file.asyncSource) {
+            this.loading = true
+            const { provider, id } = this.playlist
+            fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${file.asyncSource}`)
+                .then((source) => {
+                    if (fileIndex == this.currentFileIndex) {
+                        Object.keys(source).forEach((key) => file[key] = source[key])
+                        file.asyncSource = null
+                        this.loading = false
+                        this.setSource(file)
+                    }
+                })
+        } else {
+            this.setSource(file)
+        }
 
         return true
     }
@@ -178,11 +200,15 @@ export class LocalDevice extends Device {
     @action.bound setAudioTracks(audioTracks) {
         this.audioTracks = audioTracks
 
-        const storesAudioTrack = store.get(`${getPlaylistPrefix(this.playlist)}:audio_track`)
-        if(storesAudioTrack) {
-            const audioTrack = audioTracks.find(({ id }) => id == storesAudioTrack)
-            if(audioTracks) {
-                this.audioTrack = audioTrack.id
+        if (audioTracks.length > 0) {
+            const storesAudioTrack = store.get(`${getPlaylistPrefix(this.playlist)}:audio_track`)
+            if (storesAudioTrack) {
+                const audioTrack = audioTracks.find(({ id }) => id == storesAudioTrack)
+                if (audioTrack) {
+                    this.audioTrack = audioTrack.id
+                } else {
+                    this.audioTrack = audioTracks[0].id
+                }
             }
         }
     }
@@ -273,7 +299,7 @@ class PlayerStore {
         if (title && files) {
             let res = title
 
-            if(files.length > 1) {
+            if (files.length > 1) {
                 const file = files[currentFileIndex]
                 let currentPath = file.path
                 currentPath = currentPath ? currentPath.split('/') : []

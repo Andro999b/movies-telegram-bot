@@ -107,7 +107,7 @@ class Player extends Component {
 
         if (idle) {
             this.setState({ idle: false })
-            if (!(e instanceof KeyboardEvent)) {
+            if (e && !(e instanceof KeyboardEvent)) {
                 e.stopImmediatePropagation()
                 e.preventDefault()
             }

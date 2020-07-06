@@ -1,10 +1,10 @@
 const extract = require('../extract')
 
-const url = decodeURIComponent('https://play.roomfish.ru/2147406642')
+const url = decodeURIComponent('https://video.sibnet.ru/shell.php?videoid=1864980')
 // eslint-disable-next-line no-console
 console.log(url)
 
 extract({
     url,
-    type: 'animevost'
+    type: 'sibnetmp4'
 }).then(console.log) // eslint-disable-line no-console

@@ -1,22 +1,12 @@
 const getBestPlayerJSQuality = require('./parsePlayerJSFile')
 
 function extractFile(file, linksExtractor) {
-    const qualityUrls = linksExtractor(file)
-    
-    const urls = qualityUrls.map((it) => it.url)
-    const mainUrl = urls[0]
-
-    if (mainUrl.endsWith('m3u8')) {
-        return { manifestUrl: mainUrl }
-    } else {
-        const item = { url: mainUrl }
-
-        if (qualityUrls.length > 0) {
-            item.qualitiesUrls = qualityUrls
-        }
-
-        return item
+    if(file.endsWith('m3u8')) {
+        return { manifestUrl: file }
     }
+
+    const urls = linksExtractor(file)
+    return { urls: urls }
 }
 
 function convertFolder(prefix, items, linksExtractor) {

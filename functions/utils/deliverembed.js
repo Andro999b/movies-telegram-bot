@@ -73,7 +73,7 @@ module.exports = async (url, referer) => {
         }))).reduce((acc, files) => acc.concat(files), [])
     }
 
-    parts = res.text.match(/playlist: (?<playlist>.+),/)
+    parts = res.text.match(/playlist: (?<playlist>\{[\s\S]+\}),/)
     if(parts) {
         let playlist
 

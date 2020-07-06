@@ -74,16 +74,16 @@ class KinogoProvider extends DataLifeProvider {
         const fmp4 = extractString(script, 'fmp4')
 
         if (fmp4) {
-            const qualitiesUrls = parsePlayerJSFile(fmp4)
+            const urls = parsePlayerJSFile(fmp4)
             
-            const url = qualitiesUrls[0].url
+            const url = urls[0].url
 
             if (url.endsWith('m3u8')) { // not actual mp4 lol
                 return [{
                     manifestUrl: url
                 }]
             } else {
-                return [{ url, qualitiesUrls }]
+                return [{ urls }]
             }
         }
     }

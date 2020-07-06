@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'seasonvar'
-const id = '/serial-24146-Vsegda_vesna.html'
+const provider = 'nekomori'
+const id = '91'
 
 console.log(decodeURIComponent(id));
 

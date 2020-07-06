@@ -4,9 +4,7 @@ const providers = [
     new (require('./KinogoProvider'))(),
     new (require('./KinovodProvider'))(),
     new (require('./AnimeVostProvider'))(),
-    // new (require('./AnimeGOProvider'))(),
-    new (require('./YummyanimeProvider'))(),
-    new (require('./EXFSProvider'))(),
+    new (require('./AnimediaProvider'))(),
     new (require('./VideoCDNProvider'))(),
     new (require('./NekomoriProvider'))()
 ]
@@ -46,7 +44,7 @@ module.exports = {
 
         try {
             const provider = await this.getProvider(providerName)
-            return await provider.search(query, page, pageCount)
+            return provider.search(query, page, pageCount)
         } catch (e) {
             console.error(`Provider ${providerName} failed.`, e)
         }
@@ -55,6 +53,10 @@ module.exports = {
     },
     async getInfo(providerName, resultsId) {
         const provider = await this.getProvider(providerName)
-        return await provider.getInfo(resultsId)
+        return provider.getInfo(resultsId)
+    },
+    async getSource(providerName, resultsId, sourceId) {
+        const provider = await this.getProvider(providerName)
+        return provider.getSource(resultsId, sourceId)
     }
 }

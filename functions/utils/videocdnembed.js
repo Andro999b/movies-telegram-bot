@@ -7,28 +7,31 @@ function _extractNoTranslations(playlist) {
 }
 
 function _extractTranslations(translations, playlists) {
-    return Object.keys(translations)
+    const getKey = ({ name, path }) => [path, name].filter(it => it).join('/')
+    const filesByKey = {}
+
+    Object.keys(translations)
         .map((translation) => {
             const playlist = playlists[translation]
             const translationName = translations[translation]
-
-            return convertPlayerJSPlaylist(playlist)
-                .map((file) => {
-                    if(file.name) {
-                        return {
-                            ...file,
-                            path: [translationName, file.path].filter((it) => it).join('/')
-                        }
+            convertPlayerJSPlaylist(playlist)
+                .forEach((file) => {
+                    const key = getKey(file)
+                    if (filesByKey[key]) {
+                        const currentFile = filesByKey[key]
+                        const newUrls = currentFile.urls.concat(
+                            file.urls.map((u) => ({...u, audio: translationName}))
+                        )
+                        filesByKey[key] = { ...currentFile, urls: newUrls }
                     } else {
-                        return {
-                            ...file,
-                            name: translationName
-                        }
+                        filesByKey[key] = file
                     }
-                })
+                });
         })
-        .reduce((acc, item) => acc.concat(item), [])
-        .map((file, index) => ({ ...file, id: index }))
+
+    return Object
+        .values(filesByKey)
+        .map((file, id) => ({...file, id}) )
 }
 
 module.exports = async (url) => {

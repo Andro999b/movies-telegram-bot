@@ -143,6 +143,10 @@ class Provider {
         return this._absoluteUrl(url)
     }
 
+    async getSource(resultsId, sourceId) {
+        return {}
+    }
+
     _absoluteUrl(url) {
         return url.startsWith('/') ? this.config.baseUrl + url : url
     }

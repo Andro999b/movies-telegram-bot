@@ -9,13 +9,13 @@ module.exports.handler = async (event, context) => {
     let result = {}
     
     if (event.pathParameters) {
-        const { provider, resultId } = event.pathParameters
+        const { provider, resultId, sourceId } = event.pathParameters
 
         const cache = await getCache()
 
-        result = await cache.getCahcedInfo(
-            provider, resultId, 
-            ([provider, resultId]) => providersService.getInfo(provider, resultId)
+        result = await cache.getCahcedSource(
+            provider, resultId, sourceId, 
+            ([provider, resultId, sourceId]) => providersService.getSource(provider, resultId, sourceId)
         )
     }
 

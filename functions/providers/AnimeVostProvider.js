@@ -44,8 +44,10 @@ class AnimeVostProvider extends DataLifeProvider {
                                 return {
                                     id: index,
                                     name: key,
-                                    extractor: { type: 'animevost' },
-                                    url: playerUrl
+                                    urls: [{ 
+                                        url: playerUrl,
+                                        extractor: { type: 'animevost' }
+                                    }]
                                 }
                             })
                     }

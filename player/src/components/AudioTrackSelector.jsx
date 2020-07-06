@@ -4,10 +4,12 @@ import BaseSelector from './BaseSelector'
 import { observer } from 'mobx-react'
 import {
     IconButton,
+    Button,
     MenuItem,
     MenuList
 } from '@material-ui/core'
 import { AudiotrackRounded as AudioTrackIcon } from '@material-ui/icons'
+import { isTouchDevice } from '../utils'
 
 @observer
 class AudioTrackSelector extends BaseSelector {
@@ -18,17 +20,36 @@ class AudioTrackSelector extends BaseSelector {
     }
 
     renderButton() {
-        return (
-            <IconButton onClick={this.handleClick}>
-                <AudioTrackIcon/>
-            </IconButton>
-        )
+        if (isTouchDevice()) {
+            return(
+                <IconButton onClick={this.handleClick}>
+                    <AudioTrackIcon/>
+                </IconButton>
+            )
+        } else {
+            const { audioTrack, audioTracks } = this.props.device
+            const selectedTrack = audioTracks.find((it) => it.id == audioTrack)
+
+            if(selectedTrack) {
+                return (
+                    <Button onClick={this.handleClick}>
+                        {selectedTrack.name}
+                    </Button>
+                )
+            } else {
+                return(
+                    <IconButton onClick={this.handleClick}>
+                        <AudioTrackIcon/>
+                    </IconButton>
+                )
+            }
+        }
     }
 
     renderList() {
         const { audioTrack, audioTracks } = this.props.device
 
-        const items = audioTracks.map(({id, name}) => (
+        const items = audioTracks.map(({ id, name }) => (
             <MenuItem key={id} selected={id == audioTrack} onClick={() => this.selectTrack(id)}>
                 {name}
             </MenuItem>

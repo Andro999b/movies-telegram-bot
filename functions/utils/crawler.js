@@ -89,7 +89,7 @@ class Crawler {
 
         const step = async (currentUrl) => {
             const res = await this._requestGenerator(currentUrl)
-
+            
             const $ = cheerio.load(res.text, { xmlMode: false })
 
             const nextUrl =

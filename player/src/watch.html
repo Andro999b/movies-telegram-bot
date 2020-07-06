@@ -75,7 +75,12 @@
         </div>
     </div>
     <script>
-        window.API_BASE_URL = 'https://6gov3btrq2.execute-api.eu-central-1.amazonaws.com/dev/api'
+        const params = new URLSearchParams(window.location.search)
+        if(params.has('dev')) {
+            window.API_BASE_URL = 'https://6gov3btrq2.execute-api.eu-central-1.amazonaws.com/dev/api'
+        } else {
+            window.API_BASE_URL = 'https://mcw4r3l663.execute-api.eu-central-1.amazonaws.com/prod/api'
+        }
     </script>
 
 </html>
