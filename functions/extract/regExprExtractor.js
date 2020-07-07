@@ -3,9 +3,10 @@ const makeResponse = require('../utils/makeResponse')
 
 module.exports = (patterns) => async (params) => {
     const { url } = params
+    const targetUrl = url.startsWith('//') ? 'https:' + url : url
 
     const siteRes = await superagent
-        .get(url)
+        .get(targetUrl)
         .timeout(5000)
         .disableTLSCerts()
 

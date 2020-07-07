@@ -103,7 +103,7 @@ functions:
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
       PLAYER_URL: ${self:custom.playerUrl}
       HELP_IMAGES: ${self:custom.helpImages}
-      PROVIDERS: 'animevost,animedia,nekomori'
+      PROVIDERS: 'anidub,animevost,animedia,nekomori'
   
   proxy:
     handler: handlers/proxy.handler

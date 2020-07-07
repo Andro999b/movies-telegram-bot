@@ -1,6 +1,6 @@
 const extract = require('../extract')
 
-const url = decodeURIComponent('https://video.sibnet.ru/shell.php?videoid=1864980')
+const url = decodeURIComponent('%2F%2Fvideo.sibnet.ru%2Fshell.php%3Fvideoid%3D3804323')
 // eslint-disable-next-line no-console
 console.log(url)
 

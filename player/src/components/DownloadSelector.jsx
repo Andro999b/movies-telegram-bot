@@ -12,6 +12,11 @@ import analytics from '../utils/analytics'
 
 class DownloadSelector extends BaseSelector {
 
+    getTitleAndDownloadUrl = ({ url, quality, audio, extractor }) => ({
+        downloadUrl: extractor ? createExtractorUrlBuilder(extractor)(url) : url,
+        title: [audio, quality].filter((it) => it).join(' - ')
+    })
+
     handleMobileDownload = (downloadUrl) => {
         const { title, file } = this.props
 
@@ -30,17 +35,17 @@ class DownloadSelector extends BaseSelector {
 
     renderButton() {
         const { file } = this.props
-        const { url, extractor, qualitiesUrls } = file
+        const { urls } = file
 
-        const downloadUrl = extractor ? createExtractorUrlBuilder(extractor)(url) : url
-
-        if (qualitiesUrls) {
+        if (urls.length > 1) {
             return (
                 <IconButton onClick={this.handleClick}>
                     <DownloadIcon />
                 </IconButton>
             )
         } else {
+            const { downloadUrl } = this.getTitleAndDownloadUrl(urls[0])
+
             if (window.mobileApp) {
                 return (
                     <IconButton onClick={() => this.handleMobileDownload(downloadUrl)}>
@@ -65,16 +70,16 @@ class DownloadSelector extends BaseSelector {
 
     renderList() {
         const { file } = this.props
-        const { extractor, qualitiesUrls } = file
+        const { urls } = file
 
-        if (qualitiesUrls) {
-            const items = qualitiesUrls.map(({ quality, url }) => {
-                const downloadUrl = extractor ? createExtractorUrlBuilder(extractor)(url) : url
+        if (urls) {
+            const items = urls.map((it) => {
+                const { title, downloadUrl }  = this.getTitleAndDownloadUrl(it)
 
                 if (window.mobileApp) {
                     return (
-                        <MenuItem key={quality} onClick={() => this.handleMobileDownload(downloadUrl)}>
-                            {quality}
+                        <MenuItem key={title} onClick={() => this.handleMobileDownload(downloadUrl)}>
+                            {title}
                         </MenuItem>
                     )
                 } else {
@@ -84,10 +89,10 @@ class DownloadSelector extends BaseSelector {
                             href={downloadUrl}
                             download={downloadUrl}
                             target="_blank"
-                            key={quality}
+                            key={title}
                             onClick={this.handleTrackDownload}
                         >
-                            {quality}
+                            {title}
                         </MenuItem>
                     )
                 }

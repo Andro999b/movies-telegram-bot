@@ -109,7 +109,7 @@ class PlayerPlayList extends Component {
 
     renderDownload(file) {
         const { device: { title } } = this.props
-        return file.url ? (
+        return file.urls ? (
             <ListItemSecondaryAction>
                 <DownloadSelector file={file} title={title} />
             </ListItemSecondaryAction>

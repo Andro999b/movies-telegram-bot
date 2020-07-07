@@ -50,6 +50,7 @@ class NekomoriProvider extends Provider {
         ret.body
             // eslint-disable-next-line no-prototype-builtins
             .filter(({ player }) => playersConfig.hasOwnProperty(player))
+            .sort((a, b) => b.kind - a.kind)
             .forEach(({ author, kind, player, link, ep }) => {
                 const name = `Episode ${ep}`
                 const audio = `${kindTranslation[kind]} - ${getAuthor(author)} - ${player}`

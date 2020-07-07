@@ -123,16 +123,19 @@ class VideoScrean extends BaseScrean {
     }
 
     startNativeVideo() {
-        const { device: { source: { urls }, quality, audioTrack } } = this.props
+        const { device: { source: { urls }, audioTrack } } = this.props
+        let videoUrls
 
         if(audioTrack) {
-            this.videoUrls = urls.filter((it) => it.audio == audioTrack)
-            if(this.videoUrls.length == 0) {
-                this.videoUrls = urls
+            videoUrls = urls.filter((it) => it.audio == audioTrack)
+            if(videoUrls.length == 0) {
+                videoUrls = urls
             }
         } else {
-            this.videoUrls = urls
+            videoUrls = urls
         }
+
+        this.videoUrls = [].concat(videoUrls)
 
         this.setNativeVideoUrl(this.videoUrls.shift())
     }
