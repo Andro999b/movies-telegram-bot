@@ -44,12 +44,12 @@ class Share extends BaseSelector {
         const { device: { currentTime, currentFileIndex } } = this.props
 
         const params = new URLSearchParams(location.search);
+        const newParams = new URLSearchParams();
 
-        ['provider', 'id'].forEach((k) => {
-            if (!params.has(k)) {
-                params.set(k, store.get(k))
-            }
-        })
+        newParams.set('provider', params.get('provider') || store.get('provider'))
+        newParams.set('id', params.get('id') || store.get('id'))
+
+        if(params.has('query')) newParams.set('query', params.get('query'))
 
         if (sharePosition) {
             params.set('file', currentFileIndex)
@@ -59,7 +59,7 @@ class Share extends BaseSelector {
             }
         }
 
-        return encodeURIComponent(location.protocol + '//' + location.host + '/?' + params.toString())
+        return encodeURIComponent(location.protocol + '//' + location.host + location.pathname + '?' + newParams.toString())
     }
 
     getTitle = (sharePosition) => {

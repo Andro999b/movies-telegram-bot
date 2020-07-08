@@ -1,12 +1,12 @@
 const providers = require('../providers')
 const util = require('util')
 
-const providerName = 'anidub'
+// const providerName = 'anidub'
 // const providerName = 'animedia'
 // const providerName = 'kinovod'
 // const providerName = 'kinogo'
 // const providerName = 'seasonvar'
-// const providerName = 'videocdn'
+const providerName = 'videocdn'
 // const providerName = 'animevost'
 // const providerName = 'nekomori'
 // const providerName = '7serealov'
@@ -18,7 +18,9 @@ const providerName = 'anidub'
 // const searchQuery = 'Харли квин'
 // const searchQuery = 'one punch'
 // const searchQuery = 'ID: Вторжение'
-const searchQuery = 'Дорохедоро'
+// const searchQuery = 'Дорохедоро'
+// const searchQuery = 'Принц-дракон'
+const searchQuery = 'Полуночная проповедь'
 // const searchQuery = 'веном'
 // const searchQuery = 'ванпанчмен'
 

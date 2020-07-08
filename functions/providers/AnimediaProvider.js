@@ -51,7 +51,7 @@ class AnimediaProvider extends Provider {
         query = this._prepareQuery(query)
 
         const res = await superagent
-            .get(`${searchUrl}?keywords=${encodeURIComponent(query)}&limit=12&orderby_sort=	entry_date|desc`)
+            .get(`${searchUrl}?keywords=${encodeURIComponent(query)}&limit=12&orderby_sort=entry_date|desc`)
             .timeout(timeout)
 
         const $results = $(res.text)

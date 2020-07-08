@@ -42,7 +42,7 @@ module.exports = {
     'seasonvar': {
         'encryptKey': 'ololo',
         'baseUrl': 'http://seasonvar.ru',
-        'searchUrl': 'http://seasonvar.ru/search'
+        'searchUrl': 'http://seasonvar.ru/autocomplete.php'
     },
     'exfs': {
         'baseUrl': 'http://ex-fs.net',

@@ -7,7 +7,9 @@
     "start": "webpack-dev-server --config webpack.dev-server.config.js",
     "watch": "webpack --config webpack.watch.js",
     "sync-files": "copy-and-watch --watch dist/*.{js,png,ico} dist/mobile.html C:\\Users\\Andrii\\AndroidStudioProjects\\CastPlayer\\app\\src\\main\\assets",
-    "build": "rm -rf dist/* && webpack --mode production"
+    "build": "rm -rf dist/* && webpack --mode production",
+    "deploy": "surge dist movie-player.surge.sh",
+    "publish": "npm run build && npm run deploy"
   },
   "keywords": [],
   "author": "",

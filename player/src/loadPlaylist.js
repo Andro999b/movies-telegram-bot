@@ -25,7 +25,7 @@ function getAlternativeUrl() {
             bot = 'films_search_bot'
     }
 
-    return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`
+    return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(queryi))}`
 }
 
 function renderError(message, err) {
@@ -60,7 +60,6 @@ function renderVideoNotReleased(trailerUrl) {
         trailerUrl
     )
 }
-
 
 export default function () {
     if (window.gtag) {

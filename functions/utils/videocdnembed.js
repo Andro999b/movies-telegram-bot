@@ -24,7 +24,8 @@ function _extractTranslations(translations, playlists) {
                         )
                         filesByKey[key] = { ...currentFile, urls: newUrls }
                     } else {
-                        filesByKey[key] = file
+                        const newUrls = file.urls.map((u) => ({...u, audio: translationName}))
+                        filesByKey[key] = { ...file, urls: newUrls }
                     }
                 });
         })
