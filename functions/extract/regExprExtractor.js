@@ -32,8 +32,6 @@ module.exports = (patterns) => async (params) => {
             Location: await transform(matches)
         })
     }
-
-    console.log(siteRes.text);
     
     throw Error('Video can`t be extracted', params)
 }

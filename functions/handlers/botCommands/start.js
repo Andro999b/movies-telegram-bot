@@ -3,30 +3,8 @@ const doSearch = require('./functions/doSearch')
 const { base64UrlDecode } = require('../../utils/base64')
 
 module.exports = (bot, providers, botType) => {
-    bot.hears(/^\/(start|help)(.*)$/, async (ctx) => {
-        const { i18n, reply, mixpanel, match } = ctx
-        const command = match[1]
 
-        // eslint-disable-next-line no-console
-        console.log(match)
-
-        if (command == 'start') {
-            let query = match[2]
-
-            mixpanel.people.set({ $created: new Date().toISOString() })
-
-            if(query) {
-                query = query.trim()
-                if(query) {
-                    mixpanel.track('alternativeLinks', { bot: botType })
-                    
-                    return doSearch(ctx, providers, botType, base64UrlDecode(query))
-                } 
-            }    
-
-            mixpanel.track('register', { bot: botType })
-        }
-
+    function renderHello({ i18n, reply }) {
         return reply(
             i18n.t(
                 'start',
@@ -37,5 +15,34 @@ module.exports = (bot, providers, botType) => {
             ),
             Extra.HTML()
         )
+    }
+
+    bot.start(async (ctx) => {
+        const { mixpanel, startPayload } = ctx
+
+        mixpanel.people.set({ $created: new Date().toISOString() })
+
+        if (startPayload) {
+            query = startPayload.trim()
+            if (query) {
+                mixpanel.track('alternativeLinks', { bot: botType, query })
+
+                return doSearch(ctx, providers, botType, base64UrlDecode(query))
+            }
+        }
+
+        mixpanel.track('register', { bot: botType })
+
+        return renderHello(ctx)
+    })
+
+    bot.help(async (ctx) => {
+        const { mixpanel } = ctx
+
+        mixpanel.people.set({ $created: new Date().toISOString() })
+
+        mixpanel.track('register', { bot: botType })
+
+        return renderHello(ctx)
     })
 }

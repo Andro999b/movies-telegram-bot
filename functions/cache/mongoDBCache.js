@@ -1,5 +1,5 @@
 const Cache = require('./Cache')
-const { MongoClient, } = require('mongodb');
+const { MongoClient } = require('mongodb');
 
 const COLLECTION_NAME = process.env.TABLE_NAME
 const MONGODB_URI = process.env.MONGODB_URI
@@ -10,6 +10,7 @@ let cachedDb = null;
 
 async function connectToDatabase() {
     if (!cachedDb) {
+        console.log(MONGODB_URI);
         const client = await MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true })
         cachedDb = client.db('test')
     }
@@ -33,6 +34,26 @@ class MongoDBCache extends Cache {
         )
     }
 
+    async putToCacheMultiple(results) {
+        const expired = new Date(Date.now() + expirationTime)
+
+        await this.collection.bulkWrite(results.map(({ id, result }) => ({
+            updateOne: {
+                filter: { _id: result.id },
+                update: { $set: { result, lastModifiedDate: new Date(), expired } },
+                upsert: true 
+            }
+        })))
+    }
+
+    async get(id) {
+        return (await this.collection.findOneAndUpdate(
+            { _id: id },
+            { $inc: { hit: 1 } }
+        )).value
+    }
+
+
     async extendExpire(id) {
         const expired = new Date(Date.now() + expirationTime)
         await this.collection.updateOne({ _id: id }, { $set: { expired } })
@@ -42,10 +63,7 @@ class MongoDBCache extends Cache {
         const id = keys.join(':')
 
         let result = {}
-        const cacheItem = (await this.collection.findOneAndUpdate(
-            { _id: id },
-            { $inc: { hit: 1 } }
-        )).value
+        const cacheItem = await this.get(id)
 
         if (cacheItem) {
             if (cacheItem.expired.getTime() < Date.now()) {

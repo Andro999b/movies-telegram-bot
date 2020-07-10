@@ -3,6 +3,7 @@ service: movies-telegram-bot
 custom:
   tableName: cache-${opt:stage, 'dev'}
   playerUrl: 'http://movie-player.surge.sh/watch.html'
+  mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
   helpImages: 'https://movie-player.surge.sh/images/help/1.png,https://movie-player.surge.sh/images/help/2.png,https://movie-player.surge.sh/images/help/3.png'
 
 provider:
@@ -13,6 +14,19 @@ provider:
   memorySize: 512
 
 functions:
+  library:
+    handler: handlers/library.handler
+    events:
+      - http: 
+          path: api/library
+          method: get
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                q: true
+                type: true
+
   search:
     handler: handlers/search.handler
     events:
@@ -64,7 +78,7 @@ functions:
                 - resultId: true 
     environment:
       TABLE_NAME: ${self:custom.tableName}
-      MONGODB_URI: mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test
+      MONGODB_URI: ${self:custom.mongoUrl}
 
   extract:
     handler: handlers/extract.handler
@@ -83,8 +97,10 @@ functions:
           cors: true
     environment:
       BOT_TYPE: 'films'
-      TOKEN: ${ssm:bot_ru_TOKEN}
+      TOKEN: ${ssm:bot_ru_TOKEN_${opt:stage, 'dev'}}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
+      TABLE_NAME: ${self:custom.tableName}
+      MONGODB_URI: ${self:custom.mongoUrl}
       PLAYER_URL: ${self:custom.playerUrl}
       HELP_IMAGES: ${self:custom.helpImages}
       PROVIDERS: 'videocdn,kinogo,kinovod,seasonvar,7serealov'
@@ -99,8 +115,10 @@ functions:
     environment:
       BOT_TYPE: 'anime'
       LOCALIZATION_TYPE: 'localization/anime'
-      TOKEN: ${ssm:bot_anime_TOKEN}
+      TOKEN: ${ssm:bot_anime_TOKEN_${opt:stage, 'dev'}}
       MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
+      TABLE_NAME: ${self:custom.tableName}
+      MONGODB_URI: ${self:custom.mongoUrl}
       PLAYER_URL: ${self:custom.playerUrl}
       HELP_IMAGES: ${self:custom.helpImages}
       PROVIDERS: 'anidub,animevost,animedia,nekomori'

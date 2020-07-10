@@ -12,7 +12,8 @@ const getCache = async (cacheName) => {
     return cache
 }
 
-module.exports = async () => ({
+module.exports = {
+    getCache,
     getCahcedInfo: async (provider, resultId, compute) => {
         const cache = await getCache('info')
         return cache.getOrCompute(
@@ -28,4 +29,4 @@ module.exports = async () => ({
             compute
         )
     }
-})
+}

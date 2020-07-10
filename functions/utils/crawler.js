@@ -22,7 +22,7 @@ class Crawler {
                 .charset()
                 .timeout(this._timeoutMs)
                 .disableTLSCerts()
-                .set(this._headers)
+                .set(this._headers || {})
         })
         this._url = url
         this._useProxy = false

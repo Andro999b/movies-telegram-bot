@@ -57,10 +57,14 @@ class SeasonvarProvider extends DirectMediaProvider {
             .get(`${searchUrl}?query=${encodeURIComponent(query)}`)
             .timeout(timeout)
 
-        const { suggestions: { valu }, data } = JSON.parse(res.text)
 
-        return valu.map((title, index) => ({
-            title,
+        const body = JSON.parse(res.text)
+        if(!body.suggestions ||!body.suggestions.valu) return []
+
+        const { suggestions: { valu }, data } = body
+
+        return valu.map((name, index) => ({
+            name,
             id: urlencode(this.config.baseUrl + '/' + data[index]),
             provider: this.name
         }))
