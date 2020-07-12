@@ -51,7 +51,8 @@ module.exports = class KinopoisLibrary extends Library {
         results = results.map((it) => ({
             ...it,
             image: it.image.replace('sm_film', 'film_big'),
-            title: it.title.replace(/\(.+\)/, '').trim()
+            title: it.title.replace(/\(.+\)/, '').trim(),
+            url: `${BASE_URL}/film/${it.id}`
         }))
 
         const cache = await getCache('library')
