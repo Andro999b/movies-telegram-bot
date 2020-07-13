@@ -8,6 +8,7 @@ class Library {
         const options = { keys: ['name'], includeScore: true }
         this.typeSearcher = new Fuse(this._getTypeData(), options)
         this.genreSearcher = new Fuse(this._getGenreData(), options)
+        this.countrySearcher = new Fuse(this._getCountryData(), options)
     }
 
     _parseQuery(query) {
@@ -21,6 +22,8 @@ class Library {
             genreName = null, 
             fromYear = null, 
             toYear = null, 
+            country = null,
+            countryName = null,
             page = 1
 
         const getYear = (k) => {
@@ -60,6 +63,7 @@ class Library {
                 if (res[0] && res[0].score < FUZZY_MATCH_SCORE) {
                     typeName = res[0].item.name
                     type = res[0].item.id
+                    continue
                 }
             }
             
@@ -68,6 +72,16 @@ class Library {
                 if (res[0] && res[0].score < FUZZY_MATCH_SCORE) {
                     genreName = res[0].item.name
                     genre = res[0].item.id
+                    continue
+                }
+            }
+
+            if (!country) {
+                const res = this.countrySearcher.search(keyword)
+                if (res[0] && res[0].score < FUZZY_MATCH_SCORE) {
+                    countryName = res[0].item.name
+                    country = res[0].item.id
+                    continue
                 }
             }
         }
@@ -87,7 +101,9 @@ class Library {
             type, 
             typeName, 
             genre, 
-            genreName, 
+            genreName,
+            country,
+            countryName,
             fromYear, 
             toYear, 
             page 

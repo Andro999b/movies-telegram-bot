@@ -2,7 +2,7 @@ const { filmsLibrary } = require('../../library')
 const Markup = require('telegraf/markup')
 const Extra = require('telegraf/extra')
 
-module.exports = (bot, defaultProviders, botType) => {
+module.exports = (bot, botType) => {
     const handler = async (ctx) => {
         const { i18n, replyWithMarkdown, replyWithChatAction, mixpanel, match } = ctx
         const query = match[1]
@@ -80,6 +80,10 @@ module.exports = (bot, defaultProviders, botType) => {
     }
 
     if (botType == 'films') {
+        bot.command('tophelp', ({ reply, i18n, mixpanel }) => {
+            mixpanel.track('tophelp')
+            return reply(i18n.t('top_help'))
+        })
         bot.hears(/^\/lib([0-9]+)$/, libSearchHandler)
         bot.hears(/^\/top(.*)$/, handler)
         bot.action(/^\/top(.*)$/, async (ctx) => {
