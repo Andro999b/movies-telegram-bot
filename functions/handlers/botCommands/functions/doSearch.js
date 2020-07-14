@@ -82,6 +82,8 @@ module.exports = async (ctx, defaultProviders, botType, text) => {
         const searchEngineQuery = await extractSearchEngineQuery(parts[0])
         if (searchEngineQuery)
             query = searchEngineQuery
+        else
+            return // do nothing in case if user send link
     }
     // check link ends
 
