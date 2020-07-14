@@ -89,7 +89,7 @@ module.exports = (bot, providers, botType) => {
     }
 
     const libSearchHandler = async (ctx) => {
-        const { match, replyWithChatAction } = ctx
+        const { match, replyWithChatAction, answerCbQuery } = ctx
         const id = match[1]
 
         await replyWithChatAction('typing')
@@ -98,10 +98,12 @@ module.exports = (bot, providers, botType) => {
 
         if (item) {
             const { title } = item
-            return doSimpleSearch(ctx, providers, botType, title)
+            await doSimpleSearch(ctx, providers, botType, title)
         } else {
-            return reply(i18n.t('no_results', { query: id }))
+            await reply(i18n.t('no_results', { query: id }))
         }
+
+        return answerCbQuery()
     }
 
     if (botType == 'films') {
