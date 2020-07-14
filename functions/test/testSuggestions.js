@@ -1,3 +1,3 @@
 const suggestions = require('../utils/suggestions')
 
-suggestions('удивительный мир хамбла').then((it) => console.log(it))
+suggestions('мулаа').then((it) => console.log(it))
