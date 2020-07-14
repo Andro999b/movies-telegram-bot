@@ -3,6 +3,7 @@ const extractSearchEngineQuery = require('../../../utils/extractSearchEngineQuer
 const providersService = require('../../../providers')
 const getQueryAndProviders = require('./getQueryAndProviders')
 const Markup = require('telegraf/markup')
+const suggestions = require('../../../utils/suggestions')
 
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
 const PLAYER_URL = process.env.PLAYER_URL
@@ -43,7 +44,29 @@ function createResultButtons(res, query) {
     )
 }
 
-module.exports = async ({ i18n, reply, replyWithChatAction, mixpanel }, defaultProviders, botType, text) => {
+async function getNoResults({ reply, i18n }, query) {
+    let text = i18n.t('no_results', { query })
+    let btns = [
+        Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
+        Markup.callbackButton(i18n.t('repeat_search'), query)
+    ]
+
+    const correctedName = await suggestions(query)
+    
+    if(correctedName) {
+        text += '\n' + i18n.t('spell_check')
+        btns.unshift(Markup.callbackButton(correctedName, correctedName))
+    } 
+
+    return reply(
+        text,
+        Markup.inlineKeyboard(btns, { columns: 1 }).extra()
+    )
+}
+
+module.exports = async (ctx, defaultProviders, botType, text) => {
+    const { i18n, reply, replyWithChatAction, mixpanel } = ctx
+
     await replyWithChatAction('typing')
 
     mixpanel.track('search', { query: text, bot: botType })
@@ -68,25 +91,17 @@ module.exports = async ({ i18n, reply, replyWithChatAction, mixpanel }, defaultP
 
     providersResults = providersResults.filter((res) => res && res.length)
 
+    // no results
     if (!providersResults.length) {
         mixpanel.track('noresults', { query: text, bot: botType })
-        return await reply(
-            i18n.t('no_results', { query }),
-            Markup.inlineKeyboard(
-                [
-                    Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
-                    Markup.callbackButton(i18n.t('repeat_search'), query)
-                ],
-                { columns: 1 }
-            ).extra()
-        )
+        return getNoResults(ctx, query, botType)
     }
 
-
+    // retur single provider results
     if (providersResults.length == 1) {
         const results = providersResults[0]
         const provider = results[0].provider
-        await reply(
+        return reply(
             i18n.t('provider_results', { query, provider }),
             Markup.inlineKeyboard(
                 createResultButtons(results, query)
@@ -97,8 +112,10 @@ module.exports = async ({ i18n, reply, replyWithChatAction, mixpanel }, defaultP
                 { columns: 1 }
             ).extra()
         )
-    } else {
-        await reply(
+    }
+    //return multiple provders results
+    else {
+        return reply(
             i18n.t('results', { query }),
             getResultsKeyboad(providersResults, query, i18n).extra()
         )

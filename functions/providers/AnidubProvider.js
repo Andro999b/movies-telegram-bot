@@ -1,5 +1,4 @@
 const DataLifeProvider = require("./DataLifeProvider")
-const superagent = require('superagent')
 const $ = require('cheerio')
 const urlencode = require('urlencode')
 

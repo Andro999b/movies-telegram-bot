@@ -58,7 +58,7 @@ module.exports = (bot, botType) => {
     }
 
     const libSearchHandler = async (ctx) => {
-        const { i18n, reply, replyWithPhoto, deleteMessage, match } = ctx
+        const { i18n, reply, replyWithPhoto, deleteMessage, match, mixpanel } = ctx
         const id = match[1]
 
         const item = await filmsLibrary.getInfoById(id)
@@ -66,6 +66,8 @@ module.exports = (bot, botType) => {
         await deleteMessage()
 
         if (item) {
+            mixpanel.track('lib', { name: item.name, id })
+
             const { title, year, rating, url } = item
             return replyWithPhoto(
                 item.image,
