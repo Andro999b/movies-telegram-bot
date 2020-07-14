@@ -127,7 +127,7 @@ async function doSearch(ctx, defaultProviders, botType, text) {
     }
     // check link ends
 
-    return doSimpleSearch(ctx, providers, botType, text)
+    return doSimpleSearch(ctx, providers, botType, query)
 }
 
 module.exports = doSearch
