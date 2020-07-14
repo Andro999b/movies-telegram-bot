@@ -10,7 +10,6 @@ let cachedDb = null;
 
 async function connectToDatabase() {
     if (!cachedDb) {
-        console.log(MONGODB_URI);
         const client = await MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true })
         cachedDb = client.db('test')
     }

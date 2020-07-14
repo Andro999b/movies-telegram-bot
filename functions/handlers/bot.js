@@ -20,7 +20,7 @@ const mixpanel = new TelegrafMixpanel(process.env.MIXPANEL_TOKEN)
 bot.use(i18n.middleware())
 bot.use(mixpanel.middleware())
 
-require('./botCommands/library')(bot, BOT_TYPE)
+require('./botCommands/library')(bot, PROVIDERS, BOT_TYPE)
 require('./botCommands/start')(bot, PROVIDERS, BOT_TYPE)
 require('./botCommands/helpsearch')(bot, BOT_TYPE)
 require('./botCommands/search')(bot, PROVIDERS, INLINE_PROVIDERS, BOT_TYPE)

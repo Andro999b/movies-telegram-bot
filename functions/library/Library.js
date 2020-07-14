@@ -86,7 +86,7 @@ class Library {
             }
         }
 
-        if(!type) {
+        if(!type && !genre) {
             const { name, id } = this._getDefaultTypeData()
             type = id
             typeName = name

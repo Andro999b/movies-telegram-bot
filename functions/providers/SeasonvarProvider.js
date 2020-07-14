@@ -64,7 +64,7 @@ class SeasonvarProvider extends DirectMediaProvider {
         const { suggestions: { valu }, data } = body
 
         return valu.map((name, index) => ({
-            name: name.replaceAll("<[^>]*>", ""),
+            name: name.replace(/<[^>]*>/g, ""),
             id: urlencode(this.config.baseUrl + '/' + data[index]),
             provider: this.name
         }))

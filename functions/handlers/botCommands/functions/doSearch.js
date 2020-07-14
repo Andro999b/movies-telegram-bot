@@ -44,6 +44,8 @@ function createResultButtons(res, query) {
     )
 }
 
+
+
 async function getNoResults({ reply, i18n }, query) {
     let text = i18n.t('no_results', { query })
     let btns = [
@@ -64,27 +66,11 @@ async function getNoResults({ reply, i18n }, query) {
     )
 }
 
-module.exports = async (ctx, defaultProviders, botType, text) => {
-    const { i18n, reply, replyWithChatAction, mixpanel } = ctx
+async function doSimpleSearch(ctx, providers, botType, query) {
+    const { i18n, reply, mixpanel } = ctx
 
-    await replyWithChatAction('typing')
-
-    mixpanel.track('search', { query: text, bot: botType })
+    mixpanel.track('search', { query, bot: botType })
     mixpanel.people.set({ $last_seen: new Date().toISOString() })
-
-
-    let { query, providers } = getQueryAndProviders(text, defaultProviders)
-
-    // check link
-    const parts = query.match(/http?s:\/\/[^\s]+/)
-
-    if (parts && parts.length > 0) {
-        const searchEngineQuery = await extractSearchEngineQuery(parts[0])
-
-        if (searchEngineQuery) query = searchEngineQuery
-        else return reply(i18n.t('no_results', { query }))// do nothing in case if user send link
-    }
-    // check link ends
 
     let providersResults = await Promise.all(providers.map((providerName) =>
         providersService.searchOne(providerName, query)
@@ -94,7 +80,7 @@ module.exports = async (ctx, defaultProviders, botType, text) => {
 
     // no results
     if (!providersResults.length) {
-        mixpanel.track('noresults', { query: text, bot: botType })
+        mixpanel.track('noresults', { query, bot: botType })
         return getNoResults(ctx, query, botType)
     }
 
@@ -122,3 +108,27 @@ module.exports = async (ctx, defaultProviders, botType, text) => {
         )
     }
 }
+
+async function doSearch(ctx, defaultProviders, botType, text) {
+    const { i18n, reply, replyWithChatAction, mixpanel } = ctx
+
+    await replyWithChatAction('typing')
+
+    let { query, providers } = getQueryAndProviders(text, defaultProviders)
+
+    // check link
+    const parts = query.match(/http?s:\/\/[^\s]+/)
+
+    if (parts && parts.length > 0) {
+        const searchEngineQuery = await extractSearchEngineQuery(parts[0])
+
+        if (searchEngineQuery) query = searchEngineQuery
+        else return reply(i18n.t('no_results', { query }))// do nothing in case if user send link
+    }
+    // check link ends
+
+    return doSimpleSearch(ctx, providers, botType, text)
+}
+
+module.exports = doSearch
+module.exports.doSimpleSearch = doSimpleSearch
