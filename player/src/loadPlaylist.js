@@ -25,7 +25,7 @@ function getAlternativeUrl() {
             bot = 'films_search_bot'
     }
 
-    return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(queryi))}`
+    return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`
 }
 
 function renderError(message, err) {

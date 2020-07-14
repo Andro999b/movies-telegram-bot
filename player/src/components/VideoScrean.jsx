@@ -37,7 +37,9 @@ class VideoScrean extends BaseScrean {
 
     onPlayPause(isPlaying) {
         if (isPlaying) {
-            this.video.play()
+            this.video
+                .play()
+                .catch((e) => console.log('Play aborted', e))
         } else {
             this.video.pause()
         }
@@ -93,9 +95,12 @@ class VideoScrean extends BaseScrean {
         video.currentTime = device.currentTime
         video.muted = device.isMuted
         video.volume = device.volume
+        video.load()
 
         if (device.isPlaying) {
-            video.play()
+            video
+                .play()
+                .catch((e) => console.log('Play aborted', e))
         } else {
             video.pause()
         }
@@ -126,9 +131,9 @@ class VideoScrean extends BaseScrean {
         const { device: { source: { urls }, audioTrack } } = this.props
         let videoUrls
 
-        if(audioTrack) {
+        if (audioTrack) {
             videoUrls = urls.filter((it) => it.audio == audioTrack)
-            if(videoUrls.length == 0) {
+            if (videoUrls.length == 0) {
                 videoUrls = urls
             }
         } else {
@@ -229,22 +234,22 @@ class VideoScrean extends BaseScrean {
 
 
         let code
-        let retry = false
+        let retry = true
 
         switch (this.video.error.code) {
             case MediaError.MEDIA_ERR_ABORTED:
                 code = 'MEDIA_ERR_ABORTED'
+                retry = false
                 break
             case MediaError.MEDIA_ERR_NETWORK:
                 code = 'MEDIA_ERR_NETWORK'
-                retry = true
                 break
             case MediaError.MEDIA_ERR_DECODE:
                 code = 'MEDIA_ERR_DECODE'
-                retry = true
                 break
             case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
                 code = 'MEDIA_ERR_SRC_NOT_SUPPORTED'
+                retry = false
                 break
         }
 
