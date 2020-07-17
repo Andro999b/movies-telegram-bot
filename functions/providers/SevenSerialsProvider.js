@@ -33,8 +33,7 @@ class SevenSerailsProvider extends DataLifeProvider {
                             const files = await deliverembed(parts[1], this.config.baseUrl)
 
                             return files.map((file) => {
-                                const parts = file.manifestUrl.split('?video=')
-                                const manifestUrl = decodeURIComponent(parts[1])
+                                const manifestUrl = `https://corsproxy.movies-player.workers.dev?${file.manifestUrl}`
                                 return { ...file, manifestUrl }
                             })
                         }

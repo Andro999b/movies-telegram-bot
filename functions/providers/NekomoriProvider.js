@@ -82,6 +82,7 @@ class NekomoriProvider extends Provider {
 
         return {
             title,
+            provider: this.name,
             image: `${postersCDNUrl}/${artId}.jpg`,
             files: Object.values(filesByKey).sort((a, b) => a.id - b.id)
         }
