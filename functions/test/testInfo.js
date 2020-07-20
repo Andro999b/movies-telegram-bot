@@ -1,10 +1,10 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'nekomori'
-const id = '91'
+const provider = 'videocdn'
+const id = 'tv-series_1666'
 
 console.log(decodeURIComponent(id));
 
-providers.getInfo(provider, id)
-    .then((details) => console.log('details',  util.inspect(details, false, null, true)))// eslint-disable-line
+providers.getInfo(provider, id).then()
+    .then((details) => console.log(util.inspect(details, false, null, false)))// eslint-disable-line

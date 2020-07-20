@@ -46,7 +46,7 @@ function createResultButtons(res, query) {
 
 
 
-async function getNoResults({ reply, i18n }, query) {
+async function getNoResults({ reply, i18n, mixpanel }, query, botType) {
     let text = i18n.t('no_results', { query })
     let btns = [
         Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
@@ -60,6 +60,8 @@ async function getNoResults({ reply, i18n }, query) {
         btns.unshift(Markup.callbackButton(correctedName, correctedName))
     } 
 
+    mixpanel.track('noresults', { query, correctedName, bot: botType })
+
     return reply(
         text,
         Markup.inlineKeyboard(btns, { columns: 1 }).extra()
@@ -69,7 +71,7 @@ async function getNoResults({ reply, i18n }, query) {
 async function doSimpleSearch(ctx, providers, botType, query) {
     const { i18n, reply, mixpanel } = ctx
 
-    mixpanel.track('search', { query, bot: botType })
+    mixpanel.track('search', { query, providers, bot: botType })
     mixpanel.people.set({ $last_seen: new Date().toISOString() })
 
     let providersResults = await Promise.all(providers.map((providerName) =>
@@ -80,7 +82,6 @@ async function doSimpleSearch(ctx, providers, botType, query) {
 
     // no results
     if (!providersResults.length) {
-        mixpanel.track('noresults', { query, bot: botType })
         return getNoResults(ctx, query, botType)
     }
 
