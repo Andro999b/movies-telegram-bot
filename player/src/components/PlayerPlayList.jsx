@@ -13,6 +13,7 @@ import {
     AppBar
 } from '@material-ui/core'
 import { NavigateBeforeRounded as BackIcon } from '@material-ui/icons'
+import { List as VirtualizedList, AutoSizer } from 'react-virtualized'
 import DownloadSelector from './DownloadSelector'
 import { observer } from 'mobx-react'
 import memoize from 'memoize-one'
@@ -116,6 +117,26 @@ class PlayerPlayList extends Component {
         ) : null
     }
 
+    renderFileRow(file, style, key, selectedIds) {
+        return (
+            <div style={style}>
+                <ListItem
+                    button
+                    key={key}
+                    selected={selectedIds.indexOf(file.id) != -1}
+                    onClick={() => this.hundleSelect(file)}
+                >
+                    <ListItemText primary={
+                        <span style={{ wordBreak: 'break-all', whiteSpace: 'normal' }}>
+                            {file.name}
+                        </span>
+                    } />
+                    {this.renderDownload(file)}
+                </ListItem>
+            </div>
+        )
+    }
+
     render() {
         const { path } = this.state
         const { device: { playlist, currentFileIndex }, open } = this.props
@@ -145,23 +166,20 @@ class PlayerPlayList extends Component {
                             </Toolbar>
                         </AppBar>
                     }
-                    <List>
-                        {node.files.map((file) => (
-                            <ListItem
-                                button
-                                key={file.id}
-                                selected={selectedIds.indexOf(file.id) != -1}
-                                onClick={() => this.hundleSelect(file)}
-                            >
-                                <ListItemText primary={
-                                    <span style={{ wordBreak: 'break-all', whiteSpace: 'normal' }}>
-                                        {file.name}
-                                    </span>
-                                } />
-                                {this.renderDownload(file)}
-                            </ListItem>
-                        ))}
-                    </List>
+
+                    <AutoSizer>
+                        {({ width, height }) => (
+                            <List>
+                                <VirtualizedList
+                                    width={width}
+                                    height={height}
+                                    rowCount={node.files.length}
+                                    rowHeight={48}
+                                    rowRenderer={({ key, index, style }) => this.renderFileRow(node.files[index], style, key, selectedIds)}
+                                />
+                            </List>
+                        )}
+                    </AutoSizer>
                 </Paper>
             </Slide>
         )
