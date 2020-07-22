@@ -34,7 +34,7 @@ class AnimediaProvider extends Provider {
                         const { file } = stripPlayerJSConfig(script)
 
                         res = await superagent
-                            .get(file)
+                            .get(this._absoluteUrl(file))
                             .timeout(this.config.timeout)
 
                         return convertPlayerJSPlaylist(JSON.parse(res.text))
