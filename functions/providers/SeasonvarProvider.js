@@ -59,19 +59,21 @@ class SeasonvarProvider extends DirectMediaProvider {
 
 
         const body = JSON.parse(res.text)
-        if(!body.suggestions ||!body.suggestions.valu) return []
+        if (!body.suggestions || !body.suggestions.valu) return []
 
         const { suggestions: { valu }, data } = body
 
-        return valu.map((name, index) => ({
-            name: name.replace(/<[^>]*>/g, ""),
-            id: urlencode(this.config.baseUrl + '/' + data[index]),
-            provider: this.name
-        }))
+        return valu
+            .filter((_, index) => data[index] && data[index].endsWith("html"))
+            .map((name, index) => ({
+                name: name.replace(/<[^>]*>/g, ""),
+                id: urlencode(this.config.baseUrl + '/' + data[index]),
+                provider: this.name
+            }))
     }
 
     async _extractSeasonFiles(serialId, seasonId, secureMark) {
-        try{
+        try {
             const res = await superagent
                 .post(`${this.config.baseUrl}/player.php`)
                 .set('X-Requested-With', 'XMLHttpRequest')
@@ -95,7 +97,7 @@ class SeasonvarProvider extends DirectMediaProvider {
             const playlist = JSON.parse(plistRes.text)
 
             return convertPlayerJSPlaylist(playlist, (x) => this._decryptFilePath(x))
-        } catch(e) {
+        } catch (e) {
             console.error('Seasonvar sesson extractor failed', e)
             return []
         }
