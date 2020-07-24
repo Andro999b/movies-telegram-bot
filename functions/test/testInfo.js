@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'animedia'
-const id = '%2Fanime%2Fvtorjenie-gigantov'
+const provider = 'kinovod'
+const id = '%2Ffilm%2F43786-pod-vodoj'
 
 console.log(decodeURIComponent(id));
 

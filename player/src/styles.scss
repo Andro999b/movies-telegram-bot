@@ -89,7 +89,9 @@ html {
 }
 
 .player__file-list {
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     width: 100%;
     position: absolute;
     right: 0;
@@ -101,6 +103,10 @@ html {
     @media (min-width: 768px) {
         width: 576px;
     }
+}
+
+.player__file-list-container {
+    flex-grow: 1;
 }
 
 .shadow-border {

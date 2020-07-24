@@ -117,13 +117,13 @@ class PlayerPlayList extends Component {
         ) : null
     }
 
-    renderFileRow(file, style, key, selectedIds) {
+    renderFileRow(file, style, key, selected) {
         return (
             <div style={style}>
                 <ListItem
                     button
                     key={key}
-                    selected={selectedIds.indexOf(file.id) != -1}
+                    selected={selected}
                     onClick={() => this.hundleSelect(file)}
                 >
                     <ListItemText primary={
@@ -151,6 +151,13 @@ class PlayerPlayList extends Component {
         currentPath = currentPath ? currentPath.split('/') : []
         const selectedIds = currentPath.concat(currentFileId)
 
+
+        const selectedIndex = node.files.findIndex(
+            (file) => selectedIds.indexOf(file.id) != -1
+        )
+
+        console.log(selectedIndex);
+
         return (
             <Slide direction="left" in={open} mountOnEnter unmountOnExit>
                 <Paper elevation={12} square className="player__file-list">
@@ -166,20 +173,20 @@ class PlayerPlayList extends Component {
                             </Toolbar>
                         </AppBar>
                     }
-
-                    <AutoSizer>
-                        {({ width, height }) => (
-                            <List>
+                    <List className="player__file-list-container">
+                        <AutoSizer>
+                            {({ width, height }) => (
                                 <VirtualizedList
                                     width={width}
                                     height={height}
                                     rowCount={node.files.length}
+                                    scrollToIndex={selectedIndex}
                                     rowHeight={48}
-                                    rowRenderer={({ key, index, style }) => this.renderFileRow(node.files[index], style, key, selectedIds)}
+                                    rowRenderer={({ key, index, style }) => this.renderFileRow(node.files[index], style, key, index == selectedIndex)}
                                 />
-                            </List>
-                        )}
-                    </AutoSizer>
+                            )}
+                        </AutoSizer>
+                    </List>
                 </Paper>
             </Slide>
         )

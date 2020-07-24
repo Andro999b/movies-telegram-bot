@@ -115,10 +115,10 @@ class Player extends Component {
     }
 
     setIdleTimeout() {
-        this.idleTimeout = setTimeout(
-            () => this.setState({ idle: true }),
-            IDLE_TIMEOUT
-        )
+        // this.idleTimeout = setTimeout(
+        //     () => this.setState({ idle: true }),
+        //     IDLE_TIMEOUT
+        // )
     }
 
     componentWillUnmount() {
