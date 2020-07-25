@@ -31,8 +31,7 @@ providers.search([providerName], searchQuery)
 
         return results[0]
     }) 
-    .catch(() => console.log("JS eats shite"))
-    // .then(({ id, provider }) => 
-    //     providers.getInfo(provider, id)
-    // )
-    // .then((details) => console.log(util.inspect(details, false, null, true)))// eslint-disable-line
+    .then(({ id, provider }) => 
+        providers.getInfo(provider, id)
+    )
+    .then((details) => console.log(util.inspect(details, false, null, true)))// eslint-disable-line
