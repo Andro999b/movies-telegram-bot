@@ -45,7 +45,7 @@ module.exports = {
 
         try {
             const provider = await this.getProvider(providerName)
-            return provider.search(query, page, pageCount)
+            return await provider.search(query, page, pageCount)
         } catch (e) {
             console.error(`Provider ${providerName} failed.`, e)
         }

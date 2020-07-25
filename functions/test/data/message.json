@@ -1,0 +1,21 @@
+{
+    "update_id": 754780150,
+    "message": {
+        "message_id": 793,
+        "from": {
+            "id": 317505076,
+            "is_bot": false,
+            "first_name": "Andrii",
+            "last_name": "Pivovarov",
+            "language_code:": "ru"
+        },
+        "chat": {
+            "id": 317505076,
+            "first_name": "Andrii",
+            "last_name": "Pivovarov",
+            "type": "private"
+        },
+        "date": 1595697531,
+        "text": "Я робот"
+    }
+}
