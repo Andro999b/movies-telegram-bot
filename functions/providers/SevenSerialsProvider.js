@@ -30,11 +30,10 @@ class SevenSerailsProvider extends DataLifeProvider {
                         const parts = $root.html().match(/(https:\/\/api[0-9]+[a-z\-.]+\/embed\/movie\/[0-9]+)/g)
                         
                         if(parts && parts.length > 1) {
-                            const files = await deliverembed(parts[1], this.config.baseUrl)
+                            const files = await deliverembed(parts[1])
 
                             return files.map((file) => {
-                                const manifestUrl = `https://corsproxy.movies-player.workers.dev?${file.manifestUrl}`
-                                return { ...file, manifestUrl }
+                                return { ...file, manifestUrl: file.manifestUrl }
                             })
                         }
 

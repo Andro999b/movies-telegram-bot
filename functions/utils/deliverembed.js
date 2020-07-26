@@ -34,7 +34,8 @@ function convertPlaylist(playlist) {
 module.exports = async (url, referer) => {
     let res
     try {
-        let request = superagent.get(url.startsWith('//') ? 'https:' + url : url)
+        let request = superagent
+            .get(url.startsWith('//') ? 'https:' + url : url)
 
         if(referer) {
             request = request.set({

@@ -32,10 +32,9 @@ class Kinogo2Provider extends DataLifeProvider {
                         const parts = $root.html().match(/(https:\/\/api[0-9]+[a-z\-.]+\/embed\/movie\/[0-9]+)/g)
                         
                         if(parts && parts.length > 0) {
-                            const files = await deliverembed(parts[0], this.config.baseUrl)
+                            const files = await deliverembed(`https://corsproxy.movies-player.workers.dev?${parts[0]}`)
 
                             return files.map((file) => {
-                                // const manifestUrl = `https://corsproxy.movies-player.workers.dev?${file.manifestUrl}`
                                 return { ...file, manifestUrl: file.manifestUrl }
                             })
                         }
