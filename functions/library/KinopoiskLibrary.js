@@ -14,9 +14,10 @@ module.exports = class KinopoisLibrary extends Library {
         const pageSize = 10
         
         const queryParams = {
-            'm_act[from_year]': fromYear,
             'm_act[country]': country,
-            'm_act[from_to]': toYear,
+            'm_act[year]': toYear ? null : fromYear,
+            'm_act[from_year]': toYear ? fromYear : null,
+            'm_act[to_year]': toYear,
             'm_act[genre][0]': genre,
             'm_act[type]': type
         }

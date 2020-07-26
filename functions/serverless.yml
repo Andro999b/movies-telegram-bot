@@ -103,7 +103,7 @@ functions:
       MONGODB_URI: ${self:custom.mongoUrl}
       PLAYER_URL: ${self:custom.playerUrl}
       HELP_IMAGES: ${self:custom.helpImages}
-      PROVIDERS: 'videocdn,kinogo,kinovod,seasonvar'
+      PROVIDERS: 'videocdn,kinovod,kinogo2,seasonvar'
 
   animebot:
     handler: handlers/bot.handler

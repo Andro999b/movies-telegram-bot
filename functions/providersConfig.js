@@ -35,6 +35,10 @@ module.exports = {
         'baseUrl': 'https://kinogo.by',
         'searchUrl': 'https://kinogo.by/index.php?do=search'
     },
+    'kinogo2': {
+        'baseUrl': 'https://kinogo.cc',
+        'searchUrl': 'https://kinogo.cc/index.php?do=search'
+    },
     'baskino': {
         'baseUrl': 'http://baskino.me',
         'searchUrl': 'http://baskino.me'

@@ -4,7 +4,7 @@ const util = require('util')
 // const providerName = 'anidub'
 // const providerName = 'animedia'
 // const providerName = 'kinovod'
-const providerName = 'kinogo'
+const providerName = 'kinogo2'
 // const providerName = 'seasonvar'
 // const providerName = 'videocdn'
 // const providerName = 'animevost'
@@ -25,7 +25,7 @@ const searchQuery = 'Синяя книга'
 // const searchQuery = 'веном'
 // const searchQuery = 'ванпанчмен'
 
-providers.search([providerName], searchQuery)
+providers.searchOne(providerName, searchQuery)
     .then((results) => {
         console.log('results', results)// eslint-disable-line
 

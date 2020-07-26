@@ -50,6 +50,7 @@ module.exports = async (url, referer) => {
 
     let parts = res.text.match(/apiBaseUrl:\s+"(?<api>.+)"/)
 
+
     if(parts) {
         const { groups: { api } } = parts
         const { groups: { franchise } } = res.text.match(/franchise:\s+(?<franchise>\d+)/)
