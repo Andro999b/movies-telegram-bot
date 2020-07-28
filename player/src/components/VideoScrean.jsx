@@ -37,9 +37,8 @@ class VideoScrean extends BaseScrean {
 
     onPlayPause(isPlaying) {
         if (isPlaying) {
-            this.video
-                .play()
-                .catch((e) => console.log('Play aborted', e))
+            const p = this.video.play()
+            p &&  p.catch((e) => console.log('Play aborted', e))
         } else {
             this.video.pause()
         }
@@ -98,9 +97,8 @@ class VideoScrean extends BaseScrean {
         video.load()
 
         if (device.isPlaying) {
-            video
-                .play()
-                .catch((e) => console.log('Play aborted', e))
+            const p = video.play()
+            p && p.catch((e) => console.log('Play aborted', e))
         } else {
             video.pause()
         }
