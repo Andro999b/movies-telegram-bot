@@ -179,7 +179,8 @@ export class LocalDevice extends Device {
                     logger.error('Can`t load async source', {
                         title: document.title,
                         url: location.href,
-                        source: file
+                        source: file,
+                        errorData: e
                     })
 
                     analytics('play', 'error', 'Can`t play media')
