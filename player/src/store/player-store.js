@@ -176,7 +176,7 @@ export class LocalDevice extends Device {
                     }
                 })
                 .catch((e) => {            
-                    logger.error('Can`t play media', {
+                    logger.error('Can`t load async source', {
                         title: document.title,
                         url: location.href,
                         source: file
