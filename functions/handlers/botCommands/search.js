@@ -12,10 +12,8 @@ module.exports = (bot, defaultProviders, inlineProviders, botType) => {
         return ctx.answerCbQuery()
     })
     bot.on('text', async (ctx) => doSearch(ctx, defaultProviders, botType, ctx.message.text))
-    bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery, mixpanel }) => {
+    bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
         const { query, providers } = getQueryAndProviders(inlineQuery.query, inlineProviders)
-    
-        mixpanel.track('inlinesearch', { query: inlineQuery.query, bot: botType })
     
         const results = await providersService.search(providers, query)
     

@@ -5,11 +5,9 @@ const Extra = require('telegraf/extra')
 
 module.exports = (bot, providers, botType) => {
     const topQueryHandler = async (ctx, query) => {
-        const { i18n, replyWithMarkdown, replyWithChatAction, mixpanel } = ctx
+        const { i18n, replyWithMarkdown, replyWithChatAction } = ctx
 
         await replyWithChatAction('typing')
-
-        mixpanel.track('top', { query, bot: botType })
 
         const { results, params } = await filmsLibrary.top(query)
         const { page, pageSize, genreName, typeName, countryName, fromYear, toYear } = params
@@ -65,7 +63,7 @@ module.exports = (bot, providers, botType) => {
     }
 
     const libHandler = async (ctx) => {
-        const { i18n, reply, replyWithPhoto, deleteMessage, match, mixpanel } = ctx
+        const { i18n, reply, replyWithPhoto, deleteMessage, match } = ctx
         const id = match[1]
 
         const item = await filmsLibrary.getInfoById(id)
@@ -73,8 +71,6 @@ module.exports = (bot, providers, botType) => {
         await deleteMessage()
 
         if (item) {
-            mixpanel.track('lib', { name: item.name, id })
-
             const { title, year, rating, url } = item
             return replyWithPhoto(
                 item.image,
@@ -123,8 +119,7 @@ module.exports = (bot, providers, botType) => {
         bot.hears('/topaction', (ctx) => topQueryHandler(ctx, 'боевик'))
         bot.hears('/topdetective', (ctx) => topQueryHandler(ctx, 'детектив'))
         // top help
-        bot.command('tophelp', ({ reply, i18n, mixpanel }) => {
-            mixpanel.track('tophelp')
+        bot.command('tophelp', ({ reply, i18n }) => {
             return reply(i18n.t('top_help'))
         })
         // lib

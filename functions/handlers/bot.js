@@ -2,7 +2,6 @@ const makeResponse = require('../utils/makeResponse')
 const path = require('path')
 const Telegraf = require('telegraf')
 const TelegrafI18n = require('telegraf-i18n')
-const TelegrafMixpanel = require('telegraf-mixpanel')
 
 const PROVIDERS = process.env.PROVIDERS ? process.env.PROVIDERS.split(',') : []
 const INLINE_PROVIDERS = process.env.INLINE_PROVIDERS ? process.env.INLINE_PROVIDERS.split(',') : PROVIDERS
@@ -15,10 +14,8 @@ const i18n = new TelegrafI18n({
 })
 
 const bot = new Telegraf(process.env.TOKEN)
-const mixpanel = new TelegrafMixpanel(process.env.MIXPANEL_TOKEN)
 
 bot.use(i18n.middleware())
-bot.use(mixpanel.middleware())
 
 require('./botCommands/library')(bot, PROVIDERS, BOT_TYPE)
 require('./botCommands/start')(bot, PROVIDERS, BOT_TYPE)

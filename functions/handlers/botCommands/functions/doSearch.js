@@ -46,7 +46,7 @@ function createResultButtons(res, query) {
 
 
 
-async function getNoResults({ reply, i18n, mixpanel }, query, botType) {
+async function getNoResults({ reply, i18n }, query, botType) {
     let text = i18n.t('no_results', { query })
     let btns = [
         Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
@@ -60,8 +60,6 @@ async function getNoResults({ reply, i18n, mixpanel }, query, botType) {
         btns.unshift(Markup.callbackButton(correctedName, correctedName))
     } 
 
-    mixpanel.track('noresults', { query, correctedName, bot: botType })
-
     return reply(
         text,
         Markup.inlineKeyboard(btns, { columns: 1 }).extra()
@@ -69,10 +67,7 @@ async function getNoResults({ reply, i18n, mixpanel }, query, botType) {
 }
 
 async function doSimpleSearch(ctx, providers, botType, query) {
-    const { i18n, reply, mixpanel } = ctx
-
-    mixpanel.track('search', { query, providers, bot: botType })
-    mixpanel.people.set({ $last_seen: new Date().toISOString() })
+    const { i18n, reply } = ctx
 
     let providersResults = await Promise.all(providers.map((providerName) =>
         providersService.searchOne(providerName, query)
@@ -111,7 +106,7 @@ async function doSimpleSearch(ctx, providers, botType, query) {
 }
 
 async function doSearch(ctx, defaultProviders, botType, text) {
-    const { i18n, reply, replyWithChatAction, mixpanel } = ctx
+    const { i18n, reply, replyWithChatAction } = ctx
 
     await replyWithChatAction('typing')
 
