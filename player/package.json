@@ -9,7 +9,7 @@
     "sync-files": "copy-and-watch --watch dist/*.{js,png,ico} dist/mobile.html C:\\Users\\Andrii\\AndroidStudioProjects\\CastPlayer\\app\\src\\main\\assets",
     "build": "rm -rf dist/* && webpack --mode production",
     "deploy-surge": "surge dist movie-player.surge.sh",
-    "deploy-firebase": "surge dist movie-player.surge.sh",
+    "deploy-firebase": "firebase deploy",
     "release-firebase": "npm run build && npm run deploy-firebase",
     "release-surge": "npm run build && npm run deploy-surge",
     "release": "npm run build && npm run deploy-firebase && npm run deploy-surge"
