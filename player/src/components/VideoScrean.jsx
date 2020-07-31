@@ -105,9 +105,13 @@ class VideoScrean extends BaseScrean {
     }
 
     initVideo() {
-        const { props: { device: { source: { manifestUrl, urls } } } } = this
+        const { props: { device: { source } } } = this
 
         this.disposeHls()
+
+        if(!source) return
+
+        const { manifestUrl, urls }  = source
 
         if (urls) {
             this.startNativeVideo()

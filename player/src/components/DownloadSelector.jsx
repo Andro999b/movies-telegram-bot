@@ -73,12 +73,12 @@ class DownloadSelector extends BaseSelector {
         const { urls } = file
 
         if (urls) {
-            const items = urls.map((it) => {
+            const items = urls.map((it, index) => {
                 const { title, downloadUrl }  = this.getTitleAndDownloadUrl(it)
 
                 if (window.mobileApp) {
                     return (
-                        <MenuItem key={title} onClick={() => this.handleMobileDownload(downloadUrl)}>
+                        <MenuItem key={index} onClick={() => this.handleMobileDownload(downloadUrl)}>
                             {title}
                         </MenuItem>
                     )
@@ -89,7 +89,7 @@ class DownloadSelector extends BaseSelector {
                             href={downloadUrl}
                             download={downloadUrl}
                             target="_blank"
-                            key={title}
+                            key={index}
                             onClick={this.handleTrackDownload}
                         >
                             {title}

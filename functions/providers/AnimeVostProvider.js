@@ -1,6 +1,8 @@
 const DataLifeProvider = require('./DataLifeProvider')
-const { extractObject } = require('../utils/extractScriptVariable')
+const { extractObject, extractStringPropery } = require('../utils/extractScriptVariable')
 const urlencode = require('urlencode')
+const superagent = require('superagent')
+const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 
 class AnimeVostProvider extends DataLifeProvider {
     constructor() {
@@ -26,17 +28,17 @@ class AnimeVostProvider extends DataLifeProvider {
                     transform: ($el) => {
                         let episodesData
 
-                        for(const item of $el.toArray()) {
-                            if(item.children.length != 0) {
+                        for (const item of $el.toArray()) {
+                            if (item.children.length != 0) {
                                 const script = item.children[0].data
 
                                 episodesData = extractObject(script, 'data')
 
-                                if(episodesData)  break
+                                if (episodesData) break
                             }
                         }
 
-                        if(!episodesData) return []
+                        if (!episodesData) return []
 
                         return Object.keys(episodesData)
                             .map((key, index) => {
@@ -44,16 +46,27 @@ class AnimeVostProvider extends DataLifeProvider {
                                 return {
                                     id: index,
                                     name: key,
-                                    urls: [{ 
-                                        url: playerUrl,
-                                        extractor: { type: 'animevost' }
-                                    }]
+                                    asyncSource: urlencode(playerUrl)
                                 }
                             })
                     }
                 }
             }
         })
+    }
+
+    async getSource(resultsId, sourceId) {
+        const url = decodeURIComponent(sourceId)
+        const targetUrl = url.startsWith('//') ? 'https:' + url : url
+
+        const siteRes = await superagent
+            .get(targetUrl)
+            .timeout(5000)
+            .disableTLSCerts()
+
+        const playerJsPlaylist = extractStringPropery(siteRes.text, "file")
+
+        return convertPlayerJSPlaylist(playerJsPlaylist)[0]
     }
 }
 

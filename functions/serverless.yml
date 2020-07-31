@@ -2,9 +2,9 @@ service: movies-telegram-bot
 
 custom:
   tableName: cache-${opt:stage, 'dev'}
-  playerUrl: 'http://movie-player.surge.sh/watch.html'
+  playerUrl: 'https://movies-player.firebaseapp.com/watch.html'
   mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
-  helpImages: 'https://movie-player.surge.sh/images/help/1.png,https://movie-player.surge.sh/images/help/2.png,https://movie-player.surge.sh/images/help/3.png'
+  helpImages: 'https://movies-player.firebaseapp.com//images/help/1.png,https://movie-player.surge.sh/images/help/2.png,https://movie-player.surge.sh/images/help/3.png'
 
 provider:
   name: aws
@@ -54,6 +54,9 @@ functions:
                 - provider: true 
                 - resultId: true 
                 - sourceId: true 
+    environment:
+      TABLE_NAME: ${self:custom.tableName}
+      MONGODB_URI: ${self:custom.mongoUrl}
 
   provider:
     handler: handlers/provider.handler
@@ -103,7 +106,7 @@ functions:
       MONGODB_URI: ${self:custom.mongoUrl}
       PLAYER_URL: ${self:custom.playerUrl}
       HELP_IMAGES: ${self:custom.helpImages}
-      PROVIDERS: 'videocdn,kinovod,kinogo2,seasonvar'
+      PROVIDERS: 'videocdn,kinovod,kinogo,seasonvar'
 
   animebot:
     handler: handlers/bot.handler

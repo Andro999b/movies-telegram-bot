@@ -3,6 +3,8 @@ import { observable, action } from 'mobx'
 import { getPlaylistPrefix } from '../utils'
 import analytics from '../utils/analytics'
 import store from '../utils/storage'
+import logger from '../utils/logger'
+import localization from '../localization'
 
 const END_FILE_TIME_OFFSET = 60
 
@@ -164,6 +166,7 @@ export class LocalDevice extends Device {
             this.loading = true
             const { provider, id } = this.playlist
             fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${file.asyncSource}`)
+                .then((res) => res.json())
                 .then((source) => {
                     if (fileIndex == this.currentFileIndex) {
                         Object.keys(source).forEach((key) => file[key] = source[key])
@@ -171,6 +174,17 @@ export class LocalDevice extends Device {
                         this.loading = false
                         this.setSource(file)
                     }
+                })
+                .catch((e) => {            
+                    logger.error('Can`t play media', {
+                        title: document.title,
+                        url: location.href,
+                        source: file
+                    })
+
+                    analytics('play', 'error', 'Can`t play media')
+
+                    this.setError(localization.cantPlayMedia)
                 })
         } else {
             this.setSource(file)

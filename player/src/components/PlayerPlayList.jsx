@@ -156,8 +156,6 @@ class PlayerPlayList extends Component {
             (file) => selectedIds.indexOf(file.id) != -1
         )
 
-        console.log(selectedIndex);
-
         return (
             <Slide direction="left" in={open} mountOnEnter unmountOnExit>
                 <Paper elevation={12} square className="player__file-list">
