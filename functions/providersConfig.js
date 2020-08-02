@@ -20,8 +20,8 @@ module.exports = {
         'searchUrl': 'https://online.anidub.com/index.php?do=search',
     },
     'animedia': {
-        'baseUrl': 'https://online.animedia.pro',
-        'searchUrl': 'https://online.animedia.pro//ajax/search_result_search_page_2/P0'
+        'baseUrl': 'https://m4.animedia.pro',
+        'searchUrl': 'https://m4.animedia.pro//ajax/search_result_search_page_2/P0'
     },
     'kinovod': {
         'baseUrl': 'http://kinovod129.cc',

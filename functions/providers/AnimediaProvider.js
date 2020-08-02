@@ -37,6 +37,8 @@ class AnimediaProvider extends Provider {
                             .get(this._absoluteUrl(file))
                             .timeout(this.config.timeout)
 
+                        console.log(JSON.parse(res.text));
+
                         return convertPlayerJSPlaylist(JSON.parse(res.text))
                             .map((file, id) => ({ id,...file }))
                     }

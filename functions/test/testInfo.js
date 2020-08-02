@@ -2,7 +2,7 @@ const providers = require('../providers')
 const util = require('util')
 
 const provider = 'animedia'
-const id = '%2Fanime%2Fnaruto-uragannyie-hroniki-tv2'
+const id = '%2Fanime%2Fryitsar-vampir-2'
 
 console.log(decodeURIComponent(id));
 
