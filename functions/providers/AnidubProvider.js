@@ -25,9 +25,9 @@ class AnidubProvider extends DataLifeProvider {
                     selector: '.video-box:nth-child(3) .series-tab',
                     transform: ($el) => $el.children()
                         .toArray()
-                        .map((el,id) => {
-                            const $el = $(el)
-
+                        .map((el) => $(el))
+                        .filter(($el) => $el.attr('data').includes('sibnet'))
+                        .map(($el,id) => {
                             return {
                                 id,
                                 name: $el.text(),
