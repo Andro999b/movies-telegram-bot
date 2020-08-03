@@ -54,11 +54,9 @@ function renderError(message, err) {
     })
 }
 
-function renderVideoNotReleased(trailerUrl) {
-    document.querySelector('#app .loader').innerHTML = localization.formatString(
-        localization.videoNotReleased, 
-        trailerUrl
-    )
+function trailerRedirect(trailerUrl) {
+    analytics('load', 'rediectTrailer', trailerUrl)
+    location.href = trailerUrl
 }
 
 export default function () {
@@ -84,7 +82,7 @@ export default function () {
 
                     render((<App />), document.getElementById('app'))
                 } else if(playlist && playlist.trailer) {
-                    renderVideoNotReleased(playlist.trailer)
+                    trailerRedirect(playlist.trailer)
                 } else {
                     renderError(localization.videoNotFound)
                 }

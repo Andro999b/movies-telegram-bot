@@ -6,14 +6,12 @@ module.exports = (input) => {
         .replace(/\\/g, '')
         .split(',')
         .map((link) => {
-            const res = link.match(/(\[[^0-9\[]*(?<quality>[0-9]+)[^0-9\]]*\])?(?<urls>.*)/)
+            const res = link.trim().match(/(\[[^0-9\[]*(?<quality>[0-9]+)[^0-9\]]*\])?(?<urls>.*)/)
 
             if(!res) return null
 
             let { urls, quality } = res.groups
             quality = quality ? parseInt(quality) : 0
-
-            console.log(urls, quality);
 
             return urls.split(' or ').map((url) => ({ url, quality }))
         })

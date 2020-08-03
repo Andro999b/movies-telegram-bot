@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'anidub'
-const id = 'https%3A%2F%2Fonline.anidub.com%2Fvideoblog%2F10182-pochemu-ne-stoit-smotret-boruto-naruto-luchshe.html'
+const provider = 'animedia'
+const id = '%2Fanime%2Fodnazhdy-v-tokio'
 
 console.log(decodeURIComponent(id));
 
