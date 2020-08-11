@@ -6,12 +6,12 @@ const uuid = require('uuid')
 
 const PLAYER_URL = process.env.PLAYER_URL
 
-module.exports = (bot, defaultProviders, inlineProviders, botType) => {
+module.exports = (bot, defaultProviders, inlineProviders) => {
     bot.on('callback_query', async (ctx) => {
-        await doSearch(ctx, defaultProviders, botType, ctx.callbackQuery.data)
+        await doSearch(ctx, defaultProviders, ctx.callbackQuery.data)
         return ctx.answerCbQuery()
     })
-    bot.on('text', async (ctx) => doSearch(ctx, defaultProviders, botType, ctx.message.text))
+    bot.on('text', async (ctx) => doSearch(ctx, defaultProviders, ctx.message.text))
     bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
         const { query, providers } = getQueryAndProviders(inlineQuery.query, inlineProviders)
     

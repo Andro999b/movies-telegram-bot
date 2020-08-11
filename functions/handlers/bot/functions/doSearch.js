@@ -1,4 +1,3 @@
-
 const extractSearchEngineQuery = require('../../../utils/extractSearchEngineQuery')
 const providersService = require('../../../providers')
 const getQueryAndProviders = require('./getQueryAndProviders')
@@ -46,18 +45,20 @@ function createResultButtons(res, query) {
 
 
 
-async function getNoResults({ reply, i18n }, query, botType) {
+async function getNoResults({ reply, i18n, track }, providers, query) {
     let text = i18n.t('no_results', { query })
     let btns = [
         Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
         Markup.callbackButton(i18n.t('repeat_search'), query)
     ]
 
-    const correctedName = await suggestions(query)
+    const suggestion = await suggestions(query)
+
+    track('no_results', { query, providers, suggestion })
     
-    if(correctedName) {
+    if(suggestion) {
         text += '\n' + i18n.t('spell_check')
-        btns.unshift(Markup.callbackButton(correctedName, correctedName))
+        btns.unshift(Markup.callbackButton(suggestion, suggestion))
     } 
 
     return reply(
@@ -66,8 +67,8 @@ async function getNoResults({ reply, i18n }, query, botType) {
     )
 }
 
-async function doSimpleSearch(ctx, providers, botType, query) {
-    const { i18n, reply } = ctx
+async function doSimpleSearch(ctx, providers, query) {
+    const { i18n, reply, track } = ctx
 
     let providersResults = await Promise.all(providers.map((providerName) =>
         providersService.searchOne(providerName, query)
@@ -77,8 +78,11 @@ async function doSimpleSearch(ctx, providers, botType, query) {
 
     // no results
     if (!providersResults.length) {
-        return getNoResults(ctx, query, botType)
+        return getNoResults(ctx, providers, query)
     }
+
+    const resultsCount = providersResults.reduce((acc, items) => acc + items.length, 0)
+    track('search', { query, providers, resultsCount })
 
     // retur single provider results
     if (providersResults.length == 1) {
@@ -105,8 +109,8 @@ async function doSimpleSearch(ctx, providers, botType, query) {
     }
 }
 
-async function doSearch(ctx, defaultProviders, botType, text) {
-    const { i18n, reply, replyWithChatAction } = ctx
+async function doSearch(ctx, defaultProviders, text) {
+    const { i18n, reply, replyWithChatAction, track } = ctx
 
     await replyWithChatAction('typing')
 
@@ -118,12 +122,16 @@ async function doSearch(ctx, defaultProviders, botType, text) {
     if (parts && parts.length > 0) {
         const searchEngineQuery = await extractSearchEngineQuery(parts[0])
 
-        if (searchEngineQuery) query = searchEngineQuery
-        else return reply(i18n.t('no_results', { query }))// do nothing in case if user send link
+        if (searchEngineQuery) {
+            query = searchEngineQuery
+        } else  {
+            track('no_results', { query, providers } )
+            return reply(i18n.t('no_results', { query }))// do nothing in case if user send link
+        }
     }
     // check link ends
 
-    return doSimpleSearch(ctx, providers, botType, query)
+    return doSimpleSearch(ctx, providers, query)
 }
 
 module.exports = doSearch

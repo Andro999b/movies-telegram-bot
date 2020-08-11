@@ -5,13 +5,14 @@ const Extra = require('telegraf/extra')
 
 module.exports = (bot, providers, botType) => {
     const topQueryHandler = async (ctx, query) => {
-        const { i18n, replyWithMarkdown, replyWithChatAction } = ctx
+        const { i18n, track, replyWithMarkdown, replyWithChatAction } = ctx
+
+        track('top', { query })
 
         await replyWithChatAction('typing')
 
         const { results, params } = await filmsLibrary.top(query)
         const { page, pageSize, genreName, typeName, countryName, fromYear, toYear } = params
-
 
         const content = results
             .map(({ id, year, rating, title }) => ({
@@ -63,7 +64,7 @@ module.exports = (bot, providers, botType) => {
     }
 
     const libHandler = async (ctx) => {
-        const { i18n, reply, replyWithPhoto, deleteMessage, match } = ctx
+        const { i18n, track, reply, replyWithPhoto, deleteMessage, match } = ctx
         const id = match[1]
 
         const item = await filmsLibrary.getInfoById(id)
@@ -71,6 +72,7 @@ module.exports = (bot, providers, botType) => {
         await deleteMessage()
 
         if (item) {
+            track('lib', { item })
             const { title, year, rating, url } = item
             return replyWithPhoto(
                 item.image,
@@ -80,12 +82,13 @@ module.exports = (bot, providers, botType) => {
                     .markdown()
             )
         } else {
+            track('lib_not_found', { libId: id })
             return reply(i18n.t('no_results', { query: id }))
         }
     }
 
     const libSearchHandler = async (ctx) => {
-        const { match, replyWithChatAction, answerCbQuery } = ctx
+        const { match, track, replyWithChatAction, answerCbQuery } = ctx
         const id = match[1]
 
         await replyWithChatAction('typing')
@@ -94,8 +97,9 @@ module.exports = (bot, providers, botType) => {
 
         if (item) {
             const { title } = item
-            await doSimpleSearch(ctx, providers, botType, title)
+            await doSimpleSearch(ctx, providers, title)
         } else {
+            track('lib_not_found', { libId: id })
             await reply(i18n.t('no_results', { query: id }))
         }
 
@@ -119,7 +123,8 @@ module.exports = (bot, providers, botType) => {
         bot.hears('/topaction', (ctx) => topQueryHandler(ctx, 'боевик'))
         bot.hears('/topdetective', (ctx) => topQueryHandler(ctx, 'детектив'))
         // top help
-        bot.command('tophelp', ({ reply, i18n }) => {
+        bot.command('tophelp', ({ reply, track, i18n }) => {
+            track('top_help')
             return reply(i18n.t('top_help'))
         })
         // lib

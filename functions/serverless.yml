@@ -1,10 +1,11 @@
 service: movies-telegram-bot
 
 custom:
-  tableName: cache-${opt:stage, 'dev'}
+  cahceTable: cache-${opt:stage, 'dev'}
   playerUrl: 'https://movies-player.firebaseapp.com/watch.html'
   mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
   helpImages: 'https://movies-player.firebaseapp.com//images/help/1.png,https://movie-player.surge.sh/images/help/2.png,https://movie-player.surge.sh/images/help/3.png'
+  analyticsTable: analyticsTable-${opt:stage, 'dev'}
 
 provider:
   name: aws
@@ -12,6 +13,16 @@ provider:
   region: eu-central-1
   versionFunctions: false
   memorySize: 512
+  environment:
+    ANALYTIC_TABLE: ${self:custom.analyticsTable}
+    CACHE_TABLE: ${self:custom.cahceTable}
+    MONGODB_URI: ${self:custom.mongoUrl}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:BatchWriteItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.analyticsTable}"
+
 
 functions:
   library:
@@ -55,8 +66,7 @@ functions:
                 - resultId: true 
                 - sourceId: true 
     environment:
-      TABLE_NAME: ${self:custom.tableName}
-      MONGODB_URI: ${self:custom.mongoUrl}
+
 
   provider:
     handler: handlers/provider.handler
@@ -79,9 +89,6 @@ functions:
               path:
                 - provider: true 
                 - resultId: true 
-    environment:
-      TABLE_NAME: ${self:custom.tableName}
-      MONGODB_URI: ${self:custom.mongoUrl}
 
   extract:
     handler: handlers/extract.handler
@@ -101,9 +108,6 @@ functions:
     environment:
       BOT_TYPE: 'films'
       TOKEN: ${ssm:bot_ru_TOKEN_${opt:stage, 'dev'}}
-      MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
-      TABLE_NAME: ${self:custom.tableName}
-      MONGODB_URI: ${self:custom.mongoUrl}
       PLAYER_URL: ${self:custom.playerUrl}
       HELP_IMAGES: ${self:custom.helpImages}
       PROVIDERS: 'videocdn,kinovod,kinogo,seasonvar'
@@ -119,9 +123,6 @@ functions:
       BOT_TYPE: 'anime'
       LOCALIZATION_TYPE: 'localization/anime'
       TOKEN: ${ssm:bot_anime_TOKEN_${opt:stage, 'dev'}}
-      MIXPANEL_TOKEN: ${ssm:MIXPANEL_TOKEN}
-      TABLE_NAME: ${self:custom.tableName}
-      MONGODB_URI: ${self:custom.mongoUrl}
       PLAYER_URL: ${self:custom.playerUrl}
       HELP_IMAGES: ${self:custom.helpImages}
       PROVIDERS: 'anidub,animevost,animedia,nekomori'
@@ -137,3 +138,50 @@ functions:
 package:
   exclude:
    - test/**
+
+resources:
+  Resources:
+    analyticsTable:
+      Type: AWS::DynamoDB::Table
+      Properties: 
+        TableName: ${self:custom.analyticsTable}
+        AttributeDefinitions:
+          - AttributeName: uid
+            AttributeType: N
+          - AttributeName: time
+            AttributeType: N
+          - AttributeName: type
+            AttributeType: S
+          - AttributeName: bot
+            AttributeType: S
+        KeySchema:
+          - AttributeName: type
+            KeyType: HASH
+          - AttributeName: time
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: userIdx
+            KeySchema:
+              - AttributeName: uid
+                KeyType: HASH
+              - AttributeName: time
+                KeyType: RANGE
+            Projection: 
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: botIdx
+            KeySchema:
+              - AttributeName: bot
+                KeyType: HASH
+              - AttributeName: time
+                KeyType: RANGE
+            Projection: 
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

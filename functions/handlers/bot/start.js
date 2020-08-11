@@ -2,7 +2,7 @@ const Extra = require('telegraf/extra')
 const doSearch = require('./functions/doSearch')
 const { base64UrlDecode } = require('../../utils/base64')
 
-module.exports = (bot, providers, botType) => {
+module.exports = (bot, providers) => {
 
     function renderHello({ i18n, reply }) {
         return reply(
@@ -18,12 +18,14 @@ module.exports = (bot, providers, botType) => {
     }
 
     bot.start(async (ctx) => {
-        const { startPayload } = ctx
+        const { startPayload, track } = ctx
+
+        track('start', { startPayload })
 
         if (startPayload) {
             query = startPayload.trim()
             if (query) {
-                return doSearch(ctx, providers, botType, base64UrlDecode(query))
+                return doSearch(ctx, providers, base64UrlDecode(query))
             }
         }
 
@@ -31,6 +33,7 @@ module.exports = (bot, providers, botType) => {
     })
 
     bot.help(async (ctx) => {
+        ctx.track('help')
         return renderHello(ctx)
     })
 }

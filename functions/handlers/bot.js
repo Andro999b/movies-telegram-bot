@@ -1,4 +1,6 @@
 const makeResponse = require('../utils/makeResponse')
+const analytics = require('./bot/midleware/analytics')
+const tracker = require('../tracker')
 const path = require('path')
 const Telegraf = require('telegraf')
 const TelegrafI18n = require('telegraf-i18n')
@@ -16,11 +18,12 @@ const i18n = new TelegrafI18n({
 const bot = new Telegraf(process.env.TOKEN)
 
 bot.use(i18n.middleware())
+bot.use(analytics(tracker(), BOT_TYPE))
 
-require('./botCommands/library')(bot, PROVIDERS, BOT_TYPE)
-require('./botCommands/start')(bot, PROVIDERS, BOT_TYPE)
-require('./botCommands/helpsearch')(bot, BOT_TYPE)
-require('./botCommands/search')(bot, PROVIDERS, INLINE_PROVIDERS, BOT_TYPE)
+require('./bot/library')(bot, PROVIDERS, BOT_TYPE)
+require('./bot/start')(bot, PROVIDERS)
+require('./bot/helpsearch')(bot)
+require('./bot/search')(bot, PROVIDERS, INLINE_PROVIDERS)
 
 bot.catch((err) => {
     if (err.response && err.response.error_code === 403) {
