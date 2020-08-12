@@ -24,7 +24,6 @@ provider:
         - dynamodb:BatchWriteItem
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.analyticsTable}"
 
-
 functions:
   library:
     handler: handlers/library.handler
@@ -66,8 +65,6 @@ functions:
                 - provider: true 
                 - resultId: true 
                 - sourceId: true 
-    environment:
-
 
   provider:
     handler: handlers/provider.handler
@@ -149,16 +146,14 @@ resources:
         AttributeDefinitions:
           - AttributeName: uid
             AttributeType: N
+          - AttributeName: date
+            AttributeType: S
           - AttributeName: time
             AttributeType: N
-          - AttributeName: ttl
-            AttributeType: N
           - AttributeName: type
-            AttributeType: S
-          - AttributeName: bot
             AttributeType: S
         KeySchema:
-          - AttributeName: type
+          - AttributeName: date
             KeyType: HASH
           - AttributeName: time
             KeyType: RANGE
@@ -174,9 +169,9 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
-          - IndexName: botIdx
+          - IndexName: typeIdx
             KeySchema:
-              - AttributeName: bot
+              - AttributeName: type
                 KeyType: HASH
               - AttributeName: time
                 KeyType: RANGE

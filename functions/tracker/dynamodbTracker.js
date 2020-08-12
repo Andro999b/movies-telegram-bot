@@ -27,8 +27,14 @@ module.exports = () => {
 
     return async (events) => {
         const requests = events.map((event) => {
+            const today = new Date();
+            const date = today.getFullYear() + '-' + (today.getMonth() + 1 ) + '-' + today.getDate();
+
             const Item = {
-                'ttl': {
+                date: {
+                    'S': date
+                },
+                ttl: {
                     'N': '' + (Math.floor(Date.now() / 1000) + analyticsTTL)
                 }
             }
