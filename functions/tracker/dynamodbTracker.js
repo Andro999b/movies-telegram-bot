@@ -3,6 +3,8 @@ const ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
 module.exports = () => {
     const tableName = process.env.ANALYTIC_TABLE || 'analyticsEvents'
+    const analyticsTTL = 3600 * 24 * (process.env.ANALYTIC_RETENTION || 90)
+
     const typeMapping = {
         uid: 'N',
         time: 'N',
@@ -25,7 +27,11 @@ module.exports = () => {
 
     return async (events) => {
         const requests = events.map((event) => {
-            const Item = {}
+            const Item = {
+                'ttl': {
+                    'N': '' + (Math.floor(Date.now() / 1000) + analyticsTTL)
+                }
+            }
 
             Object.keys(event).forEach((key) => {
                 Item[key] = mapper(key, event[key])

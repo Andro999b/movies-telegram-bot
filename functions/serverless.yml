@@ -17,6 +17,7 @@ provider:
     ANALYTIC_TABLE: ${self:custom.analyticsTable}
     CACHE_TABLE: ${self:custom.cahceTable}
     MONGODB_URI: ${self:custom.mongoUrl}
+    ANALYTIC_RETENTION: 90
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -150,6 +151,8 @@ resources:
             AttributeType: N
           - AttributeName: time
             AttributeType: N
+          - AttributeName: ttl
+            AttributeType: N
           - AttributeName: type
             AttributeType: S
           - AttributeName: bot
@@ -185,3 +188,6 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
