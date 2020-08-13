@@ -358,7 +358,7 @@ class VideoScrean extends BaseScrean {
             details: errorData,
         })
 
-        analytics('play', 'error', 'Can`t play media')
+        analytics('errorPlayback', 'Can`t play media')
     }
 
     render() {

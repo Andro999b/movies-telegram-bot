@@ -1,6 +1,6 @@
-export default (action, category, label) => {
+export default (action, label) => {
     window.gtag && gtag('event', action, {
-        'event_category': category,
+        'event_category': 'player',
         'event_label': label
     })
 }

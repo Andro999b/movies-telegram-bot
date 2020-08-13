@@ -72,7 +72,7 @@ class Share extends BaseSelector {
     }
 
     handleShare = (network) => {
-        analytics(network, 'share', document.title)
+        analytics('share', document.title)
     }
 
     handleCopy = (url) => {

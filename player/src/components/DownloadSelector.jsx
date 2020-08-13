@@ -30,7 +30,7 @@ class DownloadSelector extends BaseSelector {
     handleTrackDownload = () => {
         const { file, title } = this.props
 
-        analytics('downloadFile', 'downloadFile', `${title} - ${file.name}`)
+        analytics('downloadFile', `${title} - ${file.name}`)
     }
 
     renderButton() {

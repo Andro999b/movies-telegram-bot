@@ -38,14 +38,14 @@ function renderError(message, err) {
             getAlternativeUrl()
         )
         document.getElementById('altenativeLink').addEventListener('click', () => {
-            analytics('load', 'alternativeLink', query)
+            analytics('alternativeLink', query)
         })
     } else {
         document.querySelector('#app .loader').textContent = message
     }
     
 
-    analytics('load', 'error', message)
+    analytics('errorLoad', message)
     logger.error(message, {
         provider,
         id,
@@ -55,7 +55,7 @@ function renderError(message, err) {
 }
 
 function trailerRedirect(trailerUrl) {
-    analytics('load', 'rediectTrailer', trailerUrl)
+    analytics('rediectTrailer', trailerUrl)
     location.href = trailerUrl
 }
 
@@ -78,7 +78,7 @@ export default function () {
 
                     playerStore.openPlaylist({ id, provider, ...playlist }, fileIndex, time)
 
-                    analytics('open', 'playlist', document.title)
+                    analytics('playlistLoaded', document.title)
 
                     render((<App />), document.getElementById('app'))
                 } else if(playlist && playlist.trailer) {

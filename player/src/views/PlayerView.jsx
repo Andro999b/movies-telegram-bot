@@ -41,7 +41,7 @@ class PlayerView extends Component {
             this.setState({ initialFullScreen: true })
         }
         this.props.device.play()
-        analytics('start', 'video', document.title)
+        analytics('start', document.title)
     }
 
     render() {

@@ -183,7 +183,7 @@ export class LocalDevice extends Device {
                         errorData: e
                     })
 
-                    analytics('play', 'error', 'Can`t play media')
+                    analytics('errorPlayback', 'Can`t play media')
 
                     this.setError(localization.cantPlayMedia)
                 })
@@ -267,6 +267,8 @@ class PlayerStore {
 
         this.device.setPlaylist(playlist, fileIndex, startTime)
         document.title = this.getPlayerTitle()
+
+        analytics('selectFile', document.title)
     }
 
     @action.bound switchFile(fileIndex) {
@@ -276,8 +278,8 @@ class PlayerStore {
             this.device.pause()
         }
         document.title = this.getPlayerTitle()
-
-        analytics('selectFile', 'video', document.title)
+        
+        analytics('selectFile', document.title)
     }
 
     @action.bound prevFile() {
