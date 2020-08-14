@@ -28,11 +28,15 @@ module.exports = () => {
     return async (events) => {
         const requests = events.map((event) => {
             const today = new Date();
-            const date = today.getFullYear() + '-' + (today.getMonth() + 1 ) + '-' + today.getDate();
+            const date = today.getFullYear() + '-' + (today.getMonth() + 1 ) + '-' + today.getDate()
+            const month = today.getFullYear() + '-' + (today.getMonth() + 1 )
 
             const Item = {
                 date: {
                     'S': date
+                },
+                month: {
+                    'S': month
                 },
                 ttl: {
                     'N': '' + (Math.floor(Date.now() / 1000) + analyticsTTL)

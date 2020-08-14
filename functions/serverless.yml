@@ -148,10 +148,10 @@ resources:
             AttributeType: N
           - AttributeName: date
             AttributeType: S
+          - AttributeName: month
+            AttributeType: S
           - AttributeName: time
             AttributeType: N
-          - AttributeName: type
-            AttributeType: S
         KeySchema:
           - AttributeName: date
             KeyType: HASH
@@ -169,9 +169,9 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
-          - IndexName: typeIdx
+          - IndexName: monthIdx
             KeySchema:
-              - AttributeName: type
+              - AttributeName: month
                 KeyType: HASH
               - AttributeName: time
                 KeyType: RANGE
