@@ -4,13 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev-server.config.js"
+    "start": "webpack-dev-server --config webpack.dev-server.config.js",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@date-io/moment": "1.x",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/pickers": "^3.2.10",
     "amazon-cognito-identity-js": "^4.3.3",
     "aws-sdk": "^2.731.0",
     "clsx": "^1.1.1",

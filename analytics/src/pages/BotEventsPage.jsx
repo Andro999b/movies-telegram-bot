@@ -5,14 +5,15 @@ import {
     makeStyles,
     Box,
     Container,
-    TextField,
+    TextField
 } from '@material-ui/core'
 import moment from 'moment'
 import botEvents from '../store/botEvents'
-import UserActivity from '../components/UserActivity'
+import EventsTable from '../components/EventsTable'
 import ReloadButton from '../components/ReloadButton'
 import { observer } from 'mobx-react-lite'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
+import { DatePicker } from '@material-ui/pickers'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,19 +25,27 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1
     },
     filter: {
+        display: 'flex',
         marginBottom: theme.spacing(2)
     },
     filterInput: {
-        backgroundColor: '#FFF'
+        flexGrow: 1,
+        backgroundColor: '#FFF',
+        marginRight: theme.spacing(2)
+    },
+    dataPicker: {
+        backgroundColor: '#FFF',
+        width: 100
     }
 }))
 
 export default observer(() => {
     const store = React.useRef(botEvents).current
+    const [date, setDate] = React.useState(new Date())
     const classes = useStyles()
 
     React.useEffect(() => {
-        if (!store.lastTs) store.reload()
+        if (!store.lastTs) store.setDate(date)
 
         store.startUpdate()
 
@@ -45,30 +54,40 @@ export default observer(() => {
 
     const [filter, setFilter] = React.useState('')
     let items = filter ?
-        store.events.filter((item) => item.filter.includes(filter)).slice(0, 100) :
-        store.events.slice(0, 100)
+        store.events.filter((item) => item.filter.includes(filter)) :
+        store.events
+
+    const handleDateChange = (newDate) => {
+        setDate(newDate)
+        store.setDate(newDate)
+    }
 
     return (
         <Box className={classes.root}>
             <Toolbar>
-                <Typography className={classes.title}>Bot Events Stream (Displayed: {items.length})</Typography>
-                <Typography>Last Update: {moment(store.lastTs).format('HH:mm')}</Typography>
+                <Typography className={classes.title}>Bot Events Stream</Typography>
             </Toolbar>
             <Container className={classes.filter}>
                 <TextField
                     className={classes.filterInput}
-                    fullWidth
                     label="Filter"
                     variant="outlined"
                     value={filter}
                     onChange={(e) => setFilter(e.currentTarget.value)}
                 />
+                <DatePicker
+                    autoOk
+                    format="YYYY-M-D"
+                    disableFuture
+                    inputVariant="outlined"
+                    value={date}
+                    className={classes.dataPicker}
+                    onChange={handleDateChange}
+                />
             </Container>
             <Container>
                 <LoadingPlaceholder loading={!store.initialized}>
-                    {items.map((item) => (
-                        <UserActivity key={`${item.uid}_${item.type}_${item.time}`} item={item} clickable />
-                    ))}
+                    <EventsTable rows={items} />
                 </LoadingPlaceholder>
             </Container>
             <ReloadButton onClick={() => store.reload()} />

@@ -7,9 +7,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import BotDashboardPage from './pages/BotDashboardPage'
 import BotEventsPage from './pages/BotEventsPage';
 import BotUsersPage from './pages/BotUsersPage';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     root: {
         display: 'flex',
         height: '100%'
@@ -18,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         height: '100%'
     }
-}))
+})
 
 const App = () => {
     const classes = useStyles()
@@ -28,17 +30,19 @@ const App = () => {
         <Router>
             <Navigation />
             <main className={classes.content} >
-                <Switch>
-                    <Route exact path="/">
-                        <BotDashboardPage/>
-                    </Route>
-                    <Route path="/events">
-                        <BotEventsPage/>
-                    </Route>
-                    <Route path="/users/:uid">
-                        <BotUsersPage/>
-                    </Route>
-                </Switch>
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <Switch>
+                        <Route exact path="/">
+                            <BotDashboardPage />
+                        </Route>
+                        <Route path="/events">
+                            <BotEventsPage />
+                        </Route>
+                        <Route path="/users/:uid">
+                            <BotUsersPage />
+                        </Route>
+                    </Switch>
+                </MuiPickersUtilsProvider>
             </main>
         </Router>
     </div >)

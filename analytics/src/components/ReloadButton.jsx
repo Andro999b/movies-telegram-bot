@@ -5,7 +5,7 @@ import { Fab, withStyles } from '@material-ui/core'
 const styles = {
     fab: {
         position: 'fixed',
-        bottom: 10,
+        bottom: 50,
         right: 10,
     }
 }

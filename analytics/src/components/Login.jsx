@@ -6,14 +6,13 @@ import {
     AuthenticationDetails,
     CognitoUser
 } from 'amazon-cognito-identity-js'
-
 import {
     TextField,
     Button,
     FormControl,
     Typography
 } from '@material-ui/core';
-
+import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import AWS from 'aws-sdk'
 
 import {
@@ -25,6 +24,13 @@ import {
 
 export function withLogin(Component) {
     const useStyles = makeStyles((theme) => ({
+        container: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%'
+        },
         root: {
             '&': {
                 display: 'block',
@@ -49,11 +55,13 @@ export function withLogin(Component) {
         const [username, setUsername] = React.useState('')
         const [error, setError] = React.useState('')
         const [userData, setUserData] = React.useState()
+        const [loading, setLoading] = React.useState(false)
         const classes = useStyles()
 
         const doLogin = (e) => {
             e.preventDefault()
             setError('')
+            setLoading(true)
 
             const authDetails = new AuthenticationDetails({
                 Username: username,
@@ -86,14 +94,17 @@ export function withLogin(Component) {
                         } else {
                             setStep('SIGNED')
                         }
+                        setLoading(false)
                     });
                 },
                 onFailure: (err) => {
                     setError(err.message)
-                    console.error(err);
+                    setLoading(false)
+                    console.error(err)
                 },
                 newPasswordRequired: (userAttributes) => {
                     setStep('NEW_PASSWORD_REQUIRED')
+                    setLoading(false)
                     setPassword('')
                     setUserData({ user, userAttributes })
                 }
@@ -103,6 +114,7 @@ export function withLogin(Component) {
         const doChangePassword = (e) => {
             e.preventDefault()
             setError('')
+            setLoading(true)
 
             const { user, userAttributes } = userData
 
@@ -111,16 +123,20 @@ export function withLogin(Component) {
                 onSuccess: (result) => {
                     console.log(result)
                     setStep('SIGNED')
+                    setLoading(false)
                 },
                 onFailure: (err) => {
                     setError(err.message)
+                    setLoading(false)
                     console.error(err);
                 },
             })
         }
 
+        let form
+
         if (step == 'NEW_PASSWORD_REQUIRED') {
-            return (
+            form = (
                 <form onSubmit={doChangePassword}>
                     <FormControl className={classes.root}>
                         <Typography className={classes.error}>{error}</Typography>
@@ -129,10 +145,8 @@ export function withLogin(Component) {
                     </FormControl>
                 </form>
             )
-        }
-
-        if (step == 'NOT_SIGNED') {
-            return (
+        } else if (step == 'NOT_SIGNED') {
+            form = (
                 <form onSubmit={doLogin}>
                     <FormControl className={classes.root}>
                         <Typography className={classes.error}>{error}</Typography>
@@ -141,6 +155,14 @@ export function withLogin(Component) {
                         <Button disableElevation type="submit" variant="contained" color="primary" onClick={doLogin}>Loggin</Button>
                     </FormControl>
                 </form>
+            )
+        }
+
+        if (form) {
+            return (
+                <LoadingPlaceholder loading={loading}>
+                    <div className={classes.container}>{form}</div>
+                </LoadingPlaceholder>
             )
         }
 

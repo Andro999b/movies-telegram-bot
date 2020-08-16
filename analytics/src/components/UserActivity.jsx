@@ -21,11 +21,12 @@ const filterProperties = [
     'ttl', 'filter'
 ]
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     details: {
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        backgroundColor: grey[100]
+        backgroundColor: grey[100],
+        paddingTop: theme.spacing(2)
     },
     propLabel: {
         display: 'inline-block',
@@ -53,7 +54,7 @@ export default ({ item, clickable }) => {
                 <Box flexGrow={1}>
                     <Typography>{title}</Typography>
                 </Box>
-                <Typography>{moment(item.time).format('HH:mm')}</Typography>
+                <Typography>{moment(item.time).format('YYYY-M-D HH:mm')}</Typography>
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
                 <Grid container>

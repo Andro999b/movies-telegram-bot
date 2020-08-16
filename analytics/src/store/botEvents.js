@@ -5,16 +5,18 @@ import { TABLE_NAME, EVENTS_UPDATE_INTERVAL } from '../constants'
 
 let loading = false
 let interval = null
+const today = moment().utc().format('YYYY-M-D')
 
 export default observable({
     events: [],
     lastTs: null,
     initialized: false,
+    date: today,
 
     startUpdate() {
         if (interval) clearInterval(interval)
         interval = setInterval(
-            () => this.loadStratingFromTS(this.lastTs),
+            () => { if(this.date == today) this.loadStratingFromTS(this.lastTs) },
             EVENTS_UPDATE_INTERVAL
         )
     },
@@ -27,14 +29,12 @@ export default observable({
         if (loading) return
         loading = true
 
-        const keyValue = moment().utc().format('YYYY-M-D')
-
         const query = {
             TableName: TABLE_NAME,
             KeyConditions: {
                 date: {
                     ComparisonOperator: 'EQ',
-                    AttributeValueList: [keyValue]
+                    AttributeValueList: [this.date]
                 }
             },
             ScanIndexForward: false
@@ -64,6 +64,11 @@ export default observable({
                 .concat(this.events)
             this.lastTs = Date.now()
         })
+    },
+
+    setDate(date) {
+        this.date = moment(date).utc().format('YYYY-M-D')
+        this.reload()
     },
 
     reload() {
