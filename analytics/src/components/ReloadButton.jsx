@@ -1,0 +1,17 @@
+import React from 'react'
+import { Refresh as RefreshIcon } from '@material-ui/icons';
+import { Fab, withStyles } from '@material-ui/core'
+
+const styles = {
+    fab: {
+        position: 'fixed',
+        bottom: 10,
+        right: 10,
+    }
+}
+
+export default withStyles(styles)(({ onClick, classes }) => (
+    <Fab color="secondary" className={classes.fab} onClick={onClick}>
+        <RefreshIcon />
+    </Fab>
+))
