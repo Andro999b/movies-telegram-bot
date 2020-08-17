@@ -4,10 +4,9 @@ export const USER_POOL_ID = 'eu-central-1_ofVThlAy3'
 export const APP_CLIENT_ID = '5rpkhcspe0slqppqqt9oldfc9'
 export const TABLE_NAME = 'analyticsTable-prod'
 export const EVENTS_UPDATE_INTERVAL = 1000 * 30
+export const DATE_FORMAT = 'YYYY-M-D'
 
 export const names ={
-    today: 'Today',
-    yesterday: 'Yesterday',
     last7days: 'Last 7 days',
     current_month: 'Current month',
     previous_month: 'Previous month',

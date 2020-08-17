@@ -1,12 +1,13 @@
 import { runQuery } from '../database/dynamodb'
 import { TABLE_NAME } from '../constants'
-import { bucketReducer, toPieData } from '../utils'
+import { bucketReducer, toPieData, getUserName } from '../utils'
 
 export default () => ({
     loading: true,
     botsPie: [],
     eventsPie: [],
     events: [],
+    name: null,
 
     load(uid) {
         this.botPie = []
@@ -32,6 +33,9 @@ export default () => ({
             this.eventsPie = toPieData(items.reduce(eventsReducer, {}))
             this.botsPie = toPieData(items.reduce(botsReducer, {}))
             this.loading = false
+
+            if(items.length)
+                this.name = getUserName(items[0])
         })
     }
 })

@@ -1,22 +1,22 @@
 import { observable } from 'mobx'
 import { runQuery } from '../database/dynamodb'
 import moment from 'moment'
-import { TABLE_NAME, EVENTS_UPDATE_INTERVAL } from '../constants'
+import { TABLE_NAME, EVENTS_UPDATE_INTERVAL, DATE_FORMAT } from '../constants'
+import { isToday } from '../utils'
 
 let loading = false
 let interval = null
-const today = moment().utc().format('YYYY-M-D')
 
 export default observable({
     events: [],
     lastTs: null,
     initialized: false,
-    date: today,
+    date: new Date(),
 
     startUpdate() {
         if (interval) clearInterval(interval)
         interval = setInterval(
-            () => { if(this.date == today) this.loadStratingFromTS(this.lastTs) },
+            () => { if(isToday(this.date)) this.loadStratingFromTS(this.lastTs) },
             EVENTS_UPDATE_INTERVAL
         )
     },
@@ -29,12 +29,14 @@ export default observable({
         if (loading) return
         loading = true
 
+        const keyValue = moment(this.date).utc().format(DATE_FORMAT)
+
         const query = {
             TableName: TABLE_NAME,
             KeyConditions: {
                 date: {
                     ComparisonOperator: 'EQ',
-                    AttributeValueList: [this.date]
+                    AttributeValueList: [keyValue]
                 }
             },
             ScanIndexForward: false
@@ -67,7 +69,7 @@ export default observable({
     },
 
     setDate(date) {
-        this.date = moment(date).utc().format('YYYY-M-D')
+        this.date = date
         this.reload()
     },
 

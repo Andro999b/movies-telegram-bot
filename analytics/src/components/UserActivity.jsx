@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core'
 import { grey } from '@material-ui/core/colors'
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
-import { getUserName } from '../utils'
+import { getEventInputProp } from '../utils'
 import moment from 'moment'
 
 const filterProperties = [
@@ -39,18 +39,18 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-export default ({ item, clickable }) => {
+export default ({ item }) => {
     const classes = useStyles()
 
-    const title = clickable ?
-        <Link href={`#/users/${item.uid}`}>{getUserName(item)}</Link> :
-        getUserName(item)
-
+    const input = getEventInputProp(item)
+    const title = input && input.value ?
+        (<span><b>{input.name}: </b>{input.value}</span>) :
+        ''
 
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Box width={120}><Typography><b>{item.type}</b></Typography></Box>
+                <Box width={200}><Typography><b>{item.bot}#{item.type}</b></Typography></Box>
                 <Box flexGrow={1}>
                     <Typography>{title}</Typography>
                 </Box>

@@ -75,3 +75,43 @@ export const toPieData = (bucket) =>
             name: key,
             value: bucket[key]
         }))
+
+export const getEventInputProp = (event) => {
+    let propName
+    switch(event.type) {
+        case 'search': {
+            propName = 'query'
+            break
+        }
+        case 'no_results': {
+            propName = 'query'
+            break
+        }
+        case 'top': {
+            propName = 'query'
+            break
+        }
+        case 'lib': {
+            propName = 'item'
+            break
+        }
+        case 'start' : {
+            propName = 'startPayload'
+            break
+        }
+        default: return
+    }
+
+    return {
+        name: propName,
+        value: event[propName]
+    }
+}
+
+export const isToday = (date) => {
+    console.log(date);
+    const today = new Date()
+    return date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+}

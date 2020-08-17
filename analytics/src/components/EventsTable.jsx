@@ -20,7 +20,7 @@ import {
     KeyboardArrowUp as KeyboardArrowUpIcon
 } from '@material-ui/icons'
 import moment from 'moment'
-import { getUserName } from '../utils'
+import { getUserName, getEventInputProp } from '../utils'
 import { grey } from '@material-ui/core/colors'
 
 const filterProperties = [
@@ -62,6 +62,8 @@ const Row = ({ data }) => {
     const classes = useRowStyles()
     const [open, setOpen] = React.useState(false);
 
+    const input = getEventInputProp(data)
+
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
@@ -79,9 +81,12 @@ const Row = ({ data }) => {
                 <TableCell>
                     <Link href={`#/users/${data.uid}`}>{getUserName(data)}</Link>
                 </TableCell>
+                <TableCell>
+                    {input && input.value}
+                </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell className={classes.contentCell} colSpan={4}>
+                <TableCell className={classes.contentCell} colSpan={5}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Grid container className={classes.details}>
                             {Object
@@ -128,6 +133,7 @@ export default ({ rows }) => {
                             <TableCell>Event</TableCell>
                             <TableCell>Time</TableCell>
                             <TableCell>User</TableCell>
+                            <TableCell>Input</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

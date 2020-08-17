@@ -1,4 +1,4 @@
-import { periods, TABLE_NAME } from '../constants'
+import { periods, TABLE_NAME, DATE_FORMAT } from '../constants'
 import {
     getDateFor,
     getIndexForPeriod,
@@ -19,8 +19,6 @@ import { observable } from 'mobx'
 
 const getKeysForPeriod = (period) => {
     switch (period) {
-        case 'today': return [{ key: 'date', value: getDateFor(0) }]
-        case 'yesterday': return [{ key: 'date', value: getDateFor(1) }]
         case 'last7days': return range(7)
             .map((i) => ({ key: 'date', value: getDateFor(i - 1) }))
             .reverse()
@@ -29,6 +27,7 @@ const getKeysForPeriod = (period) => {
         case 'last3months': return range(3)
             .map((i) => ({ key: 'month', value: getMonthFor(i - 1) }))
             .reverse()
+        default: return [{ key: 'date', value: period }]
     }
 }
 
@@ -91,10 +90,10 @@ const topUsersBucketReducer = (acc, item) => {
 }
 
 const getSegmetExtractorForPeriod = (period) => {
-    if (period == 'today' || period == 'yesterday')
-        return ({ time }) => moment(time).format('HH:00')
+    if (periods.includes(period))
+        return ({ date }) => date
 
-    return ({ date }) => date
+    return ({ time }) => moment(time).format('HH:00')
 }
 
 const toUserActivityData = (bucket) =>
@@ -127,7 +126,7 @@ export default observable({
     eventsChart: [],
     events: [],
 
-    period: periods[0],
+    period: moment().utc().format(DATE_FORMAT),
 
     load(period) {
         this.period = period

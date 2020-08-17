@@ -41,11 +41,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default observer(() => {
     const store = React.useRef(botEvents).current
-    const [date, setDate] = React.useState(new Date())
     const classes = useStyles()
 
     React.useEffect(() => {
-        if (!store.lastTs) store.setDate(date)
+        if (!store.lastTs) store.reload()
 
         store.startUpdate()
 
@@ -58,8 +57,7 @@ export default observer(() => {
         store.events
 
     const handleDateChange = (newDate) => {
-        setDate(newDate)
-        store.setDate(newDate)
+        store.setDate(newDate.toDate())
     }
 
     return (
@@ -80,7 +78,7 @@ export default observer(() => {
                     format="YYYY-M-D"
                     disableFuture
                     inputVariant="outlined"
-                    value={date}
+                    value={store.date}
                     className={classes.dataPicker}
                     onChange={handleDateChange}
                 />
