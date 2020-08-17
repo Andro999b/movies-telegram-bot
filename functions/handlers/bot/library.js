@@ -72,7 +72,7 @@ module.exports = (bot, providers, botType) => {
         await deleteMessage()
 
         if (item) {
-            track('lib', { item })
+            track('lib', { title: item.title })
             const { title, year, rating, url } = item
             return replyWithPhoto(
                 item.image,

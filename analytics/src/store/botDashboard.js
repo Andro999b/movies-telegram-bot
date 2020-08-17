@@ -1,4 +1,4 @@
-import { periods, TABLE_NAME, DATE_FORMAT } from '../constants'
+import { PERIODS, TABLE_NAME, DATE_FORMAT } from '../constants'
 import {
     getDateFor,
     getIndexForPeriod,
@@ -90,7 +90,7 @@ const topUsersBucketReducer = (acc, item) => {
 }
 
 const getSegmetExtractorForPeriod = (period) => {
-    if (periods.includes(period))
+    if (PERIODS.includes(period))
         return ({ date }) => date
 
     return ({ time }) => moment(time).format('HH:00')

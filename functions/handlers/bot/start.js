@@ -20,14 +20,17 @@ module.exports = (bot, providers) => {
     bot.start(async (ctx) => {
         const { startPayload, track } = ctx
 
-        track('start', { startPayload })
-
         if (startPayload) {
-            query = startPayload.trim()
+            let query = startPayload.trim()
             if (query) {
+                track('start', { 
+                    startPayload: base64UrlDecode(query) 
+                })
                 return doSearch(ctx, providers, base64UrlDecode(query))
             }
         }
+
+        track('start')
 
         return renderHello(ctx)
     })

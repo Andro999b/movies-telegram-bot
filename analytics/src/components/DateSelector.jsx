@@ -1,11 +1,11 @@
 import React, { useState, Fragment } from 'react'
 import { Button, Menu, MenuItem } from '@material-ui/core'
-import { names, periods, DATE_FORMAT } from '../constants'
+import { NAMES, PERIODS, DATE_FORMAT } from '../constants'
 import { DatePicker } from '@material-ui/pickers'
 import moment from 'moment'
 
 
-export default ({ value, onChange }) => {
+export default ({ value, onChange, format = DATE_FORMAT }) => {
     const [anchorEl, setAnchorEl] = useState(null)
 
     const handleClose = () => {
@@ -22,16 +22,16 @@ export default ({ value, onChange }) => {
     //parse value for 
     let calendarDate = new Date()
 
-    if (!periods.includes(value)) {
-        calendarDate = moment(value, DATE_FORMAT).toDate()
+    if (!PERIODS.includes(value)) {
+        calendarDate = moment(value, format).toDate()
         name = value
     } else {
-        name = names[value || periods[0]]
+        name = NAMES[value || PERIODS[0]]
     }
 
     const handleDateChange = (newDate) => {
         setAnchorEl(null);
-        onChange(moment(newDate).format(DATE_FORMAT))
+        onChange(moment(newDate).format(format))
     }
 
     return (
@@ -48,8 +48,8 @@ export default ({ value, onChange }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {periods.map((period) => (
-                    <MenuItem key={period} onClick={() => handleSelect(period)}>{names[period]}</MenuItem>
+                {PERIODS.map((period) => (
+                    <MenuItem key={period} onClick={() => handleSelect(period)}>{NAMES[period]}</MenuItem>
                 ))}
                 <DatePicker
                     disableFuture

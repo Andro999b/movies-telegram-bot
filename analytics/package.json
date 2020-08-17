@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev-server.config.js",
-    "build": "rm -rf dist/* && webpack --mode production"
+    "build": "rm -rf dist/* && webpack --mode production",
+    "deploy": "surge dist movie-player-stat.surge.sh",
+    "release": "npm run build && npm run deploy"
   },
   "author": "",
   "license": "ISC",

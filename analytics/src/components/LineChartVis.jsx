@@ -1,6 +1,6 @@
 import React from 'react'
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
-import { colors } from '../constants'
+import { COLORS } from '../constants'
 
 export default ({ data, lines }) => {
     return (
@@ -10,7 +10,7 @@ export default ({ data, lines }) => {
                 <YAxis />
                 <Tooltip />
                 {lines.map((line, index) => 
-                    <Line key={line} type="monotone" dataKey={line} strokeWidth={2} stroke={colors[index % colors.length]}/>
+                    <Line key={line} type="monotone" dataKey={line} strokeWidth={2} stroke={COLORS[index % COLORS.length]}/>
                 )}
             </LineChart>
         </ResponsiveContainer>

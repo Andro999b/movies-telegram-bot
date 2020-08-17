@@ -1,0 +1,14 @@
+service: analytics-functions
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-central-1
+
+functions:
+  ga:
+    handler: handlers/ga.handler
+    environment:
+      CLIENT_EMAIL: ${ssm:bot_ga_client_email}
+      PRIVATE_KEY: ${ssm:bot_ga_private_key}
+      VIEW_ID: ${ssm:bot_ga_view_id}

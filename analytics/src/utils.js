@@ -92,7 +92,7 @@ export const getEventInputProp = (event) => {
             break
         }
         case 'lib': {
-            propName = 'item'
+            propName = 'title'
             break
         }
         case 'start' : {

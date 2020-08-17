@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import BotDashboardPage from './pages/BotDashboardPage'
 import BotEventsPage from './pages/BotEventsPage';
 import BotUsersPage from './pages/BotUsersPage';
+import GADashboard from './pages/GADashboard';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 
@@ -37,6 +38,9 @@ const App = () => {
                         </Route>
                         <Route path="/events">
                             <BotEventsPage />
+                        </Route>
+                        <Route path="/ga">
+                            <GADashboard />
                         </Route>
                         <Route path="/users/:uid">
                             <BotUsersPage />

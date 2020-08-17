@@ -14,7 +14,8 @@ import {
     ChevronLeft as LeftIcon,
     ChevronRight as RightIcon,
     Dashboard as DashboardIcon,
-    ViewStream as EventsIcon
+    ViewStream as EventsIcon,
+    Web as WedIcon
 } from '@material-ui/icons'
 import { useHistory } from "react-router-dom";
 
@@ -84,6 +85,10 @@ export default () => {
                 <ListItem button onClick={() => history.push('/events')}>
                     <ListItemIcon><EventsIcon /></ListItemIcon>
                     <ListItemText primary="Events" />
+                </ListItem>
+                <ListItem button onClick={() => history.push('/ga')}>
+                    <ListItemIcon><WedIcon /></ListItemIcon>
+                    <ListItemText primary="Google Analytics" />
                 </ListItem>
             </List>
         </Drawer>

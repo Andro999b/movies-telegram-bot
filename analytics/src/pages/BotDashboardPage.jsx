@@ -32,7 +32,7 @@ export default observer(() => {
     const classes = useStyles()
     const store = React.useRef(dashboard).current
 
-    React.useEffect(() => dashboard.reload(), [])
+    React.useEffect(() => store.reload(), [])
 
     const totalEvent = store.botPie.reduce((acc, { value }) => acc + value, 0)
 

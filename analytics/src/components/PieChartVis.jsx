@@ -1,6 +1,6 @@
 import React from 'react'
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts'
-import { colors } from '../constants'
+import { COLORS } from '../constants'
 
 export default ({ data }) => {
 
@@ -9,7 +9,7 @@ export default ({ data }) => {
             <PieChart>
                 <Pie data={data} nameKey="name" dataKey="value">
                     {data.map((_, index) =>
-                        <Cell key={index} fill={colors[index % colors.length]} />
+                        <Cell key={index} fill={COLORS[index % COLORS.length]} />
                     )}
                 </Pie>
                 <Legend formatter={(value, _, index) => `${value} (${data[index].value})`}/>

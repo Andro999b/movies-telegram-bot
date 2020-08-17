@@ -33,9 +33,7 @@ export function withLogin(Component) {
         },
         root: {
             '&': {
-                display: 'block',
-                margin: 'auto',
-                width: 216
+                display: 'flex'
             },
             '& > *': {
                 margin: theme.spacing(1),
@@ -44,8 +42,7 @@ export function withLogin(Component) {
         },
         error: {
             color: red[900],
-            textAlign: 'center',
-            width: 200
+            textAlign: 'center'
         }
     }))
 
