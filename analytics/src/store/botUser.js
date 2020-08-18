@@ -1,6 +1,6 @@
 import { runQuery } from '../database/dynamodb'
 import { TABLE_NAME } from '../constants'
-import { bucketReducer, toPieData, getUserName } from '../utils'
+import { bucketReducer, getUserName } from '../utils'
 
 export default () => ({
     loading: true,
@@ -30,8 +30,8 @@ export default () => ({
 
         runQuery(query).then(({ items }) => {
             this.events = items
-            this.eventsPie = toPieData(items.reduce(eventsReducer, {}))
-            this.botsPie = toPieData(items.reduce(botsReducer, {}))
+            this.eventsPie = items.reduce(eventsReducer, {}).chartData
+            this.botsPie = items.reduce(botsReducer, {}).chartData
             this.loading = false
 
             if(items.length)

@@ -18,7 +18,7 @@ export default ({ children, loading }) => {
     if(loading) {
         return (
             <div className={classes.container}>
-                <CircularProgress disableShrink/>
+                <CircularProgress/>
             </div>
         )
     }

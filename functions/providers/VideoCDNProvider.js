@@ -54,7 +54,7 @@ class VideoCDNProvider extends Provider {
         const { ru_title, iframe_src, kinopoisk_id } = res.body.data[0]
         const url = iframe_src.startsWith('//') ? 'https:' + iframe_src : iframe_src
 
-        const files = (await videocdnembed(url))
+        const files = (await videocdnembed(url.replace('5167.videocdn.pw', 'videocdn.so')))
             .map((file, id) => ({ id, ...file }))
 
         const kinopoiskPoster = `https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`

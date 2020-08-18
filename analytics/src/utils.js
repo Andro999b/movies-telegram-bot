@@ -3,78 +3,77 @@ export const range = (to) => Array.from({ length: to }, (_, k) => k + 1)
 export const getUserName = ({ firstname, lastname, username }) =>
     [firstname, lastname].join(' ') + (username ? ' @' + username : '')
 
-export const segmentBucketReducer = (segmentExtractor, keyExtractor) => {
-    return (acc, item) => {
-        const segment = segmentExtractor(item)
+export const segmentBucketReducer = (
+    segmentExtractor, 
+    keyExtractor, 
+    valueReducer = (acc) => acc + 1,
+    initValue = 0 
+) => {
+    return ({ acc ={}, chartData = [] }, item) => {
+        const seg = segmentExtractor(item)
         const key = keyExtractor(item)
 
         if (!key) return
 
-        if (!acc.hasOwnProperty(segment)) {
-            acc[segment] = {}
+        if (!acc.hasOwnProperty(seg)) {
+            acc[seg] = { seg }
+            chartData.push(acc[seg])
         }
 
-        const segmentBucket = acc[segment]
+        const segmentBucket = acc[seg]
 
         if (!segmentBucket.hasOwnProperty(key)) {
-            segmentBucket[key] = 0
+            segmentBucket[key] = initValue
         }
 
-        segmentBucket[key]++
+        segmentBucket[key] = valueReducer(segmentBucket[key], item)
 
-        return acc
+        return { acc, chartData }
     }
 }
 
 export const uniqueBucketReducer = (segmentExtractor, keyExtractor) => {
-    return (acc, item) => {
-        const segment = segmentExtractor(item)
+    return ({ acc = {}, chartData = [] }, item) => {
+        const seg = segmentExtractor(item)
         const key = keyExtractor(item)
 
         if (!key) return
 
-        if (!acc.hasOwnProperty(segment)) {
-            acc[segment] = new Set()
+        if (!acc.hasOwnProperty(seg)) {
+            acc[seg] = { seg, value: new Set(), count: 0 }
+            chartData.push(acc[seg])
         }
 
-        acc[segment].add(key)
+        acc[seg].value.add(key)
+        acc[seg].count = acc[seg].value.size
 
-        return acc
+        return { acc, chartData }
     }
 }
 
-export const bucketReducer = (keyExtractor) => {
-    return (acc, item) => {
+export const bucketReducer = (
+    keyExtractor,
+    valueReducer = (acc) => acc + 1,
+    initValue = 0 
+) => {
+    return ({ acc = {}, chartData = [] }, item) => {
         const key = keyExtractor(item)
 
         if (!acc.hasOwnProperty(key)) {
-            acc[key] = 0
+            acc[key] = { key, value: initValue}
+            chartData.push(acc[key])
         }
 
-        acc[key]++
+        acc[key].value = valueReducer(acc[key].value, item)
 
-        return acc
+        return { acc, chartData }
     }
 }
 
-export const getBucketKeys = (bucket) =>
-    Object.keys(bucket)
-        .sort((a, b) => bucket[b] - bucket[a])
+export const getBucketKeys = ({ acc }) =>
+    Object.keys(acc)
+        .sort((a, b) => acc[b] - acc[a])
 
-export const toChartData = (bucket) =>
-    Object
-        .keys(bucket)
-        .map((key) => ({
-            seg: key,
-            ...bucket[key]
-        }))
-
-export const toPieData = (bucket) =>
-    getBucketKeys(bucket)
-        .map((key) => ({
-            name: key,
-            value: bucket[key]
-        }))
 
 export const getEventInputProp = (event) => {
     let propName
@@ -109,7 +108,6 @@ export const getEventInputProp = (event) => {
 }
 
 export const isToday = (date) => {
-    console.log(date);
     const today = new Date()
     return date.getDate() === today.getDate() &&
         date.getMonth() === today.getMonth() &&

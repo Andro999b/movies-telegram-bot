@@ -25,7 +25,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "recharts": "^1.8.5"
+    "recharts": "^1.8.5",
+    "webworker-promise": "^0.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
@@ -40,6 +41,7 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^5.1.1"
+    "webpack-merge": "^5.1.1",
+    "worker-loader": "^3.0.1"
   }
 }

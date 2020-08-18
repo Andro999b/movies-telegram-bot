@@ -7,7 +7,6 @@ import {
     Container,
     TextField
 } from '@material-ui/core'
-import moment from 'moment'
 import botEvents from '../store/botEvents'
 import EventsTable from '../components/EventsTable'
 import ReloadButton from '../components/ReloadButton'
@@ -63,7 +62,10 @@ export default observer(() => {
     return (
         <Box className={classes.root}>
             <Toolbar>
-                <Typography className={classes.title}>Bot Events Stream</Typography>
+                <Box className={classes.title}>
+                    <Typography>Bot Events Stream</Typography>
+                    <Typography>Total Events: {store.events.length}</Typography>
+                </Box>
             </Toolbar>
             <Container className={classes.filter}>
                 <TextField

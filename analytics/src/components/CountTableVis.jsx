@@ -31,12 +31,12 @@ const useStyles = makeStyles(() => ({
 
 const ROWS_COUNT = 26
 
-export default ({ data, showTotal, title, renderName }) => {
+export default ({ data, showTotal, title, renderName, showRows = ROWS_COUNT }) => {
     const classes = useStyles()
     const [showAll, setShowAll] = React.useState(false)
-    const hasMore = ROWS_COUNT < data.length
+    const hasMore = showRows < data.length
 
-    const rows = showAll ? data : data.slice(0, ROWS_COUNT)
+    const rows = showAll ? data : data.slice(0, showRows)
     const total = data.length
 
     return (

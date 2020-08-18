@@ -93,6 +93,7 @@ export function withLogin(Component) {
                         }
                         setLoading(false)
                     });
+
                 },
                 onFailure: (err) => {
                     setError(err.message)
@@ -118,7 +119,6 @@ export function withLogin(Component) {
             delete userAttributes.email_verified
             user.completeNewPasswordChallenge(password, userAttributes, {
                 onSuccess: (result) => {
-                    console.log(result)
                     setStep('SIGNED')
                     setLoading(false)
                 },
@@ -155,7 +155,7 @@ export function withLogin(Component) {
             )
         }
 
-        if (form) {
+        if (form || loading) {
             return (
                 <LoadingPlaceholder loading={loading}>
                     <div className={classes.container}>{form}</div>
