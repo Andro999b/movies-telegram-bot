@@ -1,12 +1,12 @@
 const Cache = require('./Cache')
-const { MongoClient } = require('mongodb');
+const { MongoClient } = require('mongodb')
 
 const COLLECTION_NAME = process.env.CACHE_TABLE
 const MONGODB_URI = process.env.MONGODB_URI
 
 const expirationTime = 1 * 3600 * 1000
 
-let cachedDb = null;
+let cachedDb = null
 
 async function connectToDatabase() {
     if (!cachedDb) {
@@ -36,7 +36,7 @@ class MongoDBCache extends Cache {
     async putToCacheMultiple(results) {
         const expired = new Date(Date.now() + expirationTime)
 
-        await this.collection.bulkWrite(results.map(({ id, result }) => ({
+        await this.collection.bulkWrite(results.map(({ result }) => ({
             updateOne: {
                 filter: { _id: result.id },
                 update: { $set: { result, lastModifiedDate: new Date(), expired } },

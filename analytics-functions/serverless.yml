@@ -1,9 +1,14 @@
 service: analytics-functions
 
+custom:
+  cahceTable: cache-prod-info
+  mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
+
 provider:
   name: aws
   runtime: nodejs12.x
   region: eu-central-1
+  versionFunctions: false
 
 functions:
   ga:
@@ -12,3 +17,9 @@ functions:
       CLIENT_EMAIL: ${ssm:bot_ga_client_email}
       PRIVATE_KEY: ${ssm:bot_ga_private_key}
       VIEW_ID: ${ssm:bot_ga_view_id}
+
+  mongostat:
+    handler: handlers/mongostat.handler
+    environment:
+      CACHE_TABLE: ${self:custom.cahceTable}
+      MONGODB_URI: ${self:custom.mongoUrl}

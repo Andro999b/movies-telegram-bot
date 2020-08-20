@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "googleapis": "^59.0.0"
+    "googleapis": "^59.0.0",
+    "mongodb": "^3.6.0"
   }
 }
