@@ -42,7 +42,7 @@ export default ({ value, onChange, format = DATE_FORMAT }) => {
     }
 
     const handleDateChange = (newDate) => {
-        setAnchorEl(null);
+        setAnchorEl(null)
         onChange(moment(newDate).format(format))
     }
 

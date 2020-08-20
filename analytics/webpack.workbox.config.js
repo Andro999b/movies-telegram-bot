@@ -9,6 +9,7 @@ module.exports = merge(webpackConfig, {
         new WebpackPwaManifest({
             name: 'Movie Bot Analytics',
             short_name: 'Movie Bot Analytics',
+            display: 'fullscreen',
             background_color: '#ffffff',
             orientation: 'landscape',
             crossorigin: 'use-credentials', //can be null, use-credentials or anonymous

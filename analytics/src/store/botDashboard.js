@@ -1,4 +1,3 @@
-import AWS from 'aws-sdk'
 import { DATE_FORMAT } from '../constants'
 import { getBucketKeys } from '../utils'
 import moment from 'moment'

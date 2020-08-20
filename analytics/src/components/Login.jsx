@@ -13,7 +13,6 @@ import {
     Typography
 } from '@material-ui/core';
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
-import AWS from 'aws-sdk'
 
 import {
     REGION,

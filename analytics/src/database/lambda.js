@@ -1,4 +1,3 @@
-
 let lambda
 export const getLambda = () => {
     if (!lambda) lambda = new AWS.Lambda({ apiVersion: '2015-03-31' })

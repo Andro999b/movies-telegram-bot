@@ -18,9 +18,9 @@ import {
     Web as WedIcon,
     Storage as StorageIcon
 } from '@material-ui/icons'
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const useStyle = makeStyles((theme) => ({
     drawer: {
@@ -54,7 +54,7 @@ const useStyle = makeStyles((theme) => ({
 }))
 
 export default () => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false)
     const history = useHistory()
     const classes = useStyle()
 

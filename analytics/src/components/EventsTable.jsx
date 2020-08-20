@@ -60,7 +60,7 @@ const useRowStyles = makeStyles((theme) => ({
 
 const Row = ({ data }) => {
     const classes = useRowStyles()
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false)
 
     const input = getEventInputProp(data)
 
@@ -73,7 +73,7 @@ const Row = ({ data }) => {
                     </IconButton>
                 </TableCell>
                 <TableCell width={110}>
-                    <b>{data.type}</b>
+                    <b>{data.bot}#{data.type}</b>
                 </TableCell>
                 <TableCell width={160}>
                     {moment(data.time).format('YYYY-M-D HH:mm')}
@@ -110,14 +110,14 @@ const Row = ({ data }) => {
 }
 
 export default ({ rows }) => {
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(rowsPerPageOptions[0]);
+    const [page, setPage] = React.useState(0)
+    const [rowsPerPage, setRowsPerPage] = React.useState(rowsPerPageOptions[0])
 
     React.useEffect(() => setPage(0), [rows])
 
     const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
+        setRowsPerPage(+event.target.value)
+        setPage(0)
     }
 
     const fromIndex = page * rowsPerPage

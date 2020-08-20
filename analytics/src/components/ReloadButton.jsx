@@ -1,5 +1,5 @@
 import React from 'react'
-import { Refresh as RefreshIcon } from '@material-ui/icons';
+import { Refresh as RefreshIcon } from '@material-ui/icons'
 import { Fab, withStyles } from '@material-ui/core'
 
 const styles = {

@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk'
+import '../aws-sdk'
 import { PERIODS, TABLE_NAME, REGION } from '../constants'
 import { getDateFor, getIndexForPeriod, getMonthFor, runQuery } from '../database/dynamodb'
 import { range, segmentBucketReducer, uniqueBucketReducer, bucketReducer } from '../utils'

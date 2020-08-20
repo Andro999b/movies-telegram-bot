@@ -1,4 +1,3 @@
-import AWS from 'aws-sdk'
 import moment from 'moment'
 import { DATE_FORMAT } from '../constants'
 

@@ -6,11 +6,10 @@ import {
     Accordion,
     AccordionSummary,
     AccordionDetails,
-    Link,
     Grid
 } from '@material-ui/core'
 import { grey } from '@material-ui/core/colors'
-import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons';
+import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
 import { getEventInputProp } from '../utils'
 import moment from 'moment'
 
