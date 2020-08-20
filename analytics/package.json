@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev-server.config.js",
-    "build": "rm -rf dist/* && webpack --mode production",
+    "build": "rm -rf dist/* && webpack --config webpack.workbox.config.js --mode production",
     "deploy": "surge dist movie-player-stat.surge.sh",
     "release": "npm run build && npm run deploy"
   },
@@ -26,7 +26,8 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "recharts": "^1.8.5",
-    "webworker-promise": "^0.4.2"
+    "webworker-promise": "^0.4.2",
+    "workbox-webpack-plugin": "^5.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
@@ -42,6 +43,7 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^5.1.1",
+    "webpack-pwa-manifest": "^4.2.0",
     "worker-loader": "^3.0.1"
   }
 }

@@ -113,3 +113,16 @@ export const isToday = (date) => {
         date.getMonth() === today.getMonth() &&
         date.getFullYear() === today.getFullYear()
 }
+
+export function isTouchDevice() {
+    if('ontouchstart' in document.documentElement) {
+        return true
+    }
+    
+    if(window.matchMedia) {
+        const isMobile = window.matchMedia('only screen and (max-width: 570px)')
+        return isMobile.matches
+    }
+
+    return false
+}

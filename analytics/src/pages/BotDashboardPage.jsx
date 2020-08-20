@@ -50,7 +50,7 @@ export default observer(() => {
                     <Toolbar>
                         <Box className={classes.title}>
                             <Typography>Bot Dashboard</Typography>
-                            <Typography>Total Event: {totalEvent}</Typography>
+                            <Typography>Event: {totalEvent} Users: {store.topUsers.length}</Typography>
                         </Box>
                         <DateSelector value={store.period} onChange={(p) => store.load(p)} />
                     </Toolbar>
@@ -112,7 +112,7 @@ export default observer(() => {
                     </Grid>
                 </Grid>
             </Grid>
-            <ReloadButton onClick={() => store.reload(true)}/>
+            <ReloadButton onClick={() => store.reload(true)} />
         </div>
     )
 })

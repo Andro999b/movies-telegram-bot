@@ -98,6 +98,7 @@ functions:
 
   bot:
     handler: handlers/bot.handler
+    timeout: 12
     events:
       - http: 
           path: bot

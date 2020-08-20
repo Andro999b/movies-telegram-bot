@@ -119,8 +119,9 @@ export default observable({
     eventsPie: [],
     events: [],
     devicePie: [],
-    totalEvents: null,
-    totalSessions: null,
+    totalEvents: 0,
+    totalSessions: 0,
+    totalUsers: 0,
     labels: [],
     period: todayFormated,
 
@@ -151,6 +152,7 @@ export default observable({
             this.eventsPie = eventsCountBucket.chartData
             this.totalEvents = eventsCountBucket.chartData.reduce((acc, { value }) => acc + value, 0)
             this.devicePie = deviceCountBucket.chartData
+            this.totalUsers = deviceCountBucket.chartData.reduce((acc, { value }) => acc + value, 0)
         }
 
 

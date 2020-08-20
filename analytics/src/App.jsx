@@ -9,6 +9,7 @@ import BotEventsPage from './pages/BotEventsPage';
 import BotUsersPage from './pages/BotUsersPage';
 import GADashboard from './pages/GADashboard';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { isTouchDevice } from './utils'
 import MomentUtils from '@date-io/moment';
 
 
@@ -25,6 +26,12 @@ const useStyles = makeStyles({
 
 const App = () => {
     const classes = useStyles()
+
+    React.useEffect(() => {
+        if (isTouchDevice() && screen.orientation) {
+            screen.orientation.lock('landscape')
+        }
+    }, [])
 
     return (<div className={classes.root}>
         <CssBaseline />

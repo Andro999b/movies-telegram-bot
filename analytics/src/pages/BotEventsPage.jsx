@@ -79,6 +79,7 @@ export default observer(() => {
                     autoOk
                     format="YYYY-M-D"
                     disableFuture
+                    variant="inline"
                     inputVariant="outlined"
                     value={store.date}
                     className={classes.dataPicker}

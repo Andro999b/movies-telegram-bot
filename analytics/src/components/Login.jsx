@@ -33,11 +33,11 @@ export function withLogin(Component) {
         },
         root: {
             '&': {
-                display: 'flex'
+                display: 'flex',
+                width: 260
             },
             '& > *': {
-                margin: theme.spacing(1),
-                width: '25ch',
+                margin: theme.spacing(1)
             }
         },
         error: {
@@ -47,13 +47,44 @@ export function withLogin(Component) {
     }))
 
     return () => {
-        const [step, setStep] = React.useState('NOT_SIGNED')
+        const [step, setStep] = React.useState('RESTORE')
         const [password, setPassword] = React.useState('')
         const [username, setUsername] = React.useState('')
         const [error, setError] = React.useState('')
         const [userData, setUserData] = React.useState()
-        const [loading, setLoading] = React.useState(false)
+        const [loading, setLoading] = React.useState(true)
         const classes = useStyles()
+
+        React.useEffect(() => {
+            const token = localStorage.getItem('token')
+            if(token) {
+                setLoading(true)
+                ensureCredentials(token)
+            } else {
+                setStep('NOT_SIGNED')
+                setLoading(false)
+            }
+        }, [])
+
+        const ensureCredentials = (token) => {
+            AWS.config.region = REGION
+            AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: IDENTITY_POOL_ID,
+                Logins: {
+                    [`cognito-idp.${REGION}.amazonaws.com/${USER_POOL_ID}`]: token
+                }
+            })
+            AWS.config.credentials.refresh((error) => {
+                if (error) {
+                    setError(error.message)
+                    console.error(error);
+                    setStep('NOT_SIGNED')
+                } else {
+                    setStep('SIGNED')
+                }
+                setLoading(false)
+            });
+        }
 
         const doLogin = (e) => {
             e.preventDefault()
@@ -77,23 +108,9 @@ export function withLogin(Component) {
 
             user.authenticateUser(authDetails, {
                 onSuccess: (result) => {
-                    AWS.config.region = REGION
-                    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-                        IdentityPoolId: IDENTITY_POOL_ID,
-                        Logins: {
-                            [`cognito-idp.${REGION}.amazonaws.com/${USER_POOL_ID}`]: result.getIdToken().getJwtToken()
-                        }
-                    })
-                    AWS.config.credentials.refresh((error) => {
-                        if (error) {
-                            setError(error.message)
-                            console.error(error);
-                        } else {
-                            setStep('SIGNED')
-                        }
-                        setLoading(false)
-                    });
-
+                    const token = result.getIdToken().getJwtToken()
+                    localStorage.setItem('token', token)
+                    ensureCredentials(token)
                 },
                 onFailure: (err) => {
                     setError(err.message)
@@ -118,11 +135,11 @@ export function withLogin(Component) {
 
             delete userAttributes.email_verified
             user.completeNewPasswordChallenge(password, userAttributes, {
-                onSuccess: (result) => {
-                    setStep('SIGNED')
+                onSuccess: () => {
+                    setStep('NOT_SIGNED')
                     setLoading(false)
                 },
-                onFailure: (err) => {
+                onFailure: () => {
                     setError(err.message)
                     setLoading(false)
                     console.error(err);

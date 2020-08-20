@@ -1,19 +1,31 @@
 import React, { useState, Fragment } from 'react'
-import { Button, Menu, MenuItem } from '@material-ui/core'
+import { Button, Popover, Box, List, ListItem, makeStyles } from '@material-ui/core'
 import { NAMES, PERIODS, DATE_FORMAT } from '../constants'
 import { DatePicker } from '@material-ui/pickers'
 import moment from 'moment'
 
+const useStyles = makeStyles(() => ({
+    menu: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    '@media (orientation: landscape) and (max-height: 380px)': {
+        menu: {
+            flexDirection: 'row-reverse'
+        }
+    }
+}))
 
 export default ({ value, onChange, format = DATE_FORMAT }) => {
     const [anchorEl, setAnchorEl] = useState(null)
+    const classes = useStyles()
 
     const handleClose = () => {
-        setAnchorEl(null);
+        setAnchorEl(null)
     }
 
     const handleSelect = (value) => {
-        setAnchorEl(null);
+        setAnchorEl(null)
         onChange(value)
     }
 
@@ -43,22 +55,26 @@ export default ({ value, onChange, format = DATE_FORMAT }) => {
             >
                 {name}
             </Button>
-            <Menu
+            <Popover
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {PERIODS.map((period) => (
-                    <MenuItem key={period} onClick={() => handleSelect(period)}>{NAMES[period]}</MenuItem>
-                ))}
-                <DatePicker
-                    disableFuture
-                    variant="static"
-                    openTo="date"
-                    value={calendarDate}
-                    onChange={handleDateChange}
-                />
-            </Menu>
+                <Box className={classes.menu}>
+                    <List>
+                        {PERIODS.map((period) => (
+                            <ListItem key={period} button onClick={() => handleSelect(period)}>{NAMES[period]}</ListItem>
+                        ))}
+                    </List>
+                    <DatePicker
+                        disableFuture
+                        variant="static"
+                        openTo="date"
+                        value={calendarDate}
+                        onChange={handleDateChange}
+                    />
+                </Box>
+            </Popover>
         </Fragment>
     )
 }
