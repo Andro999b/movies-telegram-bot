@@ -26,9 +26,7 @@
         "react/prop-types": ["off"]
     },
     "globals": {
-        "gtag": "readonly",
-        "mixpanel": "readonly",
-        "mobileApp": "readonly"
+        "AWS": "readonly"
     },
     "settings": {
         "react": {

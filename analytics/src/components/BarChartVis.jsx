@@ -1,25 +1,32 @@
 import React from 'react'
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts'
+import { 
+    BarChart, 
+    ResponsiveContainer, 
+    XAxis, 
+    YAxis, 
+    Tooltip, 
+    Legend, 
+    Bar
+} from 'recharts'
 import { getColor } from '../utils'
 
 export default ({ data, lines, legend }) => {
     return (
         <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
+            <BarChart data={data}>
                 <XAxis dataKey="seg" />
                 <YAxis />
                 <Tooltip />
                 {legend && <Legend/> }
                 {lines.map((line) =>
-                    <Line 
+                    <Bar 
                         key={line} 
-                        type="monotone" 
                         dataKey={line} 
-                        strokeWidth={2} 
-                        stroke={getColor(line)} 
+                        stackId="1"
+                        fill={getColor(line)} 
                     />
                 )}
-            </LineChart>
+            </BarChart>
         </ResponsiveContainer>
     )
 }

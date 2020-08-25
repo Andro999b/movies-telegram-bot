@@ -9,6 +9,7 @@ import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import dashboard from '../store/botDashboard'
 import { getUserName } from '../utils'
 import ReloadButton from '../components/ReloadButton'
+import AreaChartVis from '../components/AreaChartVis'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,7 +40,7 @@ export default observer(() => {
     const classes = useStyles()
     const store = React.useRef(dashboard).current
 
-    React.useEffect(() => store.reload(), [])
+    React.useEffect(() => store.reload(), []) // eslint-disable-line
 
     const totalEvent = store.botPie.reduce((acc, { value }) => acc + value, 0)
 
@@ -61,7 +62,7 @@ export default observer(() => {
                     </Grid>
                     <Grid item sm={12} xs={12} className={classes.item}>
                         <LoadingPlaceholder loading={store.loading}>
-                            <LineChartVis data={store.usersChart} lines={['count']} />
+                            <AreaChartVis data={store.usersChart} lines={['count']} />
                         </LoadingPlaceholder>
                     </Grid>
                     <Grid container item>
@@ -70,7 +71,7 @@ export default observer(() => {
                         </Grid>
                         <Grid item sm={9} xs={12} className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
-                                <LineChartVis data={store.eventsChart} lines={store.events} />
+                                <AreaChartVis stacked data={store.eventsChart} lines={store.events} />
                             </LoadingPlaceholder>
                         </Grid>
                         <Grid item sm={3} xs={12} className={classes.item}>
@@ -85,7 +86,7 @@ export default observer(() => {
                         </Grid>
                         <Grid item sm={9} xs={12} className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
-                                <LineChartVis data={store.botChart} lines={store.bots} />
+                                <AreaChartVis stacked data={store.botChart} lines={store.bots} />
                             </LoadingPlaceholder>
                         </Grid>
                         <Grid item sm={3} xs={12} className={classes.item}>

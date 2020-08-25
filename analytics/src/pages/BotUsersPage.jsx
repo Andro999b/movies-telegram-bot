@@ -10,7 +10,7 @@ import ReloadButton from '../components/ReloadButton'
 
 const useStyles = makeStyles((theme) => ({
     sectionTitle: {
-        textAlign: "center"
+        textAlign: 'center'
     },
     chart: {
         height: 260,
@@ -25,7 +25,7 @@ export default observer(() => {
     const user = useLocalStore(botUser)
     const { uid } = useParams()
 
-    React.useEffect(() => user.load(uid), [])
+    React.useEffect(() => user.load(uid), [])// eslint-disable-line
 
     const items = user.events.slice(0, 100)
 

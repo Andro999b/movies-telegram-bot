@@ -16,4 +16,14 @@ export const NAMES ={
 
 export const PERIODS = Object.keys(NAMES)
 
-export const COLORS = ["#35618f", "#e71761", "#dc3c07", "#214324", "#18857f", "#66c7d3", "#391d74", "#a194dc", "#62ce75"]
+export const COLORS = [
+    '#35618f', 
+    '#e71761', 
+    '#dc3c07', 
+    '#214324', 
+    '#18857f', 
+    '#66c7d3', 
+    '#391d74', 
+    '#a194dc', 
+    '#62ce75'
+]

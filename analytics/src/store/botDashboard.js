@@ -63,7 +63,7 @@ export default observable({
             this.loading = false
         }
 
-        if (!force && periodsCache.hasOwnProperty(period)) {
+        if (!force && periodsCache[period]) {
             updateCharts(periodsCache[period])
             return
         }

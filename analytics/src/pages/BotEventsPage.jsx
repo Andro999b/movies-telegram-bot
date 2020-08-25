@@ -48,7 +48,7 @@ export default observer(() => {
         store.startUpdate()
 
         return () => store.stopUpdate()
-    }, [])
+    }, [])// eslint-disable-line
 
     const [filter, setFilter] = React.useState('')
     let items = filter ?

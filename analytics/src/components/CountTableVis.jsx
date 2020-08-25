@@ -59,7 +59,7 @@ export default ({ data, showTotal, title, renderName, showRows = ROWS_COUNT }) =
                     {rows.map((row, index) => (
                         <TableRow key={index} className={classes.row}>
                             <TableCell>{renderName ? renderName(row) : row.name}</TableCell>
-                            <TableCell>{row.value}</TableCell>
+                            <TableCell><b>{row.value}</b></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

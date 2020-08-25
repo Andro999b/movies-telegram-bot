@@ -1,10 +1,23 @@
 import React, { useState, Fragment } from 'react'
-import { Button, Popover, Box, List, ListItem, makeStyles } from '@material-ui/core'
+import {
+    Button,
+    Popover,
+    Box,
+    List,
+    ListItem,
+    IconButton,
+    makeStyles
+} from '@material-ui/core'
 import { NAMES, PERIODS, DATE_FORMAT } from '../constants'
 import { DatePicker } from '@material-ui/pickers'
+import {
+    ChevronLeft as ArrowBackIcon,
+    ChevronRight as ArrowNextIcon
+} from '@material-ui/icons'
 import moment from 'moment'
+import { isToday } from '../utils'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     menu: {
         display: 'flex',
         flexDirection: 'column'
@@ -13,6 +26,9 @@ const useStyles = makeStyles(() => ({
         menu: {
             flexDirection: 'row-reverse'
         }
+    },
+    nav: {
+        marginRight: theme.spacing(1)
     }
 }))
 
@@ -33,11 +49,17 @@ export default ({ value, onChange, format = DATE_FORMAT }) => {
 
     //parse value for 
     let calendarDate = new Date()
+    let showPrev = true, showNext = true
 
     if (!PERIODS.includes(value)) {
         calendarDate = moment(value, format).toDate()
         name = value
+        if(isToday(calendarDate)) {
+            showNext = false
+        }
     } else {
+        showPrev = false
+        showNext = false
         name = NAMES[value || PERIODS[0]]
     }
 
@@ -46,8 +68,28 @@ export default ({ value, onChange, format = DATE_FORMAT }) => {
         onChange(moment(newDate).format(format))
     }
 
+    const handleNext = () => {
+        setAnchorEl(null)
+        onChange(moment(calendarDate).add(1, 'days').format(format))
+    }
+
+    const handlePrev = () => {
+        setAnchorEl(null)
+        onChange(moment(calendarDate).add(-1, 'days').format(format))
+    }
+
     return (
         <Fragment>
+            {showPrev &&
+                <IconButton className={classes.nav} onClick={handlePrev}>
+                    <ArrowBackIcon />
+                </IconButton>
+            }
+            {showNext &&
+                <IconButton className={classes.nav} onClick={handleNext}>
+                    <ArrowNextIcon />
+                </IconButton>
+            }
             <Button
                 variant="contained"
                 color="default"

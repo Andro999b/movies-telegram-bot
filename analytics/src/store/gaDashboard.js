@@ -1,6 +1,6 @@
-import { observable } from "mobx";
+import { observable } from 'mobx'
 import { invokeGA } from '../database/lambda'
-import { segmentBucketReducer, bucketReducer } from "../utils";
+import { segmentBucketReducer, bucketReducer } from '../utils'
 import { GA_DATE_FORMAT } from '../constants'
 import moment from 'moment'
 
@@ -18,7 +18,7 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
     usersBucket = users.reduce(
         segmentBucketReducer(
             (row) => row[0],
-            () => "users",
+            () => 'users',
             (acc, row) => acc + parseInt(row[1])
         ),
         usersBucket
@@ -27,7 +27,7 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
     usersBucket = newUsers.reduce(
         segmentBucketReducer(
             (row) => row[0],
-            () => "newUsers",
+            () => 'newUsers',
             (acc, row) => acc + parseInt(row[1])
         ),
         usersBucket
@@ -37,7 +37,7 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
     const sessionsBucket = sessions.reduce(
         segmentBucketReducer(
             (row) => row[0],
-            () => "sessions",
+            () => 'sessions',
             (acc, row) => acc + parseInt(row[1])
         ),
         {}
@@ -156,7 +156,7 @@ export default observable({
         }
 
 
-        if (!force && cache.hasOwnProperty(period)) {
+        if (!force && cache[period]) {
             updateCharts(cache[period])
             return
         }

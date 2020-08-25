@@ -1,15 +1,16 @@
-import React from 'react';
+import React from 'react'
 import { withLogin } from './components/Login'
-import { Switch, Route, HashRouter as Router } from 'react-router-dom';
-import Navigation from './components/Navigation';
-import { CssBaseline } from '@material-ui/core';
+import { Switch, Route, HashRouter as Router } from 'react-router-dom'
+import Navigation from './components/Navigation'
+import { CssBaseline } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import BotDashboardPage from './pages/BotDashboardPage'
-import BotEventsPage from './pages/BotEventsPage';
-import BotUsersPage from './pages/BotUsersPage';
-import GADashboard from './pages/GADashboard';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
+import BotEventsPage from './pages/BotEventsPage'
+import BotUsersPage from './pages/BotUsersPage'
+import GADashboard from './pages/GADashboard'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import MomentUtils from '@date-io/moment'
+import StorageDashboard from './pages/StorageDashboard'
 
 
 const useStyles = makeStyles({
@@ -42,6 +43,9 @@ const App = () => {
                         <Route path="/ga">
                             <GADashboard />
                         </Route>
+                        <Route path="/storage">
+                            <StorageDashboard />
+                        </Route>
                         <Route path="/users/:uid">
                             <BotUsersPage />
                         </Route>
@@ -52,4 +56,4 @@ const App = () => {
     </div >)
 }
 
-export default withLogin(App);
+export default withLogin(App)

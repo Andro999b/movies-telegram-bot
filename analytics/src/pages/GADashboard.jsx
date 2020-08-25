@@ -1,15 +1,15 @@
-import { observer } from "mobx-react-lite"
+import { observer } from 'mobx-react-lite'
 
 import React from 'react'
-import { Grid, Toolbar, Typography, makeStyles, Box } from "@material-ui/core"
+import { Grid, Toolbar, Typography, makeStyles, Box } from '@material-ui/core'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import CountTableVis from '../components/CountTableVis'
 import PieChartVis from '../components/PieChartVis'
-import LineChartVis from '../components/LineChartVis'
+import AreaChartVis from '../components/AreaChartVis'
 import DateSelector from '../components/DateSelector'
 import ReloadButton from '../components/ReloadButton'
 import dashboard from '../store/gaDashboard'
-import { GA_DATE_FORMAT } from "../constants"
+import { GA_DATE_FORMAT } from '../constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1
     },
     sectionTitle: {
-        textAlign: "center"
+        textAlign: 'center'
     },
     item: {
         height: 300,
@@ -40,7 +40,7 @@ export default observer(() => {
     const classes = useStyles()
     const store = React.useRef(dashboard).current
 
-    React.useEffect(() => store.reload(), [])
+    React.useEffect(() => store.reload(), [])// eslint-disable-line
 
     return (
         <div>
@@ -60,7 +60,7 @@ export default observer(() => {
                     </Grid>
                     <Grid item sm={12} xs={12} className={classes.item}>
                         <LoadingPlaceholder loading={store.loading}>
-                            <LineChartVis data={store.usersChart} lines={['users', 'newUsers']} legend />
+                            <AreaChartVis data={store.usersChart} lines={['users', 'newUsers']} legend />
                         </LoadingPlaceholder>
                     </Grid>
                     <Grid container item>
@@ -70,7 +70,7 @@ export default observer(() => {
                         <Grid item sm={9} xs={12} className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <LineChartVis data={store.sessionsChart} lines={['sessions']} />
+                                    <AreaChartVis data={store.sessionsChart} lines={['sessions']} />
                                 </LoadingPlaceholder>
                             </LoadingPlaceholder>
                         </Grid>
@@ -86,17 +86,17 @@ export default observer(() => {
                         </Grid>
                         <Grid item md={6} xs={12} className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
-                                <LineChartVis data={store.eventsChart} lines={['playlistLoaded', 'start']} legend />
+                                <AreaChartVis data={store.eventsChart} lines={['playlistLoaded', 'start']} legend />
                             </LoadingPlaceholder>
                         </Grid>
                         <Grid item md={6} xs={12} className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
-                                <LineChartVis data={store.eventsChart} lines={['selectFile']} legend />
+                                <AreaChartVis data={store.eventsChart} lines={['selectFile']} legend />
                             </LoadingPlaceholder>
                         </Grid>
                         <Grid item md={6} xs={12} className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
-                                <LineChartVis data={store.eventsChart} lines={['errorPlayback', 'errorLoad']} legend />
+                                <AreaChartVis stacked data={store.eventsChart} lines={['errorPlayback', 'errorLoad']} legend />
                             </LoadingPlaceholder>
                         </Grid>
                         <Grid item md={6} xs={12} className={classes.item}>
