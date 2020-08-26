@@ -26,12 +26,22 @@ const useStyles = makeStyles(() => ({
     },
     title: {
         backgroundColor: grey[200]
+    },
+    value: {
+        textAlign: 'right'
     }
 }))
 
 const ROWS_COUNT = 26
 
-export default ({ data, showTotal, title, renderName, showRows = ROWS_COUNT }) => {
+export default ({ 
+    data, 
+    showTotal, 
+    title, 
+    renderName,
+    renderValue,
+    showRows = ROWS_COUNT 
+}) => {
     const classes = useStyles()
     const [showAll, setShowAll] = React.useState(false)
     const hasMore = showRows < data.length
@@ -59,7 +69,9 @@ export default ({ data, showTotal, title, renderName, showRows = ROWS_COUNT }) =
                     {rows.map((row, index) => (
                         <TableRow key={index} className={classes.row}>
                             <TableCell>{renderName ? renderName(row) : row.name}</TableCell>
-                            <TableCell><b>{row.value}</b></TableCell>
+                            <TableCell className={classes.value}>
+                                <b>{renderValue ? renderValue(row) : row.value}</b>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

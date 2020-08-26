@@ -1,9 +1,8 @@
 import React from 'react'
 import { Typography, Toolbar, makeStyles, Grid, Link, Box } from '@material-ui/core'
 import DateSelector from '../components/DateSelector'
-import LineChartVis from '../components/LineChartVis'
 import PieChartVis from '../components/PieChartVis'
-import CountTableVis from '../components/CountTableVis'
+import ValuesTableVis from '../components/ValuesTableVis'
 import { observer } from 'mobx-react-lite'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import dashboard from '../store/botDashboard'
@@ -19,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1
     },
     sectionTitle: {
-        textAlign: "center"
+        textAlign: 'center'
     },
     item: {
         height: 300,
@@ -99,7 +98,7 @@ export default observer(() => {
                 <Grid container md={5} item sm={12} xs={12}>
                     <Grid item sm={12} xs={12} className={classes.table}>
                         <LoadingPlaceholder loading={store.loading}>
-                            <CountTableVis
+                            <ValuesTableVis
                                 data={store.topUsers}
                                 showTotal
                                 title="Top Users"

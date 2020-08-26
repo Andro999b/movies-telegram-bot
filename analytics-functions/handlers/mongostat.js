@@ -59,7 +59,23 @@ async function getTopWatches() {
     return { key: 'hits', result }
 }
 
+async function getRecientWatches() {
+    const client = await connectToDatabase()
+    const result = await client.collection(COLLECTION_NAME)
+        .find(
+            {},
+            {
+                'sort': { 'lastModifiedDate': -1 },
+                'limit': 100,
+                'projection': { 'lastModifiedDate': 1, 'result.provider': 1, 'result.title': 1 }
+            }
+        )
+        .toArray()
+
+    return { key: 'recient', result }
+}
+
 module.exports.handler = async () => {
-    const results = await Promise.all([getTopProviders(), getTopWatches()])
+    const results = await Promise.all([getTopProviders(), getTopWatches(), getRecientWatches()])
     return results.reduce((acc, { key, result }) => ({ ...acc, [key]: result }), {})
 }

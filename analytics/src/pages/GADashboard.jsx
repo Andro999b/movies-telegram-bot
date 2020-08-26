@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { Grid, Toolbar, Typography, makeStyles, Box } from '@material-ui/core'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
-import CountTableVis from '../components/CountTableVis'
+import ValuesTableVis from '../components/ValuesTableVis'
 import PieChartVis from '../components/PieChartVis'
 import AreaChartVis from '../components/AreaChartVis'
 import DateSelector from '../components/DateSelector'
@@ -110,7 +110,7 @@ export default observer(() => {
                     <Grid item sm={12} xs={12}>
                         <div className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
-                                <CountTableVis
+                                <ValuesTableVis
                                     data={store.labels}
                                     title="Event Labels"
                                     showRows={35}

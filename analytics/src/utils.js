@@ -171,6 +171,10 @@ export function getColor(name) {
         case 'alternativeLink': return COLORS[6]
         case 'rediectTrailer': return COLORS[7]
         case 'share': return COLORS[8]
+        case 'sessions': return COLORS[0]
+        case 'mobile': return COLORS[0]
+        case 'desktop': return COLORS[1]
+        case 'tablet': return COLORS[2]
         default: return COLORS[hash64(name) % COLORS.length]
     }
 }
