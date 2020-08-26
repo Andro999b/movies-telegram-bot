@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2)
     },
     table: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(1),
         textAlign: 'center',
     },
     charts: {
@@ -60,7 +60,7 @@ export default observer(() => {
                                 <BarChartVis data={store.providersChart} lines={store.providers} legend />
                             </LoadingPlaceholder>
                         </Grid>
-                        <Grid item md={6} sm={12} xs={12} className={classes.item}>
+                        <Grid item md={6} sm={12} xs={12} className={classes.table}>
                             <LoadingPlaceholder loading={store.loading}>
                                 <ValuesTableVis
                                     data={store.top}
@@ -72,7 +72,7 @@ export default observer(() => {
                                 />
                             </LoadingPlaceholder>
                         </Grid>
-                        <Grid item md={6} sm={12} xs={12} className={classes.item}>
+                        <Grid item md={6} sm={12} xs={12} className={classes.table}>
                             <LoadingPlaceholder loading={store.loading}>
                                 <ValuesTableVis
                                     data={store.recient}
@@ -82,7 +82,7 @@ export default observer(() => {
                                     )}
                                     renderValue={({ lastModifiedDate }) => 
                                         moment(lastModifiedDate).calendar(null, {
-                                            sameDay: 'hh:mm',
+                                            sameDay: 'HH:mm',
                                             lastDay: '[yesterday]',
                                             nextWeek: DATE_FORMAT,
                                             sameElse:  DATE_FORMAT
