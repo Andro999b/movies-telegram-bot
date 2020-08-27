@@ -64,7 +64,7 @@ class AnimeVostProvider extends DataLifeProvider {
             .timeout(5000)
             .disableTLSCerts()
 
-        const playerJsPlaylist = extractStringPropery(siteRes.text, "file")
+        const playerJsPlaylist = extractStringPropery(siteRes.text, 'file')
 
         return convertPlayerJSPlaylist(playerJsPlaylist)[0]
     }

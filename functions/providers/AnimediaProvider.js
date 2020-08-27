@@ -1,4 +1,4 @@
-const Provider = require("./Provider")
+const Provider = require('./Provider')
 const superagent = require('superagent')
 const $ = require('cheerio')
 const urlencode = require('urlencode')
@@ -36,8 +36,6 @@ class AnimediaProvider extends Provider {
                         res = await superagent
                             .get(this._absoluteUrl(file))
                             .timeout(this.config.timeout)
-
-                        console.log(JSON.parse(res.text));
 
                         return convertPlayerJSPlaylist(JSON.parse(res.text))
                             .map((file, id) => ({ id,...file }))

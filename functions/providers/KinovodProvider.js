@@ -72,7 +72,7 @@ class KinovodProvider extends Provider {
                             .map((el) => $(el).attr('src'))
                             .find((src) => src.search('youtube') != 1)
 
-                        return src;
+                        return src
                     }
                 }
             }

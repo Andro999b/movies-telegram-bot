@@ -7,6 +7,7 @@ const providers = [
     new (require('./AnimeVostProvider'))(),
     new (require('./AnimediaProvider'))(),
     new (require('./AnidubProvider'))(),
+    new (require('./AnigatoProvider'))(),
     new (require('./VideoCDNProvider'))(),
     new (require('./NekomoriProvider'))()
 ]

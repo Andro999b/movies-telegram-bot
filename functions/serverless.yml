@@ -124,7 +124,7 @@ functions:
       TOKEN: ${ssm:bot_anime_TOKEN_${opt:stage, 'dev'}}
       PLAYER_URL: ${self:custom.playerUrl}
       HELP_IMAGES: ${self:custom.helpImages}
-      PROVIDERS: 'anidub,animevost,animedia,nekomori'
+      PROVIDERS: 'anidub,animevost,anigato,animedia,nekomori'
   
   proxy:
     handler: handlers/proxy.handler

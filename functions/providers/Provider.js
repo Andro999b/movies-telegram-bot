@@ -142,7 +142,7 @@ class Provider {
         return this._absoluteUrl(url)
     }
 
-    async getSource(resultsId, sourceId) {
+    async getSource(resultsId, sourceId) {// eslint-disable-line
         return {}
     }
 

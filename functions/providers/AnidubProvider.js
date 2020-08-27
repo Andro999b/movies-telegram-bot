@@ -1,4 +1,4 @@
-const DataLifeProvider = require("./DataLifeProvider")
+const DataLifeProvider = require('./DataLifeProvider')
 const $ = require('cheerio')
 const urlencode = require('urlencode')
 
@@ -43,8 +43,7 @@ class AnidubProvider extends DataLifeProvider {
                     transform: ($el) => $el.eq(0).children()
                         .toArray()
                         .map((el) => $(el).attr('data'))
-                        .filter((data) => data && data.includes('youtube'))
-                        [0]
+                        .filter((data) => data && data.includes('youtube'))[0]
                 }
             }
         })

@@ -19,7 +19,7 @@ module.exports = async (params) => {
     const urlMatch = matches[1]
     const targetUrl = new URL(urlMatch.startsWith('//') ? 'https:' + urlMatch : urlMatch)
 
-    const { id, hash } = targetUrl.pathname.match(/\/go\/seria\/(?<id>[0-9]+)\/(?<hash>[0-9a-z]+)/).groups
+    const { id, hash, type } = targetUrl.pathname.match(/\/go\/(?<type>[a-z]+)\/(?<id>[0-9]+)\/(?<hash>[0-9a-z]+)/).groups
 
     const videoInfoParams =  {
         id,
@@ -31,7 +31,7 @@ module.exports = async (params) => {
         pd_sign: targetUrl.searchParams.get('pd_sign'),
         ref: encodeURIComponent(targetUrl.searchParams.get('ref')),
         ref_sign: targetUrl.searchParams.get('ref_sign'),
-        type: 'seria',
+        type: type,
         bad_user: true
     }
 

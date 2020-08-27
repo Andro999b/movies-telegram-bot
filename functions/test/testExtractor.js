@@ -1,10 +1,10 @@
 const extract = require('../extract')
 
-const url = decodeURIComponent('https%3A%2F%2Fstreamguard.cc%2Fvideo%2F95fd0eec726288c9%2Fiframe')
+const url = decodeURIComponent('//kodik.cc/video/531/fba6e1e2b8e5a56b96b92ea34f1bf5b8/720p')
 // eslint-disable-next-line no-console
 console.log(url)
 
 extract({
     url,
-    type: 'sibnetmp4'
+    type: 'anigit'
 }).then(console.log) // eslint-disable-line no-console
