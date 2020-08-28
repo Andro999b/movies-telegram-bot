@@ -88,7 +88,7 @@ module.exports = (bot, providers, botType) => {
     }
 
     const libSearchHandler = async (ctx) => {
-        const { match, track, replyWithChatAction, answerCbQuery } = ctx
+        const { match, track, reply, i18n, replyWithChatAction, answerCbQuery } = ctx
         const id = match[1]
 
         await replyWithChatAction('typing')

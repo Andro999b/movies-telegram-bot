@@ -27,7 +27,6 @@ function getResultsKeyboad(providersResults, query, i18n) {
             })
             .reduce((acc, items) => acc.concat(items), [])
             .concat([
-                Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
                 Markup.callbackButton(i18n.t('repeat_search'), query)
             ]),
         { columns: 1 }
@@ -48,7 +47,6 @@ function createResultButtons(res, query) {
 async function getNoResults({ reply, i18n, track }, providers, query) {
     let text = i18n.t('no_results', { query })
     let btns = [
-        Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
         Markup.callbackButton(i18n.t('repeat_search'), query)
     ]
 
@@ -93,15 +91,12 @@ async function doSimpleSearch(ctx, providers, query) {
             Markup.inlineKeyboard(
                 createResultButtons(results, query)
                     .concat([
-                        Markup.callbackButton(i18n.t('help_search_title'), 'helpsearch'),
                         Markup.callbackButton(i18n.t('repeat_search'), query)
                     ]),
                 { columns: 1 }
             ).extra()
         )
-    }
-    //return multiple provders results
-    else {
+    } else { //return multiple provders results
         return reply(
             i18n.t('results', { query }),
             getResultsKeyboad(providersResults, query, i18n).extra()

@@ -37,6 +37,11 @@ class AnigatoProvider extends DataLifeProvider {
                             .children()
                             .toArray()
 
+                        const getOptionUrls = (el) => ([{
+                            url: $(el).attr('value').split('?')[0],
+                            extractor: { type: 'anigit' }
+                        }])
+
                         if ($seasons.length == 0) {
                             return [{
                                 id: 0,
@@ -45,19 +50,25 @@ class AnigatoProvider extends DataLifeProvider {
                                     extractor: { type: 'anigit' }
                                 }]
                             }]
+                        } else if ($seasons.length == 1) {
+                            const $season = $seasons[0]
+                            return $season.find('option')
+                                .toArray()
+                                .map((el, id) => ({
+                                    id,
+                                    name: $(el).text(),
+                                    urls: getOptionUrls(el)
+                                }))
                         } else {
                             return $seasons
                                 .map((el, season) => {
                                     return $(el)
                                         .find('option')
                                         .toArray()
-                                        .map((el, episode) => ({
-                                            name: `Episode ${episode + 1}`,
+                                        .map((el) => ({
+                                            name: $(el).text(),
                                             path: `Season ${season + 1}`,
-                                            urls: [{
-                                                url: $(el).attr('value').split('?')[0],
-                                                extractor: { type: 'anigit' }
-                                            }]
+                                            urls: getOptionUrls(el)
                                         }))
                                 })
                                 .reduce((acc, items) => acc.concat(items), [])

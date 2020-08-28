@@ -1,5 +1,5 @@
-const AWS = require('aws-sdk');
-const ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
+const AWS = require('aws-sdk')
+const ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' })
 
 module.exports = () => {
     const tableName = process.env.ANALYTIC_TABLE || 'analyticsEvents'
@@ -27,7 +27,7 @@ module.exports = () => {
 
     return async (events) => {
         const requests = events.map((event) => {
-            const today = new Date();
+            const today = new Date()
             const date = today.getFullYear() + '-' + (today.getMonth() + 1 ) + '-' + today.getDate()
             const month = today.getFullYear() + '-' + (today.getMonth() + 1 )
 

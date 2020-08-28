@@ -111,7 +111,7 @@ const Row = ({ data }) => {
 
 export default ({ rows }) => {
     const [page, setPage] = React.useState(0)
-    const [rowsPerPage, setRowsPerPage] = React.useState(rowsPerPageOptions[0])
+    const [rowsPerPage, setRowsPerPage] = React.useState(100)
 
     React.useEffect(() => setPage(0), [rows])
 

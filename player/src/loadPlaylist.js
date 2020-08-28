@@ -79,7 +79,7 @@ export default function () {
                     playerStore.openPlaylist({ id, provider, ...playlist }, fileIndex, time)
 
                     analytics('playlistLoaded', document.title)
-
+                    
                     render((<App />), document.getElementById('app'))
                 } else if(playlist && playlist.trailer) {
                     trailerRedirect(playlist.trailer)
