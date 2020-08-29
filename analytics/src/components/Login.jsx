@@ -1,6 +1,6 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core/styles'
+import { red } from '@material-ui/core/colors'
 import {
     CognitoUserPool,
     AuthenticationDetails,
@@ -11,7 +11,7 @@ import {
     Button,
     FormControl,
     Typography
-} from '@material-ui/core';
+} from '@material-ui/core'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 
 import {
@@ -76,13 +76,13 @@ export function withLogin(Component) {
             AWS.config.credentials.refresh((error) => {
                 if (error) {
                     setError(error.message)
-                    console.error(error);
+                    console.error(error)
                     setStep('NOT_SIGNED')
                 } else {
                     setStep('SIGNED')
                 }
                 setLoading(false)
-            });
+            })
         }
 
         const doLogin = (e) => {
@@ -141,7 +141,7 @@ export function withLogin(Component) {
                 onFailure: () => {
                     setError(err.message)
                     setLoading(false)
-                    console.error(err);
+                    console.error(err)
                 },
             })
         }

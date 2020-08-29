@@ -60,11 +60,11 @@ export default observer(() => {
     }
 
     return (
-        <Box className={classes.root}>
+        <div className={classes.root}>
             <Toolbar>
                 <Box className={classes.title}>
                     <Typography>Bot Events Stream</Typography>
-                    <Typography>Total Events: {store.events.length}</Typography>
+                    <Typography>Total Events: <b>{store.events.length}</b></Typography>
                 </Box>
             </Toolbar>
             <Container className={classes.filter}>
@@ -92,6 +92,6 @@ export default observer(() => {
                 </LoadingPlaceholder>
             </Container>
             <ReloadButton onClick={() => store.reload()} />
-        </Box>
+        </div>
     )
 })

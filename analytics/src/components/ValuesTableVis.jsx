@@ -63,7 +63,7 @@ export default ({
                     {showTotal &&
                         <TableRow className={classes.row}>
                             <TableCell><b>Total Row</b></TableCell>
-                            <TableCell>{total}</TableCell>
+                            <TableCell className={classes.value}>{total}</TableCell>
                         </TableRow>
                     }
                     {rows.map((row, index) => (

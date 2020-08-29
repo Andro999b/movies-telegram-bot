@@ -49,7 +49,7 @@ export default observer(() => {
                     <Toolbar>
                         <Box className={classes.title}>
                             <Typography>Google Analytics</Typography>
-                            <Typography>Events: {store.totalEvents} Sessions: {store.totalSessions} Users: {store.totalUsers}</Typography>
+                            <Typography>Events: <b>{store.totalEvents}</b> Sessions: <b>{store.totalSessions}</b> Users: <b>{store.totalUsers}</b></Typography>
                         </Box>
                         <DateSelector value={store.period} format={GA_DATE_FORMAT} onChange={(p) => store.load(p)} />
                     </Toolbar>

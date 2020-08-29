@@ -50,7 +50,7 @@ export default observer(() => {
                     <Toolbar>
                         <Box className={classes.title}>
                             <Typography>Bot Dashboard</Typography>
-                            <Typography>Event: {totalEvent} Users: {store.topUsers.length}</Typography>
+                            <Typography>Event: <b>{totalEvent}</b> Users: <b>{store.topUsers.length}</b></Typography>
                         </Box>
                         <DateSelector value={store.period} onChange={(p) => store.load(p)} />
                     </Toolbar>

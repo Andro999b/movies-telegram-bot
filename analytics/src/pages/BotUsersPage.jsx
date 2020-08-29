@@ -32,7 +32,7 @@ export default observer(() => {
     return (
         <div>
             <Toolbar>
-                <Typography>{user.name} (Events: {user.events.length})</Typography>
+                <Typography>{user.name} (Events: <b>{user.events.length}</b>)</Typography>
             </Toolbar>
             <Container>
                 <Grid container spacing={1}>

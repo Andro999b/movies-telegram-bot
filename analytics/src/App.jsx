@@ -11,6 +11,7 @@ import GADashboard from './pages/GADashboard'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import MomentUtils from '@date-io/moment'
 import StorageDashboard from './pages/StorageDashboard'
+import ErrorLogDashboard from './pages/ErrorLogDashboard'
 
 
 const useStyles = makeStyles({
@@ -45,6 +46,9 @@ const App = () => {
                         </Route>
                         <Route path="/storage">
                             <StorageDashboard />
+                        </Route>
+                        <Route path="/errors">
+                            <ErrorLogDashboard />
                         </Route>
                         <Route path="/users/:uid">
                             <BotUsersPage />

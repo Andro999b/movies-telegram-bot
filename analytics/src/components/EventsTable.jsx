@@ -67,11 +67,6 @@ const Row = ({ data }) => {
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
-                <TableCell width={30}>
-                    <IconButton size="small" onClick={() => setOpen(!open)}>
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
-                </TableCell>
                 <TableCell width={110}>
                     <b>{data.bot}#{data.type}</b>
                 </TableCell>
@@ -83,6 +78,11 @@ const Row = ({ data }) => {
                 </TableCell>
                 <TableCell>
                     {input && input.value}
+                </TableCell>
+                <TableCell width={30}>
+                    <IconButton size="small" onClick={() => setOpen(!open)}>
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
                 </TableCell>
             </TableRow>
             <TableRow>
@@ -129,11 +129,11 @@ export default ({ rows }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell />
                             <TableCell>Event</TableCell>
                             <TableCell>Time</TableCell>
                             <TableCell>User</TableCell>
                             <TableCell>Input</TableCell>
+                            <TableCell/>
                         </TableRow>
                     </TableHead>
                     <TableBody>

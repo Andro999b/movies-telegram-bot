@@ -50,7 +50,7 @@ export default observer(() => {
                         <Toolbar>
                             <Box className={classes.title}>
                                 <Typography>Storage Analytics</Typography>
-                                <Typography>Total playlist: {store.total}</Typography>
+                                <Typography>Total playlist: <b>{store.total}</b></Typography>
                             </Box>
                         </Toolbar>
                     </Grid>
