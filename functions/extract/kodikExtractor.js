@@ -6,18 +6,23 @@ const hash2 = 'OErmnYyYA4wHwOP'
 module.exports = async (params) => {
     const { url, referer, hls, linksApi } = params
 
-    const res = await superagent
-        .get(url.startsWith('//') ? 'https:' + url : url)
-        .set({ 'Referer': referer || url })
-        .timeout(5000)
+    let targetUrl
+    if(!url.includes('/go/')) {
+        const res = await superagent
+            .get(url.startsWith('//') ? 'https:' + url : url)
+            .set({ 'Referer': referer || url })
+            .timeout(5000)
 
-    const matches = res.text.match(/iframe\.src = "([^"]+)"/)
+        const matches = res.text.match(/iframe\.src = "([^"]+)"/)
 
-    if(!matches)
-        throw Error('Video can`t be extracted', params)
-    
-    const urlMatch = matches[1]
-    const targetUrl = new URL(urlMatch.startsWith('//') ? 'https:' + urlMatch : urlMatch)
+        if(!matches)
+            throw Error('Video can`t be extracted', params)
+        
+        const urlMatch = matches[1]
+        targetUrl = new URL(urlMatch.startsWith('//') ? 'https:' + urlMatch : urlMatch)
+    } else {
+        targetUrl = new URL(url.startsWith('//') ? 'https:' + url : url)
+    }
 
     const { id, hash, type } = targetUrl.pathname.match(/\/go\/(?<type>[a-z]+)\/(?<id>[0-9]+)\/(?<hash>[0-9a-z]+)/).groups
 

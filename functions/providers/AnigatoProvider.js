@@ -51,7 +51,7 @@ class AnigatoProvider extends DataLifeProvider {
                                 }]
                             }]
                         } else if ($seasons.length == 1) {
-                            const $season = $seasons[0]
+                            const $season = $($seasons[0])
                             return $season.find('option')
                                 .toArray()
                                 .map((el, id) => ({
