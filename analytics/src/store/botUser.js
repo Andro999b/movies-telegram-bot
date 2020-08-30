@@ -22,7 +22,8 @@ export default () => ({
                     AttributeValueList: [parseInt(uid)]
                 }
             },
-            ScanIndexForward: false
+            ScanIndexForward: false,
+            Limit: 100
         }
 
         const eventsReducer = bucketReducer(({ type }) => type)
