@@ -22,7 +22,7 @@ class AnidubProvider extends DataLifeProvider {
                     transform: ($el) => this._absoluteUrl($el.attr('data-src'))
                 },
                 files: {
-                    selector: '.video-box:nth-child(3) .series-tab',
+                    selector: '.video-box .series-tab',
                     transform: ($el) => $el.children()
                         .toArray()
                         .map((el) => $(el))

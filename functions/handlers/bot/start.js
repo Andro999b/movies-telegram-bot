@@ -23,10 +23,13 @@ module.exports = (bot, providers) => {
         if (startPayload) {
             let query = startPayload.trim()
             if (query) {
-                track('start', { 
-                    startPayload: base64UrlDecode(query) 
-                })
-                return doSearch(ctx, providers, base64UrlDecode(query))
+                try {
+                    const startPayload = base64UrlDecode(query)
+                    track('start', { startPayload })
+                    return doSearch(ctx, providers, base64UrlDecode(query))
+                } catch(e) {
+                    console.error(`Fail proccess start peayload ${query}`, e)
+                }
             }
         }
 

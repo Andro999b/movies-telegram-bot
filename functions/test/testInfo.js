@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'anigato'
-const id = 'https%3A%2F%2Fanigato.ru%2Fanime_movie%2F1607-so-sklonov-kokuriko.html'
+const provider = 'anidub'
+const id = 'https://online.anidub.com/anime_movie/2209-perfect-blue-sovershennaya-grust-bd-rip720p-51.html'
 
 console.log(decodeURIComponent(id))
 
