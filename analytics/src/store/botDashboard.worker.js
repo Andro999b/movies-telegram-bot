@@ -49,7 +49,7 @@ const processPeriod = (period, reducer, initValue = {}) => {
                 const newQueries = []
 
                 results.forEach(({ items, query, lastKey }) => {
-                    items.forEach((item) => { accumulator = reducer(accumulator, item) })
+                    items.forEach((item) => accumulator = reducer(accumulator, item))
                     if (lastKey) {
                         newQueries.push({ ...query, ExclusiveStartKey: lastKey })
                     }
@@ -65,7 +65,7 @@ const processPeriod = (period, reducer, initValue = {}) => {
 }
 
 const topUsersBucketReducer = (acc, item) => {
-    if (!acc.hasOwnProperty(item.uid)) {
+    if (!acc[item.uid]) {
         acc[item.uid] = {
             value: 0,
             item
@@ -84,35 +84,35 @@ const getSegmetExtractorForPeriod = (period) => {
 }
 
 registerWebworker(({ period, credentials }) => {
-        AWS.config.region = REGION
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials(credentials)
+    AWS.config.region = REGION
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials(credentials)
 
-        const segmentExtractor = getSegmetExtractorForPeriod(period)
-    
-        const eventsReducer = segmentBucketReducer(segmentExtractor, ({ type }) => type)
-        const eventsCounterReducer = bucketReducer(({ type }) => type)
-        const botsReducer = segmentBucketReducer(segmentExtractor, ({ bot }) => bot)
-        const botsCounterReducer = bucketReducer(({ bot }) => bot)
-        const usersReducer = uniqueBucketReducer(segmentExtractor, ({ uid }) => uid)
+    const segmentExtractor = getSegmetExtractorForPeriod(period)
 
-        return processPeriod(
-            period,
-            (acc, item) => {
-                acc.eventsBucket = eventsReducer(acc.eventsBucket, item)
-                acc.eventsCountBucket = eventsCounterReducer(acc.eventsCountBucket, item)
-                acc.botsBucket = botsReducer(acc.botsBucket, item)
-                acc.botsCountBucket = botsCounterReducer(acc.botsCountBucket, item)
-                acc.usersBucket = usersReducer(acc.usersBucket, item)
-                acc.topUsersBucket = topUsersBucketReducer(acc.topUsersBucket, item)
-                return acc
-            },
-            {
-                eventsBucket: {},
-                eventsCountBucket: {},
-                botsBucket: {},
-                botsCountBucket: {},
-                usersBucket: {},
-                topUsersBucket: {}
-            }
-        )
-    })
+    const eventsReducer = segmentBucketReducer(segmentExtractor, ({ type }) => type)
+    const eventsCounterReducer = bucketReducer(({ type }) => type)
+    const botsReducer = segmentBucketReducer(segmentExtractor, ({ bot }) => bot)
+    const botsCounterReducer = bucketReducer(({ bot }) => bot)
+    const usersReducer = uniqueBucketReducer(segmentExtractor, ({ uid }) => uid)
+
+    return processPeriod(
+        period,
+        (acc, item) => {
+            acc.eventsBucket = eventsReducer(acc.eventsBucket, item)
+            acc.eventsCountBucket = eventsCounterReducer(acc.eventsCountBucket, item)
+            acc.botsBucket = botsReducer(acc.botsBucket, item)
+            acc.botsCountBucket = botsCounterReducer(acc.botsCountBucket, item)
+            acc.usersBucket = usersReducer(acc.usersBucket, item)
+            acc.topUsersBucket = topUsersBucketReducer(acc.topUsersBucket, item)
+            return acc
+        },
+        {
+            eventsBucket: {},
+            eventsCountBucket: {},
+            botsBucket: {},
+            botsCountBucket: {},
+            usersBucket: {},
+            topUsersBucket: {}
+        }
+    )
+})

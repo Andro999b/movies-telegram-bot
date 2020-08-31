@@ -44,16 +44,14 @@ export default observer(() => {
 
     return (
         <div>
+            <Toolbar>
+                <Box className={classes.title}>
+                    <Typography>Storage Analytics</Typography>
+                    <Typography>Total playlist: <b>{store.total}</b></Typography>
+                </Box>
+            </Toolbar>
             <Container>
                 <Grid container>
-                    <Grid item xs={12}>
-                        <Toolbar>
-                            <Box className={classes.title}>
-                                <Typography>Storage Analytics</Typography>
-                                <Typography>Total playlist: <b>{store.total}</b></Typography>
-                            </Box>
-                        </Toolbar>
-                    </Grid>
                     <Grid container item xs={12} className={classes.charts}>
                         <Grid item md={12} sm={12} xs={12} className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
@@ -80,12 +78,12 @@ export default observer(() => {
                                     renderName={({ result: { provider, title } }) => (
                                         <span><b className={classes.provider}>{provider}</b>{title}</span>
                                     )}
-                                    renderValue={({ lastModifiedDate }) => 
+                                    renderValue={({ lastModifiedDate }) =>
                                         moment(lastModifiedDate).calendar(null, {
                                             sameDay: 'HH:mm',
                                             lastDay: '[yesterday]',
                                             nextWeek: DATE_FORMAT,
-                                            sameElse:  DATE_FORMAT
+                                            sameElse: DATE_FORMAT
                                         })
                                     }
                                 />
