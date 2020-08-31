@@ -69,7 +69,11 @@ module.exports = (bot, providers, botType) => {
 
         const item = await filmsLibrary.getInfoById(id)
 
-        await deleteMessage()
+        try { 
+            await deleteMessage() 
+        } catch(e) {
+            console.error('fail previous lib delete message', e)
+        }
 
         if (item) {
             track('lib', { title: item.title })
@@ -134,7 +138,11 @@ module.exports = (bot, providers, botType) => {
         bot.hears(/^\/top(.*)$/, topHandler)
         bot.action(/^\/top(.*)$/, async (ctx) => {
             await topHandler(ctx)
-            await ctx.deleteMessage()
+            try { 
+                await ctx.deleteMessage() 
+            } catch(e) {
+                console.error('fail delete previous top page message', e)
+            }
             return ctx.answerCbQuery()
         })
     }

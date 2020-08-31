@@ -45,24 +45,27 @@ function createResultButtons(res, query) {
 
 
 async function getNoResults({ reply, i18n, track }, providers, query) {
-    let text = i18n.t('no_results', { query })
-    let btns = [
-        Markup.callbackButton(i18n.t('repeat_search'), query)
-    ]
-
     const suggestion = await suggestions(query)
 
     track('no_results', { query, providers, suggestion })
 
     if (suggestion) {
-        text += '\n' + i18n.t('spell_check')
-        btns.unshift(Markup.callbackButton(suggestion, suggestion))
+        if(Buffer.byteLength(suggestion, 'utf-8') > 63) {
+            return reply(
+                i18n.t('no_results', { query }) + '\n' + 
+                i18n.t('spell_check_too_long', { suggestion }) 
+            )
+        } else {
+            return reply(
+                i18n.t('no_results', { query }) + '\n' + i18n.t('spell_check'),
+                Markup.inlineKeyboard([
+                    Markup.callbackButton(suggestion, suggestion)
+                ]).extra()
+            )
+        }
+    } else {
+        return reply(i18n.t('no_results', { query }))
     }
-
-    return reply(
-        text,
-        Markup.inlineKeyboard(btns, { columns: 1 }).extra()
-    )
 }
 
 async function doSimpleSearch(ctx, providers, query) {
