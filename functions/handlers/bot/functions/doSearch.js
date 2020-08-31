@@ -53,11 +53,11 @@ async function getNoResults({ reply, i18n, track }, providers, query) {
     const suggestion = await suggestions(query)
 
     track('no_results', { query, providers, suggestion })
-    
-    if(suggestion) {
+
+    if (suggestion) {
         text += '\n' + i18n.t('spell_check')
         btns.unshift(Markup.callbackButton(suggestion, suggestion))
-    } 
+    }
 
     return reply(
         text,
@@ -119,8 +119,8 @@ async function doSearch(ctx, defaultProviders, text) {
 
         if (searchEngineQuery) {
             query = searchEngineQuery
-        } else  {
-            track('no_results', { query, providers } )
+        } else {
+            track('no_results', { query, providers })
             return reply(i18n.t('no_results', { query }))// do nothing in case if user send link
         }
     }

@@ -19,21 +19,26 @@ module.exports = (bot, providers) => {
 
     bot.start(async (ctx) => {
         const { startPayload, track } = ctx
+        let referer = null
 
         if (startPayload) {
             let query = startPayload.trim()
-            if (query) {
-                try {
-                    const startPayload = base64UrlDecode(query)
-                    track('start', { startPayload })
-                    return doSearch(ctx, providers, base64UrlDecode(query))
-                } catch(e) {
-                    console.error(`Fail proccess start peayload ${query}`, e)
-                }
+            switch (query) {
+                case 'botostore':
+                    referer = query
+                    break
+                default:
+                    try {
+                        const startPayload = base64UrlDecode(query)
+                        track('start', { startPayload })
+                        return doSearch(ctx, providers, base64UrlDecode(query))
+                    } catch (e) {
+                        console.error(`Fail proccess start peayload ${query}`, e)
+                    }
             }
         }
 
-        track('start')
+        track('start', { referer })
 
         return renderHello(ctx)
     })

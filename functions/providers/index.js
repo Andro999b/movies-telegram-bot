@@ -12,6 +12,8 @@ const providers = [
     new (require('./NekomoriProvider'))()
 ]
 
+const MAX_RESULTS = 30
+
 module.exports = {
     getProviders() {
         return providers.map((provider) => provider.getName())
@@ -23,7 +25,7 @@ module.exports = {
         }
         return Promise.reject(`No provider found for ${name}`)
     },
-    async search(providers, query, page = 0, pageCount = 1) {
+    async search(providers, query, page = 0, pageCount = MAX_RESULTS) {
         if (!query || !providers || !providers.length) {
             return []
         }
@@ -31,7 +33,8 @@ module.exports = {
         const results = await Promise.all(providers.map(async (providerName) => {
             try {
                 const provider = await this.getProvider(providerName)
-                return await provider.search(query, page, pageCount)
+                const results = await provider.search(query, page, pageCount)
+                return results.slice(0, pageCount)
             } catch (e) {
                 console.error(`Provider ${providerName} failed.`, e)
                 return []
@@ -40,14 +43,15 @@ module.exports = {
 
         return results.reduce((acc, result) => acc.concat(result), [])
     },
-    async searchOne(providerName, query, page = 0, pageCount = 1) {
+    async searchOne(providerName, query, page = 0, pageCount = MAX_RESULTS) {
         if (!query) {
             return []
         }
 
         try {
             const provider = await this.getProvider(providerName)
-            return await provider.search(query, page, pageCount)
+            const results = await provider.search(query, page, pageCount)
+            return results.slice(0, pageCount)
         } catch (e) {
             console.error(`Provider ${providerName} failed.`, e)
         }
