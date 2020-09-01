@@ -9,6 +9,7 @@ export default observable({
     initlized: false,
     loading: true,
     providersChart: [],
+    providersHitsChart: [],
     providers: [],
     top: [],
     recient: [],
@@ -20,14 +21,16 @@ export default observable({
         this.loading = true
 
         invokeMongoStat()
-            .then(({ providers, hits, recient }) => {
+            .then(({ providers, providersHits, hits, recient }) => {
                 this.initlized = true
                 this.loading = false
 
                 const providersBucket = providers.reduce(providerReducer, {})
+                const providersHitsBucket = providersHits.reduce(providerReducer, {})
 
                 this.total = providers.reduce((acc, { count }) => acc + count, 0)
                 this.providersChart = providersBucket.chartData
+                this.providersHitsChart = providersHitsBucket.chartData
                 this.providers = Object.keys(providersBucket.acc)
                 this.top = hits
                 this.recient = recient

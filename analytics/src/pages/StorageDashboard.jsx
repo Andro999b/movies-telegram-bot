@@ -53,8 +53,15 @@ export default observer(() => {
             <Container>
                 <Grid container>
                     <Grid container item xs={12} className={classes.charts}>
-                        <Grid item md={12} sm={12} xs={12} className={classes.item}>
+                        <Grid item md={6} sm={12} xs={12} className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
+                                <Typography>Top watched providers</Typography>
+                                <BarChartVis data={store.providersHitsChart} lines={store.providers} legend />
+                            </LoadingPlaceholder>
+                        </Grid>
+                        <Grid item md={6} sm={12} xs={12} className={classes.item}>
+                            <LoadingPlaceholder loading={store.loading}>
+                                <Typography>Top cached providers</Typography>
                                 <BarChartVis data={store.providersChart} lines={store.providers} legend />
                             </LoadingPlaceholder>
                         </Grid>

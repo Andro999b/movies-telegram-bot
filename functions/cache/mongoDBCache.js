@@ -28,7 +28,7 @@ class MongoDBCache extends Cache {
         const expired = new Date(Date.now() + expirationTime)
         await this.collection.updateOne(
             { _id: id },
-            { $set: { result, lastModifiedDate: new Date(), expired } },
+            { $set: { result, lastModifiedDate: new Date(), expired }, $inc: { hit: 1 } },
             { upsert: true }
         )
     }
@@ -39,7 +39,7 @@ class MongoDBCache extends Cache {
         await this.collection.bulkWrite(results.map(({ result }) => ({
             updateOne: {
                 filter: { _id: result.id },
-                update: { $set: { result, lastModifiedDate: new Date(), expired } },
+                update: { $set: { result, lastModifiedDate: new Date(), expired }, $inc: { hit: 1 } },
                 upsert: true 
             }
         })))

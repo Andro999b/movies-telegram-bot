@@ -14,24 +14,10 @@ async function connectToDatabase() {
     return cachedDb
 }
 
-async function getTopProviders() {
+async function runAggregation(pipline) {
     const client = await connectToDatabase()
-    const result = await new Promise((resolve, reject) => {
-        client.collection(COLLECTION_NAME).aggregate([
-            {
-                '$group': {
-                    '_id': '$result.provider',
-                    'count': {
-                        '$sum': 1
-                    }
-                }
-            },
-            {
-                '$sort': {
-                    'count': -1
-                }
-            }
-        ], (err, cursor) => {
+    return await new Promise((resolve, reject) => {
+        client.collection(COLLECTION_NAME).aggregate(pipline, (err, cursor) => {
             if (err) reject(err)
             else cursor.toArray((err, documents) => {
                 if (err) reject(err)
@@ -39,6 +25,44 @@ async function getTopProviders() {
             })
         })
     })
+}
+
+async function getTopWatchedProviders() {
+    const result = await runAggregation([
+        {
+            '$group': {
+                '_id': '$result.provider',
+                'count': {
+                    '$sum': "$hit"
+                }
+            }
+        },
+        {
+            '$sort': {
+                'count': -1
+            }
+        }
+    ])
+
+    return { key: 'providersHits', result }
+}
+
+async function getTopCachedProviders() {
+    const result = await runAggregation([
+        {
+            '$group': {
+                '_id': '$result.provider',
+                'count': {
+                    '$sum': 1
+                }
+            }
+        },
+        {
+            '$sort': {
+                'count': -1
+            }
+        }
+    ])
 
     return { key: 'providers', result }
 }
@@ -76,6 +100,11 @@ async function getRecientWatches() {
 }
 
 module.exports.handler = async () => {
-    const results = await Promise.all([getTopProviders(), getTopWatches(), getRecientWatches()])
+    const results = await Promise.all([
+        getTopCachedProviders(), 
+        getTopWatchedProviders(), 
+        getTopWatches(), 
+        getRecientWatches()
+    ])
     return results.reduce((acc, { key, result }) => ({ ...acc, [key]: result }), {})
 }
