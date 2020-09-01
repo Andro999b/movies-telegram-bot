@@ -5,8 +5,9 @@ const Markup = require('telegraf/markup')
 const suggestions = require('../../../utils/suggestions')
 
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
+const MAX_QUERY_LENGTH = 63
+const MAX_QUERY_LENTH_WITH_PROVIDER = 50
 const PLAYER_URL = process.env.PLAYER_URL
-
 
 function getResultsKeyboad(providersResults, query, i18n) {
     return Markup.inlineKeyboard(
@@ -26,9 +27,9 @@ function getResultsKeyboad(providersResults, query, i18n) {
                 }
             })
             .reduce((acc, items) => acc.concat(items), [])
-            .concat([
+            /* .concat([
                 Markup.callbackButton(i18n.t('repeat_search'), query)
-            ]),
+            ]) */,
         { columns: 1 }
     )
 }
@@ -50,7 +51,7 @@ async function getNoResults({ reply, i18n, track }, providers, query) {
     track('no_results', { query, providers, suggestion })
 
     if (suggestion) {
-        if(Buffer.byteLength(suggestion, 'utf-8') > 63) {
+        if(Buffer.byteLength(suggestion, 'utf-8') > MAX_QUERY_LENGTH) {
             return reply(
                 i18n.t('no_results', { query }) + '\n' + 
                 i18n.t('spell_check_too_long', { suggestion }) 
@@ -85,20 +86,20 @@ async function doSimpleSearch(ctx, providers, query) {
     const resultsCount = providersResults.reduce((acc, items) => acc + items.length, 0)
     track('search', { query, providers, resultsCount })
 
-    // retur single provider results
-    if (providersResults.length == 1) {
-        const results = providersResults[0]
+    const replySingleProvider = (results) => {
         const provider = results[0].provider
         return reply(
             i18n.t('provider_results', { query, provider }),
-            Markup.inlineKeyboard(
-                createResultButtons(results, query)
-                    .concat([
-                        Markup.callbackButton(i18n.t('repeat_search'), query)
-                    ]),
-                { columns: 1 }
-            ).extra()
+            Markup.inlineKeyboard(createResultButtons(results, query), { columns: 1 }).extra()
         )
+    }
+
+    // retur single provider results
+    if (providersResults.length == 1) {
+        const results = providersResults[0]
+        return replySingleProvider(results)
+    } else if(Buffer.byteLength(query, 'utf8') > MAX_QUERY_LENTH_WITH_PROVIDER) {
+        return Promise.all(providersResults.map(replySingleProvider))
     } else { //return multiple provders results
         return reply(
             i18n.t('results', { query }),
