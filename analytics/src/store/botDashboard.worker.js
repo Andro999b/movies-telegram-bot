@@ -10,8 +10,11 @@ const getKeysForPeriod = (period) => {
         case 'last7days': return range(7)
             .map((i) => ({ key: 'date', value: getDateFor(i - 1) }))
             .reverse()
+        case 'last30days': return range(30)
+            .map((i) => ({ key: 'date', value: getDateFor(i - 1) }))
+            .reverse()
         case 'current_month': return [{ key: 'month', value: getMonthFor(0) }]
-        case 'previous_month': return [{ key: 'month', value: getMonthFor(-1) }]
+        case 'previous_month': return [{ key: 'month', value: getMonthFor(1) }]
         case 'last3months': return range(3)
             .map((i) => ({ key: 'month', value: getMonthFor(i - 1) }))
             .reverse()

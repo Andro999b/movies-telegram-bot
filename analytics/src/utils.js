@@ -72,9 +72,13 @@ export const bucketReducer = (
     }
 }
 
-export const getBucketKeys = ({ acc }) =>
-    Object.keys(acc)
-        .sort((a, b) => acc[b] - acc[a])
+export const getBucketKeys = ({ acc }) => {
+    if(!acc)
+        return []
+    else
+        return Object.keys(acc)
+            .sort((a, b) => acc[b] - acc[a])
+}
 
 
 export const getEventInputProp = (event) => {

@@ -49,15 +49,15 @@ export default observable({
         }) => {
             if (this.period != period) return
 
-            this.eventsChart = eventsBucket.chartData
-            this.eventsPie = eventsCountBucket.chartData
+            this.eventsChart = eventsBucket.chartData || []
+            this.eventsPie = eventsCountBucket.chartData || []
             this.events = getBucketKeys(eventsCountBucket)
 
-            this.botChart = botsBucket.chartData
-            this.botPie = botsCountBucket.chartData
+            this.botChart = botsBucket.chartData || []
+            this.botPie = botsCountBucket.chartData || []
             this.bots = getBucketKeys(botsCountBucket)
 
-            this.usersChart = usersBucket.chartData
+            this.usersChart = usersBucket.chartData || []
             this.topUsers = toTopUsersPie(topUsersBucket)
 
             this.loading = false

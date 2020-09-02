@@ -92,16 +92,20 @@ const getGARange = (period) => {
             today.clone().subtract(7, 'day').format(GA_DATE_FORMAT),
             todayFormated,
         ]
+        case 'last30days': return [
+            today.clone().subtract(30, 'day').format(GA_DATE_FORMAT),
+            todayFormated,
+        ]
         case 'current_month': return [
-            today.clone().subtract(1, 'month').format(GA_DATE_FORMAT),
+            today.clone().startOf('month').format(GA_DATE_FORMAT),
             todayFormated,
         ]
         case 'previous_month': return [
-            today.clone().subtract(1, 'month').format(GA_DATE_FORMAT),
-            today.clone().subtract(2, 'month').format(GA_DATE_FORMAT),
+            today.clone().subtract(1, 'month').startOf('month').format(GA_DATE_FORMAT),
+            today.clone().subtract(1, 'month').endOf('month').format(GA_DATE_FORMAT),
         ]
         case 'last3months': return [
-            today.clone().subtract(3, 'month').format(GA_DATE_FORMAT),
+            today.clone().subtract(2, 'month').startOf('month').format(GA_DATE_FORMAT),
             todayFormated,
         ]
     }

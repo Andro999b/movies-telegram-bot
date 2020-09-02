@@ -9,6 +9,7 @@ export const GA_DATE_FORMAT = 'YYYY-MM-DD'
 
 export const NAMES ={
     last7days: 'Last 7 days',
+    last30days: 'Last 30 Days',
     current_month: 'Current month',
     previous_month: 'Previous month',
     last3months: 'Three months',
