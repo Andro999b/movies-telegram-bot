@@ -8,8 +8,8 @@ export const getDocClient = () => {
     return docClient
 }
 
-export const getDateFor = (pass) => moment().utc().subtract(pass, 'days').format(DATE_FORMAT)
-export const getMonthFor = (pass) => moment().utc().subtract(pass, 'months').format('YYYY-M')
+export const getDateFor = (pass) => moment().subtract(pass, 'days').utc().format(DATE_FORMAT)
+export const getMonthFor = (pass) => moment().subtract(pass, 'months').utc().format('YYYY-M')
 
 export const runQuery = (q) =>
     new Promise((resolve, reject) =>

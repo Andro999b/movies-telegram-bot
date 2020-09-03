@@ -38,7 +38,7 @@ const getPeriodRange = (period) => {
 const cache = {}
 
 export default observable({
-    period: moment().utc().format(DATE_FORMAT),
+    period: moment().format(DATE_FORMAT),
     searcher: null,
 
     load(period) {

@@ -109,7 +109,12 @@ const getGARange = (period) => {
             todayFormated,
         ]
     }
-    return [period, period]
+
+    const utcPeriod = moment(period, GA_DATE_FORMAT).utc().format(GA_DATE_FORMAT)
+    return [
+        utcPeriod, 
+        utcPeriod
+    ]
 }
 
 

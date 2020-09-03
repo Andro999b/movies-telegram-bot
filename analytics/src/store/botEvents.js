@@ -16,7 +16,9 @@ export default observable({
     startUpdate() {
         if (interval) clearInterval(interval)
         interval = setInterval(
-            () => { if(isToday(this.date)) this.loadStratingFromTS(this.lastTs) },
+            () => { 
+                if(isToday(this.date)) this.loadStratingFromTS(this.lastTs)
+            },
             EVENTS_UPDATE_INTERVAL
         )
     },

@@ -1,5 +1,5 @@
 import '../aws-sdk'
-import { PERIODS, TABLE_NAME, REGION } from '../constants'
+import { PERIODS, TABLE_NAME, REGION, DATE_FORMAT } from '../constants'
 import { getDateFor, getIndexForPeriod, getMonthFor, runQuery } from '../database/dynamodb'
 import { range, segmentBucketReducer, uniqueBucketReducer, bucketReducer } from '../utils'
 import registerWebworker from 'webworker-promise/lib/register'
@@ -18,7 +18,10 @@ const getKeysForPeriod = (period) => {
         case 'last3months': return range(3)
             .map((i) => ({ key: 'month', value: getMonthFor(i - 1) }))
             .reverse()
-        default: return [{ key: 'date', value: period }]
+        default: return [{ 
+            key: 'date', 
+            value: moment(period, DATE_FORMAT).utc().format(DATE_FORMAT) 
+        }]
     }
 }
 

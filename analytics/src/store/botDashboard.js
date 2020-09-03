@@ -29,7 +29,7 @@ export default observable({
     eventsChart: [],
     events: [],
 
-    period: moment().utc().format(DATE_FORMAT),
+    period: moment().format(DATE_FORMAT),
 
     load(period) {
         this.period = period
