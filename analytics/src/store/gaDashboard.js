@@ -84,8 +84,8 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
     }
 }
 
-const today = moment().utc()
-const todayFormated = moment().utc().format(GA_DATE_FORMAT)
+const today = moment()
+const todayFormated = moment().format(GA_DATE_FORMAT)
 const getGARange = (period) => {
     switch (period) {
         case 'last7days': return [
@@ -110,10 +110,9 @@ const getGARange = (period) => {
         ]
     }
 
-    const utcPeriod = moment(period, GA_DATE_FORMAT).utc().format(GA_DATE_FORMAT)
     return [
-        utcPeriod, 
-        utcPeriod
+        period, 
+        period
     ]
 }
 
@@ -142,7 +141,6 @@ export default observable({
     reload(force) {
         const period = this.period
 
-        
         const updateCharts = ({
             labels,
             usersBucket,

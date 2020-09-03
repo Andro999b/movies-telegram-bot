@@ -18,10 +18,11 @@ const getKeysForPeriod = (period) => {
         case 'last3months': return range(3)
             .map((i) => ({ key: 'month', value: getMonthFor(i - 1) }))
             .reverse()
-        default: return [{ 
-            key: 'date', 
-            value: moment(period, DATE_FORMAT).utc().format(DATE_FORMAT) 
-        }]
+        default:
+            return [{
+                key: 'date',
+                value: period
+            }]
     }
 }
 
