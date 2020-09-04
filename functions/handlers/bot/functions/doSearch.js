@@ -60,12 +60,22 @@ async function getNoResults({ reply, i18n, track }, providers, query) {
             return reply(
                 i18n.t('no_results', { query }) + '\n' + i18n.t('spell_check'),
                 Markup.inlineKeyboard([
-                    Markup.callbackButton(suggestion, suggestion)
+                    Markup.callbackButton(suggestion, suggestion),
+                    Markup.callbackButton(i18n.t('repeat_search'), query)
                 ]).extra()
             )
         }
     } else {
-        return reply(i18n.t('no_results', { query }))
+        if(Buffer.byteLength(suggestion, 'utf-8') > MAX_QUERY_LENGTH) {
+            return reply(i18n.t('no_results', { query }))
+        } else {
+            return reply(
+                i18n.t('no_results', { query }),
+                Markup.inlineKeyboard([
+                    Markup.callbackButton(i18n.t('repeat_search'), query)
+                ]).extra()
+            )
+        }
     }
 }
 
