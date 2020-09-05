@@ -28,8 +28,8 @@ module.exports = {
         'searchUrl': 'https://anigato.ru/index.php?do=search'
     },
     'kinovod': {
-        'baseUrl': 'http://kinovod129.cc',
-        'searchUrl': 'http://kinovod129.cc/search'
+        'baseUrl': 'https://kinovod183.cc',
+        'searchUrl': 'https://kinovod183.cc/ajax/search.php'
     },
     'animevost': {
         'baseUrl': 'https://animevost.org',

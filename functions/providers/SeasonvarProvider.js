@@ -1,6 +1,5 @@
 const DirectMediaProvider = require('./Provider')
 const urlencode = require('urlencode')
-const $ = require('cheerio')
 const superagent = require('superagent')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const { base64encode, base64decode } = require('../utils/base64')
@@ -64,9 +63,9 @@ class SeasonvarProvider extends DirectMediaProvider {
         const { suggestions: { valu }, data } = body
 
         return valu
-            .filter((_, index) => data[index] && data[index].endsWith("html"))
+            .filter((_, index) => data[index] && data[index].endsWith('html'))
             .map((name, index) => ({
-                name: name.replace(/<[^>]*>/g, ""),
+                name: name.replace(/<[^>]*>/g, ''),
                 id: urlencode(this.config.baseUrl + '/' + data[index]),
                 provider: this.name
             }))

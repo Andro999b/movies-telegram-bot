@@ -47,6 +47,7 @@ class SevenSerailsProvider extends DataLifeProvider {
     getInfoUrl(resultId) {
         return decodeURIComponent(resultId)
     }
+
 }
 
 module.exports = SevenSerailsProvider
