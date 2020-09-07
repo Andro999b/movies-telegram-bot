@@ -1,8 +1,10 @@
 const AWS = require('aws-sdk')
+const { DateTime } = require('luxon')
 const ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' })
 
 module.exports = () => {
     const tableName = process.env.ANALYTIC_TABLE || 'analyticsEvents'
+    const timezone = process.env.ANALYTIC_TIMEZONE || 'analyticsEvents'
     const analyticsTTL = 3600 * 24 * (process.env.ANALYTIC_RETENTION || 90)
 
     const typeMapping = {
@@ -27,9 +29,9 @@ module.exports = () => {
 
     return async (events) => {
         const requests = events.map((event) => {
-            const today = new Date()
-            const date = today.getFullYear() + '-' + (today.getMonth() + 1 ) + '-' + today.getDate()
-            const month = today.getFullYear() + '-' + (today.getMonth() + 1 )
+            const today = timezone ? DateTime.utc().setZone(timezone) : DateTime.utc()
+            const date = today.toFormat('y-M-d')
+            const month = today.toFormat('y-M')
 
             const Item = {
                 date: {

@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'kinovod'
-const id = '%2Ffilm%2F518-terminator-2-sudnyj-den'
+const provider = 'kinogo'
+const id = 'https%3A%2F%2Fkinogo.by%2F23000-little-women_2019.html'
 
 providers.getInfo(provider, id)
     .then((details) => console.log(util.inspect(details, false, null, true)))// eslint-disable-line

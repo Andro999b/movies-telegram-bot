@@ -14,6 +14,7 @@
     "cheerio": "^1.0.0-rc.3",
     "crypto-js": "^4.0.0",
     "fuse.js": "^6.4.0",
+    "luxon": "^1.25.0",
     "mongodb": "^3.5.9",
     "superagent": "^5.2.2",
     "superagent-charset": "^1.2.0",

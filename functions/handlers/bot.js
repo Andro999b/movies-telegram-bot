@@ -22,7 +22,6 @@ bot.use(analytics(tracker(), BOT_TYPE))
 
 require('./bot/library')(bot, PROVIDERS, BOT_TYPE)
 require('./bot/start')(bot, PROVIDERS)
-require('./bot/helpsearch')(bot)
 require('./bot/search')(bot, PROVIDERS, INLINE_PROVIDERS)
 
 bot.catch((err) => {
