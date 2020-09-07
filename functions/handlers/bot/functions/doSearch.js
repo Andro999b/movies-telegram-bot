@@ -66,7 +66,7 @@ async function getNoResults({ reply, i18n, track }, providers, query) {
             )
         }
     } else {
-        if(Buffer.byteLength(suggestion, 'utf-8') > MAX_QUERY_LENGTH) {
+        if(Buffer.byteLength(query, 'utf-8') > MAX_QUERY_LENGTH) {
             return reply(i18n.t('no_results', { query }))
         } else {
             return reply(
