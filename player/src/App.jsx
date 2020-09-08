@@ -1,5 +1,5 @@
 import './styles.scss'
-import 'react-virtualized/styles.css';
+import 'react-virtualized/styles.css'
 import React, { Component } from 'react'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { red, grey } from '@material-ui/core/colors'

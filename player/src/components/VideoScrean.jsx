@@ -254,9 +254,7 @@ class VideoScrean extends BaseScrean {
                 retry = false
                 break
         }
-
-        console.log(code, retry);
-
+        
         //retry
         if (retry) {
             this.errorRetries--

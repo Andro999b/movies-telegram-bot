@@ -16,7 +16,6 @@ import {
 import { inject } from 'mobx-react'
 
 import analytics from '../utils/analytics'
-import store from '../utils/storage'
 import localization from '../localization'
 
 @inject(({ notificationStore: { showMessage }}) => ({ showMessage }))
@@ -43,11 +42,11 @@ class Share extends BaseSelector {
     getShareUrl = (sharePosition, shareTime) => {
         const { device: { currentTime, currentFileIndex } } = this.props
 
-        const params = new URLSearchParams(location.search);
-        const newParams = new URLSearchParams();
+        const params = new URLSearchParams(location.search)
+        const newParams = new URLSearchParams()
 
-        newParams.set('provider', params.get('provider') || store.get('provider'))
-        newParams.set('id', params.get('id') || store.get('id'))
+        newParams.set('provider', params.get('provider'))
+        newParams.set('id', params.get('id'))
 
         if(params.has('query')) newParams.set('query', params.get('query'))
 
@@ -71,7 +70,7 @@ class Share extends BaseSelector {
         }
     }
 
-    handleShare = (network) => {
+    handleShare = () => {
         analytics('share', document.title)
     }
 
