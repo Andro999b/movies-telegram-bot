@@ -1,6 +1,7 @@
 import { runQuery } from '../database/dynamodb'
 import { TABLE_NAME } from '../constants'
 import { bucketReducer, getUserName } from '../utils'
+import errorHadler from '../database/errorHadler'
 
 export default () => ({
     loading: true,
@@ -29,14 +30,16 @@ export default () => ({
         const eventsReducer = bucketReducer(({ type }) => type)
         const botsReducer = bucketReducer(({ bot }) => bot)
 
-        runQuery(query).then(({ items }) => {
-            this.events = items
-            this.eventsPie = items.reduce(eventsReducer, {}).chartData
-            this.botsPie = items.reduce(botsReducer, {}).chartData
-            this.loading = false
+        runQuery(query)
+            .then(({ items }) => {
+                this.events = items
+                this.eventsPie = items.reduce(eventsReducer, {}).chartData
+                this.botsPie = items.reduce(botsReducer, {}).chartData
+                this.loading = false
 
-            if(items.length)
-                this.name = getUserName(items[0])
-        })
+                if (items.length)
+                    this.name = getUserName(items[0])
+            })
+            .catch(errorHadler)
     }
 })

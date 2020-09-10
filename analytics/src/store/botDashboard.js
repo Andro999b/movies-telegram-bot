@@ -4,6 +4,7 @@ import moment from 'moment'
 import { observable } from 'mobx'
 import WebworkerPromise from 'webworker-promise'
 import Worker from './botDashboard.worker'
+import errorHadler from '../database/errorHadler'
 
 const worker = new WebworkerPromise(new Worker())
 
@@ -79,5 +80,6 @@ export default observable({
                 periodsCache[period] = acc
                 updateCharts(acc)
             })
+            .catch(errorHadler)
     }
 })

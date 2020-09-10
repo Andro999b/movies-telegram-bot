@@ -1,5 +1,6 @@
 import { LOG_GROUPS } from '../constants'
 import { observable } from 'mobx'
+import errorHadler from './errorHadler'
 
 export const getCloudWatch = () => new AWS.CloudWatchLogs()
 
@@ -25,7 +26,7 @@ export const searchLogs = (from, to) => {
                     if(err) {
                         this.loading = false
                         clearInterval(intervalId)
-                        console.error('Fail to check query results', err)
+                        errorHadler(err)
                         return
                     } else {
                         this.status = data.status
@@ -46,7 +47,7 @@ export const searchLogs = (from, to) => {
                 logGroupNames: LOG_GROUPS
             }, (err,data) => {
                 if(err) {
-                    console.error('Fail to start query', err)
+                    errorHadler(err)
                     return
                 } else {
                     this.status = 'Scheduled'

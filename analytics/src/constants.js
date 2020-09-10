@@ -1,4 +1,5 @@
 export const REGION = 'eu-central-1'
+export const ACCOUNT_ID = '534471691183'
 export const IDENTITY_POOL_ID = 'eu-central-1:3792695e-59ce-40f2-a2bf-2ede7f4f2988'
 export const USER_POOL_ID = 'eu-central-1_ofVThlAy3'
 export const APP_CLIENT_ID = '5rpkhcspe0slqppqqt9oldfc9'

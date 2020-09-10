@@ -3,6 +3,7 @@ import { invokeGA } from '../database/lambda'
 import { segmentBucketReducer, bucketReducer } from '../utils'
 import { GA_DATE_FORMAT } from '../constants'
 import moment from 'moment'
+import errorHadler from '../database/errorHadler'
 
 const hoursSegFormatter = (hour) => hour + ':00'
 const dateSegFormatter = (date) => date.substring(0,4) + '-' + date.substring(4,6) + '-' + date.substring(6,8)
@@ -186,5 +187,6 @@ export default observable({
                 cache[period] = data
                 updateCharts(data)
             })
+            .catch(errorHadler)
     }
 })

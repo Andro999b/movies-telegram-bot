@@ -1,5 +1,5 @@
 import '../aws-sdk'
-import { PERIODS, TABLE_NAME, REGION, DATE_FORMAT } from '../constants'
+import { PERIODS, TABLE_NAME, REGION } from '../constants'
 import { getDateFor, getIndexForPeriod, getMonthFor, runQuery } from '../database/dynamodb'
 import { range, segmentBucketReducer, uniqueBucketReducer, bucketReducer } from '../utils'
 import registerWebworker from 'webworker-promise/lib/register'
