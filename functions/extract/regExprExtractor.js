@@ -33,5 +33,7 @@ module.exports = (patterns) => async (params) => {
         })
     }
     
-    throw Error('Video can`t be extracted', params)
+    console.error('Video can`t be extracted', params)
+
+    return makeResponse({ message: 'Video can`t be extracted'}, 404)
 }

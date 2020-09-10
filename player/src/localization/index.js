@@ -29,4 +29,4 @@ export default new LocalizedStrings({
         moviesBotTip: 'фильмы и сериалы',
         animeBotTip: 'поиск аниме'
     }
-});
+})
