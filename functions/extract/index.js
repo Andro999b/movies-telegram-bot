@@ -10,9 +10,10 @@ const extractors = {
     'sibnethls': require('./sibnetExtractorHls'),
     'sibnetmp4': require('./sibnetExtractorMp4'),
     'stormo': require('./mp4PlayerJsExtractor'),
+    'anidub': require('./anidubExtractor'),
 }
 
-module.exports = async (parmas) => {
+module.exports = async (parmas, headers) => {
     if(!parmas)
         return makeResponse({ message: 'No extractor parmas'}, 404)
 
@@ -22,5 +23,5 @@ module.exports = async (parmas) => {
     if(!extractor)
         return makeResponse({ message: 'No extractor found'}, 404)
 
-    return await extractor(parmas)
+    return await extractor(parmas, headers)
 }

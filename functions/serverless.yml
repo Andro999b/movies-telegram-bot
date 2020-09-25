@@ -127,7 +127,7 @@ functions:
       LOCALIZATION_TYPE: 'localization/anime'
       TOKEN: ${ssm:bot_anime_TOKEN_${opt:stage, 'dev'}}
       PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDERS: 'anidub,animevost,anigato,animedia,nekomori'
+      PROVIDERS: 'animevost,anigato,animedia,nekomori'
   
   proxy:
     handler: handlers/proxy.handler
