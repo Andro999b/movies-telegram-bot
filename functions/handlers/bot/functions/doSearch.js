@@ -2,7 +2,7 @@ const extractSearchEngineQuery = require('../../../utils/extractSearchEngineQuer
 const providersService = require('../../../providers')
 const getQueryAndProviders = require('./getQueryAndProviders')
 const Markup = require('telegraf/markup')
-const suggestions = require('../../../utils/suggestions')
+const getSuggestions = require('../../../utils/suggestions')
 
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
 const MAX_QUERY_LENGTH = 63
@@ -46,21 +46,22 @@ function createResultButtons(res, query) {
 
 
 async function getNoResults({ reply, i18n, track }, providers, query) {
-    const suggestion = await suggestions(query)
+    const suggestions = await getSuggestions(query)
 
-    track('no_results', { query, providers, suggestion })
+    track('no_results', { query, providers, suggestions })
 
-    if (suggestion) {
-        if(Buffer.byteLength(suggestion, 'utf-8') > MAX_QUERY_LENGTH) {
+    if (suggestions && suggestions.length) {
+        const tooLong = suggestions.some((suggestion) => Buffer.byteLength(suggestion, 'utf-8') > MAX_QUERY_LENGTH)
+        if(tooLong) {
             return reply(
                 i18n.t('no_results', { query }) + '\n' + 
-                i18n.t('spell_check_too_long', { suggestion }) 
+                i18n.t('spell_check_too_long', { suggestion: suggestions.join(',') }) 
             )
         } else {
             return reply(
                 i18n.t('no_results', { query }) + '\n' + i18n.t('spell_check'),
                 Markup.inlineKeyboard([
-                    Markup.callbackButton(suggestion, suggestion),
+                    ...suggestions.map((suggestion) => Markup.callbackButton(suggestion, suggestion)),
                     Markup.callbackButton(i18n.t('repeat_search'), query)
                 ]).extra()
             )

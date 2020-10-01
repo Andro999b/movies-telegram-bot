@@ -48,10 +48,8 @@ class AnidubProvider extends DataLifeProvider {
                             return {
                                 id,
                                 name: $el.text(),
-                                urls: [{
-                                    url: $el.attr('data'),
-                                    extractor: { type: 'anidub' }
-                                }]
+                                manifestUrl: $el.attr('data'),
+                                manifestExtractor: { type: 'anidub' }
                             }
                         })
                 },

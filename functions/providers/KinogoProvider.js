@@ -3,6 +3,8 @@ const parsePlayerJSFile = require('../utils/parsePlayerJSFile')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const stripPlayerJSConfig = require('../utils/stripPlayerJSConfig')
 const urlencode = require('urlencode')
+const superagent = require('superagent')
+const $ = require('cheerio')
 const { extractString } = require('../utils/extractScriptVariable')
 
 class KinogoProvider extends DataLifeProvider {
@@ -50,6 +52,18 @@ class KinogoProvider extends DataLifeProvider {
                         }))
                     }
                 },
+                // files: {
+                //     selector: '#post_id',
+                //     transform: async ($el) => {
+                //         const newsId = $el.val()
+                //         const res = await superagent
+                //             .get(`${this.config.baseUrl}/engine/ajax/cdn_download.php?news_id=${newsId}`)
+                //             .timeout(this.config.timeout)
+
+                //         const $downloads = $(res.text)
+                //         return this._parseDownloads($downloads)
+                //     }
+                // },
                 trailer: {
                     selector: 'video>source',
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
@@ -57,6 +71,10 @@ class KinogoProvider extends DataLifeProvider {
             }
         })
     }
+
+    // _parseDownloads($el) {
+    //     return $el.length
+    // }
 
     _tryExtractHls(script) {
         const fhls = extractString(script, 'fhls')

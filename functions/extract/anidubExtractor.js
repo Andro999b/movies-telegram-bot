@@ -5,7 +5,7 @@ const { baseUrl }= require('../providersConfig')['anidub']
 module.exports = async ({ url }, headers) => {
     const proxyHeaders = {
         referer: baseUrl,
-        'user-agent': headers['user-agent']
+        'User-Agent': headers['User-Agent']
     }
 
     const res = await superagent
