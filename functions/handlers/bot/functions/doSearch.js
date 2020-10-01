@@ -63,7 +63,7 @@ async function getNoResults({ reply, i18n, track }, providers, query) {
                 Markup.inlineKeyboard([
                     ...suggestions.map((suggestion) => Markup.callbackButton(suggestion, suggestion)),
                     Markup.callbackButton(i18n.t('repeat_search'), query)
-                ]).extra()
+                ], { columns: 1 }).extra()
             )
         }
     } else {
