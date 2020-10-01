@@ -47,7 +47,8 @@ const yandexSpellerSuggestion = async (searchQuery) => { // eslint-disable-line
     try {
         const words = searchQuery.split(' ')
 
-        const searchUrl = `https://corsproxy.movies-player.workers.dev/?https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
+        // const searchUrl = `https://corsproxy.movies-player.workers.dev/?https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
+        const searchUrl = `https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
         const res = await superagent
             .get(searchUrl)
 
@@ -59,7 +60,32 @@ const yandexSpellerSuggestion = async (searchQuery) => { // eslint-disable-line
             words[pos] = s
         })
 
-        return 
+        /* eslint-disable */
+        function getCorrected(pos) {
+            let word = words[pos]
+
+            if(typeof word == 'string') {
+                word = [word]
+            }
+
+            if(pos < words.length - 1) {
+                const subwords = getCorrected(pos + 1)
+                const newwords = []
+
+                subwords.forEach((i) => {
+                    word.forEach((j) => {
+                        newwords.push([j].concat(i))
+                    })
+                })
+
+                return newwords
+            }
+
+            return word
+        }
+        /* eslint-enable */
+
+        return getCorrected(0).map((w) => w.join(' '))
     } catch (e) {
         console.error(`Fail to fetch suggestion from yandex speller for: ${searchQuery}`, e)
     }
