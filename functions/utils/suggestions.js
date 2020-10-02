@@ -45,50 +45,64 @@ const yandexSuggestion = async (searchQuery) => { // eslint-disable-line
 
 const yandexSpellerSuggestion = async (searchQuery) => { // eslint-disable-line
     try {
-        const words = searchQuery.split(' ')
-
         // const searchUrl = `https://corsproxy.movies-player.workers.dev/?https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
         const searchUrl = `https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
-        const res = await superagent
-            .get(searchUrl)
+        const res = await superagent.get(searchUrl)
 
         const corrections = JSON.parse(res.text)
-
         if(corrections.length == 0) return []
 
-        corrections.forEach(({ pos, s }) => {
-            words[pos] = s
-        })
+        function getCorrectionsVariants(i = 0) { // eslint-disable-line no-inner-declarations
+            let { pos, len, s } = corrections[i]
 
-        /* eslint-disable */
-        function getCorrected(pos) {
-            let word = words[pos]
+            let variants = s.map((word) => ({
+                pos,
+                len,
+                word
+            }))
 
-            if(typeof word == 'string') {
-                word = [word]
-            }
+            if(i < corrections.length - 1) {
+                const subvariants = getCorrectionsVariants(i + 1)
+                const newvariants = []
 
-            if(pos < words.length - 1) {
-                const subwords = getCorrected(pos + 1)
-                const newwords = []
-
-                subwords.forEach((i) => {
-                    word.forEach((j) => {
-                        newwords.push([j].concat(i))
+                subvariants.forEach((i) => {
+                    variants.forEach((j) => {
+                        newvariants.push([j].concat(i))
                     })
                 })
 
-                return newwords
+                return newvariants
             }
 
-            return word
+            return variants
         }
-        /* eslint-enable */
 
-        return getCorrected(0).map((w) => w.join(' '))
+        function putСorrection(correction) { // eslint-disable-line no-inner-declarations
+            let prev = 0
+            const parts = []
+            correction.forEach(({ pos, len }) => {
+                const cut = [prev, pos]
+                prev = prev + len + 1
+                parts.push(searchQuery.substring(cut[0], cut[1]))
+            })
+
+            parts.push(searchQuery.substring(prev))
+
+            let result = ''
+            parts.forEach((val, index) => {
+                result += val
+                if(index < correction.length)
+                    result += correction[index].word
+            })
+
+            return result.trim()
+        }
+
+        return getCorrectionsVariants().map((correction) => putСorrection(correction))
     } catch (e) {
         console.error(`Fail to fetch suggestion from yandex speller for: ${searchQuery}`, e)
     }
 }
 
-module.exports = yandexSpellerSuggestion
+module.exports = async (searchQuery) => 
+    yandexSpellerSuggestion(searchQuery.replace(/[^a-zA-Z0-9\u0400-\u04FF]+/g, ' '))
