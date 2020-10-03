@@ -45,8 +45,8 @@ const yandexSuggestion = async (searchQuery) => { // eslint-disable-line
 
 const yandexSpellerSuggestion = async (searchQuery) => { // eslint-disable-line
     try {
-        // const searchUrl = `https://corsproxy.movies-player.workers.dev/?https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
-        const searchUrl = `https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
+        const searchUrl = `https://corsproxy.movies-player.workers.dev/?https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
+        // const searchUrl = `https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
         const res = await superagent.get(searchUrl)
 
         const corrections = JSON.parse(res.text)
@@ -55,11 +55,11 @@ const yandexSpellerSuggestion = async (searchQuery) => { // eslint-disable-line
         function getCorrectionsVariants(i = 0) { // eslint-disable-line no-inner-declarations
             let { pos, len, s } = corrections[i]
 
-            let variants = s.map((word) => ({
+            let variants = s.map((word) => ([{
                 pos,
                 len,
                 word
-            }))
+            }]))
 
             if(i < corrections.length - 1) {
                 const subvariants = getCorrectionsVariants(i + 1)
@@ -67,7 +67,7 @@ const yandexSpellerSuggestion = async (searchQuery) => { // eslint-disable-line
 
                 subvariants.forEach((i) => {
                     variants.forEach((j) => {
-                        newvariants.push([j].concat(i))
+                        newvariants.push(j.concat(i))
                     })
                 })
 
@@ -82,11 +82,11 @@ const yandexSpellerSuggestion = async (searchQuery) => { // eslint-disable-line
             const parts = []
             correction.forEach(({ pos, len }) => {
                 const cut = [prev, pos]
-                prev = prev + len + 1
+                prev = pos + len
                 parts.push(searchQuery.substring(cut[0], cut[1]))
             })
-
-            parts.push(searchQuery.substring(prev))
+            
+            parts.push(searchQuery.substring(prev, searchQuery.length))
 
             let result = ''
             parts.forEach((val, index) => {
