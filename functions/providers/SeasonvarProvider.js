@@ -90,7 +90,7 @@ class SeasonvarProvider extends DirectMediaProvider {
             const plist = matches[1]
 
             const plistRes = await superagent
-                .get(`https://corsproxy.movies-player.workers.dev/?${this.config.baseUrl}${plist}`)
+                .get(`${this.config.baseUrl}${plist}`)
                 .timeout(this.config.timeout)
 
             const playlist = JSON.parse(plistRes.text)

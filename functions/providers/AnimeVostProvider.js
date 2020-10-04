@@ -42,7 +42,7 @@ class AnimeVostProvider extends DataLifeProvider {
 
                         return Object.keys(episodesData)
                             .map((key, index) => {
-                                const playerUrl = `https://play.roomfish.ru/${episodesData[key]}`
+                                const playerUrl = episodesData[key]
                                 return {
                                     id: index,
                                     name: key,
@@ -56,8 +56,19 @@ class AnimeVostProvider extends DataLifeProvider {
     }
 
     async getSource(resultsId, sourceId) {
-        const url = decodeURIComponent(sourceId)
-        const targetUrl = url.startsWith('//') ? 'https:' + url : url
+        const url = `${this.config.baseUrl}/frame2.php?play=${decodeURIComponent(sourceId)}`
+        const iframeUrl = url.startsWith('//') ? 'https:' + url : url
+
+        const iframeRes = await superagent
+            .get(iframeUrl)
+            .timeout(this.config.timeout)
+            .disableTLSCerts()
+
+        const matches = iframeRes.text.match(/https?[^\s"]+/)
+
+        if(matches.length == null) return []
+
+        const targetUrl = matches[0]
 
         const siteRes = await superagent
             .get(targetUrl)
