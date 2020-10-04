@@ -145,7 +145,6 @@ export class LocalDevice extends Device {
         this.playlist = playlist
         this.selectFile(fileIndex || 0)
         this.play(startTime)
-        this.isPlaying = false
     }
 
     @action.bound selectFile(fileIndex) {
@@ -163,7 +162,9 @@ export class LocalDevice extends Device {
         const file = files[this.currentFileIndex]
 
         if (file.asyncSource) {
-            this.loading = true
+            this.isLoading = true
+            this.source = null
+
             const { provider, id } = this.playlist
             fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${file.asyncSource}`)
                 .then((res) => res.json())
@@ -171,7 +172,7 @@ export class LocalDevice extends Device {
                     if (fileIndex == this.currentFileIndex) {
                         Object.keys(source).forEach((key) => file[key] = source[key])
                         file.asyncSource = null
-                        this.loading = false
+                        this.isLoading = false
                         this.setSource(file)
                     }
                 })
@@ -199,6 +200,7 @@ export class LocalDevice extends Device {
     }
 
     @action.bound setError(error) {
+        this.isLoading = false
         this.error = error
         this.source = null
     }

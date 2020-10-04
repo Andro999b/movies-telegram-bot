@@ -165,7 +165,7 @@ class Player extends Component {
             >
                 <div id="player_root" className={hideUi ? 'idle' : ''}>
                     {!hideUi && <PlayerTitle title={playerStore.getPlayerTitle()} />}
-                    {local && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
+                    {(local && !error) && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
                     {(!local && !error) &&
                         <div
                             className="player__pause-cover player__background-cover"
