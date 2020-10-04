@@ -25,7 +25,8 @@ module.exports = {
     },
     'anigato': {
         'baseUrl': 'https://anigato.ru/',
-        'searchUrl': 'https://anigato.ru/index.php?do=search'
+        'searchUrl': 'https://anigato.ru/index.php?do=search',
+        'token': '447d179e875efe44217f20d1ee2146be'
     },
     'kinovod': {
         'baseUrl': 'https://kinovod183.cc',

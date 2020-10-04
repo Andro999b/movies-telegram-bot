@@ -45,8 +45,8 @@ const yandexSuggestion = async (searchQuery) => { // eslint-disable-line
 
 const yandexSpellerSuggestion = async (searchQuery) => { // eslint-disable-line
     try {
-        // const searchUrl = `https://corsproxy.movies-player.workers.dev/?https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
-        const searchUrl = `https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
+        const searchUrl = `https://corsproxy.movies-player.workers.dev/?https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
+        // const searchUrl = `https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
         const res = await superagent.get(searchUrl)
 
         const corrections = JSON.parse(res.text)

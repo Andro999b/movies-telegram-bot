@@ -2,6 +2,7 @@ const DataLifeProvider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
 const $ = require('cheerio')
+const { extractJSStringPropery } = require('../utils/extractScriptVariable')
 
 class AnigatoProvider extends DataLifeProvider {
     constructor() {
@@ -25,9 +26,17 @@ class AnigatoProvider extends DataLifeProvider {
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
-                    selector: '#kodik-player iframe',
+                    selector: '#kodik-player',
                     transform: async ($el) => {
-                        const iframeSrc = $el.attr('src')
+                        const script = $el.next('script')
+                            .toArray()[0]
+                            .children[0]
+                            .data
+
+                        const worldArtId = extractJSStringPropery(script, 'worldartAnimationID')
+
+                        const iframeSrc = await this.getKodikPlayer(worldArtId)
+                        
                         const res = await superagent
                             .get(iframeSrc.startsWith('//') ? 'https:' + iframeSrc : iframeSrc)
                             .timeout(this.config.timeout)
@@ -78,6 +87,16 @@ class AnigatoProvider extends DataLifeProvider {
                 }
             }
         })
+    }
+
+    async getKodikPlayer(worldartAnimationID) {
+        const { token, timeout } = this.config
+
+        const res = await superagent
+            .get(`https://kodikapi.com/get-player?hasPlayer=false&token=${token}&worldartAnimationID=${worldartAnimationID}`)
+            .timeout(timeout)
+
+        return res.body.link
     }
 }
 

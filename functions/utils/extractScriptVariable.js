@@ -18,6 +18,16 @@ function extractStringPropery(script, varName) {
     return null
 }
 
+function extractJSStringPropery(script, varName) {
+    const parts = script.match(new RegExp(`${varName}:\\s+"([^"]+)"`))
+
+    if (parts && parts.length > 1) {
+        return parts[1]
+    }
+
+    return null
+}
+
 function extractObject(script, varName) {
     const parts = script.match(new RegExp(`${varName} = ({[^}]+})`))
 
@@ -41,6 +51,7 @@ function extractNumber(script, varName) {
 module.exports = {
     extractString,
     extractStringPropery,
+    extractJSStringPropery,
     extractNumber,
     extractObject
 }
