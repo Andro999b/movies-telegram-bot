@@ -130,7 +130,7 @@ class VideoScrean extends BaseScrean {
     }
 
     startNativeVideo() {
-        const { device: { source: { urls }, audioTrack } } = this.props
+        const { device: { source: { urls }, quality, audioTrack } } = this.props
         let videoUrls
 
         if (audioTrack) {
@@ -142,9 +142,19 @@ class VideoScrean extends BaseScrean {
             videoUrls = urls
         }
 
+        const selectedQuality = quality || 720
+
         this.videoUrls = [].concat(videoUrls)
 
-        this.setNativeVideoUrl(this.videoUrls.shift())
+        const selectedIndex = this.videoUrls.findIndex((it) => it.quality == selectedQuality)
+        
+        if(selectedIndex == -1) {
+            this.setNativeVideoUrl(this.videoUrls.shift())
+        } else {
+            this.setNativeVideoUrl(this.videoUrls.splice(selectedIndex, 1)[0])
+        }
+
+        
     }
 
     setNativeVideoUrl({ url, extractor }) {

@@ -18,6 +18,7 @@ provider:
     MONGODB_URI: ${self:custom.mongoUrl}
     ANALYTIC_RETENTION: 90
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
+    STAGE: ${opt:stage, 'dev'}
   iamRoleStatements:
     - Effect: Allow
       Action:

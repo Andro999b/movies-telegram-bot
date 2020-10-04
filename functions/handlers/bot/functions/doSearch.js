@@ -5,6 +5,7 @@ const Markup = require('telegraf/markup')
 const getSuggestions = require('../../../utils/suggestions')
 
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
+const STAGE = process.env.STAGE || 3
 const MAX_QUERY_LENGTH = 63
 const MAX_QUERY_LENTH_WITH_PROVIDER = 50
 const PLAYER_URL = process.env.PLAYER_URL
@@ -38,7 +39,7 @@ function createResultButtons(res, query) {
     return res.map((result) =>
         Markup.urlButton(
             `[${result.provider}] ${result.name}`,
-            `${PLAYER_URL}?provider=${result.provider}&id=${result.id}&query=${encodeURIComponent(query)}`
+            `${PLAYER_URL}?provider=${result.provider}&id=${result.id}&query=${encodeURIComponent(query)}${STAGE == 'dev' ? '&dev' : ''}`
         )
     )
 }
