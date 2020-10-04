@@ -162,7 +162,7 @@ export class LocalDevice extends Device {
         const file = files[this.currentFileIndex]
 
         if (file.asyncSource) {
-            this.isLoading = true
+            this.setLoading(true)
             this.source = null
 
             const { provider, id } = this.playlist
@@ -172,7 +172,7 @@ export class LocalDevice extends Device {
                     if (fileIndex == this.currentFileIndex) {
                         Object.keys(source).forEach((key) => file[key] = source[key])
                         file.asyncSource = null
-                        this.isLoading = false
+                        this.setLoading(false)
                         this.setSource(file)
                     }
                 })
@@ -187,6 +187,7 @@ export class LocalDevice extends Device {
                     analytics('errorPlayback', 'Can`t play media')
 
                     this.setError(localization.cantPlayMedia)
+                    this.setLoading(false)
                 })
         } else {
             this.setSource(file)
@@ -200,9 +201,7 @@ export class LocalDevice extends Device {
     }
 
     @action.bound setError(error) {
-        this.isLoading = false
         this.error = error
-        this.source = null
     }
 
     @action.bound setVolume(volume) {

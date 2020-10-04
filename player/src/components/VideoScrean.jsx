@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactResizeDetector from 'react-resize-detector'
 import { observer } from 'mobx-react'
+import { toJS } from 'mobx'
 import Hls from 'hls.js'
 import BaseScrean from './BaseScrean'
 import { createExtractorUrlBuilder } from '../utils'
@@ -16,6 +17,9 @@ class VideoScrean extends BaseScrean {
         this.state = {
             videoScale: 'hor'
         }
+
+        this.video = React.createRef()
+        this.container = React.createRef()
     }
 
     /**
@@ -36,24 +40,27 @@ class VideoScrean extends BaseScrean {
      */
 
     onPlayPause(isPlaying) {
+        const video = this.video.current
         if (isPlaying) {
-            const p = this.video.play()
-            p &&  p.catch((e) => console.error('Play aborted', e))
+            video.play()
         } else {
-            this.video.pause()
+            video.pause()
         }
     }
 
     onSeek(seekTo) {
-        this.video.currentTime = seekTo
+        const video = this.video.current
+        video.currentTime = seekTo
     }
 
     onMute(isMuted) {
-        this.video.muted = isMuted
+        const video = this.video.current
+        video.muted = isMuted
     }
 
     onVolume(volume) {
-        this.video.volume = volume
+        const video = this.video.current
+        video.volume = volume
     }
 
     onSource() {
@@ -89,7 +96,8 @@ class VideoScrean extends BaseScrean {
     }
 
     restoreVideoState = () => {
-        const { video, props: { device } } = this
+        const { props: { device } } = this
+        const video = this.video.current
 
         video.currentTime = device.currentTime
         video.muted = device.isMuted
@@ -97,11 +105,12 @@ class VideoScrean extends BaseScrean {
         video.load()
 
         if (device.isPlaying) {
-            const p = video.play()
-            p && p.catch((e) => console.error('Play aborted', e))
+            video.play()
         } else {
             video.pause()
         }
+
+        device.setLoading(true)
     }
 
     initVideo() {
@@ -159,11 +168,12 @@ class VideoScrean extends BaseScrean {
 
     setNativeVideoUrl({ url, extractor }) {
         if (url.startsWith('//')) url = 'http:' + url
+        const video = this.video.current
 
         if (extractor) {
-            this.video.src = createExtractorUrlBuilder(extractor)(url)
+            video.src = createExtractorUrlBuilder(extractor)(url)
         } else {
-            this.video.src = url
+            video.src = url
         }
     }
 
@@ -182,7 +192,7 @@ class VideoScrean extends BaseScrean {
             }
         })
 
-        hls.attachMedia(this.video)
+        hls.attachMedia(this.video.current)
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
             this.restoreVideoState()
 
@@ -243,12 +253,14 @@ class VideoScrean extends BaseScrean {
 
     handleError = () => {
         const { props: { device }, videoUrls } = this
-
+        const video = this.video.current
 
         let code
         let retry = true
+        let videoErrorCode = video.error && video.error.code
+        let videoErrorMessage = video.error && video.error.message
 
-        switch (this.video.error.code) {
+        switch (videoErrorCode) {
             case MediaError.MEDIA_ERR_ABORTED:
                 code = 'MEDIA_ERR_ABORTED'
                 retry = false
@@ -297,8 +309,8 @@ class VideoScrean extends BaseScrean {
 
         this.logError({
             code,
-            message: this.video.error.message,
-            videoSrc: this.video.src
+            message: videoErrorMessage,
+            videoSrc: video.src
         })
     }
 
@@ -313,8 +325,9 @@ class VideoScrean extends BaseScrean {
     }
 
     handleResize = () => {
-        if (this.container) {
-            this.video.className = `scale_${this.getVideoScale()}`
+        const video = this.video.current
+        if (this.container.current) {
+            video.className = `scale_${this.getVideoScale()}`
         }
     }
 
@@ -330,7 +343,7 @@ class VideoScrean extends BaseScrean {
 
     handleUpdate = () => {
         const { device } = this.props
-        const { video: { buffered, duration, currentTime } } = this
+        const { buffered, duration, currentTime } = this.video.current
 
         device.onUpdate({
             duration,
@@ -347,8 +360,11 @@ class VideoScrean extends BaseScrean {
     }
 
     getVideoScale() {
-        const originAspectRatio = this.video.videoWidth / this.video.videoHeight
-        const containerAspectRatio = this.container.clientWidth / this.container.clientHeight
+        const video = this.video.current
+        const container = this.container.current
+
+        const originAspectRatio = video.videoWidth / video.videoHeight
+        const containerAspectRatio = container.clientWidth / container.clientHeight
 
         if (originAspectRatio < containerAspectRatio)
             return 'vert'
@@ -362,7 +378,7 @@ class VideoScrean extends BaseScrean {
         logger.error('Can`t play media', {
             title: document.title,
             url: location.href,
-            source: source,
+            source: toJS(source),
             details: errorData,
         })
 
@@ -371,7 +387,7 @@ class VideoScrean extends BaseScrean {
 
     render() {
         return (
-            <div className="player__player-screen" ref={(el) => this.container = el}>
+            <div className="player__player-screen" ref={this.container}>
                 <ReactResizeDetector
                     skipOnMount
                     handleWidth
@@ -379,7 +395,7 @@ class VideoScrean extends BaseScrean {
                     onResize={this.handleResize}
                 />
                 <video
-                    ref={(el) => this.video = el}
+                    ref={this.video}
                     onDurationChange={this.handleUpdate}
                     onProgress={this.handleUpdate}
                     onTimeUpdate={this.handleUpdate}
