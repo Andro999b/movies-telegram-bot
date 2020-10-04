@@ -109,7 +109,11 @@ class VideoScrean extends BaseScrean {
 
         this.disposeHls()
 
-        if(!source) return
+        if(!source) {
+            this.video.removeAttribute('src')
+            this.video.load()
+            return
+        }
 
         const { manifestUrl, urls }  = source
 
@@ -147,7 +151,7 @@ class VideoScrean extends BaseScrean {
         this.videoUrls = [].concat(videoUrls)
 
         const selectedIndex = this.videoUrls.findIndex((it) => it.quality == selectedQuality)
-        
+
         if(selectedIndex == -1) {
             this.setNativeVideoUrl(this.videoUrls.shift())
         } else {

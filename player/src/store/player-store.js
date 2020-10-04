@@ -200,6 +200,7 @@ export class LocalDevice extends Device {
 
     @action.bound setError(error) {
         this.error = error
+        this.source = null
     }
 
     @action.bound setVolume(volume) {

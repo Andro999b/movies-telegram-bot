@@ -33,6 +33,7 @@ export const COLORS = [
 export const LOG_GROUPS = [
     '/aws/lambda/movies-telegram-bot-prod-info',
     '/aws/lambda/movies-telegram-bot-prod-extract',
+    '/aws/lambda/movies-telegram-bot-prod-source',
     '/aws/lambda/movies-telegram-bot-prod-bot',
     '/aws/lambda/movies-telegram-bot-prod-animebot',
     'web-prod'
