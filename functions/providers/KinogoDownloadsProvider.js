@@ -32,7 +32,7 @@ class KinogoDownloadsProvider extends KinogoProvider {
             } else if($item.hasClass('cdn_download_item')) {
                 const $spans = $item.children('span')
                 const name = $spans.first().text()
-                const audio = `[${$spans.eq(1).text()}] ${$spans.eq(2).text()}`
+                const audio = `${$spans.eq(1).text()} ${$spans.eq(2).text()}`
 
                 let fullName
                 let file

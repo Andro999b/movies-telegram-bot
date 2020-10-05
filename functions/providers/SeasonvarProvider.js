@@ -86,9 +86,22 @@ class SeasonvarProvider extends DirectMediaProvider {
                     type: 'html5'
                 })
 
-            const matches = res.text.match(/'0': "(.+)"/)
+            let matches = res.text.match(/'0': "(.+)"/)
             const plist = matches[1]
+            //TODO: Default translation
+            // const translations = { 0: plist }
 
+            // matches = res.text.match(/pl\[\d+\] = "[^"]+"/g)
+            // if(matches.length > 0) {
+            //     matches.forEach((match) => {
+            //         const parts = match.split(' = ')
+            //         const transId = parts[0].substring(3, parts[0].length - 1)
+            //         const url = parts[1].substring(1, parts[1].length - 1)
+            //         translations[transId] = url
+            //     })
+            // }
+
+            // console.log(translations);
             const plistRes = await superagent
                 .get(`${this.config.baseUrl}${plist}`)
                 .timeout(this.config.timeout)
@@ -96,6 +109,7 @@ class SeasonvarProvider extends DirectMediaProvider {
             const playlist = JSON.parse(plistRes.text)
 
             return convertPlayerJSPlaylist(playlist, (x) => this._decryptFilePath(x))
+            // return translations
         } catch (e) {
             console.error('Seasonvar sesson extractor failed', e)
             return []
