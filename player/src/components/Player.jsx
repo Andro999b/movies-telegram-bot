@@ -21,8 +21,8 @@ const IDLE_TIMEOUT = 3000
 @observer
 class Player extends Component {
 
-    constructor(props, context) {
-        super(props, context)
+    constructor(props) {
+        super(props)
 
         this.state = {
             playlistOpen: false,

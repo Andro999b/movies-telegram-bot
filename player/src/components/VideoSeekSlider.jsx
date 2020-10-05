@@ -4,8 +4,8 @@ import { toHHMMSS, isTouchDevice } from '../utils'
 
 class VideoSeekSlider extends Component {
 
-    constructor(props, context) {
-        super(props, context)
+    constructor(props) {
+        super(props)
 
         this.state = {
             trackWidth: 0

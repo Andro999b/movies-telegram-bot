@@ -21,8 +21,8 @@ import memoize from 'memoize-one'
 @observer
 class PlayerPlayList extends Component {
 
-    constructor(props, context) {
-        super(props, context)
+    constructor(props) {
+        super(props)
 
         const { device: { playlist: { files }, currentFileIndex } } = props
         let path = files[currentFileIndex].path

@@ -1,4 +1,4 @@
-import LocalizedStrings from 'react-localization';
+import LocalizedStrings from 'react-localization'
 
 export default new LocalizedStrings({
     en: {
@@ -13,7 +13,8 @@ export default new LocalizedStrings({
         shuffleOff: 'Shuffle playlist mode OFF',
         searchAlternatives: '{0}<br/><a id="altenativeLink" href="{1}">Search alternative links</a>',
         moviesBotTip: 'movies and tv shows',
-        animeBotTip: 'search anime'
+        animeBotTip: 'search anime',
+        translation: 'Translation'
     },
     ru: {
         cantLoadPLaylist: 'Ошибка загрузки',
@@ -27,6 +28,7 @@ export default new LocalizedStrings({
         shuffleOff: 'Случаный режим выключен',
         searchAlternatives: '{0}<br/><a id="altenativeLink" href="{1}">Поискать другие ссылки</a>',
         moviesBotTip: 'фильмы и сериалы',
-        animeBotTip: 'поиск аниме'
+        animeBotTip: 'поиск аниме',
+        translation: 'Перевод'
     }
 })

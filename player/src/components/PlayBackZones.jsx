@@ -12,8 +12,8 @@ import { observer } from 'mobx-react'
 @observer
 class PlayBackZones extends Component {
 
-    constructor(props, context) {
-        super(props, context)
+    constructor(props) {
+        super(props)
 
         this.state = {
             seekMode: null

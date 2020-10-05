@@ -11,8 +11,8 @@ import localization from '../localization'
 
 @observer
 class VideoScrean extends BaseScrean {
-    constructor(props, context) {
-        super(props, context)
+    constructor(props) {
+        super(props)
 
         this.state = {
             videoScale: 'hor'

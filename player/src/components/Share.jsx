@@ -21,8 +21,8 @@ import localization from '../localization'
 @inject(({ notificationStore: { showMessage }}) => ({ showMessage }))
 class Share extends BaseSelector {
 
-    constructor(props, context) {
-        super(props, context)
+    constructor(props) {
+        super(props)
 
         this.state.sharePosition = true
         this.state.shareTime = false

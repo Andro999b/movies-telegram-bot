@@ -12,10 +12,6 @@ import { observer } from 'mobx-react'
 
 @observer
 class SoundControl extends Component {
-    constructor(props, context) {
-        super(props, context)
-    }
-
     handleVolumDown = () => {
         this.props.device.setVolume(0)
     }

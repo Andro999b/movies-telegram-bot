@@ -45,7 +45,7 @@ class KinogoDownloadsProvider extends KinogoProvider {
 
                 if(cache[fullName] == null) {
                     file = {
-                        name: fullName,
+                        name,
                         urls: []
                     }
                     if(path) file.path = path
@@ -67,11 +67,12 @@ class KinogoDownloadsProvider extends KinogoProvider {
             }
         })
 
-        playlist.forEach((file) => 
+        return playlist.reverse().map((file, index) => {
             file.urls = file.urls.sort((a, b) => b.quality - a.quality)
-        )
+            file.id = index
 
-        return playlist.reverse()
+            return file
+        })
     }
 }
 

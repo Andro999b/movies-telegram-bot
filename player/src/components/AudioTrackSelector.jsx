@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 import { AudiotrackRounded as AudioTrackIcon } from '@material-ui/icons'
 import { isTouchDevice } from '../utils'
+import localization from '../localization'
 
 @observer
 class AudioTrackSelector extends BaseSelector {
@@ -38,9 +39,9 @@ class AudioTrackSelector extends BaseSelector {
                 )
             } else {
                 return(
-                    <IconButton onClick={this.handleClick}>
-                        <AudioTrackIcon/>
-                    </IconButton>
+                    <Button onClick={this.handleClick}>
+                        {localization.translation}
+                    </Button>
                 )
             }
         }

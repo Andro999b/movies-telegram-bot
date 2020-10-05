@@ -6,8 +6,8 @@ import {
 
 class BaseSelector extends Component {
 
-    constructor(props, context) {
-        super(props, context)
+    constructor(props) {
+        super(props)
         this.state = { anchorEl: null }
     }
 
