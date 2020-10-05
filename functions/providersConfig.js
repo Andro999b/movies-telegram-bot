@@ -16,8 +16,8 @@ module.exports = {
         }
     },
     'anidub': {
-        'baseUrl': 'https://online.anidub.com',
-        'searchUrl': 'https://online.anidub.com/index.php?do=search',
+        'baseUrl': 'https://anime.anidub.life',
+        'searchUrl': 'https://anime.anidub.life/index.php?do=search',
     },
     'animedia': {
         'baseUrl': 'https://m4.animedia.pro',

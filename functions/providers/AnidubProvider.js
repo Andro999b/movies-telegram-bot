@@ -39,17 +39,19 @@ class AnidubProvider extends DataLifeProvider {
                 //         })
                 // },
                 files: {
-                    selector: '.video-box .series-tab',
-                    transform: ($el) => $el.children()
+                    selector: '.video-box .series-tab span',
+                    transform: ($el) => $el
                         .toArray()
                         .map((el) => $(el))
-                        .filter(($el) => $el.attr('data').includes('/player/index.php'))
+                        .filter(($el) => $el.attr('data').includes('video.sibnet.ru'))
                         .map(($el,id) => {
                             return {
                                 id,
                                 name: $el.text(),
-                                manifestUrl: $el.attr('data'),
-                                manifestExtractor: { type: 'anidub' }
+                                urls: [{
+                                    url: $el.attr('data'),
+                                    extractor: { type: 'sibnetmp4' }
+                                }]
                             }
                         })
                 },
