@@ -11,6 +11,7 @@ import {
 import { AudiotrackRounded as AudioTrackIcon } from '@material-ui/icons'
 import { isTouchDevice } from '../utils'
 import localization from '../localization'
+import analytics from '../utils/analytics'
 
 @observer
 class AudioTrackSelector extends BaseSelector {
@@ -18,6 +19,8 @@ class AudioTrackSelector extends BaseSelector {
     selectTrack = (id) => {
         this.props.device.setAudioTrack(id)
         this.handleClose()
+
+        analytics('selectAudio')
     }
 
     renderButton() {

@@ -7,6 +7,7 @@ import {
     MenuItem,
     MenuList
 } from '@material-ui/core'
+import analytics from '../utils/analytics'
 
 @observer
 class VideoQualitySelector extends BaseSelector {
@@ -14,6 +15,8 @@ class VideoQualitySelector extends BaseSelector {
     selectQuality = (quality) => {
         this.props.device.setQuality(quality)
         this.handleClose()
+
+        analytics('selectQuality', quality)
     }
 
     renderButton() {
