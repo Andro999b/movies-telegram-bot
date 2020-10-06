@@ -3,6 +3,7 @@ export default (err) => {
     switch (err.code) {
         case 'AccessDeniedException':
         case 'ExpiredToken':
+        case 'NotAuthorizedException':
         case 'UnrecognizedClientException':
             window && window.location.reload()
     }

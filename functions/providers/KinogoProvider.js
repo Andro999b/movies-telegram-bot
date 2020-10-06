@@ -1,9 +1,7 @@
 const DataLifeProvider = require('./DataLifeProvider')
-const parsePlayerJSFile = require('../utils/parsePlayerJSFile')
-const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
-const stripPlayerJSConfig = require('../utils/stripPlayerJSConfig')
+const superagent = require('superagent')
 const urlencode = require('urlencode')
-const { extractString } = require('../utils/extractScriptVariable')
+const videocdnembed = require('../utils/videocdnembed')
 
 class KinogoProvider extends DataLifeProvider {
     constructor() {
@@ -28,26 +26,25 @@ class KinogoProvider extends DataLifeProvider {
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
-                    selector: '#1212',
-                    transform: ($el) => {
-                        const script = $el.nextAll(':not([src])').toArray()[0].children[0].data
+                    selector: 'ul.tabs',
+                    transform: async ($el) => {
+                        const onlcickAttr = $el.children().eq(1).attr('onclick')
 
-                        var files = this._tryExtractMp4(script)
+                        let matches = onlcickAttr.match(/\/engine\/ajax\/player_vse_pc\.php\?string_name=\d+/)
 
-                        if (!files) {
-                            files = this._tryExtractHls(script)
-                        }
+                        if (matches.length == 0) return []
 
-                        if (!files) {
-                            files = this._tryExtractFiles(script)
-                        }
+                        const iframeRes = await superagent
+                            .get(`${this.config.baseUrl}${matches[0]}`)
+                            .timeout(this.config.timeout)
 
-                        files = files || []
+                        matches = iframeRes.text.match(/https?[^\s"]+/)
 
-                        return files.map((item, index) => ({
-                            id: index,
-                            ...item
-                        }))
+                        if (matches.length == 0) return []
+
+                        const playlist = await videocdnembed(matches[0])
+
+                        return playlist.map((file, id) => ({ id, ...file}))
                     }
                 },
                 trailer: {
@@ -56,45 +53,6 @@ class KinogoProvider extends DataLifeProvider {
                 }
             }
         })
-    }
-
-    _tryExtractHls(script) {
-        const fhls = extractString(script, 'fhls')
-
-        if (fhls) {
-            const manifestUrl = this._extractManifest(fhls)
-
-            return [{
-                manifestUrl
-            }]
-        }
-    }
-
-    _tryExtractMp4(script) {
-        const fmp4 = extractString(script, 'fmp4')
-
-        if (fmp4) {
-            const urls = parsePlayerJSFile(fmp4)
-            
-            const url = urls[0].url
-
-            if (url.endsWith('m3u8')) { // not actual mp4 lol
-                return [{
-                    manifestUrl: url
-                }]
-            } else {
-                return [{ urls }]
-            }
-        }
-    }
-
-    _tryExtractFiles(script) {
-        const config = stripPlayerJSConfig(script)
-
-        if (config) {
-            const { file } = config
-            return convertPlayerJSPlaylist(file)
-        }
     }
 
     _getSiteEncoding() {

@@ -4,7 +4,7 @@ const { MongoClient } = require('mongodb')
 const COLLECTION_NAME = process.env.CACHE_TABLE
 const MONGODB_URI = process.env.MONGODB_URI
 
-const expirationTime = 1 * 3600 * 1000
+const expirationTime = (process.env.CACHE_TTL || 3600) * 1000
 
 let cachedDb = null
 

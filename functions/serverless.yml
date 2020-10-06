@@ -19,6 +19,7 @@ provider:
     ANALYTIC_RETENTION: 90
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
     STAGE: ${opt:stage, 'dev'}
+    CACHE_TTL: 1800
   iamRoleStatements:
     - Effect: Allow
       Action:
