@@ -12,9 +12,7 @@ import {
     Fullscreen as FullscreenIcon,
     FullscreenExit as FullscreenExitIcon,
     PlaylistPlay as PlaylistPlayIcon,
-    Shuffle as ShuffleIcon,
-    Cast as CastIcon,
-    CastConnected as CastConnectedIcon
+    Shuffle as ShuffleIcon
 } from '@material-ui/icons'
 import MobileSoundControl from './MobileSoundControl'
 import SoundControl from './SoundControl'
@@ -25,16 +23,7 @@ import VideoQualitySelector from './VideoQualitySelector'
 import localization from '../localization'
 
 @inject(
-    ({
-        notificationStore: { showMessage },
-        castStore: { castAvalaible, showCastDialog },
-        playerStore: { switchToLocalDevice }
-    }) => ({
-        showMessage,
-        castAvalaible,
-        showCastDialog,
-        switchToLocalDevice
-    }))
+    ({ notificationStore: { showMessage } }) => ({ showMessage }))
 @observer
 class MediaControls extends Component {
     handleToggleShuffle = () => {
@@ -59,20 +48,15 @@ class MediaControls extends Component {
             fullScreen,
             device,
             onPrev,
-            onNext,
-            castAvalaible,
-            showCastDialog,
-            switchToLocalDevice
+            onNext
         } = this.props
 
         const {
             currentFileIndex,
             playlist: { files },
-            shuffle,
-            isLocal
+            shuffle
         } = device
 
-        const local = isLocal()
         const mobile = isTouchDevice()
         const hasAudioTracks = device.audioTracks.length > 1
         const hasQualities = device.qualities.length > 1
@@ -126,14 +110,6 @@ class MediaControls extends Component {
                                     {fullScreen && <FullscreenExitIcon />}
                                 </IconButton>
                             }
-                            {castAvalaible && <Fragment>
-                                {local && <IconButton onClick={showCastDialog}>
-                                    <CastIcon />
-                                </IconButton>}
-                                {!local && <IconButton onClick={switchToLocalDevice}>
-                                    <CastConnectedIcon />
-                                </IconButton>}
-                            </Fragment>}
                             <IconButton onClick={() => onPlaylistToggle()}>
                                 <ListIcon />
                             </IconButton>

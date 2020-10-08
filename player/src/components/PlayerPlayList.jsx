@@ -119,10 +119,9 @@ class PlayerPlayList extends Component {
 
     renderFileRow(file, style, key, selected) {
         return (
-            <div style={style}>
+            <div style={style} key={key}>
                 <ListItem
                     button
-                    key={key}
                     selected={selected}
                     onClick={() => this.hundleSelect(file)}
                 >

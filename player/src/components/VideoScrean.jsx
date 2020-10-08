@@ -32,7 +32,7 @@ class VideoScrean extends BaseScrean {
 
     componentWillUnmount() {
         super.componentWillUnmount()
-        this.disposeHls()
+        this.dispose()
     }
 
     /**
@@ -83,13 +83,18 @@ class VideoScrean extends BaseScrean {
         }
     }
 
-    disposeHls() {
+    dispose() {
         if (this.hls) {
             this.hls.stopLoad()
             this.hls.detachMedia()
             this.hls.destroy()
         }
         this.hlsMode = false
+        
+        const video = this.video.current
+        video.removeAttribute('src')
+        video.load()
+        
         if (this.keepAliveInterval) {
             clearInterval(this.keepAliveInterval)
         }
@@ -116,7 +121,7 @@ class VideoScrean extends BaseScrean {
     initVideo() {
         const { props: { device: { source } } } = this
 
-        this.disposeHls()
+        this.dispose()
 
         if(!source) return
 

@@ -64,7 +64,7 @@ export default function () {
     }
 
     if (provider && id) {
-        fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}`)
+        fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}${urlParams.has('nocache') ? '?nocahce=true' : ''}`)
             .then((response) => response.json())
             .then((playlist) => {
                 if (playlist && playlist.files && playlist.files.length) {

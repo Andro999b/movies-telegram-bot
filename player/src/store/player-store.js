@@ -144,14 +144,18 @@ export class LocalDevice extends Device {
     @action.bound setPlaylist(playlist, fileIndex, startTime) {
         this.playlist = playlist
         this.selectFile(fileIndex || 0)
-        this.play(startTime)
+            .then((selected) => {
+                if (selected) {
+                    this.play(startTime)
+                }
+            })
     }
 
     @action.bound selectFile(fileIndex) {
         const { files } = this.playlist
 
         if (fileIndex < 0 || fileIndex >= files.length)
-            return false
+            return Promise.resolve()
 
         const playlistPrefix = getPlaylistPrefix(this.playlist)
 
@@ -166,17 +170,19 @@ export class LocalDevice extends Device {
             this.source = null
 
             const { provider, id } = this.playlist
-            fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${file.asyncSource}`)
+
+
+            return fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${file.asyncSource}`)
                 .then((res) => res.json())
                 .then((source) => {
                     if (fileIndex == this.currentFileIndex) {
                         Object.keys(source).forEach((key) => file[key] = source[key])
                         file.asyncSource = null
-                        this.setLoading(false)
                         this.setSource(file)
                     }
                 })
-                .catch((e) => {            
+                .then(() => true)
+                .catch((e) => {
                     logger.error('Can`t load async source', {
                         title: document.title,
                         url: location.href,
@@ -188,12 +194,14 @@ export class LocalDevice extends Device {
 
                     this.setError(localization.cantPlayMedia)
                     this.setLoading(false)
+
+                    return false
                 })
         } else {
             this.setSource(file)
         }
 
-        return true
+        return Promise.resolve(true)
     }
 
     @action.bound setLoading(loading) {
@@ -274,14 +282,17 @@ class PlayerStore {
     }
 
     @action.bound switchFile(fileIndex) {
-        if (this.device.selectFile(fileIndex)) {
-            this.device.play()
-        } else {
-            this.device.pause()
-        }
-        document.title = this.getPlayerTitle()
+        this.device.selectFile(fileIndex)
+            .then((selected) => {
+                if (selected) {
+                    this.device.play()
+                } else {
+                    this.device.pause()
+                }
+                document.title = this.getPlayerTitle()
         
-        analytics('selectFile', document.title)
+                analytics('selectFile', document.title)
+            })
     }
 
     @action.bound prevFile() {
