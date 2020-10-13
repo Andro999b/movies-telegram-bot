@@ -9,7 +9,7 @@ import AreaChartVis from '../components/AreaChartVis'
 import DateSelector from '../components/DateSelector'
 import ReloadButton from '../components/ReloadButton'
 import dashboard from '../store/gaDashboard'
-import { GA_DATE_FORMAT } from '../constants'
+import periodStore from '../store/periodStore'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 export default observer(() => {
     const classes = useStyles()
     const store = React.useRef(dashboard).current
+    const curPeriodStore = React.useRef(periodStore).current
 
     React.useEffect(() => store.reload(), [])// eslint-disable-line
 
@@ -51,7 +52,7 @@ export default observer(() => {
                             <Typography>Google Analytics</Typography>
                             <Typography>Events: <b>{store.totalEvents}</b> Sessions: <b>{store.totalSessions}</b> Users: <b>{store.totalUsers}</b></Typography>
                         </Box>
-                        <DateSelector value={store.period} format={GA_DATE_FORMAT} onChange={(p) => store.load(p)} />
+                        <DateSelector value={curPeriodStore.period} onChange={(p) => store.load(p)} />
                     </Toolbar>
                 </Grid>
                 <Grid container item md={7} sm={12} xs={12} className={classes.charts}>

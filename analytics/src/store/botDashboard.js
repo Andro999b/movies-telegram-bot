@@ -1,10 +1,9 @@
-import { DATE_FORMAT } from '../constants'
 import { getBucketKeys } from '../utils'
-import moment from 'moment'
 import { observable } from 'mobx'
 import WebworkerPromise from 'webworker-promise'
 import Worker from './botDashboard.worker'
 import errorHadler from '../database/errorHadler'
+import periodStore from './periodStore'
 
 const worker = new WebworkerPromise(new Worker())
 
@@ -30,15 +29,13 @@ export default observable({
     eventsChart: [],
     events: [],
 
-    period: moment().format(DATE_FORMAT),
-
     load(period) {
-        this.period = period
+        periodStore.setPeriod(period)
         this.reload()
     },
 
     reload(force) {
-        const period = this.period
+        const period = periodStore.period
 
         const updateCharts = ({
             eventsBucket,
@@ -48,7 +45,7 @@ export default observable({
             usersBucket,
             topUsersBucket
         }) => {
-            if (this.period != period) return
+            if (periodStore.period != period) return
 
             this.eventsChart = eventsBucket.chartData || []
             this.eventsPie = eventsCountBucket.chartData || []

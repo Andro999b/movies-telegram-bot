@@ -6,6 +6,7 @@ import ValuesTableVis from '../components/ValuesTableVis'
 import { observer } from 'mobx-react-lite'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import dashboard from '../store/botDashboard'
+import periodStore from '../store/periodStore'
 import { getUserName } from '../utils'
 import ReloadButton from '../components/ReloadButton'
 import AreaChartVis from '../components/AreaChartVis'
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 export default observer(() => {
     const classes = useStyles()
     const store = React.useRef(dashboard).current
+    const curPeriodStore = React.useRef(periodStore).current
 
     React.useEffect(() => store.reload(), []) // eslint-disable-line
 
@@ -52,7 +54,7 @@ export default observer(() => {
                             <Typography>Bot Dashboard</Typography>
                             <Typography>Event: <b>{totalEvent}</b> Users: <b>{store.topUsers.length}</b></Typography>
                         </Box>
-                        <DateSelector value={store.period} onChange={(p) => store.load(p)} />
+                        <DateSelector value={curPeriodStore.period} onChange={(p) => store.load(p)} />
                     </Toolbar>
                 </Grid>
                 <Grid container item md={7} sm={12} xs={12} className={classes.charts}>

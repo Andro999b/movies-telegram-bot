@@ -13,6 +13,7 @@ import ReloadButton from '../components/ReloadButton'
 import { observer } from 'mobx-react-lite'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import { DatePicker } from '@material-ui/pickers'
+import periodStore from '../store/periodStore'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,15 +41,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default observer(() => {
     const store = React.useRef(botEvents).current
+    const curPeriodStore = React.useRef(periodStore).current
     const classes = useStyles()
 
-    React.useEffect(() => {
-        if (!store.lastTs) store.reload()
-
-        store.startUpdate()
-
-        return () => store.stopUpdate()
-    }, [])// eslint-disable-line
+    React.useEffect(() => store.init(), [])// eslint-disable-line
 
     const [filter, setFilter] = React.useState('')
     let items = filter ?
@@ -81,7 +77,7 @@ export default observer(() => {
                     disableFuture
                     variant="inline"
                     inputVariant="outlined"
-                    value={store.date}
+                    value={curPeriodStore.date}
                     className={classes.dataPicker}
                     onChange={handleDateChange}
                 />

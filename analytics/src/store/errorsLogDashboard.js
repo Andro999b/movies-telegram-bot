@@ -2,6 +2,7 @@ import { observable } from 'mobx'
 import moment from 'moment'
 import { DATE_FORMAT } from '../constants'
 import { searchLogs } from '../database/cloudwatch'
+import periodStore from './periodStore'
 
 const today = moment().utc()
 const getPeriodRange = (period) => {
@@ -38,16 +39,15 @@ const getPeriodRange = (period) => {
 const cache = {}
 
 export default observable({
-    period: moment().format(DATE_FORMAT),
     searcher: null,
 
     load(period) {
-        this.period = period
+        periodStore.setPeriod(period)
         this.reload()
     },
 
     reload(force) {
-        const period = this.period
+        const period = periodStore.period
 
         if (!force && cache[period]) {
             this.searcher = cache[period]

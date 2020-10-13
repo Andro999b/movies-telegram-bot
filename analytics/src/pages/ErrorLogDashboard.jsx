@@ -12,6 +12,7 @@ import dashboard from '../store/errorsLogDashboard'
 import ReloadButton from '../components/ReloadButton'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import LogsTable from '../components/LogsTable'
+import periodStore from '../store/periodStore'
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -26,6 +27,7 @@ export default observer(() => {
     const classes = useStyles()
 
     const store = React.useRef(dashboard).current
+    const curPeriodStore = React.useRef(periodStore).current
 
     React.useEffect(() => store.reload(), []) //eslint-disable-line
 
@@ -39,7 +41,7 @@ export default observer(() => {
                     </Typography>
                 }
             </Box>
-            <DateSelector value={store.period} onChange={(p) => store.load(p)} />
+            <DateSelector value={curPeriodStore.period} onChange={(p) => store.load(p)} />
         </Toolbar>
         <Container className={classes.logs}>
             <LoadingPlaceholder loading={store.searcher?.loading}>

@@ -4,6 +4,7 @@ import { segmentBucketReducer, bucketReducer } from '../utils'
 import { GA_DATE_FORMAT } from '../constants'
 import moment from 'moment'
 import errorHadler from '../database/errorHadler'
+import periodStore from './periodStore'
 
 const hoursSegFormatter = (hour) => hour + ':00'
 const dateSegFormatter = (date) => date.substring(0,4) + '-' + date.substring(4,6) + '-' + date.substring(6,8)
@@ -132,15 +133,14 @@ export default observable({
     totalSessions: 0,
     totalUsers: 0,
     labels: [],
-    period: todayFormated,
 
     load(period) {
-        this.period = period
+        periodStore.setPeriod(period)
         this.reload()
     },
 
     reload(force) {
-        const period = this.period
+        const period = periodStore.gaPeriod
 
         const updateCharts = ({
             labels,
@@ -150,7 +150,7 @@ export default observable({
             sessionsBucket,
             deviceCountBucket
         }) => {
-            if (this.period != period) return
+            if (periodStore.gaPeriod != period) return
 
             this.labels = labels
             this.usersChart = usersBucket.chartData

@@ -1,9 +1,9 @@
 import { observable } from 'mobx'
 import { runQuery } from '../database/dynamodb'
-import moment from 'moment'
-import { TABLE_NAME, EVENTS_UPDATE_INTERVAL, DATE_FORMAT } from '../constants'
+import { TABLE_NAME, EVENTS_UPDATE_INTERVAL } from '../constants'
 import { isToday } from '../utils'
 import errorHadler from '../database/errorHadler'
+import periodStore from './periodStore'
 
 let loading = false
 let interval = null
@@ -12,13 +12,12 @@ export default observable({
     events: [],
     lastTs: null,
     initialized: false,
-    date: new Date(),
 
     startUpdate() {
         if (interval) clearInterval(interval)
         interval = setInterval(
             () => {
-                if (isToday(this.date)) this.loadStratingFromTS(this.lastTs)
+                if (isToday(periodStore.date)) this.loadStratingFromTS(this.lastTs)
             },
             EVENTS_UPDATE_INTERVAL
         )
@@ -32,7 +31,7 @@ export default observable({
         if (loading) return
         loading = true
 
-        const keyValue = moment(this.date).utc().format(DATE_FORMAT)
+        const keyValue = periodStore.period
 
         const query = {
             TableName: TABLE_NAME,
@@ -75,7 +74,7 @@ export default observable({
     },
 
     setDate(date) {
-        this.date = date
+        periodStore.setDate(date)
         this.reload()
     },
 
@@ -83,5 +82,12 @@ export default observable({
         this.initialized = false
         this.events = []
         this.loadStratingFromTS(null)
+    },
+
+    init() {
+        this.reload()
+        this.startUpdate()
+
+        return () => this.stopUpdate()
     }
 })
