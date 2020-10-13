@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     },
     dataPicker: {
         backgroundColor: '#FFF',
-        width: 100
+        width: 110
     }
 }))
 
@@ -73,7 +73,7 @@ export default observer(() => {
                 />
                 <DatePicker
                     autoOk
-                    format="YYYY-M-D"
+                    format="YYYY-M-DD"
                     disableFuture
                     variant="inline"
                     inputVariant="outlined"

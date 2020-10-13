@@ -11,7 +11,7 @@ export default observable({
 
     setPeriod(period) {
         if(PERIODS.includes(period)) {
-            this.gaPeriod = period
+            this.period = period
             this.gaPeriod = period
         } else {
             const momentInst = moment(period, DATE_FORMAT)
@@ -19,6 +19,10 @@ export default observable({
             this.date = momentInst.toDate()
             this.gaPeriod = momentInst.format(GA_DATE_FORMAT)
         }
+    },
+
+    getFormatedDate() {
+        return moment(this.date).format(DATE_FORMAT)
     },
 
     setDate(date) {

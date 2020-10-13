@@ -31,7 +31,7 @@ export default observable({
         if (loading) return
         loading = true
 
-        const keyValue = periodStore.period
+        const keyValue = periodStore.getFormatedDate()
 
         const query = {
             TableName: TABLE_NAME,
