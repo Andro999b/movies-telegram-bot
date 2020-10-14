@@ -11,6 +11,10 @@ const getPeriodRange = (period) => {
             today.clone().subtract(7, 'day').valueOf(),
             today.valueOf(),
         ]
+        case 'last30days': return [
+            today.clone().subtract(30, 'day').valueOf(),
+            today.valueOf(),
+        ]
         case 'current_month': return [
             today.clone().subtract(1, 'month'),
             today.valueOf(),

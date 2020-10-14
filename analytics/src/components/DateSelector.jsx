@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-export default ({ value, onChange, format = DATE_FORMAT }) => {
+export default ({ value, onChange, format = DATE_FORMAT, periods = PERIODS }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const classes = useStyles()
 
@@ -51,7 +51,7 @@ export default ({ value, onChange, format = DATE_FORMAT }) => {
     let calendarDate = new Date()
     let showPrev = true, showNext = true
 
-    if (!PERIODS.includes(value)) {
+    if (!periods.includes(value)) {
         calendarDate = moment(value, format).toDate()
         name = value
         if(isToday(calendarDate)) {
@@ -60,7 +60,7 @@ export default ({ value, onChange, format = DATE_FORMAT }) => {
     } else {
         showPrev = false
         showNext = false
-        name = NAMES[value || PERIODS[0]]
+        name = NAMES[value || periods[0]]
     }
 
     const handleDateChange = (newDate) => {

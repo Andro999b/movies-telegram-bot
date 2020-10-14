@@ -13,9 +13,12 @@ export const searchLogs = (from, to) => {
         statistics: null,
         status: null,
         loading: false,
+        error: null,
 
         reload() {
             if (this.loading) return
+
+            this.error = null
             this.loading = true
 
             let queryId = null
@@ -25,6 +28,7 @@ export const searchLogs = (from, to) => {
                 cloudwatchlogs.getQueryResults({ queryId }, (err, data) => {
                     if(err) {
                         this.loading = false
+                        this.error = err.message
                         clearInterval(intervalId)
                         errorHadler(err)
                         return
@@ -47,6 +51,7 @@ export const searchLogs = (from, to) => {
                 logGroupNames: LOG_GROUPS
             }, (err,data) => {
                 if(err) {
+                    this.error = err.message
                     errorHadler(err)
                     return
                 } else {

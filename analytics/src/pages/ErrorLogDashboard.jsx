@@ -13,6 +13,7 @@ import ReloadButton from '../components/ReloadButton'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import LogsTable from '../components/LogsTable'
 import periodStore from '../store/periodStore'
+import { red } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -20,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
     },
     logs: {
         marginTop: theme.spacing(2)
+    },
+    error: {
+        color: red[900],
+        textAlign: 'center'
     }
 }))
 
@@ -44,6 +49,7 @@ export default observer(() => {
             <DateSelector value={curPeriodStore.period} onChange={(p) => store.load(p)} />
         </Toolbar>
         <Container className={classes.logs}>
+            {store.searcher?.error  && <Typography className={classes.error}>{store.searcher.error}</Typography>}
             <LoadingPlaceholder loading={store.searcher?.loading}>
                 {store.searcher && <LogsTable rows={store.searcher.logs} />}
             </LoadingPlaceholder>
