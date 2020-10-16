@@ -6,11 +6,13 @@ import {
     Accordion,
     AccordionSummary,
     AccordionDetails,
-    Grid
+    AccordionActions,
+    Grid,
+    Button
 } from '@material-ui/core'
 import { grey } from '@material-ui/core/colors'
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
-import { getEventInputProp } from '../utils'
+import { getEventInputProp, isSearchableEvent, getBotSearchUrl  } from '../utils'
 import moment from 'moment'
 
 const filterProperties = [
@@ -46,6 +48,16 @@ export default ({ item }) => {
         (<span><b>{input.name}: </b>{input.value}</span>) :
         ''
 
+    let searchBtn = null
+
+    if(isSearchableEvent(item)) {
+        searchBtn = (
+            <AccordionActions>
+                <Button component="a" target="_blank" href={getBotSearchUrl(item)}  color="primary">Search</Button>
+            </AccordionActions>
+        )
+    }
+
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -71,6 +83,7 @@ export default ({ item }) => {
                     }
                 </Grid>
             </AccordionDetails>
+            {searchBtn}
         </Accordion>
     )
 }

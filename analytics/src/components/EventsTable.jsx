@@ -13,14 +13,21 @@ import {
     Grid,
     IconButton,
     makeStyles,
-    Table
+    Table,
+    Button,
+    Box
 } from '@material-ui/core'
 import {
     KeyboardArrowDown as KeyboardArrowDownIcon,
     KeyboardArrowUp as KeyboardArrowUpIcon
 } from '@material-ui/icons'
 import moment from 'moment'
-import { getUserName, getEventInputProp } from '../utils'
+import { 
+    getUserName, 
+    getEventInputProp, 
+    isSearchableEvent, 
+    getBotSearchUrl 
+} from '../utils'
 import { grey } from '@material-ui/core/colors'
 
 const filterProperties = [
@@ -55,6 +62,11 @@ const useRowStyles = makeStyles((theme) => ({
     details: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2)
+    },
+    searchBtn: {
+        display: 'flex',
+        paddingBottom: theme.spacing(2),
+        justifyContent: 'flex-end'
     }
 }))
 
@@ -63,6 +75,15 @@ const Row = ({ data }) => {
     const [open, setOpen] = React.useState(false)
 
     const input = getEventInputProp(data)
+    let searchBtn = null
+
+    if(isSearchableEvent(data)) {
+        searchBtn = (
+            <Box className={classes.searchBtn}>
+                <Button component="a" target="_blank" href={getBotSearchUrl(data)} variant="contained">Search</Button>
+            </Box>
+        )
+    }
 
     return (
         <React.Fragment>
@@ -102,6 +123,7 @@ const Row = ({ data }) => {
                                 ))
                             }
                         </Grid>
+                        {searchBtn}
                     </Collapse>
                 </TableCell>
             </TableRow>
