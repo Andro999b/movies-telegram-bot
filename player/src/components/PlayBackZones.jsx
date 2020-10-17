@@ -33,6 +33,8 @@ class PlayBackZones extends Component {
     delayStartSeeking = (e, seekMode) => {
         e.stopPropagation()
 
+        if(this.state.seekMode && this.state.seekMode != seekMode) return
+
         clearInterval(this.stepInterval)
         clearTimeout(this.seekDelayTimeout)
 
@@ -44,7 +46,7 @@ class PlayBackZones extends Component {
         window.addEventListener('pointerup', this.handleSeekEnd)
 
         this.setState(
-            { seekMode },
+            { seekMode, accTime: (this.accTime || 0) },
             () => this.delayTimeout = setTimeout(this.startSeeking, 200)
         )
     }
@@ -58,11 +60,7 @@ class PlayBackZones extends Component {
         const { currentTime } = device
 
         device.seeking(currentTime)
-
-        this.setState(
-            { accTime: (this.accTime || 0) },
-            () => this.stepInterval = setInterval(this.seekStep, 200)
-        )
+        this.stepInterval = setInterval(this.seekStep, 200)
     }
 
     handlePreventScroll(e) {
