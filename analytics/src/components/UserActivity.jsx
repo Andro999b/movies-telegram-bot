@@ -53,7 +53,7 @@ export default ({ item }) => {
     if(isSearchableEvent(item)) {
         searchBtn = (
             <AccordionActions>
-                <Button component="a" target="_blank" href={getBotSearchUrl(item)}  color="primary">Search</Button>
+                <Button component="a" target="_blank" href={getBotSearchUrl(item)} color="primary">Search</Button>
             </AccordionActions>
         )
     }

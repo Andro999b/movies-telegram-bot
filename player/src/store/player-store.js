@@ -139,6 +139,7 @@ export class LocalDevice extends Device {
                 store.set(`${getPlaylistPrefix(this.playlist)}:ts`, mark)
             }
         }
+        this.seekTime = null
     }
 
     @action.bound setPlaylist(playlist, fileIndex, startTime) {

@@ -4,10 +4,11 @@ import PropTypes from 'prop-types'
 import {
     FastForwardRounded as FastForwardIcon,
     FastRewindRounded as FastRewindIcon,
-    PlayCircleFilled as PlayIcon 
+    PlayCircleFilled as PlayIcon
 } from '@material-ui/icons'
 
 import { observer } from 'mobx-react'
+import { Typography } from '@material-ui/core'
 
 @observer
 class PlayBackZones extends Component {
@@ -16,7 +17,8 @@ class PlayBackZones extends Component {
         super(props)
 
         this.state = {
-            seekMode: null
+            seekMode: null,
+            accTime: null
         }
     }
 
@@ -32,74 +34,101 @@ class PlayBackZones extends Component {
         e.stopPropagation()
 
         clearInterval(this.stepInterval)
+        clearTimeout(this.seekDelayTimeout)
+
+        const { device } = this.props
+        device.pause()
 
         window.addEventListener('pointermove', this.handlePreventScroll, { passive: false })
         window.addEventListener('pointercancel', this.handleSeekEnd)
         window.addEventListener('pointerup', this.handleSeekEnd)
 
-        this.delayTimeout = setTimeout(() => this.startSeeking(seekMode), 200)
+        this.setState(
+            { seekMode },
+            () => this.delayTimeout = setTimeout(this.startSeeking, 200)
+        )
     }
 
-    startSeeking = (seekMode) =>  {
+    startSeeking = () => {
         this.lastTs = Date.now()
-        this.accTime = 0
 
         clearInterval(this.stepInterval)
 
         const { device } = this.props
         const { currentTime } = device
 
-
         device.seeking(currentTime)
-        device.pause()
 
-        this.setState({
-            seekMode,
-            time: currentTime
-        },() => {
-            this.stepInterval = setInterval(this.seekStep, 200)
-        })
+        this.setState(
+            { accTime: (this.accTime || 0) },
+            () => this.stepInterval = setInterval(this.seekStep, 200)
+        )
     }
 
     handlePreventScroll(e) {
-        if(e.cancelable) {
+        if (e.cancelable) {
             e.preventDefault()
             e.stopImmediatePropagation()
         }
     }
 
-    handleSeekEnd = () => {
-        if(this.lastTs) { // seeking started
-            const { device } = this.props
+    handleTapSeek = () => {
+        this.accTime = (this.accTime || 0) + 10
 
+        const { seekMode } = this.state
+        const { device } = this.props
+        const { currentTime, seeking } = device
+
+        this.targetTime = seekMode == 'ff' ? currentTime + this.accTime : currentTime - this.accTime
+        seeking(this.targetTime)
+
+        this.setState({ accTime: this.accTime })
+
+        this.seekDelayTimeout = setTimeout(
+            () => {
+                device.play(this.targetTime)
+
+                this.cleanUpListeners()
+                this.cleanUpState()
+            },
+            200
+        )
+    }
+
+    handleSeekEnd = () => {
+        this.cleanUpListeners()
+
+        const { device } = this.props
+
+        if (this.lastTs) { // seeking started
             device.play(this.targetTime)
         } else {
-            this.props.onClick()
+            this.handleTapSeek()
+            return
         }
 
-        this.setState({ seekMode: null })
-
-        this.cleanUp()
+        this.cleanUpState()
     }
 
     seekStep = () => {
         const timestamp = Date.now()
         const progress = (timestamp - this.lastTs) / 1000
+        const accTime = (this.accTime || 0)
 
         let seekSpeed = 15
-        if(this.accTime > 120) {
+        if (accTime > 120) {
             seekSpeed = 60
-        } else if(this.accTime > 30) {
+        } else if (accTime > 30) {
             seekSpeed = 30
         }
 
-        const newAccTime = this.accTime + Math.floor(progress * seekSpeed)
+        const newAccTime = accTime + Math.floor(progress * seekSpeed)
 
         const { seekMode } = this.state
         const { device: { currentTime, duration, seeking } } = this.props
         const targetTime = seekMode == 'ff' ? currentTime + newAccTime : currentTime - newAccTime
 
-        if(targetTime < 0 || targetTime > duration) {
+        if (targetTime < 0 || targetTime > duration) {
             clearInterval(this.stepInterval)
             return
         }
@@ -108,49 +137,65 @@ class PlayBackZones extends Component {
         this.lastTs = timestamp
         this.targetTime = targetTime
 
+        this.setState({ accTime: this.accTime })
+
         seeking(targetTime)
     }
 
     componentWillUnmount() {
-        this.cleanUp()
+        this.cleanUpListeners()
     }
 
-    cleanUp() {
+    cleanUpState() {
+        this.setState({ seekMode: null, accTime: null })
+
+        this.stepInterval = null
+        this.delayTimeout = null
+        this.targetTime = null
+        this.lastTs = null
+        this.accTime = null
+    }
+
+    cleanUpListeners() {
         window.removeEventListener('pointermove', this.handlePreventScroll)
         window.removeEventListener('pointercancel', this.handleSeekEnd)
         window.removeEventListener('pointerup', this.handleSeekEnd)
 
         clearInterval(this.stepInterval)
         clearTimeout(this.delayTimeout)
-
-        this.stepInterval = null
-        this.delayTimeout = null
-        this.targetTime = null
-        this.lastTs = null
+        clearTimeout(this.seekDelayTimeout)
     }
 
     render() {
-        const { seekMode } = this.state
+        const { seekMode, accTime } = this.state
         const { device: { isPlaying, isLoading }, onClick } = this.props
+        const paused = accTime === null && !isPlaying
 
         return (
-            <div 
+            <div
                 className={`player__pause-zone ${(isPlaying || isLoading) ? '' : 'player__pause-cover'}`}
                 onPointerDown={() => onClick()}
             >
                 <div
                     className="playback-skip backward"
                     onPointerDown={this.handleFastRewind}
-                />
+                >
+                    {paused && <FastRewindIcon className="center" fontSize="inherit" />}
+                </div>
                 <div className="playback-skip__indicator">
-                    {seekMode == 'fr' && <FastRewindIcon className="center" fontSize="inherit" />}
-                    {seekMode == 'ff' && <FastForwardIcon className="center" fontSize="inherit"/>}
-                    {(!seekMode && !isPlaying) && <PlayIcon className="center" fontSize="inherit"/>}
+                    {accTime !== null &&
+                        <Typography className="center" variant="h2">
+                            {seekMode == 'ff' ? '+' : '-'}{accTime}s
+                        </Typography>
+                    }
+                    {paused && <PlayIcon className="center" fontSize="inherit" />}
                 </div>
                 <div
                     className="playback-skip forward"
                     onPointerDown={this.handleFastFroward}
-                />
+                >
+                    { paused && <FastForwardIcon className="center" fontSize="inherit"/> }
+                </div>
             </div>
         )
     }
