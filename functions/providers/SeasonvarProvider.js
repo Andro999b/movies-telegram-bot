@@ -42,7 +42,8 @@ class SeasonvarProvider extends DirectMediaProvider {
                             id: index + 1
                         }))
                     }
-                }
+                },
+                errorDetail: '.pgs-player-block'
             }
         })
     }

@@ -67,7 +67,7 @@ export default function () {
         fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}${urlParams.has('nocache') ? '?nocahce=true' : ''}`)
             .then((response) => response.json())
             .then((playlist) => {
-                if (playlist && playlist.files && playlist.files.length) {
+                if (playlist.files && playlist.files.length) {
                     const fileIndex = parseInt(urlParams.get('file'))
                     const time = parseFloat(urlParams.get('time'))
 
@@ -76,10 +76,10 @@ export default function () {
                     analytics('playlistLoaded', document.title)
                     
                     render((<App />), document.getElementById('app'))
-                } else if(playlist && playlist.trailer) {
+                } else if(playlist.trailer) {
                     trailerRedirect(playlist.trailer)
                 } else {
-                    renderError(localization.videoNotFound)
+                    renderError(playlist.errorDetail || localization.videoNotFound)
                 }
             })
             .catch((e) => renderError(null, { message: e.message }))
