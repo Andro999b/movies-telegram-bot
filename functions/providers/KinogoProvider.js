@@ -40,17 +40,22 @@ class KinogoProvider extends DataLifeProvider {
                         if (!matches || matches.length == 0) 
                             return this._extractFallback($root.find('#1212'))
 
-                        const iframeRes = await superagent
-                            .get(`${this.config.baseUrl}${matches[0]}`)
-                            .timeout(this.config.timeout)
+                        try {
+                            const iframeRes = await superagent
+                                .get(`${this.config.baseUrl}${matches[0]}`)
+                                .timeout(this.config.timeout)
 
-                        matches = iframeRes.text.match(/https?[^\s"]+/)
+                            matches = iframeRes.text.match(/https?[^\s"]+/)
 
-                        if (matches.length == 0) return []
+                            if (matches.length == 0) return []
 
-                        const playlist = await videocdnembed(matches[0])
+                            const playlist = await videocdnembed(matches[0])
 
-                        return playlist.map((file, id) => ({ id, ...file}))
+                            return playlist.map((file, id) => ({ id, ...file }))
+                        } catch(e) {
+                            console.error('Kinogo get files failed with', e)
+                            return this._extractFallback($root.find('#1212'))
+                        }
                     }
                 },
                 trailer: {

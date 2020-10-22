@@ -127,7 +127,7 @@ class VideoScrean extends BaseScrean {
 
         const { manifestUrl, urls }  = source
 
-        if (urls) {
+        if (urls && urls.length > 0) {
             this.startNativeVideo()
         } else if (manifestUrl) {
             this.startHlsVideo()

@@ -26,14 +26,14 @@ class AnidubProvider extends DataLifeProvider {
                 //     transform: ($el) => $el.children()
                 //         .toArray()
                 //         .map((el) => $(el))
-                //         .filter(($el) => $el.attr('data').includes('sibnet'))
+                //         .filter(($el) => $el.attr('data').startsWith('/player/index.php'))
                 //         .map(($el,id) => {
                 //             return {
                 //                 id,
                 //                 name: $el.text(),
                 //                 urls: [{
                 //                     url: $el.attr('data'),
-                //                     extractor: { type: 'sibnetmp4' }
+                //                     extractor: { type: 'anidub' }
                 //                 }]
                 //             }
                 //         })
