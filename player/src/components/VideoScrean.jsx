@@ -172,13 +172,12 @@ class VideoScrean extends BaseScrean {
     }
 
     setNativeVideoUrl({ url, extractor }) {
-        if (url.startsWith('//')) url = 'http:' + url
         const video = this.video.current
 
         if (extractor) {
             video.src = createExtractorUrlBuilder(extractor)(url)
         } else {
-            video.src = url
+            video.src = url.startsWith('//') ? 'https:' + url : url
         }
     }
 

@@ -27,7 +27,7 @@ function _extractTranslations(translations, playlists) {
                         const newUrls = file.urls.map((u) => ({...u, audio: translationName}))
                         filesByKey[key] = { ...file, urls: newUrls }
                     }
-                });
+                })
         })
 
     return Object
@@ -38,7 +38,9 @@ function _extractTranslations(translations, playlists) {
 module.exports = async (url) => {
     let res
     try {
-        res = await superagent.get(url.startsWith('//') ? 'https:' + url : url)
+        res = await superagent
+            .get(url.startsWith('//') ? 'https:' + url : url)
+            .timeout(2000)
     } catch (e) {
         console.error('Fail get iframe', url, e)
         return []
