@@ -3,7 +3,7 @@ function log(level, message, data) {
 
     const browser = `${navigator.userAgent}`
 
-    if (!location.host.startsWith('localhost') && !window.mobileApp) {
+    if (!location.host.startsWith('localhost')) {
         fetch(`${window.API_BASE_URL}/log`, {
             method: 'POST',
             credentials: 'same-origin',

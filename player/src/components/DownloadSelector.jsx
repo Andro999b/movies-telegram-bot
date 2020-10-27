@@ -17,16 +17,6 @@ class DownloadSelector extends BaseSelector {
         title: [audio, quality].filter((it) => it).join(' - ')
     })
 
-    handleMobileDownload = (downloadUrl) => {
-        const { title, file } = this.props
-
-        const name = [file.path, file.name].filter((it) => it).join(' - ')
-
-        downloadUrl = downloadUrl.startsWith('//') ? 'https:' + downloadUrl : downloadUrl
-
-        mobileApp.downloadFile(downloadUrl, title, name)
-    }
-
     handleTrackDownload = () => {
         const { file, title } = this.props
 
@@ -46,25 +36,17 @@ class DownloadSelector extends BaseSelector {
         } else {
             const { downloadUrl } = this.getTitleAndDownloadUrl(urls[0])
 
-            if (window.mobileApp) {
-                return (
-                    <IconButton onClick={() => this.handleMobileDownload(downloadUrl)}>
-                        <DownloadIcon />
-                    </IconButton>
-                )
-            } else {
-                return (
-                    <IconButton
-                        component='a'
-                        href={downloadUrl}
-                        download={downloadUrl}
-                        target="_blank"
-                        onClick={this.handleTrackDownload}
-                    >
-                        <DownloadIcon />
-                    </IconButton>
-                )
-            }
+            return (
+                <IconButton
+                    component='a'
+                    href={downloadUrl}
+                    download={downloadUrl}
+                    target="_blank"
+                    onClick={this.handleTrackDownload}
+                >
+                    <DownloadIcon />
+                </IconButton>
+            ) 
         }
     }
 
@@ -76,26 +58,18 @@ class DownloadSelector extends BaseSelector {
             const items = urls.map((it, index) => {
                 const { title, downloadUrl }  = this.getTitleAndDownloadUrl(it)
 
-                if (window.mobileApp) {
-                    return (
-                        <MenuItem key={index} onClick={() => this.handleMobileDownload(downloadUrl)}>
-                            {title}
-                        </MenuItem>
-                    )
-                } else {
-                    return (
-                        <MenuItem
-                            component='a'
-                            href={downloadUrl}
-                            download={downloadUrl}
-                            target="_blank"
-                            key={index}
-                            onClick={this.handleTrackDownload}
-                        >
-                            {title}
-                        </MenuItem>
-                    )
-                }
+                return (
+                    <MenuItem
+                        component='a'
+                        href={downloadUrl}
+                        download={downloadUrl}
+                        target="_blank"
+                        key={index}
+                        onClick={this.handleTrackDownload}
+                    >
+                        {title}
+                    </MenuItem>
+                )
             })
 
             return (<MenuList>{items}</MenuList>)
