@@ -1,9 +1,9 @@
 import { runQuery } from '../database/dynamodb'
 import { TABLE_NAME } from '../constants'
 import { bucketReducer, getUserName } from '../utils'
-import errorHadler from '../database/errorHadler'
 
 export default () => ({
+    error: null,
     loading: true,
     botsPie: [],
     eventsPie: [],
@@ -40,6 +40,6 @@ export default () => ({
                 if (items.length)
                     this.name = getUserName(items[0])
             })
-            .catch(errorHadler)
+            .catch((error) => this.error = error.message)
     }
 })

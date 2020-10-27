@@ -1,12 +1,11 @@
 import { observable } from 'mobx'
 import { invokeMongoStat } from '../database/lambda'
 import { segmentBucketReducer } from '../utils'
-import errorHadler from '../database/errorHadler'
-
 
 const providerReducer = segmentBucketReducer(({ _id }) => _id, ( { _id }) => _id, (acc, { count}) => acc + count)
 
 export default observable({
+    error: null,
     initlized: false,
     loading: true,
     providersChart: [],
@@ -36,6 +35,6 @@ export default observable({
                 this.top = hits
                 this.recient = recient
             })
-            .catch(errorHadler)
+            .catch((error) => this.error = error.message) 
     }
 })

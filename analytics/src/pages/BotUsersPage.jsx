@@ -5,8 +5,10 @@ import botUser from '../store/botUser'
 import { useParams } from 'react-router-dom'
 import UserActivity from '../components/UserActivity'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
+import ErrorAwareContainer from '../components/ErrorAwareContainer'
 import PieChartVis from '../components/PieChartVis'
 import ReloadButton from '../components/ReloadButton'
+import { Store } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
     sectionTitle: {
@@ -34,37 +36,39 @@ export default observer(() => {
             <Toolbar>
                 <Typography>{user.name} (Events: <b>{user.events.length}</b>)</Typography>
             </Toolbar>
-            <Container>
-                <Grid container spacing={1}>
-                    <Grid item xs={12} sm={6}>
-                        <div className={classes.sectionTitle}>
-                            <Typography>Bots</Typography>
-                        </div>
-                        <div className={classes.chart}>
+            <ErrorAwareContainer error={Store.error}>
+                <Container>
+                    <Grid container spacing={1}>
+                        <Grid item xs={12} sm={6}>
+                            <div className={classes.sectionTitle}>
+                                <Typography>Bots</Typography>
+                            </div>
+                            <div className={classes.chart}>
+                                <LoadingPlaceholder loading={user.loading}>
+                                    <PieChartVis data={user.botsPie} />
+                                </LoadingPlaceholder>
+                            </div>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <div className={classes.sectionTitle}>
+                                <Typography>Event types</Typography>
+                            </div>
+                            <div className={classes.chart}>
+                                <LoadingPlaceholder loading={user.loading}>
+                                    <PieChartVis data={user.eventsPie} />
+                                </LoadingPlaceholder>
+                            </div>
+                        </Grid>
+                        <Grid item xs={12} sm={12}>
                             <LoadingPlaceholder loading={user.loading}>
-                                <PieChartVis data={user.botsPie} />
+                                {items.map((item) => (
+                                    <UserActivity key={`${item.uid}_${item.type}_${item.time}`} item={item} />
+                                ))}
                             </LoadingPlaceholder>
-                        </div>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <div className={classes.sectionTitle}>
-                            <Typography>Event types</Typography>
-                        </div>
-                        <div className={classes.chart}>
-                            <LoadingPlaceholder loading={user.loading}>
-                                <PieChartVis data={user.eventsPie} />
-                            </LoadingPlaceholder>
-                        </div>
-                    </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <LoadingPlaceholder loading={user.loading}>
-                            {items.map((item) => (
-                                <UserActivity key={`${item.uid}_${item.type}_${item.time}`} item={item} />
-                            ))}
-                        </LoadingPlaceholder>
-                    </Grid>
-                </Grid>
-            </Container>
+                </Container>
+            </ErrorAwareContainer>
             <ReloadButton onClick={() => user.load(uid)} />
         </div>
     )

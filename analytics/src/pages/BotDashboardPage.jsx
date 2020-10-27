@@ -5,6 +5,7 @@ import PieChartVis from '../components/PieChartVis'
 import ValuesTableVis from '../components/ValuesTableVis'
 import { observer } from 'mobx-react-lite'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
+import ErrorAwareContainer from '../components/ErrorAwareContainer'
 import dashboard from '../store/botDashboard'
 import periodStore from '../store/periodStore'
 import { getUserName } from '../utils'
@@ -57,62 +58,64 @@ export default observer(() => {
                         <DateSelector value={curPeriodStore.period} onChange={(p) => store.load(p)} />
                     </Toolbar>
                 </Grid>
-                <Grid container item md={7} sm={12} xs={12} className={classes.charts}>
-                    <Grid item sm={12} xs={12} className={classes.sectionTitle}>
-                        <Typography>Users activity</Typography>
-                    </Grid>
-                    <Grid item sm={12} xs={12} className={classes.item}>
-                        <LoadingPlaceholder loading={store.loading}>
-                            <AreaChartVis data={store.usersChart} lines={['count']} />
-                        </LoadingPlaceholder>
-                    </Grid>
-                    <Grid container item>
+                <ErrorAwareContainer error={store.error}>
+                    <Grid container item md={7} sm={12} xs={12} className={classes.charts}>
                         <Grid item sm={12} xs={12} className={classes.sectionTitle}>
-                            <Typography>Event types</Typography>
+                            <Typography>Users activity</Typography>
                         </Grid>
-                        <Grid item sm={9} xs={12} className={classes.item}>
+                        <Grid item sm={12} xs={12} className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
-                                <AreaChartVis stacked data={store.eventsChart} lines={store.events} />
+                                <AreaChartVis data={store.usersChart} lines={['count']} />
                             </LoadingPlaceholder>
                         </Grid>
-                        <Grid item sm={3} xs={12} className={classes.item}>
+                        <Grid container item>
+                            <Grid item sm={12} xs={12} className={classes.sectionTitle}>
+                                <Typography>Event types</Typography>
+                            </Grid>
+                            <Grid item sm={9} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <AreaChartVis stacked data={store.eventsChart} lines={store.events} />
+                                </LoadingPlaceholder>
+                            </Grid>
+                            <Grid item sm={3} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <PieChartVis data={store.eventsPie} />
+                                </LoadingPlaceholder>
+                            </Grid>
+                        </Grid>
+                        <Grid container item>
+                            <Grid item sm={12} xs={12} className={classes.sectionTitle}>
+                                <Typography>Event by bots</Typography>
+                            </Grid>
+                            <Grid item sm={9} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <AreaChartVis stacked data={store.botChart} lines={store.bots} />
+                                </LoadingPlaceholder>
+                            </Grid>
+                            <Grid item sm={3} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <PieChartVis data={store.botPie} />
+                                </LoadingPlaceholder>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid container md={5} item sm={12} xs={12}>
+                        <Grid item sm={12} xs={12} className={classes.table}>
                             <LoadingPlaceholder loading={store.loading}>
-                                <PieChartVis data={store.eventsPie} />
+                                <ValuesTableVis
+                                    data={store.topUsers}
+                                    showTotal
+                                    title="Top Users"
+                                    renderName={({ item }) =>
+                                        <Link href={`#/users/${item.uid}`}>
+                                            {getUserName(item)}
+                                        </Link>
+                                    }
+                                />
                             </LoadingPlaceholder>
                         </Grid>
                     </Grid>
-                    <Grid container item>
-                        <Grid item sm={12} xs={12} className={classes.sectionTitle}>
-                            <Typography>Event by bots</Typography>
-                        </Grid>
-                        <Grid item sm={9} xs={12} className={classes.item}>
-                            <LoadingPlaceholder loading={store.loading}>
-                                <AreaChartVis stacked data={store.botChart} lines={store.bots} />
-                            </LoadingPlaceholder>
-                        </Grid>
-                        <Grid item sm={3} xs={12} className={classes.item}>
-                            <LoadingPlaceholder loading={store.loading}>
-                                <PieChartVis data={store.botPie} />
-                            </LoadingPlaceholder>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid container md={5} item sm={12} xs={12}>
-                    <Grid item sm={12} xs={12} className={classes.table}>
-                        <LoadingPlaceholder loading={store.loading}>
-                            <ValuesTableVis
-                                data={store.topUsers}
-                                showTotal
-                                title="Top Users"
-                                renderName={({ item }) =>
-                                    <Link href={`#/users/${item.uid}`}>
-                                        {getUserName(item)}
-                                    </Link>
-                                }
-                            />
-                        </LoadingPlaceholder>
-                    </Grid>
-                </Grid>
+                </ErrorAwareContainer>
             </Grid>
             <ReloadButton onClick={() => store.reload(true)} />
         </div>

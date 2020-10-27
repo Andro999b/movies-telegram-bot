@@ -2,7 +2,6 @@ import { getBucketKeys } from '../utils'
 import { observable } from 'mobx'
 import WebworkerPromise from 'webworker-promise'
 import Worker from './botDashboard.worker'
-import errorHadler from '../database/errorHadler'
 import periodStore from './periodStore'
 
 const worker = new WebworkerPromise(new Worker())
@@ -16,6 +15,7 @@ const toTopUsersPie = (bucket) =>
 const periodsCache = {}
 
 export default observable({
+    error: null,
     loading: true,
 
     usersChart: [],
@@ -77,6 +77,6 @@ export default observable({
                 periodsCache[period] = acc
                 updateCharts(acc)
             })
-            .catch(errorHadler)
+            .catch((error) => this.error = error.message)
     }
 })

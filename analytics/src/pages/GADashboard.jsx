@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { Grid, Toolbar, Typography, makeStyles, Box } from '@material-ui/core'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
+import ErrorAwareContainer from '../components/ErrorAwareContainer'
 import ValuesTableVis from '../components/ValuesTableVis'
 import PieChartVis from '../components/PieChartVis'
 import AreaChartVis from '../components/AreaChartVis'
@@ -55,71 +56,73 @@ export default observer(() => {
                         <DateSelector value={curPeriodStore.period} onChange={(p) => store.load(p)} />
                     </Toolbar>
                 </Grid>
-                <Grid container item md={7} sm={12} xs={12} className={classes.charts}>
-                    <Grid item sm={12} xs={12} className={classes.sectionTitle}>
-                        <Typography>Users</Typography>
-                    </Grid>
-                    <Grid item sm={12} xs={12} className={classes.item}>
-                        <LoadingPlaceholder loading={store.loading}>
-                            <AreaChartVis data={store.usersChart} lines={['users', 'newUsers']} legend />
-                        </LoadingPlaceholder>
-                    </Grid>
-                    <Grid container item>
+                <ErrorAwareContainer error={store.error}>
+                    <Grid container item md={7} sm={12} xs={12} className={classes.charts}>
                         <Grid item sm={12} xs={12} className={classes.sectionTitle}>
-                            <Typography>Sessions</Typography>
+                            <Typography>Users</Typography>
                         </Grid>
-                        <Grid item sm={9} xs={12} className={classes.item}>
+                        <Grid item sm={12} xs={12} className={classes.item}>
                             <LoadingPlaceholder loading={store.loading}>
+                                <AreaChartVis data={store.usersChart} lines={['users', 'newUsers']} legend />
+                            </LoadingPlaceholder>
+                        </Grid>
+                        <Grid container item>
+                            <Grid item sm={12} xs={12} className={classes.sectionTitle}>
+                                <Typography>Sessions</Typography>
+                            </Grid>
+                            <Grid item sm={9} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <AreaChartVis data={store.sessionsChart} lines={['sessions']} />
+                                    <LoadingPlaceholder loading={store.loading}>
+                                        <AreaChartVis data={store.sessionsChart} lines={['sessions']} />
+                                    </LoadingPlaceholder>
                                 </LoadingPlaceholder>
-                            </LoadingPlaceholder>
+                            </Grid>
+                            <Grid item sm={3} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <PieChartVis data={store.devicePie} />
+                                </LoadingPlaceholder>
+                            </Grid>
                         </Grid>
-                        <Grid item sm={3} xs={12} className={classes.item}>
-                            <LoadingPlaceholder loading={store.loading}>
-                                <PieChartVis data={store.devicePie} />
-                            </LoadingPlaceholder>
+                        <Grid container item>
+                            <Grid item md={12} xs={12} className={classes.sectionTitle}>
+                                <Typography>Events</Typography>
+                            </Grid>
+                            <Grid item md={6} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <AreaChartVis data={store.eventsChart} lines={['playlistLoaded', 'start']} legend />
+                                </LoadingPlaceholder>
+                            </Grid>
+                            <Grid item md={6} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <AreaChartVis data={store.eventsChart} lines={['selectFile']} legend />
+                                </LoadingPlaceholder>
+                            </Grid>
+                            <Grid item md={6} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <AreaChartVis stacked data={store.eventsChart} lines={['errorPlayback', 'errorLoad']} legend />
+                                </LoadingPlaceholder>
+                            </Grid>
+                            <Grid item md={6} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <PieChartVis data={store.eventsPie} />
+                                </LoadingPlaceholder>
+                            </Grid>
                         </Grid>
                     </Grid>
-                    <Grid container item>
-                        <Grid item md={12} xs={12} className={classes.sectionTitle}>
-                            <Typography>Events</Typography>
-                        </Grid>
-                        <Grid item md={6} xs={12} className={classes.item}>
-                            <LoadingPlaceholder loading={store.loading}>
-                                <AreaChartVis data={store.eventsChart} lines={['playlistLoaded', 'start']} legend />
-                            </LoadingPlaceholder>
-                        </Grid>
-                        <Grid item md={6} xs={12} className={classes.item}>
-                            <LoadingPlaceholder loading={store.loading}>
-                                <AreaChartVis data={store.eventsChart} lines={['selectFile']} legend />
-                            </LoadingPlaceholder>
-                        </Grid>
-                        <Grid item md={6} xs={12} className={classes.item}>
-                            <LoadingPlaceholder loading={store.loading}>
-                                <AreaChartVis stacked data={store.eventsChart} lines={['errorPlayback', 'errorLoad']} legend />
-                            </LoadingPlaceholder>
-                        </Grid>
-                        <Grid item md={6} xs={12} className={classes.item}>
-                            <LoadingPlaceholder loading={store.loading}>
-                                <PieChartVis data={store.eventsPie} />
-                            </LoadingPlaceholder>
+                    <Grid container md={5} item sm={12} xs={12}>
+                        <Grid item sm={12} xs={12}>
+                            <div className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <ValuesTableVis
+                                        data={store.labels}
+                                        title="Event Labels"
+                                        showRows={35}
+                                    />
+                                </LoadingPlaceholder>
+                            </div>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Grid container md={5} item sm={12} xs={12}>
-                    <Grid item sm={12} xs={12}>
-                        <div className={classes.item}>
-                            <LoadingPlaceholder loading={store.loading}>
-                                <ValuesTableVis
-                                    data={store.labels}
-                                    title="Event Labels"
-                                    showRows={35}
-                                />
-                            </LoadingPlaceholder>
-                        </div>
-                    </Grid>
-                </Grid>
+                </ErrorAwareContainer>
             </Grid>
             <ReloadButton onClick={() => store.reload(true)} />
         </div>

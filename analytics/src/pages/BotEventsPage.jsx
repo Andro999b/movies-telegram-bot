@@ -12,6 +12,7 @@ import EventsTable from '../components/EventsTable'
 import ReloadButton from '../components/ReloadButton'
 import { observer } from 'mobx-react-lite'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
+import ErrorAwareContainer from '../components/ErrorAwareContainer'
 import { DatePicker } from '@material-ui/pickers'
 import periodStore from '../store/periodStore'
 
@@ -63,30 +64,32 @@ export default observer(() => {
                     <Typography>Total Events: <b>{store.events.length}</b></Typography>
                 </Box>
             </Toolbar>
-            <Container className={classes.filter}>
-                <TextField
-                    className={classes.filterInput}
-                    label="Filter"
-                    variant="outlined"
-                    value={filter}
-                    onChange={(e) => setFilter(e.currentTarget.value)}
-                />
-                <DatePicker
-                    autoOk
-                    format="YYYY-M-DD"
-                    disableFuture
-                    variant="inline"
-                    inputVariant="outlined"
-                    value={curPeriodStore.date}
-                    className={classes.dataPicker}
-                    onChange={handleDateChange}
-                />
-            </Container>
-            <Container>
-                <LoadingPlaceholder loading={!store.initialized}>
-                    <EventsTable rows={items} />
-                </LoadingPlaceholder>
-            </Container>
+            <ErrorAwareContainer error={store.error}>
+                <Container className={classes.filter}>
+                    <TextField
+                        className={classes.filterInput}
+                        label="Filter"
+                        variant="outlined"
+                        value={filter}
+                        onChange={(e) => setFilter(e.currentTarget.value)}
+                    />
+                    <DatePicker
+                        autoOk
+                        format="YYYY-M-DD"
+                        disableFuture
+                        variant="inline"
+                        inputVariant="outlined"
+                        value={curPeriodStore.date}
+                        className={classes.dataPicker}
+                        onChange={handleDateChange}
+                    />
+                </Container>
+                <Container>
+                    <LoadingPlaceholder loading={!store.initialized}>
+                        <EventsTable rows={items} />
+                    </LoadingPlaceholder>
+                </Container>
+            </ErrorAwareContainer>
             <ReloadButton onClick={() => store.reload()} />
         </div>
     )

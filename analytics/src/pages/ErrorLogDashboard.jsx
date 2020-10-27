@@ -11,6 +11,7 @@ import DateSelector from '../components/DateSelector'
 import dashboard from '../store/errorsLogDashboard'
 import ReloadButton from '../components/ReloadButton'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
+import ErrorAwareContainer from '../components/ErrorAwareContainer'
 import LogsTable from '../components/LogsTable'
 import periodStore from '../store/periodStore'
 import { red } from '@material-ui/core/colors'
@@ -48,12 +49,13 @@ export default observer(() => {
             </Box>
             <DateSelector value={curPeriodStore.period} onChange={(p) => store.load(p)} />
         </Toolbar>
-        <Container className={classes.logs}>
-            {store.searcher?.error  && <Typography className={classes.error}>{store.searcher.error}</Typography>}
-            <LoadingPlaceholder loading={store.searcher?.loading}>
-                {store.searcher && <LogsTable rows={store.searcher.logs} />}
-            </LoadingPlaceholder>
-        </Container>
+        <ErrorAwareContainer error={store.searcher?.error}>
+            <Container className={classes.logs}>
+                <LoadingPlaceholder loading={store.searcher?.loading}>
+                    {store.searcher && <LogsTable rows={store.searcher.logs} />}
+                </LoadingPlaceholder>
+            </Container>
+        </ErrorAwareContainer>
         <ReloadButton onClick={() => store.reload(true)} />
     </div>)
 })

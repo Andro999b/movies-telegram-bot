@@ -2,13 +2,13 @@ import { observable } from 'mobx'
 import { runQuery } from '../database/dynamodb'
 import { TABLE_NAME, EVENTS_UPDATE_INTERVAL } from '../constants'
 import { isToday } from '../utils'
-import errorHadler from '../database/errorHadler'
 import periodStore from './periodStore'
 
 let loading = false
 let interval = null
 
 export default observable({
+    error: null,
     events: [],
     lastTs: null,
     initialized: false,
@@ -69,7 +69,7 @@ export default observable({
                     .concat(this.events)
                 this.lastTs = Date.now()
             })
-            .catch(errorHadler)
+            .catch((error) => this.error = error.message)
 
     },
 
