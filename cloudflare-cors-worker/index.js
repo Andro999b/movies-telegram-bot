@@ -13,7 +13,8 @@ async function handleRequest(request) {
 
   const res = await fetch(proxyUrl, {
     method: request.method,
-    headers: request.headers
+    headers: request.headers,
+    body: request.body
   })
 
   return new Response(res.body, {

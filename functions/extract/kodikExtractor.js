@@ -19,6 +19,7 @@ module.exports = async (params) => {
             throw Error('Video can`t be extracted', params)
         
         const urlMatch = matches[1]
+
         targetUrl = new URL(urlMatch.startsWith('//') ? 'https:' + urlMatch : urlMatch)
     } else {
         targetUrl = new URL(url.startsWith('//') ? 'https:' + url : url)
