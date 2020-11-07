@@ -1,9 +1,0 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "org.hatis.castplayer",
-    "sha256_cert_fingerprints":
-    ["2A:2A:3B:E7:AD:F9:35:08:6F:50:31:1D:39:8D:D3:AA:6C:24:6F:1E:26:CE:B2:B6:5C:4A:A1:7E:85:66:C9:FC"]
-  }
-}]
