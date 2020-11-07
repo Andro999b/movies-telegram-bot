@@ -1,18 +1,4 @@
-const { MongoClient } = require('mongodb')
-
-let cachedDb = null
-
-const COLLECTION_NAME = process.env.CACHE_TABLE
-const MONGODB_URI = process.env.MONGODB_URI
-
-async function connectToDatabase() {
-    if (!cachedDb) {
-        const client = await MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true })
-        cachedDb = client.db('test')
-    }
-
-    return cachedDb
-}
+import { COLLECTION_NAME, connectToDatabase } from './db/mongo'
 
 async function runAggregation(pipline) {
     const client = await connectToDatabase()

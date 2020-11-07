@@ -23,3 +23,9 @@ functions:
     environment:
       CACHE_TABLE: ${self:custom.cahceTable}
       MONGODB_URI: ${self:custom.mongoUrl}
+  
+  mongoinvalidate:
+    handler: handlers/mongoinvalidate.handler
+    environment:
+      CACHE_TABLE: ${self:custom.cahceTable}
+      MONGODB_URI: ${self:custom.mongoUrl}

@@ -189,6 +189,18 @@ class VideoScrean extends BaseScrean {
 
         manifestUrl = manifestUrl || device.source.manifestUrl
 
+        if (manifestExtractor) {
+            manifestUrl = createExtractorUrlBuilder(manifestExtractor)(manifestUrl)
+        }
+
+
+        const video = this.video.current
+        if(video.canPlayType('application/vnd.apple.mpegurl') !== '') {
+            video.src = manifestUrl
+            this.restoreVideoState()
+            return
+        }
+
         const hls = new Hls({
             startPosition: device.currentTime,
             xhrSetup: (xhr) => {
@@ -208,12 +220,8 @@ class VideoScrean extends BaseScrean {
         })
         hls.on(Hls.Events.ERROR, this.handleHLSError)
 
-        if (manifestExtractor) {
-            hls.loadSource(createExtractorUrlBuilder(manifestExtractor)(manifestUrl))
-        } else {
-            hls.loadSource(manifestUrl)
-        }
 
+        hls.loadSource(manifestUrl)
         this.hls = hls
     }
 

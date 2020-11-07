@@ -5,7 +5,8 @@ module.exports = {
     'videocdn': {
         'baseUrl': 'https://videocdn.tv/api',
         'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
-        'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE'
+        'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE',
+        'infoTimeout': 30
     },
     'nekomori': {
         'baseUrl': 'https://api.nekomori.ch',
@@ -38,7 +39,8 @@ module.exports = {
     },
     'kinogo': {
         'baseUrl': 'https://kinogo.by',
-        'searchUrl': 'https://kinogo.by/index.php?do=search'
+        'searchUrl': 'https://kinogo.by/index.php?do=search',
+        'infoTimeout': 30
     },
     'kinogo2': {
         'baseUrl': 'https://kinogo.cc',

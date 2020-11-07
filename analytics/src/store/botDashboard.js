@@ -67,6 +67,7 @@ export default observable({
         }
 
         this.loading = true
+        this.error = null
         
         worker
             .postMessage({

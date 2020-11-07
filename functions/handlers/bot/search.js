@@ -15,7 +15,7 @@ module.exports = (bot, defaultProviders, inlineProviders) => {
     bot.on('inline_query', async ({ i18n, inlineQuery, answerInlineQuery }) => {
         const { query, providers } = getQueryAndProviders(inlineQuery.query, inlineProviders)
     
-        const results = await providersService.search(providers, query)
+        const results = await providersService.search(providers, query, 20)
     
         return answerInlineQuery(results.map(({ name, image, provider, id }) => ({
             type: 'article',

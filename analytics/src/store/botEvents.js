@@ -51,6 +51,8 @@ export default observable({
             }
         }
 
+        this.error = null
+
         runQuery(query)
             .then(({ items }) => {
                 loading = false

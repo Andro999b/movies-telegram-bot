@@ -43,13 +43,13 @@ class KinogoProvider extends DataLifeProvider {
                         try {
                             const iframeRes = await superagent
                                 .get(`${this.config.baseUrl}${matches[0]}`)
-                                .timeout(this.config.timeout)
+                                .timeout(this.config.infoTimeout)
 
                             matches = iframeRes.text.match(/https?[^\s"]+/)
 
                             if (matches.length == 0) return []
 
-                            const playlist = await videocdnembed(matches[0])
+                            const playlist = await videocdnembed(matches[0], this.config.infoTimeout / 2)
 
                             return playlist.map((file, id) => ({ id, ...file }))
                         } catch(e) {

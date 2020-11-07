@@ -19,6 +19,7 @@ export default observable({
         if(!force && this.initlized) return
 
         this.loading = true
+        this.error = null
 
         invokeMongoStat()
             .then(({ providers, providersHits, hits, recient }) => {

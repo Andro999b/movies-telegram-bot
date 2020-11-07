@@ -1,7 +1,7 @@
 import '../aws-sdk'
 import { PERIODS, TABLE_NAME, REGION } from '../constants'
 import { getDateFor, getIndexForPeriod, getMonthFor, runQuery } from '../database/dynamodb'
-import { range, segmentBucketReducer, uniqueBucketReducer, bucketReducer } from '../utils'
+import { range, segmentBucketReducer, uniqueBucketReducer, bucketReducer, bucketInitState } from '../utils'
 import registerWebworker from 'webworker-promise/lib/register'
 import moment from 'moment'
 
@@ -114,11 +114,11 @@ registerWebworker(({ period, credentials }) => {
             return acc
         },
         {
-            eventsBucket: {},
-            eventsCountBucket: {},
-            botsBucket: {},
-            botsCountBucket: {},
-            usersBucket: {},
+            eventsBucket: bucketInitState(),
+            eventsCountBucket: bucketInitState(),
+            botsBucket: bucketInitState(),
+            botsCountBucket: bucketInitState(),
+            usersBucket: bucketInitState(),
             topUsersBucket: {}
         }
     )

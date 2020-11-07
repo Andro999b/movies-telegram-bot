@@ -30,7 +30,7 @@ class VideoCDNProvider extends Provider {
             )
             .reduce((acc, item) => acc.concat(item), [])
             .map(({ id, ru_title, kinopoisk_id, orig_title, type, year }) => {
-                year = year ? year.split('-') [0] : ''
+                year = year ? year.split('-')[0] : ''
                 return {
                     provider: this.name,
                     id: `${type}_${id}`,
@@ -43,10 +43,10 @@ class VideoCDNProvider extends Provider {
     async getInfo(typeAndId) {
         const [type, id] = typeAndId.split('_')
 
-        const { baseUrl, token, timeout } = this.config
+        const { baseUrl, token, infoTimeout } = this.config
 
         const res = await superagent.get(`${baseUrl}/${type}?api_token=${token}&id=${id}`)
-            .timeout(timeout)
+            .timeout(infoTimeout)
 
         if (res.body.data.length == 0)
             return null
@@ -54,8 +54,13 @@ class VideoCDNProvider extends Provider {
         const { ru_title, iframe_src, kinopoisk_id } = res.body.data[0]
         const url = iframe_src.startsWith('//') ? 'https:' + iframe_src : iframe_src
 
-        const files = (await videocdnembed(url.replace('5167.videocdn.pw', 'videocdn.so')))
-            .map((file, id) => ({ id, ...file }))
+        let files = []
+        try {
+            files = (await videocdnembed(url.replace('5167.videocdn.pw', 'videocdn.so'), infoTimeout))
+                .map((file, id) => ({ id, ...file }))
+        } catch (e) {
+            console.error('Failt to get files', e)
+        }
 
         const kinopoiskPoster = `https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`
 

@@ -1,6 +1,6 @@
 import { observable } from 'mobx'
 import { invokeGA } from '../database/lambda'
-import { segmentBucketReducer, bucketReducer } from '../utils'
+import { segmentBucketReducer, bucketReducer, bucketInitState } from '../utils'
 import { GA_DATE_FORMAT } from '../constants'
 import moment from 'moment'
 import periodStore from './periodStore'
@@ -15,7 +15,7 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
     const segFormatter = segment == 'ga:date' ? dateSegFormatter : hoursSegFormatter
 
     //users chart
-    let usersBucket = {}
+    let usersBucket = bucketInitState()
     usersBucket = users.reduce(
         segmentBucketReducer(
             (row) => row[0],
@@ -41,7 +41,7 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
             () => 'sessions',
             (acc, row) => acc + parseInt(row[1])
         ),
-        {}
+        bucketInitState()
     )
 
     //events
@@ -51,7 +51,7 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
             (row) => row[1],
             (acc, row) => acc + parseInt(row[2])
         ),
-        {}
+        bucketInitState()
     )
 
     const eventsCountBucket = events.reduce(
@@ -59,7 +59,7 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
             (row) => row[1],
             (acc, row) => acc + parseInt(row[2])
         ),
-        {}
+        bucketInitState()
     )
 
     //device 
@@ -68,7 +68,7 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
             (row) => row[0],
             (acc, row) => acc + parseInt(row[1])
         ),
-        {}
+        bucketInitState()
     )
 
     reformatBucketSegments(usersBucket, segFormatter)
@@ -170,6 +170,7 @@ export default observable({
         }
 
         this.loading = true
+        this.error = null
 
         const [from, to] = getGARange(period)
 
@@ -179,7 +180,7 @@ export default observable({
                 return parseResult(
                     segment,
                     results.reduce(
-                        (acc, { key, result }) => ({ ...acc, [key]: result }), {}
+                        (acc, { key, result }) => ({ ...acc, [key]: result || [] }), {}
                     )
                 )
             })

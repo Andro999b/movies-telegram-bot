@@ -72,6 +72,8 @@ export const bucketReducer = (
     }
 }
 
+export const bucketInitState = () => ({ acc: {}, chartData: [] })
+
 export const getBucketKeys = ({ acc }) => {
     if(!acc)
         return []

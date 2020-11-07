@@ -30,6 +30,8 @@ export default () => ({
         const eventsReducer = bucketReducer(({ type }) => type)
         const botsReducer = bucketReducer(({ bot }) => bot)
 
+        this.error = null
+
         runQuery(query)
             .then(({ items }) => {
                 this.events = items

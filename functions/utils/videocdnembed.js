@@ -35,16 +35,12 @@ function _extractTranslations(translations, playlists) {
         .map((file, id) => ({...file, id}) )
 }
 
-module.exports = async (url) => {
+module.exports = async (url, timeout = 10) => {
     let res
-    try {
-        res = await superagent
-            .get(url.startsWith('//') ? 'https:' + url : url)
-            .timeout(2000)
-    } catch (e) {
-        console.error('Fail get iframe', url, e)
-        return []
-    }
+
+    res = await superagent
+        .get(url.startsWith('//') ? 'https:' + url : url)
+        .timeout(timeout * 1000)
 
     const $ = cheerio.load(res.text)
 
