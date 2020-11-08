@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import React from 'react'
-import { makeStyles, Grid, Toolbar, Box, Typography, Container } from '@material-ui/core'
+import { makeStyles, Grid, Toolbar, Box, Typography, Container, Button } from '@material-ui/core'
 import dashboard from '../store/storageDashboard'
 import ReloadButton from '../components/ReloadButton'
+import InvalidateDialog from '../components/InvalidateDialog'
 import ValuesTableVis from '../components/ValuesTableVis'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import ErrorAwareContainer from '../components/ErrorAwareContainer'
@@ -43,6 +44,8 @@ export default observer(() => {
     const store = React.useRef(dashboard).current
     React.useEffect(() => store.reload(), [])// eslint-disable-line
 
+    const [invalidateDialog, showInvalidateDialog] = React.useState(false)
+
     return (
         <div>
             <Toolbar>
@@ -50,6 +53,13 @@ export default observer(() => {
                     <Typography>Storage Analytics</Typography>
                     <Typography>Total playlist: <b>{store.total}</b></Typography>
                 </Box>
+                <Button
+                    variant="contained"
+                    color="default"
+                    onClick={() => showInvalidateDialog(!invalidateDialog)}
+                >
+                    Invalidate
+                </Button>
             </Toolbar>
             <ErrorAwareContainer error={store.error}>
                 <Container>
@@ -103,6 +113,11 @@ export default observer(() => {
                 </Container>
             </ErrorAwareContainer>
             <ReloadButton onClick={() => store.reload(true)} />
-        </div>
+            <InvalidateDialog
+                open={invalidateDialog}
+                onInvalidate={({ provider, resultId }) => store.invalidate(provider, resultId)}
+                onClose={() => showInvalidateDialog(false)}
+            />
+        </div >
     )
 })

@@ -16,6 +16,19 @@ export const NAMES ={
     last3months: 'Three months',
 }
 
+export const PROVIDERS = [
+    'videocdn',
+    'kinogo',
+    'kinovod',
+    'seasonvar',
+    '7serealov',
+    'nekomori',
+    'anidub',
+    'animedia',
+    'animevost',
+    'anigato',
+]
+
 export const PERIODS = Object.keys(NAMES)
 
 export const COLORS = [

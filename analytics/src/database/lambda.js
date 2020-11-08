@@ -27,3 +27,14 @@ export const invokeMongoStat = () => new Promise((resolve, reject) => {
         else resolve(JSON.parse(data.Payload))           
     })
 })
+
+export const invokeMongoInvalidate = (provider, resultId) =>  new Promise((resolve, reject) => {
+    var params = {
+        FunctionName: `arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:analytics-functions-dev-mongoinvalidate`,
+        Payload: JSON.stringify({provider, resultId})
+    }
+    getLambda().invoke(params, function (err, data) {
+        if (err) reject(err) 
+        else resolve(JSON.parse(data.Payload))           
+    })
+})

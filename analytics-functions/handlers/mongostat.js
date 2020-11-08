@@ -1,4 +1,4 @@
-import { COLLECTION_NAME, connectToDatabase } from './db/mongo'
+const { COLLECTION_NAME, connectToDatabase } = require('./db/mongo')
 
 async function runAggregation(pipline) {
     const client = await connectToDatabase()

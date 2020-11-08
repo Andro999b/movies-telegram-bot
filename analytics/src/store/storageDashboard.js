@@ -1,5 +1,5 @@
 import { observable } from 'mobx'
-import { invokeMongoStat } from '../database/lambda'
+import { invokeMongoStat, invokeMongoInvalidate } from '../database/lambda'
 import { segmentBucketReducer } from '../utils'
 
 const providerReducer = segmentBucketReducer(({ _id }) => _id, ( { _id }) => _id, (acc, { count}) => acc + count)
@@ -14,6 +14,15 @@ export default observable({
     top: [],
     recient: [],
     total: 0,
+
+    invalidate(provider, resultId) {
+        this.loading = true
+        this.error = null
+
+        invokeMongoInvalidate(provider, resultId)
+            .then(() => this.reload(true))
+            .catch((error) => this.error = error.message) 
+    },
 
     reload(force) {
         if(!force && this.initlized) return
