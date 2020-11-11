@@ -1,12 +1,11 @@
 module.exports = {
     'timeout': 5,
-    'infoTimeout': 11,
+    'infoTimeout': 20,
     'pageSize': 15,
     'videocdn': {
         'baseUrl': 'https://videocdn.tv/api',
         'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
-        'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE',
-        'infoTimeout': 30
+        'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE'
     },
     'nekomori': {
         'baseUrl': 'https://api.nekomori.ch',
@@ -39,8 +38,7 @@ module.exports = {
     },
     'kinogo': {
         'baseUrl': 'https://kinogo.by',
-        'searchUrl': 'https://kinogo.by/index.php?do=search',
-        'infoTimeout': 30
+        'searchUrl': 'https://kinogo.by/index.php?do=search'
     },
     'kinogo2': {
         'baseUrl': 'https://kinogo.cc',

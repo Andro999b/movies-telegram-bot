@@ -39,10 +39,8 @@ export default ({ open, providers = PROVIDERS, onInvalidate, onClose }) => {
 
     const handleInvalidate = () => {
         const data = { provider, resultId }
-        setConfirm(false)
-        setResultId('')
         onInvalidate(data)
-        onClose()
+        handleClose()
     }
 
     return (
