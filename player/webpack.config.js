@@ -46,7 +46,6 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 'src/index.html',
-                { from: '.well-known', to: '.well-known' },
                 { from: path.join('src', 'images', 'help'), to: path.join('images', 'help') }
             ]
         })

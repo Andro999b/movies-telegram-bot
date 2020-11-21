@@ -1,5 +1,5 @@
 module.exports = {
-    'timeout': 5,
+    'timeout': 10,
     'infoTimeout': 20,
     'pageSize': 15,
     'videocdn': {
@@ -37,8 +37,8 @@ module.exports = {
         'searchUrl': 'https://animevost.org/index.php?do=search'
     },
     'kinogo': {
-        'baseUrl': 'https://kinogo.by',
-        'searchUrl': 'https://kinogo.by/index.php?do=search'
+        'baseUrl': 'https://kinogo.appspot.com',
+        'searchUrl': 'https://kinogo.appspot.com/index.php?do=search'
     },
     'kinogo2': {
         'baseUrl': 'https://kinogo.cc',

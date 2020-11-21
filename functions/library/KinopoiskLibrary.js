@@ -4,8 +4,8 @@ const genres = require('./genres.json')
 const country = require('./country.json')
 const { getCache } = require('../cache')
 
-const BASE_URL = 'https://www.kinopoisk.ru'
-// const BASE_URL = 'https://corsproxy.movies-player.workers.dev/?https://www.kinopoisk.ru'
+// const BASE_URL = 'https://www.kinopoisk.ru'
+const BASE_URL = 'https://corsproxy.movies-player.workers.dev/?https://www.kinopoisk.ru'
 
 
 module.exports = class KinopoisLibrary extends Library {
@@ -31,9 +31,11 @@ module.exports = class KinopoisLibrary extends Library {
         })
 
         const url = `${BASE_URL}/s/type/film/list/1/${queryParamsJoined}perpage/${pageSize}/page/${page}/`
-
         let results = await crawler
             .get(url)
+            .headers({
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
+            })
             .timeout(5000)
             .scope('.element')
             .set({

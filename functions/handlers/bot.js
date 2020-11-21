@@ -6,7 +6,6 @@ const Telegraf = require('telegraf')
 const TelegrafI18n = require('telegraf-i18n')
 
 const PROVIDERS = process.env.PROVIDERS ? process.env.PROVIDERS.split(',') : []
-const INLINE_PROVIDERS = process.env.INLINE_PROVIDERS ? process.env.INLINE_PROVIDERS.split(',') : PROVIDERS
 const BOT_TYPE = process.env.BOT_TYPE || 'default'
 
 const i18n = new TelegrafI18n({
@@ -22,7 +21,7 @@ bot.use(analytics(tracker(), BOT_TYPE))
 
 require('./bot/library')(bot, PROVIDERS, BOT_TYPE)
 require('./bot/start')(bot, PROVIDERS)
-require('./bot/search')(bot, PROVIDERS, INLINE_PROVIDERS)
+require('./bot/search')(bot, PROVIDERS)
 
 bot.catch((err) => {
     if (err.response && err.response.error_code === 403) {
