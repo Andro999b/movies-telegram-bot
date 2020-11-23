@@ -117,6 +117,7 @@ class Library {
     // eslint-disable-next-line no-unused-vars
     async topByParams(params) {}
 
+    // eslint-disable-next-line no-unused-vars
     async getInfoById(id) {}
 
     getName() {}

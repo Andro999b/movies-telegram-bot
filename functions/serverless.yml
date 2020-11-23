@@ -47,6 +47,7 @@ functions:
 
   search:
     handler: handlers/search.handler
+    timeout: 12
     events:
       - http: 
           path: api/trackers/{provider}/search

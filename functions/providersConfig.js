@@ -1,5 +1,5 @@
 module.exports = {
-    'timeout': 10,
+    'timeout': 5,
     'infoTimeout': 20,
     'pageSize': 15,
     'videocdn': {

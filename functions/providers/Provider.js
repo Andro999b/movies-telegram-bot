@@ -139,7 +139,16 @@ class Provider {
 
     getInfoUrl(resultsId) {
         const url = urlencode.decode(resultsId)
-        return this._absoluteUrl(url)
+
+        if(url.startsWith('http')) {
+            if(url.startsWith(this.config.baseUrl)){
+                return url
+            } else {
+                return url.replace(/https?:\/\/[a-z0-9.]+/, this.config.baseUrl)
+            }
+        }
+
+        return this.config.baseUrl + url
     }
 
     async getSource(resultsId, sourceId) {// eslint-disable-line

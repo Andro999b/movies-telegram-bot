@@ -15,19 +15,22 @@ class VideoCDNProvider extends Provider {
         const promices = types.map(async (type) => {
             const ordering = type.endsWith('series') ? 'last_episode_accepted' : 'last_media_accepted'
 
-            const res = await superagent
-                .get(`${baseUrl}/${type}?direction=desc&field=global&limit=${pageSize}&ordering=${ordering}&query=${encodeURIComponent(query)}&api_token=${token}`)
-                .timeout(timeout)
+            try {
+                const res = await superagent
+                    .get(`${baseUrl}/${type}?direction=desc&field=global&limit=${pageSize}&ordering=${ordering}&query=${encodeURIComponent(query)}&api_token=${token}`)
+                    .timeout(timeout)
 
-            return { res, type }
+                return { items: JSON.parse(res.text).data, type }
+            } catch (e) {
+                console.error(`videocdn api fail for type ${type}`, e)
+            }
+            return { items: [], type }
         })
 
         const results = await Promise.all(promices)
 
         return results
-            .map(({ res, type }) =>
-                JSON.parse(res.text).data.map((item) => ({ ...item, type }))
-            )
+            .map(({ items, type }) => items.map((item) => ({ ...item, type })))
             .reduce((acc, item) => acc.concat(item), [])
             .map(({ id, ru_title, kinopoisk_id, orig_title, type, year }) => {
                 year = year ? year.split('-')[0] : ''
