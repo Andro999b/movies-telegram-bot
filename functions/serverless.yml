@@ -1,7 +1,7 @@
 service: movies-telegram-bot
 
 custom:
-  cahceTable: cache-${opt:stage, 'dev'}
+  cacheTable: cache-${opt:stage, 'dev'}
   playerUrl: 'https://movies-player.firebaseapp.com/watch.html'
   mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
   analyticsTable: analyticsTable-${opt:stage, 'dev'}
@@ -14,7 +14,7 @@ provider:
   memorySize: 512
   environment:
     ANALYTIC_TABLE: ${self:custom.analyticsTable}
-    CACHE_TABLE: ${self:custom.cahceTable}
+    CACHE_TABLE: ${self:custom.cacheTable}
     MONGODB_URI: ${self:custom.mongoUrl}
     ANALYTIC_RETENTION: 90
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
@@ -55,8 +55,6 @@ functions:
           cors: true
           request:
             parameters:
-              path:
-                provider: true
               querystrings:
                 q: true
 
@@ -67,12 +65,6 @@ functions:
           path: api/trackers/{provider}/items/{resultId}/source/{sourceId}
           method: get
           cors: true
-          request:
-            parameters:
-              path:
-                - provider: true 
-                - resultId: true 
-                - sourceId: true 
 
   provider:
     handler: handlers/provider.handler
@@ -90,11 +82,6 @@ functions:
           path: api/trackers/{provider}/items/{resultId}
           method: get
           cors: true
-          request:
-            parameters:
-              path:
-                - provider: true 
-                - resultId: true 
 
   extract:
     handler: handlers/extract.handler
