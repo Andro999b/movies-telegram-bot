@@ -11,16 +11,10 @@ import localization from '../localization'
 
 @observer
 class VideoScrean extends BaseScrean {
-    constructor(props) {
-        super(props)
 
-        this.state = {
-            videoScale: 'hor'
-        }
-
-        this.video = React.createRef()
-        this.container = React.createRef()
-    }
+    state = { videoScale: 'hor' }
+    video = React.createRef()
+    container = React.createRef()
 
     /**
      * lifecycle
@@ -167,8 +161,6 @@ class VideoScrean extends BaseScrean {
         } else {
             this.setNativeVideoUrl(this.videoUrls.splice(selectedIndex, 1)[0])
         }
-
-        
     }
 
     setNativeVideoUrl({ url, extractor }) {
@@ -288,7 +280,7 @@ class VideoScrean extends BaseScrean {
                 retry = false
                 break
         }
-        
+
         //retry
         if (retry) {
             this.errorRetries--

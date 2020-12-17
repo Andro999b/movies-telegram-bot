@@ -5,11 +5,7 @@ import {
 } from '@material-ui/core'
 
 class BaseSelector extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = { anchorEl: null }
-    }
+    state = { anchorEl: null }
 
     handleClick = (e) => {
         const target = e.currentTarget

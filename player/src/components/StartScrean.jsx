@@ -1,20 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { Typography } from '@material-ui/core'
 import { PlayCircleFilled as PlayIcon } from '@material-ui/icons'
 
-import Share from '../components/Share'
-import localization from '../localization'
+import Share from './Share'
+import TelegramLinks from './TelegramLinks'
 
 class StartScrean extends Component {
     render() {
-        const {
-            device,
-            onStart
-        } = this.props
+        const { onStart, playlist } = this.props
+        const { image  } = playlist
 
-        const { playlist: { image } } = device
 
         return (
             <div>
@@ -25,25 +21,15 @@ class StartScrean extends Component {
                 >
                     <PlayIcon className="center shadow-icon" fontSize="inherit" />
                 </div>
-                <Share device={device} />
-                <div className="player__telegram-links shadow-border">
-                    <Typography>
-                        <a href="https://telegram.me/anime_tube_bot">
-                            <span className="icon-telegram vmiddle"/>@anime_tube_bot
-                        </a> - {localization.animeBotTip}
-                        <br/>
-                        <a href="https://telegram.me/films_search_bot">
-                            <span className="icon-telegram vmiddle"/>@films_search_bot 
-                        </a> - {localization.moviesBotTip}                        
-                    </Typography>
-                </div>
+                <Share playlist={playlist} />
+                <TelegramLinks/>
             </div>
         )
     }
 }
 
 StartScrean.propTypes = {
-    device: PropTypes.object,
+    playlist: PropTypes.object,
     onStart: PropTypes.func
 }
 

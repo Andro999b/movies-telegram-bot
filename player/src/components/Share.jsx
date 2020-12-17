@@ -24,7 +24,7 @@ class Share extends BaseSelector {
     constructor(props) {
         super(props)
 
-        this.state.sharePosition = true
+        this.state.sharePosition = props.device !== undefined
         this.state.shareTime = false
     }
 
@@ -40,32 +40,33 @@ class Share extends BaseSelector {
     }
 
     getShareUrl = (sharePosition, shareTime) => {
-        const { device: { currentTime, currentFileIndex } } = this.props
-
-        const params = new URLSearchParams(location.search)
+        const { playlist: { provider, id, query } } = this.props
         const newParams = new URLSearchParams()
 
-        newParams.set('provider', params.get('provider'))
-        newParams.set('id', params.get('id'))
+        newParams.set('provider', provider)
+        newParams.set('id', id)
 
-        if(params.has('query')) newParams.set('query', params.get('query'))
+        if(query) newParams.set('query', query)
 
-        if (sharePosition) {
-            params.set('file', currentFileIndex)
+        const { device } = this.props
+        if (device !== undefined && sharePosition) {
+            const { currentTime, currentFileIndex } =device
+
+            newParams.set('file', currentFileIndex)
 
             if (shareTime) {
-                params.set('time', Math.floor(currentTime))
+                newParams.set('time', Math.floor(currentTime))
             }
         }
 
-        return encodeURIComponent(location.protocol + '//' + location.host + location.pathname + '?' + newParams.toString())
+        return encodeURIComponent(location.protocol + '//' + location.host + location.pathname + '?#/watch' + newParams.toString())
     }
 
     getTitle = (sharePosition) => {
         if (sharePosition) {
             return encodeURIComponent(document.title)
         } else {
-            const { device: { playlist: { title } } } = this.props
+            const { playlist: { title } } = this.props
             return encodeURIComponent(title)
         }
     }
@@ -80,6 +81,7 @@ class Share extends BaseSelector {
     }
 
     renderList() {
+        const { device } = this.props
         const { sharePosition, shareTime } = this.state
         const url = this.getShareUrl(sharePosition, shareTime)
         const title = this.getTitle(sharePosition)
@@ -129,7 +131,7 @@ class Share extends BaseSelector {
                         <CopyIcon />
                     </a>
                 </div>
-                <div>
+                {(device !== undefined) && <div>
                     <FormGroup>
                         <FormControlLabel
                             control={
@@ -152,7 +154,7 @@ class Share extends BaseSelector {
                             label={localization.curTimePos}
                         />
                     </FormGroup>
-                </div>
+                </div>}
             </div>
         )
     }
@@ -168,7 +170,8 @@ class Share extends BaseSelector {
 
 Share.propTypes = {
     showMessage: PropTypes.func,
-    device: PropTypes.any
+    device: PropTypes.any,
+    playlist: PropTypes.any
 }
 
 export default Share 

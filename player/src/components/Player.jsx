@@ -180,7 +180,7 @@ class Player extends Component {
                     }
                     {(!isLoading && !error) && <PlayBackZones device={device} onClick={this.handleClick} />}
                     {!hideUi && <Fragment>
-                        <Share device={device} />
+                        <Share device={device} playlist={device.playlist} />
                         <PlayerFilesList
                             open={playlistOpen}
                             device={device}

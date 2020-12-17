@@ -245,29 +245,9 @@ export class LocalDevice extends Device {
 }
 
 class PlayerStore {
-    @observable device = null
-
-    @action.bound setDevice(device) {
-        this.device = device
-    }
-
-    @action.bound switchToLocalDevice(callDisconnect = true) {
-        this.switchDevice(new LocalDevice(), callDisconnect)
-    }
-
-    @action.bound switchDevice(device, callDisconnect = true) {
-        const prevDevice = this.device
-        const { playlist, currentFileIndex, currentTime } = prevDevice
-
-        if (callDisconnect && prevDevice) prevDevice.disconnect()
-
-        this.device = device
-        this.device.setPlaylist(playlist, currentFileIndex, currentTime)
-    }
+    @observable device = new LocalDevice()
 
     @action.bound openPlaylist(playlist, fileIndex, startTime) {
-        this.device = new LocalDevice()
-
         if (fileIndex == null || isNaN(fileIndex)) {
             fileIndex = store.get(`${getPlaylistPrefix(playlist)}:current`)
 
@@ -277,6 +257,7 @@ class PlayerStore {
         }
 
         this.device.setPlaylist(playlist, fileIndex, startTime)
+        this.device.play()
         document.title = this.getPlayerTitle()
 
         analytics('selectFile', document.title)
@@ -291,7 +272,7 @@ class PlayerStore {
                     this.device.pause()
                 }
                 document.title = this.getPlayerTitle()
-        
+
                 analytics('selectFile', document.title)
             })
     }

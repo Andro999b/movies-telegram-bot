@@ -3,14 +3,7 @@ import PropTypes from 'prop-types'
 import { toHHMMSS, isTouchDevice } from '../utils'
 
 class VideoSeekSlider extends Component {
-
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            trackWidth: 0
-        }
-    }
+    state = { trackWidth: 0 }
 
     componentDidMount() {
         this.setTrackWidthState()

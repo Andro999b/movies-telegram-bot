@@ -26,7 +26,7 @@ export default new LocalizedStrings({
         curTimePos: 'Время',
         shuffleOn: 'Случаный режим включен',
         shuffleOff: 'Случаный режим выключен',
-        searchAlternatives: '{0}<br/><a id="altenativeLink" href="{1}">Поискать другие ссылки</a>',
+        searchAlternatives: 'Поискать другие ссылки',
         moviesBotTip: 'фильмы и сериалы',
         animeBotTip: 'поиск аниме',
         translation: 'Перевод'

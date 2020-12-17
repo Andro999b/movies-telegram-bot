@@ -39,13 +39,12 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            filename: 'watch.html',
-            template: path.join(__dirname, 'src', 'watch.html'),
+            filename: 'index.html',
+            template: path.join(__dirname, 'src', 'index.html'),
             favicon: path.join(__dirname, 'src', 'favicon.ico')
         }),
         new CopyPlugin({
             patterns: [
-                'src/index.html',
                 { from: path.join('src', 'images', 'help'), to: path.join('images', 'help') }
             ]
         })

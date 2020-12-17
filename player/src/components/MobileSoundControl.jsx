@@ -17,13 +17,8 @@ const VOLUME_LEVELS = 15
 
 @observer
 class MobileSoundControl extends Component {
-    constructor(props) {
-        super(props)
 
-        this.state = {
-            anchorEl: null
-        }
-    }
+    state = { anchorEl: null }
 
     changeVolue(inc) {
         const { device } = this.props

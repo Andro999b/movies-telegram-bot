@@ -13,14 +13,7 @@ import { Typography } from '@material-ui/core'
 @observer
 class PlayBackZones extends Component {
 
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            seekMode: null,
-            accTime: null
-        }
-    }
+    state = { seekMode: null, accTime: null }
 
     handleFastFroward = (e) => {
         this.delayStartSeeking(e, 'ff')

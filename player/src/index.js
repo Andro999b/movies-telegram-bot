@@ -1,5 +1,7 @@
 import 'mobx-react-lite/batchingForReactDom'
 
-import loadPlaylist from './loadPlaylist.js'
+import React from 'react'
+import { render } from 'react-dom'
+import App from './App'
 
-loadPlaylist()
+render((<App />), document.getElementById('app'))

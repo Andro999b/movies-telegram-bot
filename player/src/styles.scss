@@ -233,13 +233,8 @@ html {
 
 .player__telegram-links {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 50px;
-    
-    a, a:hover, a:active, a:visited {
-        text-decoration: none;
-    }
+    bottom: 10px;
+    right: 10px;
 }
 
 @media (min-width: 576px) {

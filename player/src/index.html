@@ -13,45 +13,78 @@
             color: #fff;
         }
 
-        html, body {
-            height: 100%;
+        a,
+        a:visited,
+        a:active {
+            color: #fff;
         }
 
-        #links {
+        .loader {
+            font-size: 32px;
+            font-family: Helvetica, Arial, sans-serif;
+            color: #fff;
+            margin: 0;
             position: absolute;
-            display: none;
-            left: 50%;
             top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 20px;
-            color: #fff;
-            line-height: 25px;
+            text-align: center;
         }
 
-        a, a:active, a:hover, a:visited {
-            text-decoration: none;
-            color: #fff;
+        .lds-dual-ring {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-dual-ring:after {
+            content: " ";
+            display: block;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border-radius: 50%;
+            border: 6px solid #fff;
+            border-color: #fff transparent #fff transparent;
+            animation: lds-dual-ring 1.2s linear infinite;
+        }
+
+        @keyframes lds-dual-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153629378-1"></script>
+    <script>
+        if (!location.host.startsWith('localhost')) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date())
+            gtag('config', 'UA-153629378-1')
+        }
+    </script>
 </head>
 
 <body>
-    <div id="links">
-        Фильмы и сериалы: <a href="https://telegram.me/films_search_bot">
-            @films_search_bot
-        </a>
-        <br/>
-        Поиск аниме: <a href="https://telegram.me/anime_tube_bot">
-            @anime_tube_bot
-        </a>
+    <div id="app">
+        <div class="loader">
+            <div class="lds-dual-ring"></div>
+        </div>
     </div>
     <script>
         const params = new URLSearchParams(window.location.search)
-
-        if(params.has('provider') && params.has('id')) {
-            location.href = 'watch.html?' + params.toString()
+        if (params.has('dev') || location.host.startsWith('localhost')) {
+            window.API_BASE_URL = 'https://24qjd8d3oc.execute-api.eu-central-1.amazonaws.com/dev/api'
         } else {
-            location.href = 'https://telegram.me/films_search_bot'
+            window.API_BASE_URL = 'https://mcw4r3l663.execute-api.eu-central-1.amazonaws.com/prod/api'
         }
     </script>
+
 </html>
