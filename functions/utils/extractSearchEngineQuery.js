@@ -1,20 +1,6 @@
 const superagent = require('superagent')
 const { extractStringPropery } = require('./extractScriptVariable')
 
-const extractFromGoogleShorts = async (link) => {
-    if (link.startsWith('https://g.co')) {
-        const res = await superagent
-            .get(link)
-            .timeout(5000)
-            .redirects(0)
-            .ok((r) => r.status < 400)
-
-        return res.header['location']
-    }
-
-    return null
-}
-
 const extractFromKinopoisk = async (link) => {
     if (link.startsWith('https://www.kinopoisk.ru')) {
         const res = await superagent
@@ -34,6 +20,23 @@ const extractFromUrlParams = (link) => {
         const query = parts[2]
 
         return decodeURIComponent(query).replace(/\+/g, ' ')
+    }
+
+    return null
+}
+
+const extractFromGoogleShorts = async (link) => {
+    if (link.startsWith('https://g.co')) {
+        const res = await superagent
+            .get(link)
+            .timeout(5000)
+            .redirects(0)
+            .ok((r) => r.status < 400)
+
+        link = res.header['location']
+
+        if(link == null) return null
+        return extractFromUrlParams(link)
     }
 
     return null
