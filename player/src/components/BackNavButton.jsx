@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import { Fab } from '@material-ui/core'
-import { Close as CloseIcon } from '@material-ui/icons'
+import { History as HistoryIcon } from '@material-ui/icons'
 
 class BackNavButton extends React.Component {
     render() {
@@ -11,7 +11,7 @@ class BackNavButton extends React.Component {
             <div className="back-nav">
                 <Link to="/">
                     <Fab size="medium">
-                        <CloseIcon />
+                        <HistoryIcon />
                     </Fab>
                 </Link>
             </div>

@@ -9,7 +9,7 @@ class WatchHistoryStore {
     }
 
     watching = ({ id, provider, title, image }) => {
-        this.db.history.put({
+        return this.db.history.put({
             key: `${provider}#${id}`,
             provider,
             id,
@@ -20,7 +20,7 @@ class WatchHistoryStore {
     }
 
     delete = (key) => {
-        this.db.history
+        return this.db.history
             .where({ key })
             .delete()
     }

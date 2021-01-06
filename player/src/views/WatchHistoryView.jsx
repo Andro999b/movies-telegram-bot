@@ -5,6 +5,7 @@ import DualCirclesLoader from '../components/DualCirclesLoader'
 
 import {
     Grid,
+    IconButton,
     Typography
 } from '@material-ui/core'
 
@@ -12,6 +13,7 @@ import TelegramLinks from '../components/TelegramLinks'
 import { Link } from 'react-router-dom'
 
 import localization from '../localization'
+import { Delete } from '@material-ui/icons'
 
 @inject('watchHistoryStore')
 class WatchHistoryView extends Component {
@@ -21,11 +23,25 @@ class WatchHistoryView extends Component {
     }
 
     componentDidMount() {
+        this.reloadHistory()
+    }
+
+    reloadHistory() {
         const { watchHistoryStore } = this.props
         watchHistoryStore
             .getHistory()
             .toArray()
             .then((history) => this.setState({ history }))
+    }
+
+    onDelete = (e, key) => {
+        e.preventDefault()
+
+        const { watchHistoryStore } = this.props
+        this.setState({ history: null })
+
+        watchHistoryStore.delete(key)
+            .then(() => this.reloadHistory())
     }
 
     render() {
@@ -46,11 +62,16 @@ class WatchHistoryView extends Component {
             <Grid item xs={6} md={2} key={key}>
                 <div className="watch-history__tile">
                     <Link to={`/watch?provider=${provider}&id=${id}&query=${encodeURIComponent(title)}`}>
-                        <div className="watch-history__tile-image" style={{ backgroundImage: `url(${image})` }}/>
+                        <div className="watch-history__tile-image" style={{ backgroundImage: `url(${image})` }} />
                         <div className="watch-history__tile-title">
-                            <Typography>
-                                {title}
+                            <Typography className="watch-history__tile-title-text">
+                                [{provider}] {title}
                             </Typography>
+                            <div className="watch-history__tile-title-delete">
+                                <IconButton color="primary" onClick={(e) => this.onDelete(e, key)}>
+                                    <Delete />
+                                </IconButton>
+                            </div>
                         </div>
                     </Link>
                 </div>
@@ -66,7 +87,9 @@ class WatchHistoryView extends Component {
                     <Typography variant="h4">
                         {localization.watchHistory}
                     </Typography>
-                    <Grid container spacing={1}>
+                </div>
+                <div className="watch-history__content">
+                    <Grid container spacing={1} className="watch-history__tiles">
                         {history.map((item) => this.renderTile(item))}
                     </Grid>
                 </div>
