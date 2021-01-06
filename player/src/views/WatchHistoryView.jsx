@@ -64,9 +64,11 @@ class WatchHistoryView extends Component {
                     <Link to={`/watch?provider=${provider}&id=${id}&query=${encodeURIComponent(title)}`}>
                         <div className="watch-history__tile-image" style={{ backgroundImage: `url(${image})` }} />
                         <div className="watch-history__tile-title">
-                            <Typography className="watch-history__tile-title-text">
-                                [{provider}] {title}
-                            </Typography>
+                            <div className="watch-history__tile-title-text">
+                                <Typography>
+                                    [{provider}] {title}
+                                </Typography>
+                            </div>
                             <div className="watch-history__tile-title-delete">
                                 <IconButton color="primary" onClick={(e) => this.onDelete(e, key)}>
                                     <Delete />
