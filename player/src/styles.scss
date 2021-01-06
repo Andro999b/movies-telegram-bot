@@ -60,6 +60,7 @@ html {
 
 .player__player-screen {
     position: absolute;
+    z-index: 1;
     top: 0;
     left: 0;
     right: 0;
@@ -98,7 +99,7 @@ html {
     bottom: 71px;
     top: 0;
     opacity: 0.9;
-    z-index: 2;
+    z-index: 4;
 
     @media (min-width: 768px) {
         width: 576px;
@@ -115,7 +116,7 @@ html {
 
 .player__title {
     position: absolute;
-    z-index: 1;
+    z-index: 3;
     top: 12px;
     left: 60px;
     display: flex;
@@ -129,7 +130,7 @@ html {
 
 .player__share {
     position: absolute;
-    z-index: 1;
+    z-index: 3;
     top: 5px;
     right: 5px;
 }
@@ -152,7 +153,7 @@ html {
     bottom: 15%;
     height: 50%;
     width: 30%;
-    z-index: 1;
+    z-index: 2;
     touch-action: none;
 
     &.forward {
@@ -173,11 +174,9 @@ html {
 }
 
 .playback-skip__indicator {
-    @extend .shadow-icon;
     color: white;
-    pointer-events: none;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     top: 0;
     left: 0;
     right: 0;
@@ -318,7 +317,7 @@ html {
 
 .back-nav {
     position: absolute;
-    z-index: 1;
+    z-index: 3;
     top: 5px;
     left: 5px;
 }

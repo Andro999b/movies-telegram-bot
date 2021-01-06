@@ -176,7 +176,7 @@ class PlayBackZones extends Component {
                 </div>
                 <div className="playback-skip__indicator">
                     {accTime !== null &&
-                        <Typography className="center" variant="h2">
+                        <Typography className="center shadow-border" variant="h2">
                             {seekMode == 'ff' ? '+' : '-'}{accTime}s
                         </Typography>
                     }

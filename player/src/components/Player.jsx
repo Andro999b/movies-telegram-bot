@@ -14,7 +14,6 @@ import { Typography, CircularProgress } from '@material-ui/core'
 import { observer, inject } from 'mobx-react'
 
 import { isTouchDevice } from '../utils'
-import BackNavButton from './BackNavButton'
 
 const IDLE_TIMEOUT = 3000
 
@@ -153,26 +152,18 @@ class Player extends Component {
         const { playerStore } = this.props
         const { playlistOpen, idle, fullScreen } = this.state
         const { device } = playerStore
-        const { isLoading, error, seekTime, isLocal } = device
+        const { isLoading, error, seekTime } = device
         const { playlist: { image } } = device
 
-        const local = isLocal()
-        const hideUi = local && idle && seekTime == null
+        const hideUi = idle && seekTime == null
 
         return (
             <Fullscreen
-                enabled={fullScreen && local}
+                enabled={fullScreen}
                 onChange={this.handleSetFullScreen}
             >
                 <div id="player_root" className={hideUi ? 'idle' : ''}>
                     {!hideUi && <PlayerTitle title={playerStore.getPlayerTitle()} /> }
-                    {(local && !error) && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
-                    {(!local && !error) &&
-                        <div
-                            className="player__pause-cover player__background-cover"
-                            style={{ backgroundImage: image ? `url(${image})` : null }}
-                        ></div>
-                    }
                     {error && <Typography className="center shadow-border" variant="h4">{error}</Typography>}
                     {(isLoading && !error) &&
                         <div className="center">
@@ -180,6 +171,7 @@ class Player extends Component {
                         </div>
                     }
                     {(!isLoading && !error) && <PlayBackZones device={device} onClick={this.handleClick} />}
+                    {!error && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
                     {!hideUi && <Fragment>
                         <Share device={device} playlist={device.playlist} />
                         <PlayerFilesList

@@ -21,9 +21,12 @@ class PlaylistStore {
 
         if (this.abortController) this.abortController.abort()
 
-        this.abortController = new AbortController()
+        this.abortController = window.AbortController && new AbortController()
 
-        fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}`, { signal: this.abortController.signal })
+        fetch(
+            `${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}`, 
+            { signal: this.abortController && this.abortController.signal }
+        )
             .then((response) => response.json())
             .then((playlist) => {
                 if (playlist.files && playlist.files.length) {

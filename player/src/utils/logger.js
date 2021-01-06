@@ -3,7 +3,9 @@ function log(level, message, data) {
 
     const browser = `${navigator.userAgent}`
 
-    if (!location.host.startsWith('localhost')) {
+    console.log(process.env.NODE_ENV)
+
+    if (process.env.NODE_ENV == 'production') {
         fetch(`${window.API_BASE_URL}/log`, {
             method: 'POST',
             credentials: 'same-origin',
@@ -16,6 +18,15 @@ function log(level, message, data) {
                 data: { ...data, browser }
             })
         })
+    } else {
+        fetch('/log', {
+            method: 'POST',
+            body: JSON.stringify({
+                level,
+                message,
+                data: { ...data, browser }
+            })
+        }) 
     }
 }
 
