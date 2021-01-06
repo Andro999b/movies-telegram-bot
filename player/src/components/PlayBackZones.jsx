@@ -29,6 +29,7 @@ class PlayBackZones extends Component {
         if(this.state.seekMode && this.state.seekMode != seekMode) return
 
         clearInterval(this.stepInterval)
+        clearTimeout(this.delayTimeout)
         clearTimeout(this.seekDelayTimeout)
 
         const { device } = this.props

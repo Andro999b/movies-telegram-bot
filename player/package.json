@@ -49,6 +49,7 @@
     "@material-ui/icons": "^4.9.1",
     "base64-inline-loader": "^1.1.1",
     "clipboard-copy": "^3.1.0",
+    "dexie": "^3.0.3",
     "fscreen": "^1.0.2",
     "hls.js": "^0.13.2",
     "lodash.groupby": "^4.6.0",

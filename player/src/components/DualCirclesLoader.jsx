@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class DualCirclesLoadr extends Component {
+class DualCirclesLoader extends Component {
     render() {
         return (
             <div className="loader">
@@ -10,4 +10,4 @@ class DualCirclesLoadr extends Component {
     }
 }
 
-export default DualCirclesLoadr
+export default DualCirclesLoader

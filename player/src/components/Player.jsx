@@ -14,6 +14,7 @@ import { Typography, CircularProgress } from '@material-ui/core'
 import { observer, inject } from 'mobx-react'
 
 import { isTouchDevice } from '../utils'
+import BackNavButton from './BackNavButton'
 
 const IDLE_TIMEOUT = 3000
 
@@ -164,7 +165,7 @@ class Player extends Component {
                 onChange={this.handleSetFullScreen}
             >
                 <div id="player_root" className={hideUi ? 'idle' : ''}>
-                    {!hideUi && <PlayerTitle title={playerStore.getPlayerTitle()} />}
+                    {!hideUi && <PlayerTitle title={playerStore.getPlayerTitle()} /> }
                     {(local && !error) && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
                     {(!local && !error) &&
                         <div

@@ -2,7 +2,7 @@ service: movies-telegram-bot
 
 custom:
   cacheTable: cache-${opt:stage, 'dev'}
-  playerUrl: 'https://movies-player.firebaseapp.com/watch.html'
+  playerUrl: 'https://movies-player.firebaseapp.com/#/watch'
   mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
   analyticsTable: analyticsTable-${opt:stage, 'dev'}
 

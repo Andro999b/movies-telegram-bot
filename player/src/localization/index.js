@@ -14,7 +14,8 @@ export default new LocalizedStrings({
         searchAlternatives: '{0}<br/><a id="altenativeLink" href="{1}">Search alternative links</a>',
         moviesBotTip: 'movies and tv shows',
         animeBotTip: 'search anime',
-        translation: 'Translation'
+        translation: 'Translation',
+        watchHistory: 'Watch History'
     },
     ru: {
         cantLoadPLaylist: 'Ошибка загрузки',
@@ -29,6 +30,7 @@ export default new LocalizedStrings({
         searchAlternatives: 'Поискать другие ссылки',
         moviesBotTip: 'фильмы и сериалы',
         animeBotTip: 'поиск аниме',
-        translation: 'Перевод'
+        translation: 'Перевод',
+        watchHistory: 'История Просомотра'
     }
 })

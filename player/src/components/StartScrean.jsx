@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { PlayCircleFilled as PlayIcon } from '@material-ui/icons'
 
 import Share from './Share'
+import BackNavButton from './BackNavButton'
 import TelegramLinks from './TelegramLinks'
 
 class StartScrean extends Component {
@@ -21,6 +22,7 @@ class StartScrean extends Component {
                 >
                     <PlayIcon className="center shadow-icon" fontSize="inherit" />
                 </div>
+                <BackNavButton/>
                 <Share playlist={playlist} />
                 <TelegramLinks/>
             </div>

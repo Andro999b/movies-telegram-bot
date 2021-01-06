@@ -45,7 +45,8 @@ module.exports = {
         }),
         new CopyPlugin({
             patterns: [
-                { from: path.join('src', 'images', 'help'), to: path.join('images', 'help') }
+                { from: path.join('src', 'images', 'help'), to: path.join('images', 'help') },
+                { from: path.join('src', 'watch.html'), to: 'watch.html' },
             ]
         })
     ]

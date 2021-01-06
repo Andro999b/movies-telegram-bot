@@ -6,7 +6,8 @@ import analytics from '../utils/analytics'
 
 import StartScrean from '../components/StartScrean'
 import Player from '../components/Player'
-import DualCirclesLoadr from '../components/DualCirclesLoadr'
+import DualCirclesLoader from '../components/DualCirclesLoader'
+import BackNavButton from '../components/BackNavButton'
 import { Typography } from '@material-ui/core'
 import AlternativeLinksError from '../components/AlternativeLinksError'
 
@@ -16,7 +17,8 @@ import AlternativeLinksError from '../components/AlternativeLinksError'
             loading,
             trailerUrl,
             playlist,
-            error
+            error,
+            loadPlaylist
         },
         playerStore: { openPlaylist },
         watchHistoryStore: { watching }
@@ -26,13 +28,16 @@ import AlternativeLinksError from '../components/AlternativeLinksError'
         playlist,
         error,
         openPlaylist,
-        watching
+        watching,
+        loadPlaylist
     })
 )
 @observer
 class PlaylistView extends Component {
 
     state = { started: false, initialFullScreen: false }
+    fileIndex = 0
+    time = 0
 
     handleStartClick = () => {
         this.setState({ started: true })
@@ -41,85 +46,23 @@ class PlaylistView extends Component {
             this.setState({ initialFullScreen: true })
         }
 
-        const {
-            openPlaylist,
-            playlist,
-            watching,
-            fileIndex,
-            time
-        } = this.props
+        const { openPlaylist, playlist, watching } = this.props
 
-        openPlaylist(playlist, fileIndex, time)
+        openPlaylist(playlist, this.fileIndex, this.time)
         watching(playlist)
 
         analytics('start', document.title)
     }
 
-    render() {
-        const { loading, trailerUrl, playlist, error } = this.props
-
-        const { started, initialFullScreen } = this.state
-
-        if (loading) {
-            return (<DualCirclesLoadr />)
-        } else if (error) {
-            if (playlist.query) {
-                return (<AlternativeLinksError provider={playlist.provider} query={playlist.query} message={error} />)
-            } else {
-                return (<Typography className="center shadow-border" variant="h4">{error}</Typography>)
-            }
-        } else if (trailerUrl) {
-            return (<iframe frameBorder="0" height="100%" width="100%" src={trailerUrl} />) // redirect??
-        } else {
-            if (!started) {
-                return (
-                    <StartScrean
-                        playlist={playlist}
-                        onStart={this.handleStartClick}
-                    />
-                )
-            } else {
-                return (
-                    <div className="screan-content">
-                        <Player initialFullScreen={initialFullScreen} />
-                    </div>
-                )
-            }
-        }
-    }
-}
-
-PlaylistView.propTypes = {
-    fileIndex: PropTypes.number,
-    time: PropTypes.number,
-    //load result
-    loading: PropTypes.bool,
-    error: PropTypes.string,
-    trailerUrl: PropTypes.string,
-    playlist: PropTypes.object,
-    //actions
-    watching: PropTypes.func,
-    openPlaylist: PropTypes.func
-}
-
-
-@inject(({ playlistStore: { loadPlaylist } }) => ({ loadPlaylist }))
-class PlaylistViewWrapper extends Component {
-    render() {
-        const { location } = this.props
-
-        const urlParams = new URLSearchParams(location.search)
-
-        const fileIndex = parseInt(urlParams.get('file'))
-        const time = parseFloat(urlParams.get('time'))
-
-        return (<PlaylistView fileIndex={fileIndex} time={time} />)
-    }
 
     componentDidMount() {
         const { loadPlaylist } = this.props
+        const cur = this.parseLocation(this.props)
 
-        loadPlaylist(this.parseLocation(this.props))
+        this.fileIndex = cur.fileIndex
+        this.time = cur.time
+
+        loadPlaylist(cur)
     }
 
     componentDidUpdate(prevProps) {
@@ -128,6 +71,9 @@ class PlaylistViewWrapper extends Component {
 
         if (prev.provider != cur.provider && prev.id != cur.id) {
             const { loadPlaylist } = this.props
+
+            this.fileIndex = cur.fileIndex
+            this.time = cur.time
 
             loadPlaylist(cur)
         }
@@ -141,16 +87,75 @@ class PlaylistViewWrapper extends Component {
         const provider = urlParams.get('provider')
         const id = urlParams.get('id')
         const query = urlParams.get('query')
+        const fileIndex = parseInt(urlParams.get('file'))
+        const time = parseFloat(urlParams.get('time'))
 
-        return { provider, id, query }
+        return { provider, id, query, fileIndex, time }
+    }
+
+    render() {
+        const content = this.renderContent()
+
+        return (
+            <div className="screan-content">
+                {content}
+            </div>
+        )
+    }
+
+    renderContent() {
+        const { loading, trailerUrl, playlist, error } = this.props
+
+        const { started, initialFullScreen } = this.state
+
+        if (loading) {
+            return (<DualCirclesLoader />)
+        } else if (error) {
+            return (
+                <>
+                    <BackNavButton />
+                    {playlist.query ?
+                        <AlternativeLinksError provider={playlist.provider} query={playlist.query} message={error} /> :
+                        <Typography className="center shadow-border" variant="h4">{error}</Typography>
+                    }
+                </>
+            )
+        } else if (trailerUrl) {
+            return (
+                <>
+                    <BackNavButton />
+                    <iframe frameBorder="0" height="100%" width="100%" src={trailerUrl} />
+                </>
+            ) // redirect??
+        } else {
+            if (!started) {
+                return (
+                    <StartScrean
+                        playlist={playlist}
+                        onStart={this.handleStartClick}
+                    />
+                )
+            } else {
+                return (
+                    <Player initialFullScreen={initialFullScreen} />
+                )
+            }
+        }
     }
 }
 
-PlaylistViewWrapper.propTypes = {
-    playlistStore: PropTypes.object,
-    location: PropTypes.object,
+PlaylistView.propTypes = {
+    //load result
+    loading: PropTypes.bool,
+    error: PropTypes.string,
+    trailerUrl: PropTypes.string,
+    playlist: PropTypes.object,
     loadPlaylist: PropTypes.func,
+    //actions
+    watching: PropTypes.func,
+    openPlaylist: PropTypes.func,
+    //router
+    location: PropTypes.object
 }
 
-
-export default PlaylistViewWrapper
+export default PlaylistView

@@ -4,7 +4,7 @@ import analytics from '../utils/analytics'
 import logger from '../utils/logger'
 import localization from '../localization'
 
-class PlaylistStor {
+class PlaylistStore {
 
     @observable loading = true
     @observable trailerUrl = null
@@ -59,4 +59,4 @@ class PlaylistStor {
 
 }
 
-export default new PlaylistStor()
+export default new PlaylistStore()
