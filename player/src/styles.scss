@@ -255,7 +255,7 @@ html {
     left: 0;
     right: 0;
     bottom: 0;
-    top: 50px;
+    top: 0;
     padding: 0 10px;
     overflow-y: auto;
 }
@@ -266,11 +266,10 @@ html {
 
 .watch-history__tile {
     position: relative;
-    height: 216px;
-    
-    @media (min-width: 760px) {
-        height: 416px;
-    }
+}
+
+.watch-history__tile-aspect-ratio {
+    padding-top: 144%;
 }
 
 .watch-history__tile-image {

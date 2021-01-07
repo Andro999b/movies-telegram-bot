@@ -15,7 +15,8 @@ export default new LocalizedStrings({
         moviesBotTip: 'movies and tv shows',
         animeBotTip: 'search anime',
         translation: 'Translation',
-        watchHistory: 'Watch History'
+        watchHistory: 'History',
+        noWatchHistory: 'You havent watch anything yet. Use telegream bots to search something.'
     },
     ru: {
         cantLoadPLaylist: 'Ошибка загрузки',
@@ -31,6 +32,7 @@ export default new LocalizedStrings({
         moviesBotTip: 'фильмы и сериалы',
         animeBotTip: 'поиск аниме',
         translation: 'Перевод',
-        watchHistory: 'История Просомотра'
+        watchHistory: 'История',
+        noWatchHistory: 'Воспользуйтесь телеграмм ботами для поска фильмов'
     }
 })

@@ -59,7 +59,7 @@ class WatchHistoryView extends Component {
 
     renderTile({ image, key, provider, id, title }) {
         return (
-            <Grid item xs={6} md={2} key={key}>
+            <Grid item xs={6} sm={4} lg={2} key={key}>
                 <div className="watch-history__tile">
                     <Link to={`/watch?provider=${provider}&id=${id}&query=${encodeURIComponent(title)}`}>
                         <div className="watch-history__tile-image" style={{ backgroundImage: `url(${image})` }} />
@@ -76,6 +76,7 @@ class WatchHistoryView extends Component {
                             </div>
                         </div>
                     </Link>
+                    <div className="watch-history__tile-aspect-ratio"></div>
                 </div>
             </Grid>
         )
@@ -85,15 +86,20 @@ class WatchHistoryView extends Component {
     renderContent(history) {
         return (
             <>
-                <div className="watch-history__title">
-                    <Typography variant="h4">
-                        {localization.watchHistory}
-                    </Typography>
-                </div>
                 <div className="watch-history__content">
-                    <Grid container spacing={1} className="watch-history__tiles">
-                        {history.map((item) => this.renderTile(item))}
-                    </Grid>
+                    <div className="watch-history__title">
+                        <Typography variant="h4">
+                            {localization.watchHistory}
+                        </Typography>
+                    </div>
+                    {history.length == 0  && 
+                        <Typography className="center" variant="h4">{localization.noWatchHistory}</Typography>
+                    }
+                    {history.length > 0 &&
+                        <Grid container spacing={1} className="watch-history__tiles">
+                            {history.map((item) => this.renderTile(item))}
+                        </Grid>
+                    }
                 </div>
                 <TelegramLinks />
             </>
