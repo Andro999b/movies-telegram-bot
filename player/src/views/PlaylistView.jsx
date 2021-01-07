@@ -111,11 +111,12 @@ class PlaylistView extends Component {
         if (loading) {
             return (<DualCirclesLoader />)
         } else if (error) {
+            const { query, provider } = this.parseLocation(this.props)
             return (
                 <>
                     <BackNavButton />
-                    {playlist.query ?
-                        <AlternativeLinksError provider={playlist.provider} query={playlist.query} message={error} /> :
+                    {query ?
+                        <AlternativeLinksError provider={provider} query={query} message={error} /> :
                         <Typography className="center shadow-border" variant="h4">{error}</Typography>
                     }
                 </>
