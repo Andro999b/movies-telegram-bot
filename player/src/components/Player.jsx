@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import Fullscreen from 'react-full-screen'
@@ -163,16 +163,16 @@ class Player extends Component {
                 onChange={this.handleSetFullScreen}
             >
                 <div id="player_root" className={hideUi ? 'idle' : ''}>
-                    {!hideUi && <PlayerTitle title={playerStore.getPlayerTitle()} /> }
-                    {error && <Typography className="center shadow-border" variant="h4">{error}</Typography>}
+                    {error && <Typography className="center" variant="h4">{error}</Typography>}
                     {(isLoading && !error) &&
-                        <div className="center">
+                        <div className="player_loader-indicator center">
                             <CircularProgress color="primary" />
                         </div>
                     }
                     {(!isLoading && !error) && <PlayBackZones device={device} onClick={this.handleClick} />}
                     {!error && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
-                    {!hideUi && <Fragment>
+                    {!hideUi && <>
+                        <PlayerTitle title={playerStore.getPlayerTitle()} />
                         <Share device={device} playlist={device.playlist} />
                         <PlayerFilesList
                             open={playlistOpen}
@@ -187,7 +187,7 @@ class Player extends Component {
                             onPlaylistToggle={this.handleTogglePlayList}
                             onFullScreenToggle={this.handleToggleFullscreen}
                         />
-                    </Fragment>}
+                    </>}
                 </div>
             </Fullscreen >
         )

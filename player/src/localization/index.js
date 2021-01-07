@@ -33,6 +33,6 @@ export default new LocalizedStrings({
         animeBotTip: 'поиск аниме',
         translation: 'Перевод',
         watchHistory: 'История',
-        noWatchHistory: 'Воспользуйтесь телеграмм ботам для поиска фильмов'
+        noWatchHistory: 'Ваша история пустая. Используйте телеграм бот для поиска'
     }
 })
