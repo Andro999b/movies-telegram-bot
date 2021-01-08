@@ -1,3 +1,3 @@
 const kodikExtractor = require('./kodikExtractor')
 
-module.exports = ({ url }) => kodikExtractor({ url, linksApi: 'https://aniqit.com/get-vid' })
+module.exports = ({ url }) => kodikExtractor({ url, linksApi: 'https://aniqit.com/get-video-info' })

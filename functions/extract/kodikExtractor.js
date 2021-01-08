@@ -48,6 +48,8 @@ module.exports = async (params) => {
         .send(videoInfoParams)
         .timeout(5000)
 
+    console.log(videoInfoRes);
+
     const videoInfo = JSON.parse(videoInfoRes.text)
     const links = videoInfo.links
 
