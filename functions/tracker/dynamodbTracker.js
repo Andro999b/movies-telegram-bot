@@ -15,9 +15,9 @@ module.exports = () => {
     const mapper = (key, value) => {
         const type = typeMapping[key] || 'S'
 
-        if(Array.isArray(value)) {
+        if (Array.isArray(value)) {
             value = value.join(',')
-        } else if(value === undefined || value === null) {
+        } else if (value === undefined || value === null) {
             value = ''
         } else {
             value = '' + value
@@ -48,12 +48,9 @@ module.exports = () => {
                 Item[key] = mapper(key, event[key])
             })
 
-            // console.log(Item, events);
-
             return { PutRequest: { Item } }
         })
 
-        await new Promise((resolve, reject) => {
             dynamodb.batchWriteItem(
                 {
                     RequestItems: {
@@ -61,9 +58,8 @@ module.exports = () => {
                     }
                 },
                 (err) => {
-                    if (err) reject(err); else resolve()
+                    if(err) console.error("Fail to track events", events, err)
                 }
             )
-        })
     }
 }

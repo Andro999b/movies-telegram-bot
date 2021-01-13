@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "sls deploy",
-    "release": "sls deploy --stage=prod"
+    "deploy": "sls deploy --aws-profile serverless",
+    "release": "sls deploy --stage=prod --aws-profile serverless"
   },
   "author": "",
   "license": "ISC",

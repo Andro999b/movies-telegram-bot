@@ -1,7 +1,7 @@
 const { getCahcedInfo } = require('../cache')
+const { recordPlaylistLoad } = require('../watchRating')
 const providersService = require('../providers')
 const makeResponse = require('../utils/makeResponse')
-
 
 module.exports.handler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false
@@ -19,6 +19,8 @@ module.exports.handler = async (event, context) => {
                 ([provider, resultId]) => providersService.getInfo(provider, resultId)
             )
         }
+
+        await recordPlaylistLoad(result)
     }
 
     return makeResponse(result)

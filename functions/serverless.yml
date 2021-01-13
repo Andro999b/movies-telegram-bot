@@ -5,6 +5,7 @@ custom:
   playerUrl: 'https://movies-player.firebaseapp.com/#/watch'
   mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
   analyticsTable: analyticsTable-${opt:stage, 'dev'}
+  ratingTable: ratingTable-${opt:stage, 'dev'}
 
 provider:
   name: aws
@@ -15,6 +16,7 @@ provider:
   environment:
     ANALYTIC_TABLE: ${self:custom.analyticsTable}
     CACHE_TABLE: ${self:custom.cacheTable}
+    RATING_TABLE: ${self:custom.ratingTable}
     MONGODB_URI: ${self:custom.mongoUrl}
     ANALYTIC_RETENTION: 90
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
@@ -25,6 +27,10 @@ provider:
       Action:
         - dynamodb:BatchWriteItem
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.analyticsTable}"
+    - Effect: Allow
+      Action:
+        - dynamodb:UpdateItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.ratingTable}"
     - Effect: Allow
       Action:
         - logs:PutLogEvents
@@ -144,19 +150,47 @@ package:
 
 resources:
   Resources:
+    ratingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.ratingTable}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: month
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: monthIdx
+            KeySchema:
+              - AttributeName: month
+                KeyType: HASH
+            Projection: 
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
     analyticsTable:
       Type: AWS::DynamoDB::Table
       Properties: 
         TableName: ${self:custom.analyticsTable}
         AttributeDefinitions:
           - AttributeName: uid
-            AttributeType: N
+            AttributeType: "N"
           - AttributeName: date
             AttributeType: S
           - AttributeName: month
             AttributeType: S
           - AttributeName: time
-            AttributeType: N
+            AttributeType: "N"
         KeySchema:
           - AttributeName: date
             KeyType: HASH
