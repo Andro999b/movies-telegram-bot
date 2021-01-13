@@ -1,6 +1,5 @@
-const AWS = require('aws-sdk')
 const { DateTime } = require('luxon')
-const ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' })
+const { dynamodb } = require('../db/dynamodb')
 
 module.exports = () => {
     const tableName = process.env.ANALYTIC_TABLE || 'analyticsEvents'
@@ -55,7 +54,7 @@ module.exports = () => {
         })
 
         await new Promise((resolve, reject) => {
-            ddb.batchWriteItem(
+            dynamodb.batchWriteItem(
                 {
                     RequestItems: {
                         [tableName]: requests

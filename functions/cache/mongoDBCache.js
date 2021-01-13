@@ -1,21 +1,9 @@
 const Cache = require('./Cache')
-const { MongoClient } = require('mongodb')
+const { connectToDatabase } = require('../db/mongo')
 
 const COLLECTION_NAME = process.env.CACHE_TABLE
-const MONGODB_URI = process.env.MONGODB_URI
-
 const expirationTime = (process.env.CACHE_TTL || 3600) * 1000
 
-let cachedDb = null
-
-async function connectToDatabase() {
-    if (!cachedDb) {
-        const client = await MongoClient.connect(MONGODB_URI, { useUnifiedTopology: true })
-        cachedDb = client.db('test')
-    }
-
-    return cachedDb
-}
 
 class MongoDBCache extends Cache {
 
