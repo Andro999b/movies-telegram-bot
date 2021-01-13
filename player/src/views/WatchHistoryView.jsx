@@ -24,6 +24,7 @@ class WatchHistoryView extends Component {
 
     componentDidMount() {
         this.reloadHistory()
+        document.title = localization.watchHistory
     }
 
     reloadHistory() {

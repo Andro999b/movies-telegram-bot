@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin')
+// const WebpackPwaManifest = require('webpack-pwa-manifest')
 const path = require('path')
 
 module.exports = {
@@ -38,6 +39,20 @@ module.exports = {
         }
     },
     plugins: [
+        // new WebpackPwaManifest({
+        //     name: 'Movies',
+        //     short_name: 'Movies',
+        //     display: 'fullscreen',
+        //     background_color: '#000000',
+        //     orientation: 'landscape',
+        //     scope: 'https://movies-player.firebaseapp.com/'
+        //     // icons: [
+        //     //     {
+        //     //         src: path.resolve('src/logo.png'),
+        //     //         sizes: [96, 128, 192, 256, 384, 512] // multiple sizes
+        //     //     }
+        //     // ]
+        // }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: path.join(__dirname, 'src', 'index.html'),

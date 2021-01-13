@@ -32,6 +32,8 @@ class PlaylistStore {
                 if (playlist.files && playlist.files.length) {
                     this.playlist = { id, provider, query, ...playlist }
 
+                    document.title = playlist.title
+
                     analytics('playlistLoaded', document.title)
                 } else if (playlist.trailer) {
                     this.trailerUrl = playlist.trailer
