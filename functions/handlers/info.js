@@ -1,5 +1,5 @@
 const { getCahcedInfo } = require('../cache')
-const { recordPlaylistLoad } = require('../watchRating')
+const { recordPlaylistLoad } = require('../watches')
 const providersService = require('../providers')
 const makeResponse = require('../utils/makeResponse')
 

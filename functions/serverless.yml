@@ -5,7 +5,7 @@ custom:
   playerUrl: 'https://movies-player.firebaseapp.com/#/watch'
   mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
   analyticsTable: analyticsTable-${opt:stage, 'dev'}
-  ratingTable: ratingTable-${opt:stage, 'dev'}
+  watchesTable: watchesTable-${opt:stage, 'dev'}
 
 provider:
   name: aws
@@ -16,12 +16,15 @@ provider:
   environment:
     ANALYTIC_TABLE: ${self:custom.analyticsTable}
     CACHE_TABLE: ${self:custom.cacheTable}
-    RATING_TABLE: ${self:custom.ratingTable}
+    RATING_TABLE: ${self:custom.watchesTable}
     MONGODB_URI: ${self:custom.mongoUrl}
     ANALYTIC_RETENTION: 90
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
     STAGE: ${opt:stage, 'dev'}
     CACHE_TTL: 1800
+    FILMS_PROVIDERS: 'videocdn,kinovod,kinogo,seasonvar'
+    ANIME_PROVIDERS: 'animevost,anidub,animedia,nekomori'
+    PLAYER_URL: ${self:custom.playerUrl}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -30,7 +33,7 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:UpdateItem
-      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.ratingTable}"
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.watchesTable}"
     - Effect: Allow
       Action:
         - logs:PutLogEvents
@@ -108,8 +111,6 @@ functions:
     environment:
       BOT_TYPE: 'films'
       TOKEN: ${ssm:bot_ru_TOKEN_${opt:stage, 'dev'}}
-      PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDERS: 'videocdn,kinovod,kinogo,seasonvar'
 
   animebot:
     handler: handlers/bot.handler
@@ -122,8 +123,6 @@ functions:
       BOT_TYPE: 'anime'
       LOCALIZATION_TYPE: 'localization/anime'
       TOKEN: ${ssm:bot_anime_TOKEN_${opt:stage, 'dev'}}
-      PLAYER_URL: ${self:custom.playerUrl}
-      PROVIDERS: 'animevost,anidub,animedia,nekomori'
   
   proxy:
     handler: handlers/proxy.handler
@@ -150,23 +149,27 @@ package:
 
 resources:
   Resources:
-    ratingTable:
+    watchesTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.ratingTable}
+        TableName: ${self:custom.watchesTable}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          - AttributeName: month
+          - AttributeName: bucket
+            AttributeType: S
+          - AttributeName: count
             AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - IndexName: monthIdx
+          - IndexName: bucketIdx
             KeySchema:
-              - AttributeName: month
+              - AttributeName: bucket
                 KeyType: HASH
+              - AttributeName: count
+                KeyType: RANGE
             Projection: 
               ProjectionType: ALL
             ProvisionedThroughput:

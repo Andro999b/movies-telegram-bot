@@ -5,8 +5,8 @@ const path = require('path')
 const Telegraf = require('telegraf')
 const TelegrafI18n = require('telegraf-i18n')
 
-const PROVIDERS = process.env.PROVIDERS ? process.env.PROVIDERS.split(',') : []
-const BOT_TYPE = process.env.BOT_TYPE || 'default'
+const BOT_TYPE = process.env.BOT_TYPE
+const PROVIDERS = (BOT_TYPE == 'anime' ? process.env.ANIME_PROVIDERS : process.env.FILMS_PROVIDERS).split(',')
 
 const i18n = new TelegrafI18n({
     defaultLanguage: 'ru',
