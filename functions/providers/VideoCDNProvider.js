@@ -73,6 +73,7 @@ class VideoCDNProvider extends Provider {
         }
 
         return {
+            id: typeAndId,
             provider: this.name,
             title: ru_title,
             files,

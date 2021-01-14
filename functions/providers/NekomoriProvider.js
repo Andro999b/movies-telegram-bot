@@ -81,6 +81,7 @@ class NekomoriProvider extends Provider {
             })
 
         return {
+            id: artId,
             title,
             provider: this.name,
             image: `${postersCDNUrl}/${artId}.jpg`,
