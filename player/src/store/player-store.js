@@ -44,6 +44,8 @@ export class Device {
     /* eslint-enable */
 
     @action.bound seeking(seekTime) {
+        if(seekTime < 0) seekTime = 0
+        else if(seekTime > this.duration) seekTime = this.duration
         this.seekTime = seekTime
     }
 
@@ -139,7 +141,6 @@ export class LocalDevice extends Device {
                 store.set(`${getPlaylistPrefix(this.playlist)}:ts`, mark)
             }
         }
-        this.seekTime = null
     }
 
     @action.bound setPlaylist(playlist, fileIndex, startTime) {
