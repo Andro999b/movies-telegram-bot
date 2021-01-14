@@ -11,31 +11,33 @@ async function recordPlaylistLoad({ id, provider, title }) {
     const bot = ANIME_PROVIDERS.has(provider) ? 'anime' : 'films'
     const bucket = `${month}#${bot}`
 
-    dynamodb.updateItem(
-        {
-            TableName: COLLECTION_NAME,
-            Key: { 'id': { 'S': docId } },
-            UpdateExpression: 'SET #month = :month, #bucket = :bucket, #title = :title, #provider = :provider ADD #count :count',
-            ExpressionAttributeNames: {
-                '#month': 'month',
-                '#bucket': 'bucket',
-                '#count': 'count',
-                '#provider': 'provider',
-                '#title': 'title',
+    await new Promise((resolve) => {
+        dynamodb.updateItem(
+            {
+                TableName: COLLECTION_NAME,
+                Key: { 'id': { 'S': docId } },
+                UpdateExpression: 'SET #month = :month, #bucket = :bucket, #title = :title, #provider = :provider ADD #count :count',
+                ExpressionAttributeNames: {
+                    '#month': 'month',
+                    '#bucket': 'bucket',
+                    '#count': 'count',
+                    '#provider': 'provider',
+                    '#title': 'title',
+                },
+                ExpressionAttributeValues: {
+                    ':month': { 'S': month },
+                    ':bucket': { 'S': bucket },
+                    ':provider': { 'S': provider },
+                    ':title': { 'S': title },
+                    ':count': { 'N': "1" }
+                }
             },
-            ExpressionAttributeValues: {
-                ':month': { 'S': month },
-                ':bucket': { 'S': bucket },
-                ':provider': { 'S': provider },
-                ':title': { 'S': title },
-                ':count': { 'N': "1" }
+            (err) => {
+                if (err) console.error("Fail to count playlist watch", err)
+                resolve()
             }
-        },
-        (err) => {
-            if (err) console.error("Fail to count playlist watch", err)
-        }
-    )
-    
+        )
+    })
 }
 
 module.exports = { recordPlaylistLoad }

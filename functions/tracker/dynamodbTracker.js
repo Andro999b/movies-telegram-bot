@@ -51,6 +51,7 @@ module.exports = () => {
             return { PutRequest: { Item } }
         })
 
+        await new Promise((resolve) => {
             dynamodb.batchWriteItem(
                 {
                     RequestItems: {
@@ -59,7 +60,9 @@ module.exports = () => {
                 },
                 (err) => {
                     if(err) console.error("Fail to track events", events, err)
+                    resolve()
                 }
             )
+        })
     }
 }

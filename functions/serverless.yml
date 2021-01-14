@@ -159,7 +159,7 @@ resources:
           - AttributeName: bucket
             AttributeType: S
           - AttributeName: count
-            AttributeType: S
+            AttributeType: "N"
         KeySchema:
           - AttributeName: id
             KeyType: HASH
