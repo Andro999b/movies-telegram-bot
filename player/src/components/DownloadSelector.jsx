@@ -12,10 +12,17 @@ import analytics from '../utils/analytics'
 
 class DownloadSelector extends BaseSelector {
 
-    getTitleAndDownloadUrl = ({ url, quality, audio, extractor }) => ({
-        downloadUrl: extractor ? createExtractorUrlBuilder(extractor)(url) : url,
-        title: [audio, quality].filter((it) => it).join(' - ')
-    })
+    getTitleAndDownloadUrl = ({ url, quality, audio, extractor }, fileName) => {
+        const proxyUrl = "https://dl.movies-player.workers.dev"
+     
+        let downloadUrl = extractor ? createExtractorUrlBuilder(extractor)(url) : url
+        downloadUrl = `${proxyUrl}?url=${encodeURIComponent(downloadUrl)}&title=${encodeURIComponent(fileName)}`
+
+        return {
+            downloadUrl,
+            title: [audio, quality].filter((it) => it).join(' - ')
+        }
+    }
 
     handleTrackDownload = () => {
         const { file, title } = this.props
@@ -24,8 +31,9 @@ class DownloadSelector extends BaseSelector {
     }
 
     renderButton() {
-        const { file } = this.props
+        const { file, title } = this.props
         const { urls } = file
+        const fileName = `${title} - ${file.name}`
 
         if (urls.length > 1) {
             return (
@@ -34,35 +42,36 @@ class DownloadSelector extends BaseSelector {
                 </IconButton>
             )
         } else {
-            const { downloadUrl } = this.getTitleAndDownloadUrl(urls[0])
+            const { downloadUrl } = this.getTitleAndDownloadUrl(urls[0], fileName)
 
             return (
                 <IconButton
                     component='a'
                     href={downloadUrl}
-                    download={downloadUrl}
+                    download={fileName}
                     target="_blank"
                     onClick={this.handleTrackDownload}
                 >
                     <DownloadIcon />
                 </IconButton>
-            ) 
+            )
         }
     }
 
     renderList() {
-        const { file } = this.props
+        const { file, title } = this.props
         const { urls } = file
+        const fileName = `${title} - ${file.name}`
 
         if (urls) {
             const items = urls.map((it, index) => {
-                const { title, downloadUrl }  = this.getTitleAndDownloadUrl(it)
+                const { title, downloadUrl } = this.getTitleAndDownloadUrl(it, fileName)
 
                 return (
                     <MenuItem
                         component='a'
                         href={downloadUrl}
-                        download={downloadUrl}
+                        download={fileName}
                         target="_blank"
                         key={index}
                         onClick={this.handleTrackDownload}
