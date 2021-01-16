@@ -17,7 +17,8 @@ import {
     ViewStream as EventsIcon,
     Web as WedIcon,
     Storage as StorageIcon,
-    Error as ErrorIcon
+    Error as ErrorIcon,
+    BarChart as WatchesIcon,
 } from '@material-ui/icons'
 import { useHistory } from 'react-router-dom'
 
@@ -95,6 +96,10 @@ export default () => {
                 <ListItem button onClick={() => history.push('/storage')}>
                     <ListItemIcon><StorageIcon /></ListItemIcon>
                     <ListItemText primary="Storage" />
+                </ListItem>                
+                <ListItem button onClick={() => history.push('/watches')}>
+                    <ListItemIcon><WatchesIcon /></ListItemIcon>
+                    <ListItemText primary="Top Watched" />
                 </ListItem>
                 <ListItem button onClick={() => history.push('/errors')}>
                     <ListItemIcon><ErrorIcon /></ListItemIcon>

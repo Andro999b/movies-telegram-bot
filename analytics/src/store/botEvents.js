@@ -33,23 +33,30 @@ export default observable({
 
         const keyValue = periodStore.getFormatedDate()
 
-        const query = {
-            TableName: TABLE_NAME,
-            KeyConditions: {
-                date: {
-                    ComparisonOperator: 'EQ',
-                    AttributeValueList: [keyValue]
+        const query = ts ?
+            {
+                TableName: TABLE_NAME,
+                KeyConditionExpression: `#key = :value AND #range > :ts`,
+                ExpressionAttributeNames: {
+                    '#key': 'date',
+                    '#range': 'time'
+                },
+                ExpressionAttributeValues: {
+                    ':value': keyValue,
+                    ':ts': ts
                 }
-            },
-            ScanIndexForward: false
-        }
-
-        if (ts) {
-            query.KeyConditions['time'] = {
-                ComparisonOperator: 'GT',
-                AttributeValueList: [ts]
+            } :
+            {
+                TableName: TABLE_NAME,
+                KeyConditionExpression: `#key = :value`,
+                ExpressionAttributeNames: {
+                    '#key': 'date'
+                },
+                ExpressionAttributeValues: {
+                    ':value': keyValue
+                }
             }
-        }
+
 
         this.error = null
 

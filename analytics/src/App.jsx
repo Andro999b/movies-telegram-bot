@@ -4,15 +4,15 @@ import { Switch, Route, HashRouter as Router } from 'react-router-dom'
 import Navigation from './components/Navigation'
 import { CssBaseline } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import MomentUtils from '@date-io/moment'
 import BotDashboardPage from './pages/BotDashboardPage'
 import BotEventsPage from './pages/BotEventsPage'
 import BotUsersPage from './pages/BotUsersPage'
 import GADashboard from './pages/GADashboard'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import MomentUtils from '@date-io/moment'
 import StorageDashboard from './pages/StorageDashboard'
 import ErrorLogDashboard from './pages/ErrorLogDashboard'
-
+import TopWatchesDashboard from './pages/TopWatchesDashboard'
 
 const useStyles = makeStyles({
     root: {
@@ -46,6 +46,9 @@ const App = () => {
                         </Route>
                         <Route path="/storage">
                             <StorageDashboard />
+                        </Route>
+                        <Route path="/watches">
+                            <TopWatchesDashboard />
                         </Route>
                         <Route path="/errors">
                             <ErrorLogDashboard />

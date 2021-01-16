@@ -33,14 +33,16 @@ const processPeriod = (period, reducer, initValue = {}) => {
 
     const queries = getKeysForPeriod(period)
         .map(({ key, value }) => {
+
             const query = {
                 TableName: TABLE_NAME,
-                KeyConditions: {
-                    [key]: {
-                        ComparisonOperator: 'EQ',
-                        AttributeValueList: [value]
-                    }
+                KeyConditionExpression: `#key = :value`,
+                ExpressionAttributeNames: {
+                    '#key': key
                 },
+                ExpressionAttributeValues: {
+                    ':value': value
+                }
             }
 
             if (index) query['IndexName'] = index

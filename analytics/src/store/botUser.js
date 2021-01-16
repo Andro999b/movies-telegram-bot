@@ -17,11 +17,12 @@ export default () => ({
         const query = {
             TableName: TABLE_NAME,
             IndexName: 'userIdx',
-            KeyConditions: {
-                uid: {
-                    ComparisonOperator: 'EQ',
-                    AttributeValueList: [parseInt(uid)]
-                }
+            KeyConditionExpression: `#key = :value`,
+            ExpressionAttributeNames: {
+                '#key': 'uid'
+            },
+            ExpressionAttributeValues: {
+                ':value': parseInt(uid)
             },
             ScanIndexForward: false,
             Limit: 100
