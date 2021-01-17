@@ -20,8 +20,12 @@ module.exports.handler = async (event, context) => {
             )
         }
 
-        await recordPlaylistLoad(result)
+        const dnt = event.queryStringParameters && event.queryStringParameters.dnt
+
+        if(dnt == "1") await recordPlaylistLoad(result)
     }
+
+
 
     return makeResponse(result)
 }
