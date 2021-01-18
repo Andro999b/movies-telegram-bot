@@ -159,6 +159,8 @@ export class LocalDevice extends Device {
         if (fileIndex < 0 || fileIndex >= files.length)
             return Promise.resolve()
 
+        this.setError(null)
+
         const playlistPrefix = getPlaylistPrefix(this.playlist)
 
         store.set(`${playlistPrefix}:current`, fileIndex)
