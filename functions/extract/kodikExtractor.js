@@ -1,7 +1,7 @@
 const superagent = require('superagent')
 const makeResponse = require('../utils/makeResponse')
 
-const hash2 = 'OErmnYyYA4wHwOP'
+const hash2 = 'vbWENyTwIn8I'
 
 module.exports = async (params) => {
     const { url, referer, hls, linksApi } = params
@@ -38,17 +38,21 @@ module.exports = async (params) => {
         ref: encodeURIComponent(targetUrl.searchParams.get('ref')),
         ref_sign: targetUrl.searchParams.get('ref_sign'),
         type: type,
-        bad_user: true
+        bad_user: false,
+        info: "{}"
     }
+
+    console.log(targetUrl.toString(), videoInfoParams);
 
     const videoInfoRes = await superagent
         .post(linksApi || 'https://kodik.info/video-links')
         .type('form')
-        .set({ 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0' })
+        .set({ 
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0',
+            'Referer': targetUrl.toString()
+        })
         .send(videoInfoParams)
         .timeout(5000)
-
-    console.log(videoInfoRes);
 
     const videoInfo = JSON.parse(videoInfoRes.text)
     const links = videoInfo.links
