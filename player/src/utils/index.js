@@ -59,3 +59,17 @@ export function toHHMMSS(timestamp) {
 }
 
 export const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${playlist.id}`
+
+export function getAlternativeUrl(provider, query) {
+    let bot
+    switch(provider) {
+        case 'animevost': 
+        case 'nekomori': 
+            bot = 'anime_tube_bot'
+            break 
+        default:
+            bot = 'films_search_bot'
+    }
+
+    return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`
+}

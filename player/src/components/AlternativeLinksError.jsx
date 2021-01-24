@@ -2,22 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import localization from '../localization'
-import { base64UrlEncode } from '../utils/base64'
+import { getAlternativeUrl } from '../utils'
 import { Typography } from '@material-ui/core'
 
-function getAlternativeUrl(provider, query) {
-    let bot
-    switch(provider) {
-        case 'animevost': 
-        case 'nekomori': 
-            bot = 'anime_tube_bot'
-            break 
-        default:
-            bot = 'films_search_bot'
-    }
-
-    return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`
-}
 
 class AlternativeLinksError extends Component {
     render() {

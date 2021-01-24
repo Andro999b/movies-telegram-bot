@@ -223,6 +223,7 @@ export class LocalDevice extends Device {
 
     @action.bound setAudioTrack(id) {
         this.audioTrack = id
+        this.setError(null)
         store.set(`${getPlaylistPrefix(this.playlist)}:audio_track`, id)
     }
 
