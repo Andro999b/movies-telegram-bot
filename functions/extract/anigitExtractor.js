@@ -3,5 +3,6 @@ const kodikExtractor = require('./kodikExtractor')
 module.exports = ({ url }) => kodikExtractor({ 
     url, 
     linksApi: 'https://aniqit.com/get-video-info',
-    referer: 'https://wakanim.online'
+    referer: 'https://wakanim.online',
+    hash2: 'vbWENyTwIn8I'
 })

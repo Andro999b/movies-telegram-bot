@@ -1,10 +1,8 @@
 const superagent = require('superagent')
 const makeResponse = require('../utils/makeResponse')
 
-const hash2 = 'vbWENyTwIn8I'
-
 module.exports = async (params) => {
-    const { url, referer, hls, linksApi } = params
+    const { url, referer, hls, linksApi, hash2 = 'vbWENyTwIn8I' } = params
 
     let targetUrl
     if(!url.includes('/go/')) {
