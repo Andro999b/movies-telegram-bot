@@ -1,3 +1,4 @@
+import { base64UrlEncode } from './base64'
 
 export function createExtractorUrlBuilder(extractor, additionalParams) {
     let extractorBaseUrl = null
