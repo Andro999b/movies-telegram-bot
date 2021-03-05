@@ -22,7 +22,8 @@ module.exports.handler = async (event, context) => {
 
         const dnt = event.queryStringParameters && event.queryStringParameters.dnt
 
-        if(dnt == "1") await recordPlaylistLoad(result)
+        if(dnt != "1") 
+            await recordPlaylistLoad(result)
     }
 
 

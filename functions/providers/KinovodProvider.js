@@ -9,6 +9,17 @@ class KinovodProvider extends Provider {
     constructor() {
         super('kinovod', {
             scope: '.items>.item',
+            selectors: {
+                id: {
+                    selector: '>a',
+                    transform: ($el) => urlencode($el.attr('href'))
+                },
+                name: 'info>title>a',
+                image: {
+                    selector: '>a>img',
+                    transform: ($el) => this._absoluteUrl($el.attr('src'))
+                }
+            },
             detailsScope: '.content',
             detailsSelectors: {
                 title: '#movie>div>h1',
@@ -72,24 +83,26 @@ class KinovodProvider extends Provider {
         return `${this.config.searchUrl}?query=${encodeURIComponent(query)}`
     }
 
-    async search(query) {
-        const { timeout } = this.config
+    // async search(query) {
+    //     const { timeout } = this.config
 
-        const res = await superagent
-            .get(this.getSearchUrl(query))
-            .timeout(timeout)
+    //     const res = await superagent
+    //         .get(this.getSearchUrl(query))
+    //         .set({ "Referer": this.config.baseUrl })
+    //         .set({ "X-Requested-With": "XMLHttpRequest" })
+    //         .timeout(timeout)
 
 
-        const body = JSON.parse(res.text)
-        if (!body.suggestions) return []
+    //     const body = JSON.parse(res.text)
+    //     if (!body.suggestions) return []
 
-        return body.suggestions
-            .map(({ url, year, value}) => ({
-                name: year ? `${value} (${year})` : value,
-                id: urlencode(url),
-                provider: this.name
-            }))
-    }
+    //     return body.suggestions
+    //         .map(({ url, year, value}) => ({
+    //             name: year ? `${value} (${year})` : value,
+    //             id: urlencode(url),
+    //             provider: this.name
+    //         }))
+    // }
 }
 
 module.exports = KinovodProvider

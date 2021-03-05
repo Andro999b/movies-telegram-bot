@@ -29,8 +29,8 @@ module.exports = {
         'token': '447d179e875efe44217f20d1ee2146be'
     },
     'kinovod': {
-        'baseUrl': 'https://kinovod183.cc',
-        'searchUrl': 'https://kinovod183.cc/ajax/search.php'
+        'baseUrl': 'https://kinovod230.cc',
+        'searchUrl': 'https://kinovod230.cc/search'
     },
     'animevost': {
         'baseUrl': 'https://animevost.org',
