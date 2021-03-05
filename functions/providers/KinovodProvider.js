@@ -14,7 +14,7 @@ class KinovodProvider extends Provider {
                     selector: '>a',
                     transform: ($el) => urlencode($el.attr('href'))
                 },
-                name: 'info>title>a',
+                name: '>.info>.title>a',
                 image: {
                     selector: '>a>img',
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
