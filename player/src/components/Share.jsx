@@ -59,7 +59,7 @@ class Share extends BaseSelector {
             }
         }
 
-        return encodeURIComponent(location.protocol + '//' + location.host + location.pathname + '#/watch?' + newParams.toString())
+        return encodeURIComponent(location.protocol + '//' + location.host + location.pathname + '#/watch?') + newParams.toString()
     }
 
     getTitle = (sharePosition) => {
