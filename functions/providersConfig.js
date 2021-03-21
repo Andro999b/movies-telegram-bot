@@ -8,7 +8,8 @@ module.exports = {
         'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE'
     },
     'nekomori': {
-        'baseUrl': 'https://api.nekomori.ch',
+        'realip': '95.216.190.36',
+        'baseUrl': 'http://api.nekomori.ch',
         'postersCDNUrl': 'https://cdn.nekomori.ch/art/poster',
         'playersConfig': {
             'Sibnet': { 'extractor': 'sibnetmp4' },
@@ -24,6 +25,8 @@ module.exports = {
         'searchUrl': 'https://m4.animedia.pro//ajax/search_result_search_page_2/P0'
     },
     'anigato': {
+        'realip': '31.31.196.64', //TODO fuck cloudflare
+        'hostname': 'anigato.ru',
         'baseUrl': 'https://anigato.ru/',
         'searchUrl': 'https://anigato.ru/index.php?do=search',
         'token': '447d179e875efe44217f20d1ee2146be'

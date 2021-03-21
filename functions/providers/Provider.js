@@ -34,7 +34,8 @@ class Provider {
             pagenatorSelector,
             headers,
             pageSize,
-            timeout
+            timeout,
+            realip
         } = this.config
 
         const limit = pageCount * pageSize
@@ -47,6 +48,7 @@ class Provider {
                 this._crawlerSearchRequestGenerator(query, page)
             )
             .headers(headers)
+            .realip(realip)
             .scope(scope)
             .timeout(timeout)
             .set(selectors)
@@ -69,7 +71,8 @@ class Provider {
             detailsScope, 
             detailsSelectors, 
             headers, 
-            infoTimeout 
+            infoTimeout,
+            realip
         } = this.config
 
         let details = await crawler
@@ -80,6 +83,7 @@ class Provider {
             .timeout(infoTimeout)
             .limit(1)
             .headers(headers)
+            .realip(realip)
             .scope(detailsScope)
             .set(detailsSelectors)
             .gather()

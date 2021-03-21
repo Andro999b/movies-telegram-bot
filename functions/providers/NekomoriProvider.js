@@ -7,12 +7,14 @@ class NekomoriProvider extends Provider {
     }
 
     async search(query) {
-        const { baseUrl, postersCDNUrl, timeout } = this.config
+        const { realip, baseUrl, postersCDNUrl, timeout } = this.config
 
         query = this._prepareQuery(query)
 
+        try {
         const ret = await superagent
             .get(`${baseUrl}/art?search=${encodeURIComponent(query)}`)
+            .connect(realip)
             .timeout(timeout)
 
         return ret.body.map(({ id, name }) => ({
@@ -21,19 +23,25 @@ class NekomoriProvider extends Provider {
             name: name.ru,
             image: `${postersCDNUrl}/${id}.jpg`
         }))
+        }catch(err) {
+            console.log(err.response.res)
+            return []
+        }
     }
 
     async getInfo(artId) {
-        const { baseUrl, timeout, postersCDNUrl, playersConfig } = this.config
+        const { realip, baseUrl, timeout, postersCDNUrl, playersConfig } = this.config
 
         let ret = await superagent
             .get(`${baseUrl}/art/${artId}`)
+            .connect(realip)
             .timeout(timeout)
 
         const title = ret.body.name.ru
 
         ret = await superagent
             .get(`${baseUrl}/players?artId=${artId}`)
+            .connect(realip)
             .timeout(timeout)
 
         const kindTranslation = {

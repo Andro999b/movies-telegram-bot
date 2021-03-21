@@ -1,10 +1,10 @@
 const providers = require('../providers')
 const util = require('util')
 
-// const providerName = 'anigato'
+const providerName = 'anigato'
 // const providerName = 'anidub'
 // const providerName = 'animedia'
-const providerName = 'kinovod'
+// const providerName = 'kinovod'
 // const providerName = 'kinogo'
 // const providerName = 'seasonvar'
 // const providerName = 'videocdn'
@@ -25,7 +25,7 @@ const providerName = 'kinovod'
 // const searchQuery = 'Принц-дракон'
 // const searchQuery = 'Полуночная проповедь'
 // const searchQuery = 'Дрянь'
-const searchQuery = 'веном'
+const searchQuery = 'Выдающиеся звери'
 // const searchQuery = 'ванпанчмен'
 
 providers.searchOne(providerName, searchQuery)

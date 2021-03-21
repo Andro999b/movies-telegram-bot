@@ -16,8 +16,14 @@ class Crawler {
                 new URL(nextUrl, this._url).toString() :
                 nextUrl
 
-            return superagent
+            let request = superagent
                 .get(targetUrl)
+
+            if(this._realip) {
+                request = request.connect(this._realip)
+            }
+
+            return request
                 .buffer(true)
                 .charset()
                 .timeout(this._timeoutMs)
@@ -26,6 +32,11 @@ class Crawler {
         })
         this._url = url
         this._useProxy = false
+    }
+
+    realip(ip) {
+        this._realip = ip
+        return this
     }
 
     headers(headers) {
