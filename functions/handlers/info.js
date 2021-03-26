@@ -1,5 +1,4 @@
 const { getCahcedInfo } = require('../cache')
-const { recordPlaylistLoad } = require('../watches')
 const providersService = require('../providers')
 const makeResponse = require('../utils/makeResponse')
 
@@ -19,11 +18,6 @@ module.exports.handler = async (event, context) => {
                 ([provider, resultId]) => providersService.getInfo(provider, resultId)
             )
         }
-
-        const dnt = event.queryStringParameters && event.queryStringParameters.dnt
-
-        if(dnt != "1") 
-            await recordPlaylistLoad(result)
     }
 
 

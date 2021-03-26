@@ -5,7 +5,6 @@ custom:
   playerUrl: 'https://movies-player.firebaseapp.com/#/watch'
   mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
   analyticsTable: analyticsTable-${opt:stage, 'dev'}
-  watchesTable: watchesTable-${opt:stage, 'dev'}
 
 provider:
   name: aws
@@ -16,7 +15,6 @@ provider:
   environment:
     ANALYTIC_TABLE: ${self:custom.analyticsTable}
     CACHE_TABLE: ${self:custom.cacheTable}
-    RATING_TABLE: ${self:custom.watchesTable}
     MONGODB_URI: ${self:custom.mongoUrl}
     ANALYTIC_RETENTION: 90
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
@@ -30,10 +28,6 @@ provider:
       Action:
         - dynamodb:BatchWriteItem
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.analyticsTable}"
-    - Effect: Allow
-      Action:
-        - dynamodb:UpdateItem
-      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.watchesTable}"
     - Effect: Allow
       Action:
         - logs:PutLogEvents
@@ -149,38 +143,6 @@ package:
 
 resources:
   Resources:
-    watchesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:custom.watchesTable}
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: bucket
-            AttributeType: S
-          - AttributeName: count
-            AttributeType: "N"
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        GlobalSecondaryIndexes:
-          - IndexName: bucketIdx
-            KeySchema:
-              - AttributeName: bucket
-                KeyType: HASH
-              - AttributeName: count
-                KeyType: RANGE
-            Projection: 
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TimeToLiveSpecification:
-          AttributeName: ttl
-          Enabled: true
     analyticsTable:
       Type: AWS::DynamoDB::Table
       Properties: 
