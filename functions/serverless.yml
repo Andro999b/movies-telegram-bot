@@ -21,7 +21,7 @@ provider:
     STAGE: ${opt:stage, 'dev'}
     CACHE_TTL: 1800
     FILMS_PROVIDERS: 'videocdn,kinovod,kinogo,seasonvar'
-    ANIME_PROVIDERS: 'animevost,anidub,animedia,nekomori'
+    ANIME_PROVIDERS: 'animevost,anidub,animedia'
     PLAYER_URL: ${self:custom.playerUrl}
   iamRoleStatements:
     - Effect: Allow

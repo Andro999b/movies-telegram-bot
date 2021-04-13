@@ -8,12 +8,12 @@ module.exports = {
         'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE'
     },
     'nekomori': {
-        'realip': '95.216.190.36',
-        'baseUrl': 'http://api.nekomori.ch',
+        'realip': '195.161.41.231',
+        'baseUrl': 'http://nekomori.ch/api',
         'postersCDNUrl': 'https://cdn.nekomori.ch/art/poster',
-        'playersConfig': {
-            'Sibnet': { 'extractor': 'sibnetmp4' },
-            'Kodik': { 'extractor': 'anigit' }
+        'sourceConfig': {
+            'sibnet': { 'extractor': 'sibnetmp4' },
+            'anigit': { 'extractor': 'anigit' }
         }
     },
     'anidub': {
