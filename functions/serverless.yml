@@ -118,14 +118,6 @@ functions:
       LOCALIZATION_TYPE: 'localization/anime'
       TOKEN: ${ssm:bot_anime_TOKEN_${opt:stage, 'dev'}}
   
-  proxy:
-    handler: handlers/proxy.handler
-    events:
-      - http: 
-          path: proxy
-          method: post
-          cors: true
-  
   logger:
     handler: handlers/logger.handler
     events:

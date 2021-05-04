@@ -8,7 +8,6 @@ module.exports = {
         'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE'
     },
     'nekomori': {
-        'realip': '195.161.41.231',
         'baseUrl': 'http://nekomori.ch/api',
         'postersCDNUrl': 'https://cdn.nekomori.ch/art/poster',
         'sourceConfig': {
