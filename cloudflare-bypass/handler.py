@@ -7,7 +7,7 @@ def proxy(event, context):
     response = None
 
     if event.get("method") == "post":
-        response = scraper.post(url)
+        response = scraper.post(url, json = event["json"])
     else:
         response = scraper.get(url)
 
