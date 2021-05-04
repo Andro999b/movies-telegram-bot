@@ -33,6 +33,10 @@ provider:
         - logs:PutLogEvents
         - logs:DescribeLogStreams
       Resource: "arn:aws:logs:${self:provider.region}:*:log-group:web-${opt:stage, 'dev'}:log-stream:*"
+    - Effect: 
+      Action:
+        - lambda:InvokeFunction
+      Resource: "arn:aws:lambda:${self:provider.region}:*:function:cloudflare-bypass-prod-proxy"
 
 functions:
   library:
