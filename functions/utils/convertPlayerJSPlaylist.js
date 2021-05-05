@@ -4,12 +4,7 @@ module.exports = function (playlist, linksExtractor = getBestPlayerJSQuality) {
     const idsCache = {}
 
     function extractFile(file, linksExtractor) {
-        if(file.endsWith('m3u8')) {
-            return { manifestUrl: file }
-        }
-    
-        const urls = linksExtractor(file)
-        return { urls: urls }
+        return { urls: linksExtractor(file) }
     }
     
     function convertFolder(prefix, items, linksExtractor) {

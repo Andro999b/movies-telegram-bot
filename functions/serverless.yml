@@ -23,20 +23,22 @@ provider:
     FILMS_PROVIDERS: 'videocdn,kinovod,kinogo,seasonvar'
     ANIME_PROVIDERS: 'animevost,anidub,animedia'
     PLAYER_URL: ${self:custom.playerUrl}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:BatchWriteItem
-      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.analyticsTable}"
-    - Effect: Allow
-      Action:
-        - logs:PutLogEvents
-        - logs:DescribeLogStreams
-      Resource: "arn:aws:logs:${self:provider.region}:*:log-group:web-${opt:stage, 'dev'}:log-stream:*"
-    - Effect: 
-      Action:
-        - lambda:InvokeFunction
-      Resource: "arn:aws:lambda:${self:provider.region}:*:function:cloudflare-bypass-prod-proxy"
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:BatchWriteItem
+          Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.analyticsTable}"
+        - Effect: Allow
+          Action:
+            - logs:PutLogEvents
+            - logs:DescribeLogStreams
+          Resource: "arn:aws:logs:${self:provider.region}:*:log-group:web-${opt:stage, 'dev'}:log-stream:*"
+        - Effect: Allow
+          Action:
+            - lambda:InvokeFunction
+          Resource: "arn:aws:lambda:${self:provider.region}:*:function:cloudflare-bypass-prod-proxy"
 
 functions:
   library:
@@ -134,8 +136,8 @@ functions:
       LOG_GROUP: web-${opt:stage, 'dev'}
 
 package:
-  exclude:
-   - test/**
+  patterns:
+   - "!test/**"
 
 resources:
   Resources:

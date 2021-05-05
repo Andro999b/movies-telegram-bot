@@ -19,7 +19,8 @@ class App extends Component {
     componentDidCatch(error) {
         logger.error(error.message, {
             title: document.title,
-            url: location.href
+            url: location.href,
+            stack: error.stack
         })
     }
 

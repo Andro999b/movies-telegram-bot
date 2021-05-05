@@ -38,6 +38,7 @@ module.exports = {
             chunks: 'all'
         }
     },
+    devtool: 'source-map',
     plugins: [
         // new WebpackPwaManifest({
         //     name: 'Movies',

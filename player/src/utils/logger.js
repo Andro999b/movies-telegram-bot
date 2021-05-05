@@ -3,8 +3,6 @@ function log(level, message, data) {
 
     const browser = `${navigator.userAgent}`
 
-    console.log(process.env.NODE_ENV)
-
     if (process.env.NODE_ENV == 'production') {
         fetch(`${window.API_BASE_URL}/log`, {
             method: 'POST',

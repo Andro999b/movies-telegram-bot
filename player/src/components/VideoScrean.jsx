@@ -62,18 +62,14 @@ class VideoScrean extends BaseScrean {
     }
 
     onQuality() {
-        if (!this.hls) {
-            this.startNativeVideo()
-            this.restoreVideoState()
-        }
+        this.startVideo()
     }
 
     onAudioTrack(trackId) {
-        if (this.hls) {
+        if (this.hlsMultiAudio) {
             this.hls.audioTrack = trackId
         } else {
-            this.startNativeVideo()
-            this.restoreVideoState()
+            this.startVideo()
         }
     }
 
@@ -83,8 +79,7 @@ class VideoScrean extends BaseScrean {
             this.hls.detachMedia()
             this.hls.destroy()
         }
-        this.hlsMode = false
-        
+
         const video = this.video.current
         video.removeAttribute('src')
         video.load()
@@ -115,16 +110,16 @@ class VideoScrean extends BaseScrean {
     initVideo() {
         const { props: { device: { source } } } = this
 
-        this.dispose()
-
         if(!source) return
 
         const { manifestUrl, urls }  = source
 
         if (urls && urls.length > 0) {
-            this.startNativeVideo()
+            this.startVideo()
         } else if (manifestUrl) {
-            this.startHlsVideo()
+            this.dispose()
+            this.setHlsVideoFile({ url: manifestUrl })
+            this.restoreVideoState()
         } else {
             const { device } = this.props
 
@@ -133,11 +128,9 @@ class VideoScrean extends BaseScrean {
             this.logError('No suitable video source')
             return
         }
-
-        this.restoreVideoState()
     }
 
-    startNativeVideo() {
+    startVideo() {
         const { device: { source: { urls }, quality, audioTrack } } = this.props
         let videoUrls
 
@@ -157,13 +150,25 @@ class VideoScrean extends BaseScrean {
         const selectedIndex = this.videoUrls.findIndex((it) => it.quality == selectedQuality)
 
         if(selectedIndex == -1) {
-            this.setNativeVideoUrl(this.videoUrls.shift())
+            this.setVideoFile(this.videoUrls.shift())
         } else {
-            this.setNativeVideoUrl(this.videoUrls.splice(selectedIndex, 1)[0])
+            this.setVideoFile(this.videoUrls.splice(selectedIndex, 1)[0])
         }
     }
 
-    setNativeVideoUrl({ url, extractor }) {
+    setVideoFile(file) {
+        this.dispose()
+
+        if(file.url.endsWith("m3u8")) {
+            this.setHlsVideoFile(file)
+        } else { 
+            this.setNativeVideoFile(file)
+        }
+
+        this.restoreVideoState()
+    }
+
+    setNativeVideoFile({ url, extractor }) {
         const video = this.video.current
 
         if (extractor) {
@@ -173,23 +178,18 @@ class VideoScrean extends BaseScrean {
         }
     }
 
-    startHlsVideo(manifestUrl) {
-        this.hlsMode = true
-
+    setHlsVideoFile({ url, extractor }) {
         const { props: { device } } = this
         const { source: { manifestExtractor } } = device
 
-        manifestUrl = manifestUrl || device.source.manifestUrl
-
-        if (manifestExtractor) {
-            manifestUrl = createExtractorUrlBuilder(manifestExtractor)(manifestUrl)
+        if (manifestExtractor || extractor) {
+            url = createExtractorUrlBuilder(manifestExtractor)(manifestUrl)
         }
 
 
         const video = this.video.current
         if(video.canPlayType('application/vnd.apple.mpegurl') !== '') {
             video.src = manifestUrl
-            this.restoreVideoState()
             return
         }
 
@@ -202,9 +202,10 @@ class VideoScrean extends BaseScrean {
 
         hls.attachMedia(this.video.current)
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            this.restoreVideoState()
+            // this.restoreVideoState()
 
             if (hls.audioTracks && hls.audioTracks.length > 1) {
+                this.hlsMultiAudio = true
                 device.setAudioTracks(
                     hls.audioTracks.map(({ id, name }) => ({ id, name }))
                 )
@@ -213,14 +214,8 @@ class VideoScrean extends BaseScrean {
         hls.on(Hls.Events.ERROR, this.handleHLSError)
 
 
-        hls.loadSource(manifestUrl)
+        hls.loadSource(url)
         this.hls = hls
-    }
-
-    isHlsAvaliable() {
-        const { props: { device: { source } } } = this
-
-        return source.manifestUrl && Hls.isSupported()
     }
 
     /**
@@ -240,6 +235,8 @@ class VideoScrean extends BaseScrean {
                     // try to recover network error
                     console.log('fatal network error encountered, try to recover') // eslint-disable-line
                     this.hls.startLoad()
+           
+                    this.restoreVideoState()         
                     break
                 case Hls.ErrorTypes.MEDIA_ERROR:
                     console.log('fatal media error encountered, try to recover') // eslint-disable-line
@@ -247,6 +244,9 @@ class VideoScrean extends BaseScrean {
                     break
                 default:
                     // cannot recover
+                    if(this.tryNextVideoUrl()) 
+                        break
+
                     this.props.device.setError(localization.cantPlayMedia)
                     this.hls.destroy()
                     this.logError(data)
@@ -256,7 +256,7 @@ class VideoScrean extends BaseScrean {
     }
 
     handleError = () => {
-        const { props: { device }, videoUrls } = this
+        const { props: { device } } = this
         const video = this.video.current
 
         let code
@@ -293,20 +293,8 @@ class VideoScrean extends BaseScrean {
             }
         }
 
-        //try another urls
-        if (videoUrls && videoUrls.length > 0) {
-            setTimeout(() => {
-                this.setNativeVideoUrl(this.videoUrls.shift())
-                this.restoreVideoState()
-            }, 1)
+        if(this.tryNextVideoUrl())
             return
-        }
-
-        //try hls
-        if (!this.hlsMode && this.isHlsAvaliable()) { // retry with hls
-            this.startHlsVideo()
-            return
-        }
 
         device.setError(localization.cantPlayMedia)
         device.setLoading(false)
@@ -316,6 +304,18 @@ class VideoScrean extends BaseScrean {
             message: videoErrorMessage,
             videoSrc: video.src
         })
+    }
+
+    tryNextVideoUrl = () => {
+        const { videoUrls } = this
+        //try another urls
+        if (videoUrls && videoUrls.length > 0) {
+            setTimeout(() => {
+                this.setVideoUrl(this.videoUrls.shift())
+            }, 1)
+            return true
+        }
+        return false
     }
 
     handleLoadedMetadata = () => {

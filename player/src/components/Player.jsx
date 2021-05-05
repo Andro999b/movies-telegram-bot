@@ -153,8 +153,7 @@ class Player extends Component {
         const { playlistOpen, idle, fullScreen } = this.state
         const { device } = playerStore
         const { isLoading, error, seekTime } = device
-        const { playlist: { image } } = device
-
+        
         const hideUi = idle && seekTime == null
 
         return (
