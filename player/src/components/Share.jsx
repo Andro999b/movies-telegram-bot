@@ -44,7 +44,7 @@ class Share extends BaseSelector {
         const newParams = new URLSearchParams()
 
         newParams.set('provider', provider)
-        newParams.set('id', id)
+        newParams.set('id', decodeURIComponent(id))
 
         if(query) newParams.set('query', query)
 
@@ -59,7 +59,7 @@ class Share extends BaseSelector {
             }
         }
 
-        return encodeURIComponent(location.protocol + '//' + location.host + location.pathname + '#/watch?') + newParams.toString()
+        return encodeURIComponent(location.protocol + '//' + location.host + location.pathname + '#/watch?' + newParams.toString()) 
     }
 
     getTitle = (sharePosition) => {
@@ -85,6 +85,8 @@ class Share extends BaseSelector {
         const { sharePosition, shareTime } = this.state
         const url = this.getShareUrl(sharePosition, shareTime)
         const title = this.getTitle(sharePosition)
+
+        console.log(url)
 
         return (
             <div className="player__share-content">
