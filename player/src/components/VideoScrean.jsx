@@ -183,13 +183,13 @@ class VideoScrean extends BaseScrean {
         const { source: { manifestExtractor } } = device
 
         if (manifestExtractor || extractor) {
-            url = createExtractorUrlBuilder(manifestExtractor)(manifestUrl)
+            url = createExtractorUrlBuilder(manifestExtractor)(url)
         }
 
 
         const video = this.video.current
         if(video.canPlayType('application/vnd.apple.mpegurl') !== '') {
-            video.src = manifestUrl
+            video.src = url
             return
         }
 
