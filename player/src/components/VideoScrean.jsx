@@ -132,27 +132,27 @@ class VideoScrean extends BaseScrean {
 
     startVideo() {
         const { device: { source: { urls }, quality, audioTrack } } = this.props
-        let videoUrls
+        let videoFiles
 
         if (audioTrack) {
-            videoUrls = urls.filter((it) => it.audio == audioTrack)
-            if (videoUrls.length == 0) {
-                videoUrls = urls
+            videoFiles = urls.filter((it) => it.audio == audioTrack)
+            if (videoFiles.length == 0) {
+                videoFiles = urls
             }
         } else {
-            videoUrls = urls
+            videoFiles = urls
         }
 
         const selectedQuality = quality || 720
 
-        this.videoUrls = [].concat(videoUrls)
+        this.videoFiles = [].concat(videoFiles)
 
-        const selectedIndex = this.videoUrls.findIndex((it) => it.quality == selectedQuality)
+        const selectedIndex = this.videoFiles.findIndex((it) => it.quality == selectedQuality)
 
         if(selectedIndex == -1) {
-            this.setVideoFile(this.videoUrls.shift())
+            this.setVideoFile(this.videoFiles.shift())
         } else {
-            this.setVideoFile(this.videoUrls.splice(selectedIndex, 1)[0])
+            this.setVideoFile(this.videoFiles.splice(selectedIndex, 1)[0])
         }
     }
 
@@ -231,13 +231,6 @@ class VideoScrean extends BaseScrean {
     handleHLSError = (_, data) => {
         if (data.fatal) {
             switch (data.type) {
-                case Hls.ErrorTypes.NETWORK_ERROR:
-                    // try to recover network error
-                    console.log('fatal network error encountered, try to recover') // eslint-disable-line
-                    this.hls.startLoad()
-           
-                    this.restoreVideoState()         
-                    break
                 case Hls.ErrorTypes.MEDIA_ERROR:
                     console.log('fatal media error encountered, try to recover') // eslint-disable-line
                     this.hls.recoverMediaError()
@@ -307,11 +300,11 @@ class VideoScrean extends BaseScrean {
     }
 
     tryNextVideoUrl = () => {
-        const { videoUrls } = this
+        const { videoFiles } = this
         //try another urls
-        if (videoUrls && videoUrls.length > 0) {
+        if (videoFiles && videoFiles.length > 0) {
             setTimeout(() => {
-                this.setVideoUrl(this.videoUrls.shift())
+                this.setVideoFile(this.videoFiles.shift())
             }, 1)
             return true
         }

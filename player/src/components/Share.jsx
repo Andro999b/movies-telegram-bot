@@ -86,8 +86,6 @@ class Share extends BaseSelector {
         const url = this.getShareUrl(sharePosition, shareTime)
         const title = this.getTitle(sharePosition)
 
-        console.log(url)
-
         return (
             <div className="player__share-content">
                 <Typography>
