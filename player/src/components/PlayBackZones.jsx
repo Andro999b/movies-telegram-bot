@@ -31,17 +31,16 @@ class PlayBackZones extends Component {
 
         clearTimeout(this.seekDelayTimeout)
 
-        const { device } = this.props
-        // device.pause()
+        const { device, onSeek } = this.props
 
         this.accTime =(this.accTime || 0) + 10
 
         this.setState({ seekMode, accTime: this.accTime })
 
-        const { currentTime, seeking } = device
+        const { currentTime } = device
 
         const targetTime = seekMode == 'ff' ? currentTime + this.accTime : currentTime - this.accTime
-        seeking(targetTime)
+        onSeek(targetTime)
 
         this.seekDelayTimeout = setTimeout(
             () => {
@@ -70,13 +69,13 @@ class PlayBackZones extends Component {
 
     render() {
         const { seekMode, accTime } = this.state
-        const { device: { isPlaying, isLoading }, onClick } = this.props
+        const { device: { isPlaying, isLoading }, onPause } = this.props
         const paused = accTime === null && !isPlaying
 
         return (
             <div
                 className={`player__pause-zone ${(isPlaying || isLoading) ? '' : 'player__pause-cover'}`}
-                onClick={() => onClick()}
+                onClick={(e) => onPause() }
             >
                 <div className="playback-skip__indicator">
                     {accTime !== null &&
@@ -105,7 +104,8 @@ class PlayBackZones extends Component {
 
 PlayBackZones.propTypes = {
     device: PropTypes.object.isRequired,
-    onClick: PropTypes.func.isRequired,
+    onPause: PropTypes.func.isRequired,
+    onSeek: PropTypes.func.isRequired,
 }
 
 export default PlayBackZones

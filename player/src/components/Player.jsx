@@ -10,12 +10,42 @@ import VideoScrean from './VideoScrean'
 import PlayBackZones from './PlayBackZones'
 import Share from './Share'
 
-import { Typography, CircularProgress } from '@material-ui/core'
+import { Typography, CircularProgress, ClickAwayListener } from '@material-ui/core'
 import { observer, inject } from 'mobx-react'
 
 import { isTouchDevice } from '../utils'
 
 const IDLE_TIMEOUT = 3000
+
+class HandleActionListener extends Component {
+
+    handleClick = (e) => {
+        if(this.props.idle) {
+            e.preventDefault()
+            e.stopPropagation()
+            this.props.onAction()
+        }
+    }
+
+    render() {
+        if(isTouchDevice()) { 
+            return (<div onClickCapture={this.handleClick}>
+                {this.props.children}
+            </div>)
+        } else {
+            return (<div onMouseMove={() => this.props.onAction()}>
+                {this.props.children}
+            </div>) 
+        }
+    }
+}
+
+HandleActionListener.propTypes = {
+    idle: PropTypes.bool,
+    onAction: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired
+}
+
 
 @inject('playerStore')
 @observer
@@ -38,18 +68,18 @@ class Player extends Component {
     }
 
     handleClick = () => {
-        const { props: { playerStore: { device } }, state: { idle } } = this
-
-        if (isTouchDevice() && idle) {
-            this.handleActivity()
-            return
-        }
+        const { props: { playerStore: { device } } } = this
 
         if (device.isPlaying) {
             device.pause()
         } else {
             device.play()
         }
+    }
+
+    handleSeek = (time) => {
+        const { props: { playerStore: { device } } } = this
+        device.seeking(time)
     }
 
     handleIdle = (idle) => {
@@ -79,6 +109,7 @@ class Player extends Component {
     }
 
     handleKeyUp = (e) => {
+        console.log(e.type)
         const { props: { playerStore: { device } } } = this
 
         const step = e.ctrlKey ? 10 : (e.shiftKey ? 60 : 30)
@@ -96,10 +127,13 @@ class Player extends Component {
         } else if (e.code == 'KeyF') {
             this.handleToggleFullscreen()
         }
+
+        e.stopPropagation()
+        e.preventDefault()
     }
 
     // --- idle checking ---
-    handleActivity = (e) => {
+    handleActivity = () => {
         const { state: { idle }, idleTimeout } = this
 
         clearTimeout(idleTimeout)
@@ -107,10 +141,6 @@ class Player extends Component {
 
         if (idle) {
             this.setState({ idle: false })
-            if (e && !(e instanceof KeyboardEvent)) {
-                e.stopImmediatePropagation()
-                e.preventDefault()
-            }
         }
     }
 
@@ -124,27 +154,12 @@ class Player extends Component {
     componentWillUnmount() {
         const { idleTimeout } = this
         clearTimeout(idleTimeout);
-
-        ['pointerdown', 'pointermove', 'pointerup', 'mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
-            (event) => window.removeEventListener(event, this.handleActivity)
-        )
-
         window.removeEventListener('keyup', this.handleKeyUp)
     }
 
     componentDidMount() {
         this.setIdleTimeout()
-        if (isTouchDevice()) {
-            ['pointerdown', 'pointermove', 'pointerup', 'scroll'].forEach(
-                (event) => window.addEventListener(event, this.handleActivity, { capture: true })
-            )
-        } else {
-            ['mousemove', 'mousedown', 'keydown', 'scroll'].forEach(
-                (event) => window.addEventListener(event, this.handleActivity)
-            )
-
-            window.addEventListener('keyup', this.handleKeyUp)
-        }
+        window.addEventListener('keyup', this.handleKeyUp, true)
     }
     // --- idle checking ---
 
@@ -161,33 +176,41 @@ class Player extends Component {
                 enabled={fullScreen}
                 onChange={this.handleSetFullScreen}
             >
-                <div id="player_root" className={hideUi ? 'idle' : ''}>
-                    {error && <Typography className="center" variant="h4">{error}</Typography>}
-                    {(isLoading && !error) &&
-                        <div className="player_loader-indicator center">
-                            <CircularProgress color="primary" />
-                        </div>
-                    }
-                    {(!isLoading && !error) && <PlayBackZones device={device} onClick={this.handleClick} />}
-                    {!error && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
-                    {!hideUi && <>
-                        <PlayerTitle title={playerStore.getPlayerTitle()} />
-                        <Share device={device} playlist={device.playlist} />
-                        <PlayerFilesList
-                            open={playlistOpen}
-                            device={device}
-                            onFileSelected={this.handleSelectFile}
-                        />
-                        <MediaControls
-                            fullScreen={fullScreen}
-                            device={device}
-                            onNext={() => playerStore.nextFile()}
-                            onPrev={() => playerStore.prevFile()}
-                            onPlaylistToggle={this.handleTogglePlayList}
-                            onFullScreenToggle={this.handleToggleFullscreen}
-                        />
-                    </>}
-                </div>
+                <HandleActionListener idle={idle} onAction={this.handleActivity}>
+                    <div id="player_root" className={hideUi ? 'idle' : ''}>
+                        {error && <Typography className="center" variant="h4">{error}</Typography>}
+                        {(isLoading && !error) &&
+                            <div className="player_loader-indicator center">
+                                <CircularProgress color="primary" />
+                            </div>
+                        }
+                        {(!isLoading && !error) && 
+                            <PlayBackZones 
+                                device={device} 
+                                onPause={this.handleClick}
+                                onSeek={this.handleSeek}
+                            />
+                        }
+                        {!error && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
+                        {!hideUi && <>
+                            <PlayerTitle title={playerStore.getPlayerTitle()} />
+                            <Share device={device} playlist={device.playlist} />
+                            <PlayerFilesList
+                                open={playlistOpen}
+                                device={device}
+                                onFileSelected={this.handleSelectFile}
+                            />
+                            <MediaControls
+                                fullScreen={fullScreen}
+                                device={device}
+                                onNext={() => playerStore.nextFile()}
+                                onPrev={() => playerStore.prevFile()}
+                                onPlaylistToggle={this.handleTogglePlayList}
+                                onFullScreenToggle={this.handleToggleFullscreen}
+                            />
+                        </>}
+                    </div>
+                </HandleActionListener>
             </Fullscreen >
         )
     }
