@@ -78,6 +78,7 @@ export class LocalDevice extends Device {
     }
 
     @action.bound play(currentTime) {
+        console.log("play: " + currentTime)
         this.isPlaying = true
         if (currentTime !== null && !isNaN(currentTime)) {
             this.currentTime = currentTime

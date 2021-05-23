@@ -10,7 +10,7 @@ import VideoScrean from './VideoScrean'
 import PlayBackZones from './PlayBackZones'
 import Share from './Share'
 
-import { Typography, CircularProgress, ClickAwayListener } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { observer, inject } from 'mobx-react'
 
 import { isTouchDevice } from '../utils'
@@ -67,8 +67,10 @@ class Player extends Component {
         }))
     }
 
-    handleClick = () => {
+    handlePlayPause = () => {
         const { props: { playerStore: { device } } } = this
+
+        if(device.isLoading) return
 
         if (device.isPlaying) {
             device.pause()
@@ -80,6 +82,39 @@ class Player extends Component {
     handleSeek = (time) => {
         const { props: { playerStore: { device } } } = this
         device.seeking(time)
+    }
+
+    handleSeekEnd = (time, autoPlay = false) => {
+        const { props: { playerStore: { device } } } = this
+
+        if(autoPlay) {
+            device.play(time, autoPlay)
+        } else {
+            device.seek(time)
+        }
+    }
+
+    handleKeyUp = (e) => {
+        const { props: { playerStore: { device } } } = this
+
+        const step = e.ctrlKey ? 10 : (e.shiftKey ? 60 : 30)
+
+        if (e.code == 'Space') { //spacebar
+            if (device.isPlaying) {
+                device.pause()
+            } else {
+                device.play()
+            }
+        } else if (e.code == 'ArrowLeft') {
+            device.skip(-step)
+        } else if (e.code == 'ArrowRight') {
+            device.skip(step)
+        } else if (e.code == 'KeyF') {
+            this.handleToggleFullscreen()
+        }
+
+        e.stopPropagation()
+        e.preventDefault()
     }
 
     handleIdle = (idle) => {
@@ -106,30 +141,6 @@ class Player extends Component {
             }
             this.setState({ idle: true })
         }
-    }
-
-    handleKeyUp = (e) => {
-        console.log(e.type)
-        const { props: { playerStore: { device } } } = this
-
-        const step = e.ctrlKey ? 10 : (e.shiftKey ? 60 : 30)
-
-        if (e.code == 'Space') { //spacebar
-            if (device.isPlaying) {
-                device.pause()
-            } else {
-                device.play()
-            }
-        } else if (e.code == 'ArrowLeft') {
-            device.skip(-step)
-        } else if (e.code == 'ArrowRight') {
-            device.skip(step)
-        } else if (e.code == 'KeyF') {
-            this.handleToggleFullscreen()
-        }
-
-        e.stopPropagation()
-        e.preventDefault()
     }
 
     // --- idle checking ---
@@ -179,16 +190,12 @@ class Player extends Component {
                 <HandleActionListener idle={idle} onAction={this.handleActivity}>
                     <div id="player_root" className={hideUi ? 'idle' : ''}>
                         {error && <Typography className="center" variant="h4">{error}</Typography>}
-                        {(isLoading && !error) &&
-                            <div className="player_loader-indicator center">
-                                <CircularProgress color="primary" />
-                            </div>
-                        }
-                        {(!isLoading && !error) && 
+                        {!error && 
                             <PlayBackZones 
                                 device={device} 
-                                onPause={this.handleClick}
+                                onPlayPause={this.handlePlayPause}
                                 onSeek={this.handleSeek}
+                                onSeekEnd={this.handleSeekEnd}
                             />
                         }
                         {!error && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
@@ -203,6 +210,9 @@ class Player extends Component {
                             <MediaControls
                                 fullScreen={fullScreen}
                                 device={device}
+                                onPlayPause={this.handlePlayPause}
+                                onSeek={this.handleSeek}
+                                onSeekEnd={this.handleSeekEnd}
                                 onNext={() => playerStore.nextFile()}
                                 onPrev={() => playerStore.prevFile()}
                                 onPlaylistToggle={this.handleTogglePlayList}

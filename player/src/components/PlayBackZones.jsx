@@ -8,7 +8,7 @@ import {
 } from '@material-ui/icons'
 
 import { observer } from 'mobx-react'
-import { Typography } from '@material-ui/core'
+import { Typography, CircularProgress } from '@material-ui/core'
 
 @observer
 class PlayBackZones extends Component {
@@ -31,20 +31,21 @@ class PlayBackZones extends Component {
 
         clearTimeout(this.seekDelayTimeout)
 
-        const { device, onSeek } = this.props
+        const { device, onSeek, onSeekEnd } = this.props
 
         this.accTime =(this.accTime || 0) + 10
 
         this.setState({ seekMode, accTime: this.accTime })
 
-        const { currentTime } = device
+        const { currentTime, seekTo } = device
 
-        const targetTime = seekMode == 'ff' ? currentTime + this.accTime : currentTime - this.accTime
+        let targetTime = seekTo != null ? seekTo : currentTime
+        targetTime = seekMode == 'ff' ? targetTime + this.accTime : targetTime - this.accTime
         onSeek(targetTime)
 
         this.seekDelayTimeout = setTimeout(
             () => {
-                device.play(targetTime)
+                onSeekEnd(targetTime, true)
 
                 this.cleanUpListeners()
                 this.cleanUpState()
@@ -69,14 +70,19 @@ class PlayBackZones extends Component {
 
     render() {
         const { seekMode, accTime } = this.state
-        const { device: { isPlaying, isLoading }, onPause } = this.props
+        const { device: { isPlaying, isLoading }, onPlayPause } = this.props
         const paused = accTime === null && !isPlaying
 
         return (
             <div
                 className={`player__pause-zone ${(isPlaying || isLoading) ? '' : 'player__pause-cover'}`}
-                onClick={(e) => onPause() }
+                onClick={() => onPlayPause() }
             >
+                {(accTime === null && isLoading) && 
+                    <div className="player_loader-indicator center">
+                        <CircularProgress color="primary" />
+                    </div>
+                }
                 <div className="playback-skip__indicator">
                     {accTime !== null &&
                         <Typography className="center shadow-border" variant="h2">
@@ -104,8 +110,9 @@ class PlayBackZones extends Component {
 
 PlayBackZones.propTypes = {
     device: PropTypes.object.isRequired,
-    onPause: PropTypes.func.isRequired,
+    onPlayPause: PropTypes.func.isRequired,
     onSeek: PropTypes.func.isRequired,
+    onSeekEnd: PropTypes.func.isRequired,
 }
 
 export default PlayBackZones

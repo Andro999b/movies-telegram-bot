@@ -43,6 +43,9 @@ class MediaControls extends Component {
 
     render() {
         const {
+            onPlayPause,
+            onSeek,
+            onSeekEnd,
             onPlaylistToggle,
             onFullScreenToggle,
             fullScreen,
@@ -68,11 +71,11 @@ class MediaControls extends Component {
                 <Paper elevation={0} square className="player-controls">
                     <VideoSeekSlider
                         buffered={device.buffered}
-                        currentTime={device.currentTime}
+                        currentTime={device.seekTo != null ? device.seekTo : device.currentTime}
                         seekTime={device.seekTime}
                         duration={device.duration}
-                        onSeekEnd={(time) => device.seek(time)}
-                        onSeekTime={(time) => device.seeking(time)}
+                        onSeekEnd={(time) => onSeekEnd(time)}
+                        onSeekTime={(time) => onSeek(time)}
                     />
                     <div className="player-controls__panel">
                         <div className="player-controls__panel-section">
@@ -80,12 +83,12 @@ class MediaControls extends Component {
                                 <PreviousIcon />
                             </IconButton>
                             {!device.isPlaying &&
-                                <IconButton onClick={() => device.resume()}>
+                                <IconButton onClick={() => onPlayPause()}>
                                     <PlayIcon />
                                 </IconButton>
                             }
                             {device.isPlaying &&
-                                <IconButton onClick={() => device.pause()}>
+                                <IconButton onClick={() => onPlayPause()}>
                                     <PauseIcon />
                                 </IconButton>
                             }
@@ -124,6 +127,9 @@ class MediaControls extends Component {
 MediaControls.propTypes = {
     showMessage: PropTypes.func,
     device: PropTypes.object.isRequired,
+    onPlayPause: PropTypes.func.isRequired,
+    onSeek: PropTypes.func.isRequired,
+    onSeekEnd: PropTypes.func.isRequired,
     onPlaylistToggle: PropTypes.func.isRequired,
     onFullScreenToggle: PropTypes.func,
     onPrev: PropTypes.func.isRequired,
