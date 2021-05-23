@@ -78,18 +78,20 @@ export class LocalDevice extends Device {
     }
 
     @action.bound play(currentTime) {
-        console.log("play: " + currentTime)
         this.isPlaying = true
         if (currentTime !== null && !isNaN(currentTime)) {
             this.currentTime = currentTime
             this.seekTo = currentTime
         }
         this.seekTime = null
+
+        console.log("play: " + currentTime)
     }
 
     @action.bound setSource(source) {
         this.source = source
         this.currentTime = source.currentTime || 0
+        this.seekTo = null
         this.duration = 0
         this.buffered = 0
         this.audioTrack = null
@@ -135,6 +137,7 @@ export class LocalDevice extends Device {
         if (buffered) this.buffered = buffered
         if (currentTime) {
             this.currentTime = currentTime
+            this.seekTo = null
 
             if (this.duration) {
                 const timeLimit = Math.max(0, this.duration - END_FILE_TIME_OFFSET)

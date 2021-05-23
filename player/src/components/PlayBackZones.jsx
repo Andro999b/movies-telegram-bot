@@ -39,7 +39,7 @@ class PlayBackZones extends Component {
 
         const { currentTime, seekTo } = device
 
-        let targetTime = seekTo != null ? seekTo : currentTime
+        let targetTime = seekTo || currentTime
         targetTime = seekMode == 'ff' ? targetTime + this.accTime : targetTime - this.accTime
         onSeek(targetTime)
 

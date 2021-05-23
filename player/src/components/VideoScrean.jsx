@@ -43,8 +43,10 @@ class VideoScrean extends BaseScrean {
     }
 
     onSeek(seekTo) {
-        const video = this.video.current
-        video.currentTime = seekTo
+        if(seekTo !== null) {
+            const video = this.video.current
+            video.currentTime = seekTo
+        }
     }
 
     onMute(isMuted) {
@@ -212,7 +214,7 @@ class VideoScrean extends BaseScrean {
             }
         })
         hls.on(Hls.Events.ERROR, this.handleHLSError)
-
+        // hls.on(Hls.Events.LEVEL_LOADING, this.handleLoadStart)
 
         hls.loadSource(url)
         this.hls = hls
@@ -225,6 +227,12 @@ class VideoScrean extends BaseScrean {
     handleLoadStart = () => {
         const { device } = this.props
         device.setLoading(true)
+        device.setError(null)
+    }    
+    
+    handleLoadEnd = () => {
+        const { device } = this.props
+        device.setLoading(false)
         device.setError(null)
     }
 
@@ -318,7 +326,7 @@ class VideoScrean extends BaseScrean {
         this.handleResize()
 
         device.setError(null)
-        device.setLoading(false)
+        // device.setLoading(false)
     }
 
     handleResize = () => {
@@ -399,6 +407,7 @@ class VideoScrean extends BaseScrean {
                     onLoadedMetadata={this.handleLoadedMetadata}
                     onEnded={this.handleEnded}
                     onLoadStart={this.handleLoadStart}
+                    onLoadedData={this.handleLoadEnd}
                     onWaiting={this.handleWaiting}
                     onPlaying={this.handlePlay}
                     onError={this.handleError}

@@ -71,7 +71,7 @@ class MediaControls extends Component {
                 <Paper elevation={0} square className="player-controls">
                     <VideoSeekSlider
                         buffered={device.buffered}
-                        currentTime={device.seekTo != null ? device.seekTo : device.currentTime}
+                        currentTime={device.seekTo || device.currentTime}
                         seekTime={device.seekTime}
                         duration={device.duration}
                         onSeekEnd={(time) => onSeekEnd(time)}
