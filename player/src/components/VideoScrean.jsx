@@ -95,7 +95,7 @@ class VideoScrean extends BaseScrean {
         const { props: { device } } = this
         const video = this.video.current
 
-        video.currentTime = device.currentTime
+        video.currentTime = device.seekTo || device.currentTime
         video.muted = device.isMuted
         video.volume = device.volume
         video.load()
