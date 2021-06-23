@@ -35,7 +35,8 @@ class Provider {
             headers,
             pageSize,
             timeout,
-            realip
+            realip,
+            cfbypass
         } = this.config
 
         const limit = pageCount * pageSize
@@ -47,6 +48,7 @@ class Provider {
                 this.getSearchUrl(query, page),
                 this._crawlerSearchRequestGenerator(query, page)
             )
+            .cfbypass(cfbypass)
             .headers(headers)
             .realip(realip)
             .scope(scope)
@@ -72,7 +74,8 @@ class Provider {
             detailsSelectors, 
             headers, 
             infoTimeout,
-            realip
+            realip,
+            cfbypass
         } = this.config
 
         let details = await crawler
@@ -80,6 +83,7 @@ class Provider {
                 this.getInfoUrl(resultsId), 
                 this._crawlerInfoRequestGenerator(resultsId)
             )
+            .cfbypass(cfbypass)
             .timeout(infoTimeout)
             .limit(1)
             .headers(headers)

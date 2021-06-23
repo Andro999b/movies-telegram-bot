@@ -24,10 +24,10 @@ module.exports = {
         'searchUrl': 'https://m4.animedia.pro//ajax/search_result_search_page_2/P0'
     },
     'anigato': {
-        'realip': '31.31.196.64', //TODO fuck cloudflare
-        'hostname': 'anigato.ru',
-        'baseUrl': 'https://anigato.ru/',
-        'searchUrl': 'https://anigato.ru/index.php?do=search',
+        // 'realip': '31.31.196.64', //TODO fuck cloudflare
+        // 'hostname': 'anigato.ru',
+        'baseUrl': 'https://anigato.org/',
+        'searchUrl': 'https://anigato.org/index.php?do=search',
         'token': '447d179e875efe44217f20d1ee2146be'
     },
     'kinovod': {
@@ -36,7 +36,8 @@ module.exports = {
     },
     'animevost': {
         'baseUrl': 'https://animevost.org',
-        'searchUrl': 'https://animevost.org/index.php?do=search'
+        'searchUrl': 'https://animevost.org/index.php?do=search',
+        'playerUrl': 'https://play.animegost.org',
     },
     'kinogo': {
         'baseUrl': 'https://kinogo.appspot.com',

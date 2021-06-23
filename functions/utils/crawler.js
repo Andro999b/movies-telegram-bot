@@ -1,5 +1,6 @@
 const cheerio = require('cheerio')
 const superagent = require('superagent')
+const invokeCFBypass = require('./invokeCFBypass')
 
 require('superagent-charset')(superagent)
 
@@ -12,7 +13,23 @@ cheerio.prototype[Symbol.iterator] = function* () {
 class Crawler {
     constructor(url, requestGenerator) {
         this._requestGenerator = requestGenerator || (async (nextUrl) => {
-            const targetUrl = nextUrl != this._url ?
+            if(this._cfbypass) {
+                return this._createCFBypassRequest(nextUrl)
+            } else {
+                return this._createDefaultRequest(nextUrl)
+            }
+        })
+        this._url = url
+        this._useProxy = false
+    }
+
+    async _createCFBypassRequest(nextUrl) {
+        const res = await invokeCFBypass(nextUrl, 'get', this.headers)
+        return { text: res.body }
+    }
+
+    _createDefaultRequest(nextUrl) {
+        const targetUrl = nextUrl != this._url ?
                 new URL(nextUrl, this._url).toString() :
                 nextUrl
 
@@ -29,9 +46,11 @@ class Crawler {
                 .timeout(this._timeoutMs)
                 .disableTLSCerts()
                 .set(this._headers || {})
-        })
-        this._url = url
-        this._useProxy = false
+    }
+
+    cfbypass(bypass) {
+        this._cfbypass = bypass
+        return this
     }
 
     realip(ip) {
@@ -100,7 +119,9 @@ class Crawler {
 
         const step = async (currentUrl) => {
             const res = await this._requestGenerator(currentUrl)
-            
+
+            console.log(res)
+
             const $ = cheerio.load(res.text, { xmlMode: false })
 
             const nextUrl =

@@ -56,22 +56,8 @@ class AnimeVostProvider extends DataLifeProvider {
     }
 
     async getSource(resultsId, sourceId) {
-        const url = `${this.config.baseUrl}/frame2.php?play=${decodeURIComponent(sourceId)}`
-        const iframeUrl = url.startsWith('//') ? 'https:' + url : url
-
-        const iframeRes = await superagent
-            .get(iframeUrl)
-            .timeout(this.config.timeout)
-            .disableTLSCerts()
-
-        const matches = iframeRes.text.match(/https?[^\s"]+/)
-
-        if(matches.length == null) return []
-
-        const targetUrl = matches[0]
-
         const siteRes = await superagent
-            .get(targetUrl)
+            .get(`${this.config.playerUrl}/${decodeURIComponent(sourceId)}?old=1`)
             .timeout(5000)
             .disableTLSCerts()
 

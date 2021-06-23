@@ -7,6 +7,7 @@ const { extractJSStringPropery } = require('../utils/extractScriptVariable')
 class AnigatoProvider extends DataLifeProvider {
     constructor() {
         super('anigato', {
+            cfbypass: true,
             scope: '.sres-wrap',
             selectors: {
                 id: {

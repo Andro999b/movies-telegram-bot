@@ -1,57 +1,45 @@
 const Provider = require("./Provider");
-const superagent = require("superagent");
+const invokeCFBypass = require("../utils/invokeCFBypass");
 
-const wakanimPrefix = "https://wakanim.xyz/cdn/".length;
+const wakanimPrefix = "https://wakanim.xyz/cdn/index.php?file=".length;
 
 class NekomoriProvider extends Provider {
   constructor() {
-    super("nekomori");
+    super("nekomori")
   }
 
   async search(query) {
-    const { baseUrl, postersCDNUrl, timeout, realip } = this.config;
+    const { baseUrl, postersCDNUrl } = this.config;
 
     query = this._prepareQuery(query);
 
     try {
-      const ret = await superagent
-        .get(
-          `${baseUrl}/arts?search=${encodeURIComponent(
-            query
-          )}&page=1&perpage=20`
-        )
-        .connect(realip)
-        .timeout(timeout);
+      const ret = await invokeCFBypass(`${baseUrl}/arts?search=${encodeURIComponent(query)}&page=1&perpage=20`)
 
-      return ret.body.page.map(({ id, name }) => ({
+      return JSON.parse(ret.body).page.map(({ id, name }) => ({
         provider: this.name,
         id,
         name: name.ru || name.en,
         image: `${postersCDNUrl}/${id}.jpg`,
       }));
     } catch (err) {
-      console.log(err);
-      return [];
+      console.log(err)
+      return []
     }
   }
 
   async getInfo(artId) {
-    const { baseUrl, timeout, postersCDNUrl, realip } = this.config
+    const { baseUrl, postersCDNUrl } = this.config
 
-    let ret = await superagent
-        .get(`${baseUrl}/arts/${artId}`)
-        .connect(realip)
-        .timeout(timeout)
+    let ret = await invokeCFBypass(`${baseUrl}/arts/${artId}`)
+    const body = JSON.parse(ret.body)
+    
+    const title = body.name.ru
+    const totalEp = body.ep_total
 
-    const title = ret.body.name.ru
-    const totalEp = ret.body.ep_total
+    ret = await invokeCFBypass(`${baseUrl}/external/kartinka?artId=${artId}`)
 
-    ret = await superagent
-      .get(`${baseUrl}/external/kartinka?artId=${artId}`)
-      .connect(realip)
-      .timeout(timeout);
-
-    const seed = ret.text.substring(wakanimPrefix)
+    const seed = ret.body.substring(wakanimPrefix)
 
     return {
       id: artId,
@@ -74,32 +62,28 @@ class NekomoriProvider extends Provider {
 
     const [seed, episode] = sourceId.split(":");
 
-    const ret = await superagent
-      .get(`https://wakanim.xyz/cdn/list?page=${episode}`)
-      .set({ seed });
+    const ret = await invokeCFBypass(`https://wakanim.xyz/cdn/list?page=${episode}`, "get", { seed })   
 
     const lookupConfig = (src) => {
-      const key = configKeys.find((key) => src.includes(key));
-      return sourceConfig[key];
-    };
+      const key = configKeys.find((key) => src.includes(key))
+      return sourceConfig[key]
+    }
 
     const file = {
       id: parseInt(episode),
       name: `Episode ${episode}`,
       urls: [],
-    };
-
-    console.log(ret.body)
+    }
 
     ret.body.forEach(({ authors, src }) => {
-      const config = lookupConfig(src);
+      const config = lookupConfig(src)
       if (!config) return;
 
       const { extractor } = config
 
       const audio = authors[0].name
       file.urls = file.urls.concat([{ audio, url: src, extractor: { type: extractor }}])
-    });
+    })
 
     return file
   }

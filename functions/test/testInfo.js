@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'kinogo'
-const id = 'https%3A%2F%2Fkinogo.appspot.com%2F19474-terminator-dark-fate_2019__14-01.html'
+const provider = 'anigato'
+const id = 'https%3A%2F%2Fanigato.ru%2Fanime_ova%2F1794-vanpanchmen-ova.html'
 
 console.log(decodeURIComponent(id))
 

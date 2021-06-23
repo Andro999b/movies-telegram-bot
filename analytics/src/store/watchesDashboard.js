@@ -10,7 +10,5 @@ export default observable({
     reload(force) {
         this.loading = true
         this.error = null
-
-
     }
 })
