@@ -29,7 +29,7 @@ class HandleActionListener extends Component {
 
     render() {
         if(isTouchDevice()) { 
-            return (<div onClickCapture={this.handleClick}>
+            return (<div onClickCapture={this.handleClick} onTouchMoveCapture={() => this.props.onAction()}>
                 {this.props.children}
             </div>)
         } else {

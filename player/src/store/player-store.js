@@ -84,8 +84,6 @@ export class LocalDevice extends Device {
             this.seekTo = currentTime
         }
         this.seekTime = null
-
-        console.log("play: " + currentTime)
     }
 
     @action.bound setSource(source) {
