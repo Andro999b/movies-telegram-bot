@@ -40,8 +40,8 @@ module.exports = {
         'playerUrl': 'https://play.animegost.org',
     },
     'kinogo': {
-        'baseUrl': 'https://kinogo.appspot.com',
-        'searchUrl': 'https://kinogo.appspot.com/index.php?do=search'
+        'baseUrl': 'https://kinogo.la',
+        'searchUrl': 'https://kinogo.la/index.php?do=search'
     },
     'kinogo2': {
         'baseUrl': 'https://kinogo.cc',
