@@ -1,15 +1,26 @@
 const superagent = require('superagent')
 const makeResponse = require('../utils/makeResponse')
 
+function defaultLinkExtractor(links, hls) {
+    const bestQuality = Object.keys(links).pop()
+    let redirectUrl = links[bestQuality][0].src
+
+    if(!hls) {
+        redirectUrl = redirectUrl.replace(':hls:manifest.m3u8', '')
+    }
+
+    return redirectUrl
+}
+
 module.exports = async (params) => {
-    const { url, referer, hls, linksApi, hash2 = 'vbWENyTwIn8I' } = params
+    const { url, referer, hls, linksApi, hash2 = 'vbWENyTwIn8I', linkExtractor = defaultLinkExtractor } = params
 
     let targetUrl
     if(!url.includes('/go/')) {
         const res = await superagent
             .get(url.startsWith('//') ? 'https:' + url : url)
             .set({ 'Referer': referer || url })
-            .timeout(5000)
+            .timeout(10000)
 
         const matches = res.text.match(/iframe\.src = "([^"]+)"/)
 
@@ -40,8 +51,6 @@ module.exports = async (params) => {
         info: "{}"
     }
 
-    console.log(targetUrl.toString(), videoInfoParams);
-
     const videoInfoRes = await superagent
         .post(linksApi || 'https://kodik.info/video-links')
         .type('form')
@@ -55,12 +64,7 @@ module.exports = async (params) => {
     const videoInfo = JSON.parse(videoInfoRes.text)
     const links = videoInfo.links
 
-    const bestQuality = Object.keys(links).pop()
-    let redirectUrl = links[bestQuality][0].src
-
-    if(!hls) {
-        redirectUrl = redirectUrl.replace(':hls:manifest.m3u8', '')
-    }
+    let redirectUrl = linkExtractor(links, hls)
 
     if(redirectUrl.startsWith('//')) {
         redirectUrl = 'https:' + redirectUrl
@@ -70,3 +74,4 @@ module.exports = async (params) => {
         Location: redirectUrl
     })
 }
+module.exports.defaultLinkExtractor = defaultLinkExtractor

@@ -1,8 +1,8 @@
 const AWS = require('aws-sdk')
 const lambda = new AWS.Lambda()
 
-const ACCOUNT_ID = process.env.ACCOUNT_ID
-const REGION = process.env.REGION
+const ACCOUNT_ID = process.env.ACCOUNT_ID || '534471691183'
+const REGION = process.env.REGION || AWS.config.region
 
 module.exports = (url, method = "get", headers = {}) => new Promise((resolve, reject) => {
     var params = {

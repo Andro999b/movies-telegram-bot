@@ -37,7 +37,7 @@ class AnigatoProvider extends DataLifeProvider {
                         const worldArtId = extractJSStringPropery(script, 'worldartAnimationID')
 
                         const iframeSrc = await this.getKodikPlayer(worldArtId)
-                        
+
                         const res = await superagent
                             .get(iframeSrc.startsWith('//') ? 'https:' + iframeSrc : iframeSrc)
                             .timeout(this.config.timeout)
@@ -91,11 +91,11 @@ class AnigatoProvider extends DataLifeProvider {
     }
 
     async getKodikPlayer(worldartAnimationID) {
-        const { token, timeout } = this.config
+        const { token, infoTimeout } = this.config
 
         const res = await superagent
             .get(`https://kodikapi.com/get-player?hasPlayer=false&token=${token}&worldartAnimationID=${worldartAnimationID}`)
-            .timeout(timeout)
+            .timeout(infoTimeout)
 
         return res.body.link
     }
