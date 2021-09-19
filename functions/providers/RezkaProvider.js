@@ -105,7 +105,7 @@ class RezkaProvider extends Provider {
 
     const { dataId, translatorId, season, episode } = JSON.parse(base64decode(sourceId));
 
-    console.log(`id=${dataId}&translator_id=${translatorId}&season=${season}&episode=${episode}&action=get_stream`)
+    console.log(`${baseUrl}/ajax/get_cdn_series/?t=${Date.now()}`, `id=${dataId}&translator_id=${translatorId}&season=${season}&episode=${episode}&action=get_stream`)
 
     const res = await request
       .post(`${baseUrl}/ajax/get_cdn_series/?t=${Date.now()}`)
@@ -118,6 +118,8 @@ class RezkaProvider extends Provider {
 
 
     const body = JSON.parse(res.text)
+
+    console.log(res.text)
 
     return { urls: parsePlayerJSFile(body.url) };
   }
