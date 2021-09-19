@@ -21,23 +21,6 @@ class AnidubProvider extends DataLifeProvider {
                     selector: '.img-box img',
                     transform: ($el) => this._absoluteUrl($el.attr('data-src'))
                 },
-                // files: {
-                //     selector: '.video-box .series-tab',
-                //     transform: ($el) => $el.children()
-                //         .toArray()
-                //         .map((el) => $(el))
-                //         .filter(($el) => $el.attr('data').startsWith('/player/index.php'))
-                //         .map(($el,id) => {
-                //             return {
-                //                 id,
-                //                 name: $el.text(),
-                //                 urls: [{
-                //                     url: $el.attr('data'),
-                //                     extractor: { type: 'anidub' }
-                //                 }]
-                //             }
-                //         })
-                // },
                 files: {
                     selector: '.video-box .series-tab span',
                     transform: ($el) => $el

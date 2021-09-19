@@ -82,27 +82,6 @@ class KinovodProvider extends Provider {
     getSearchUrl(query) {
         return `${this.config.searchUrl}?query=${encodeURIComponent(query)}`
     }
-
-    // async search(query) {
-    //     const { timeout } = this.config
-
-    //     const res = await superagent
-    //         .get(this.getSearchUrl(query))
-    //         .set({ "Referer": this.config.baseUrl })
-    //         .set({ "X-Requested-With": "XMLHttpRequest" })
-    //         .timeout(timeout)
-
-
-    //     const body = JSON.parse(res.text)
-    //     if (!body.suggestions) return []
-
-    //     return body.suggestions
-    //         .map(({ url, year, value}) => ({
-    //             name: year ? `${value} (${year})` : value,
-    //             id: urlencode(url),
-    //             provider: this.name
-    //         }))
-    // }
 }
 
 module.exports = KinovodProvider

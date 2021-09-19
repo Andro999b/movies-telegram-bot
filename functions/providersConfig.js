@@ -2,6 +2,10 @@ module.exports = {
     'timeout': 5,
     'infoTimeout': 20,
     'pageSize': 15,
+    'rezka': {
+        'baseUrl': 'https://rezka.ag',
+        'searchUrl': 'https://rezka.ag/search/?do=search&subaction=search'
+    },
     'videocdn': {
         'baseUrl': 'https://videocdn.tv/api',
         'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
@@ -24,7 +28,7 @@ module.exports = {
         'searchUrl': 'https://m4.animedia.pro//ajax/search_result_search_page_2/P0'
     },
     'anigato': {
-        // 'realip': '31.31.196.64', //TODO fuck cloudflare
+        // 'realip': '31.31.196.64',
         // 'hostname': 'anigato.ru',
         'baseUrl': 'https://anigato.org/',
         'searchUrl': 'https://anigato.org/index.php?do=search',
@@ -43,17 +47,9 @@ module.exports = {
         'baseUrl': 'https://kinogo.la',
         'searchUrl': 'https://kinogo.la/index.php?do=search'
     },
-    'kinogo2': {
-        'baseUrl': 'https://kinogo.cc',
-        'searchUrl': 'https://kinogo.cc/index.php?do=search'
-    },
     'seasonvar': {
         'encryptKey': 'ololo',
         'baseUrl': 'http://seasonvar.ru',
         'searchUrl': 'http://seasonvar.ru/autocomplete.php'
-    },
-    '7serealov': {
-        'baseUrl': 'http://7serialov.net',
-        'searchUrl': 'https://7serialov.net'
     }
 }
