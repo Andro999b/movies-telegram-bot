@@ -64,22 +64,24 @@ class DownloadSelector extends BaseSelector {
         const fileName = `${title} - ${file.name}`
 
         if (urls) {
-            const items = urls.map((it, index) => {
-                const { title, downloadUrl } = this.getTitleAndDownloadUrl(it, fileName)
+            const items = urls
+                .filter(({ url }) => !url.endsWith("m3u8"))
+                .map((it, index) => {
+                    const { title, downloadUrl } = this.getTitleAndDownloadUrl(it, fileName)
 
-                return (
-                    <MenuItem
-                        component='a'
-                        href={downloadUrl}
-                        download={fileName}
-                        target="_blank"
-                        key={index}
-                        onClick={this.handleTrackDownload}
-                    >
-                        {title}
-                    </MenuItem>
-                )
-            })
+                    return (
+                        <MenuItem
+                            component='a'
+                            href={downloadUrl}
+                            download={fileName}
+                            target="_blank"
+                            key={index}
+                            onClick={this.handleTrackDownload}
+                        >
+                            {title}
+                        </MenuItem>
+                    )
+                })
 
             return (<MenuList>{items}</MenuList>)
         }
