@@ -3,8 +3,8 @@ module.exports = {
     'infoTimeout': 20,
     'pageSize': 15,
     'rezka': {
-        'baseUrl': 'https://rezka.ag',
-        'searchUrl': 'https://rezka.ag/search/?do=search&subaction=search'
+        'baseUrl': 'https://corsproxy.movies-player.workers.dev/?https://rezka.ag',
+        'searchUrl': 'https://corsproxy.movies-player.workers.dev/?https://rezka.ag/search/?do=search&subaction=search'
     },
     'videocdn': {
         'baseUrl': 'https://videocdn.tv/api',

@@ -4,6 +4,7 @@ import { getPlaylistPrefix } from '../utils'
 import analytics from '../utils/analytics'
 import store from '../utils/storage'
 import logger from '../utils/logger'
+import asyncSourceLoaders from '../utils/asyncSource'
 import localization from '../localization'
 
 const END_FILE_TIME_OFFSET = 60
@@ -177,9 +178,17 @@ export class LocalDevice extends Device {
 
             const { provider, id } = this.playlist
 
+            let loader
 
-            return fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${file.asyncSource}`)
-                .then((res) => res.json())
+            const asyncSourceLoader = asyncSourceLoaders[provider]
+            if(asyncSourceLoader) {
+                loader = asyncSourceLoader(file.asyncSource)
+            } else {
+                loader = fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${file.asyncSource}`)
+                    .then((res) => res.json())
+            }
+
+            return loader
                 .then((source) => {
                     if (fileIndex == this.currentFileIndex) {
                         Object.keys(source).forEach((key) => file[key] = source[key])
