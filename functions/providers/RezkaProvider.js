@@ -39,7 +39,11 @@ class RezkaProvider extends Provider {
             }
           },
         },
-      },
+        trailer: {
+          selector: '#videoplayer>iframe',
+          transform: ($el) => this._absoluteUrl($el.attr('src'))
+        }
+      }
     });
   }
 

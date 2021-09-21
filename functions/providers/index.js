@@ -11,7 +11,7 @@ const providers = [
     new (require('./NekomoriProvider'))()
 ]
 
-const MAX_RESULTS = 30
+const MAX_RESULTS = 10
 
 module.exports = {
     getProviders() {

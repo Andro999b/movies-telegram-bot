@@ -11,7 +11,7 @@ export default new LocalizedStrings({
         curTimePos: 'Current time',
         shuffleOn: 'Shuffle playlist mode ON',
         shuffleOff: 'Shuffle playlist mode OFF',
-        searchAlternatives: '{0}<br/><a id="altenativeLink" href="{1}">Search alternative links</a>',
+        searchAlternatives: 'Search alternatives',
         moviesBotTip: 'movies and tv shows',
         animeBotTip: 'search anime',
         translation: 'Translation',
