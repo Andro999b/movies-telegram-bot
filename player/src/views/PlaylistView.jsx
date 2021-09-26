@@ -40,18 +40,18 @@ class PlaylistView extends Component {
     time = 0
 
     handleStartClick = () => {
-        this.setState({ started: true })
-
-        if (isTouchDevice()) {
-            this.setState({ initialFullScreen: true })
-        }
-
+        this.setState({ loading: true })
         const { openPlaylist, playlist, watching } = this.props
-
-        openPlaylist(playlist, this.fileIndex, this.time)
         watching(playlist)
-
-        analytics('start', document.title)
+            .then(() => openPlaylist(playlist, this.fileIndex, this.time))
+            .then(() => { 
+                this.setState({ 
+                    started: true, 
+                    loading: false,
+                    initialFullScreen: isTouchDevice()
+                })
+                analytics('start', document.title)
+            })
     }
 
 

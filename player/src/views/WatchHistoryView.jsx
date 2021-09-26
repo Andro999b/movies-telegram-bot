@@ -1,4 +1,4 @@
-import { inject } from 'mobx-react'
+import { inject, observer } from 'mobx-react'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import DualCirclesLoader from '../components/DualCirclesLoader'
@@ -14,39 +14,25 @@ import { Link } from 'react-router-dom'
 
 import localization from '../localization'
 import { Delete } from '@material-ui/icons'
+import SyncButton from '../components/SyncButton'
 
 @inject('watchHistoryStore')
+@observer
 class WatchHistoryView extends Component {
 
-    state = {
-        history: null
-    }
-
     componentDidMount() {
-        this.reloadHistory()
         document.title = localization.watchHistory
     }
 
-    reloadHistory() {
-        const { watchHistoryStore } = this.props
-        watchHistoryStore
-            .getHistory()
-            .toArray()
-            .then((history) => this.setState({ history }))
-    }
 
     onDelete = (e, key) => {
         e.preventDefault()
-
         const { watchHistoryStore } = this.props
-        this.setState({ history: null })
-
         watchHistoryStore.delete(key)
-            .then(() => this.reloadHistory())
     }
 
     render() {
-        const { history } = this.state
+        const { history } = this.props.watchHistoryStore
 
         return (
             <div className="screan-content">
@@ -84,7 +70,9 @@ class WatchHistoryView extends Component {
     }
 
 
-    renderContent(history) {
+    renderContent() {
+        const { insync, connect, disconnect, history } = this.props.watchHistoryStore
+
         return (
             <>
                 <div className="watch-history__content">
@@ -92,6 +80,7 @@ class WatchHistoryView extends Component {
                         <Typography variant="h4">
                             {localization.watchHistory}
                         </Typography>
+                        <SyncButton  insync={insync} onConnect={connect} onDisconnect={disconnect}/>
                     </div>
                     {history.length == 0  && 
                         <Typography className="center" variant="h4">{localization.noWatchHistory}</Typography>

@@ -1,11 +1,10 @@
 import { observable, action } from 'mobx'
-
-import { getPlaylistPrefix } from '../utils'
 import analytics from '../utils/analytics'
 import store from '../utils/storage'
 import logger from '../utils/logger'
 import asyncSourceLoaders from '../utils/asyncSource'
 import localization from '../localization'
+import watchHistoryStore from './watch-history-store'
 
 const END_FILE_TIME_OFFSET = 60
 
@@ -98,19 +97,11 @@ export class LocalDevice extends Device {
         this.quality = null
 
         if (source.urls) {
-            this.qualities = Array.from(new Set(
-                source.urls
-                    .map((it) => it.quality)
-                    .filter((it) => it)
-            ))
+            this.qualities = Array.from(new Set(source.urls.map((it) => it.quality).filter((it) => it)))
 
             this.setAudioTracks(
                 Array.from(
-                    new Set(
-                        source.urls
-                            .map((it) => it.audio)
-                            .filter((it) => it)
-                    )
+                    new Set(source.urls.map((it) => it.audio).filter((it) => it))
                 )
                     .map((it) => ({ id: it, name: it }))
             )
@@ -141,7 +132,7 @@ export class LocalDevice extends Device {
             if (this.duration) {
                 const timeLimit = Math.max(0, this.duration - END_FILE_TIME_OFFSET)
                 const mark = Math.min(timeLimit, currentTime)
-                store.set(`${getPlaylistPrefix(this.playlist)}:ts`, mark)
+                watchHistoryStore.updateLastEpisodePosition(this.playlist, mark)
             }
         }
     }
@@ -164,9 +155,7 @@ export class LocalDevice extends Device {
 
         this.setError(null)
 
-        const playlistPrefix = getPlaylistPrefix(this.playlist)
-
-        store.set(`${playlistPrefix}:current`, fileIndex)
+        watchHistoryStore.updateLastEpisode(this.playlist, fileIndex)
 
         this.currentFileIndex = fileIndex
 
@@ -235,22 +224,24 @@ export class LocalDevice extends Device {
     @action.bound setAudioTrack(id) {
         this.audioTrack = id
         this.setError(null)
-        store.set(`${getPlaylistPrefix(this.playlist)}:audio_track`, id)
+        watchHistoryStore.updateAudioTrack(this.playlist, id)
     }
 
     @action.bound setAudioTracks(audioTracks) {
         this.audioTracks = audioTracks
 
         if (audioTracks.length > 0) {
-            const storesAudioTrack = store.get(`${getPlaylistPrefix(this.playlist)}:audio_track`)
-            if (storesAudioTrack) {
-                const audioTrack = audioTracks.find(({ id }) => id == storesAudioTrack)
-                if (audioTrack) {
-                    this.audioTrack = audioTrack.id
-                } else {
-                    this.audioTrack = audioTracks[0].id
-                }
-            }
+            watchHistoryStore.audioTrack(this.playlist)
+                .then((storedTrack) => {
+                    if(storedTrack) {
+                        const audioTrack = audioTracks.find(({ id }) => id == storedTrack)
+                        if (audioTrack) {
+                            this.audioTrack = audioTrack.id
+                        } else {
+                            this.audioTrack = audioTracks[0].id
+                        }
+                    }
+                })
         }
     }
 
@@ -263,19 +254,20 @@ class PlayerStore {
     @observable device = new LocalDevice()
 
     @action.bound openPlaylist(playlist, fileIndex, startTime) {
-        if (fileIndex == null || isNaN(fileIndex)) {
-            fileIndex = store.get(`${getPlaylistPrefix(playlist)}:current`)
-
-            if (startTime == null || isNaN(startTime)) {
-                startTime = parseFloat(store.get(`${getPlaylistPrefix(playlist)}:ts`))
-            }
+        let p
+        if(fileIndex == null || isNaN(fileIndex)) {
+            p = watchHistoryStore.lastEpisode(playlist)   
+        } else {
+            p = Promise.resolve({ fileIndex, startTime })
         }
 
-        this.device.setPlaylist(playlist, fileIndex, startTime)
-        this.device.play()
-        document.title = this.getPlayerTitle()
-
-        analytics('selectFile', document.title)
+        return p.then(({ fileIndex, startTime }) => {
+            this.device.setPlaylist(playlist, fileIndex, startTime)
+            this.device.play()
+            document.title = this.getPlayerTitle()
+    
+            analytics('selectFile', document.title)
+        })
     }
 
     @action.bound switchFile(fileIndex) {

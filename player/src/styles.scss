@@ -250,6 +250,9 @@ html {
 
 .watch-history__title {
     padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .watch-history__content {
