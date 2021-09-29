@@ -2,7 +2,7 @@ const DataLifeProvider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
 const $ = require('cheerio')
-const { extractJSStringPropery } = require('../utils/extractScriptVariable')
+const { extractJSStringProperty } = require('../utils/extractScriptVariable')
 
 class AnigatoProvider extends DataLifeProvider {
     constructor() {
@@ -34,7 +34,7 @@ class AnigatoProvider extends DataLifeProvider {
                             .children[0]
                             .data
 
-                        const worldArtId = extractJSStringPropery(script, 'worldartAnimationID')
+                        const worldArtId = extractJSStringProperty(script, 'worldartAnimationID')
 
                         const iframeSrc = await this.getKodikPlayer(worldArtId)
 

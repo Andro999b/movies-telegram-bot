@@ -18,11 +18,12 @@ export const NAMES ={
 
 export const PROVIDERS = [
     'videocdn',
+    'rezka',
     'kinogo',
     'kinovod',
     'seasonvar',
-    '7serealov',
-    'nekomori',
+    // '7serealov',
+    // 'nekomori',
     'anidub',
     'animedia',
     'animevost',

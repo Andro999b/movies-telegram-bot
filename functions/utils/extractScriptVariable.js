@@ -1,3 +1,5 @@
+const JSON5 = require('json5')
+
 function extractString(script, varName) {
     const parts = script.match(new RegExp(`${varName} = "([^"]+)"`))
 
@@ -8,7 +10,7 @@ function extractString(script, varName) {
     return null
 }
 
-function extractStringPropery(script, varName) {
+function extractStringProperty(script, varName) {
     const parts = script.match(new RegExp(`"${varName}":"([^"]+)"`))
 
     if (parts && parts.length > 1) {
@@ -18,7 +20,17 @@ function extractStringPropery(script, varName) {
     return null
 }
 
-function extractJSStringPropery(script, varName) {
+function extractArrayProperty(script, varName) {
+    const parts = script.match(new RegExp(`${varName}:(.*)`))
+
+    if (parts && parts.length > 1) {
+        return JSON5.parse(parts[1]) 
+    }
+
+    return null
+}
+
+function extractJSStringProperty(script, varName) {
     const parts = script.match(new RegExp(`${varName}:\\s+"([^"]+)"`))
 
     if (parts && parts.length > 1) {
@@ -50,8 +62,9 @@ function extractNumber(script, varName) {
 
 module.exports = {
     extractString,
-    extractStringPropery,
-    extractJSStringPropery,
+    extractStringProperty,
+    extractArrayProperty,
+    extractJSStringProperty,
     extractNumber,
     extractObject
 }

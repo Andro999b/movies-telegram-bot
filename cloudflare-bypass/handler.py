@@ -7,15 +7,14 @@ def proxy(event, context):
     response = None
     headers = event.get("headers")
 
-    print(url)
-    print(headers)
+    # print(event)
 
     if event.get("method") == "post":
-        response = scraper.post(url, json = event["json"], headers = headers)
+        response = scraper.post(url, data=event["body"], headers = headers)
     else:
         response = scraper.get(url, headers = headers)
 
     return {
         "statusCode": response.status_code,
-        "body": response.text
+        "text": response.text
     }

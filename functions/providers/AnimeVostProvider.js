@@ -1,5 +1,5 @@
 const DataLifeProvider = require('./DataLifeProvider')
-const { extractObject, extractStringPropery } = require('../utils/extractScriptVariable')
+const { extractObject, extractStringProperty } = require('../utils/extractScriptVariable')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
@@ -61,7 +61,7 @@ class AnimeVostProvider extends DataLifeProvider {
             .timeout(5000)
             .disableTLSCerts()
 
-        const playerJsPlaylist = extractStringPropery(siteRes.text, 'file')
+        const playerJsPlaylist = extractStringProperty(siteRes.text, 'file')
 
         return convertPlayerJSPlaylist(playerJsPlaylist)[0]
     }

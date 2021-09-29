@@ -47,9 +47,6 @@ const App = () => {
                         <Route path="/storage">
                             <StorageDashboard />
                         </Route>
-                        <Route path="/watches">
-                            <TopWatchesDashboard />
-                        </Route>
                         <Route path="/errors">
                             <ErrorLogDashboard />
                         </Route>

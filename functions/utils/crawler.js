@@ -23,9 +23,8 @@ class Crawler {
         this._useProxy = false
     }
 
-    async _createCFBypassRequest(nextUrl) {
-        const res = await invokeCFBypass(nextUrl, 'get', this.headers)
-        return { text: res.body }
+    _createCFBypassRequest(nextUrl) {
+        return invokeCFBypass(nextUrl, 'get', this.headers)
     }
 
     _createDefaultRequest(nextUrl) {
@@ -119,6 +118,8 @@ class Crawler {
 
         const step = async (currentUrl) => {
             const res = await this._requestGenerator(currentUrl)
+
+            // console.log(res)
 
             const $ = cheerio.load(res.text, { xmlMode: false })
 

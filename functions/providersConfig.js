@@ -43,6 +43,10 @@ module.exports = {
         'searchUrl': 'https://animevost.org/index.php?do=search',
         'playerUrl': 'https://play.animegost.org',
     },
+    // 'kinogo': {
+    //     'baseUrl': 'https://kinogo-net.org/v46',
+    //     'searchUrl': 'https://kinogo-net.org/v46/index.php?do=search'
+    // },
     'kinogo': {
         'baseUrl': 'https://kinogo.la',
         'searchUrl': 'https://kinogo.la/index.php?do=search'

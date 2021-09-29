@@ -1,4 +1,4 @@
-const DataLifeProvider = require('./DataLifeProvider')
+const DataLifeProvider = require('./CFDataLifeProvider')
 const superagent = require('superagent')
 const urlencode = require('urlencode')
 const videocdnembed = require('../utils/videocdnembed')

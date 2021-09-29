@@ -1,5 +1,5 @@
 const superagent = require('superagent')
-const { extractStringPropery } = require('./extractScriptVariable')
+const { extractStringProperty } = require('./extractScriptVariable')
 
 const extractFromKinopoisk = async (link) => {
     if (link.startsWith('https://www.kinopoisk.ru')) {
@@ -7,7 +7,7 @@ const extractFromKinopoisk = async (link) => {
             .get(`https://corsproxy.movies-player.workers.dev/?${link}`)
             .timeout(5000)
 
-        return extractStringPropery(res.text, 'name')
+        return extractStringProperty(res.text, 'name')
     }
 
     return null
