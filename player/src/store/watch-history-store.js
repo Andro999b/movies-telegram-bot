@@ -4,6 +4,7 @@ import { observable, action } from 'mobx'
 import { getAuth, signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider } from 'firebase/auth'
 import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, updateDoc, query, orderBy } from 'firebase/firestore'
+import log from '../utils/logger'
 initializeApp({
   apiKey: "AIzaSyCoQdUA6jN3cWx_yopHDVsC2aIW9Bor2P4",
   authDomain: "movies-player.firebaseapp.com",
@@ -60,28 +61,25 @@ class WatchHistoryStore {
     watching = (playlist) => {
         return Promise.all([
             this._localWatching(playlist),
-            this._remoteWatching(playlist)
+            this._remoteWatching(playlist).catch((e) => log.error(e.message, e))
         ])
             .then(this._loadHistory)
-            .catch(console.log)
     }
 
     delete = (key) => {
         return Promise.all([
             this._localDelete(key),
-            this._remoteDelete(key)
+            this._remoteDelete(key).catch((e) => log.error(e.message, e))
         ])
             .then(this._loadHistory)
-            .catch(console.log)
     }
 
     updateLastEpisode = ({provider, id}, fileIndex) => {
         const key = `${provider}#${id}`
         return Promise.all([
                 this._localUpdate(key, { fileIndex }),
-                this._remoteUpdate(key, { fileIndex })
+                this._remoteUpdate(key, { fileIndex }).catch((e) => log.error(e.message, e))
             ])
-            .catch(console.log)
     }
 
 
