@@ -26,7 +26,7 @@ module.exports = function (playlist, linksExtractor = getBestPlayerJSQuality) {
                     }
                 }
 
-                item.name = `Episode ${++counter}`
+                item.name = it.title || `Episode ${++counter}`
     
                 if(prefix) {
                     item.path = prefix

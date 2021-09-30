@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'anigato'
-const id = 'https%3A%2F%2Fanigato.org%2Fanime_ova%2F5202-trava-mezhplanetnyj-kulak.html'
+const provider = 'animedia'
+const id = 'https://m43.animedia.pro/anime/megaloboks'
 
 console.log(decodeURIComponent(id))
 

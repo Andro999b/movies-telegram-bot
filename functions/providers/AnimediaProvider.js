@@ -16,29 +16,33 @@ class AnimediaProvider extends Provider {
                     transform: ($el) => this._absoluteUrl($el.attr('href'))
                 },
                 files: {
-                    selector: '#btn_fav1',
+                    selector: '.media__tabs',
                     transform: async ($el) => {
-                        const url = this._absoluteUrl($el.attr('href'))
+                        const { baseUrl, timeout } = this.config 
+                        const dataId = $el.find('>ul').attr('data-entry_id')
+                        const seasons = $el.find('>ul>li>a').toArray().map((el) => $(el).text())
 
-                        let res = await superagent
-                            .get(url)
-                            .timeout(this.config.timeout)
+                        console.log(seasons)
 
-                        const $page = $(res.text, { xmlMode: false })
+                        const playlistsLoaders = seasons.map((_, i) => 
+                            superagent
+                                .get(`${baseUrl}/embeds/playlist-j.txt/${dataId}/${i + 1}`)
+                                .timeout(timeout)
+                                .then(it => it.text)
+                        )
+                        const playlists = await Promise.all(playlistsLoaders)
 
-                        const script = $page.find('#playlist_container').next('script')
-                            .toArray()[0]
-                            .children[0]
-                            .data
-
-                        const { file } = stripPlayerJSConfig(script)
-
-                        res = await superagent
-                            .get(this._absoluteUrl(file))
-                            .timeout(this.config.timeout)
-
-                        return convertPlayerJSPlaylist(JSON.parse(res.text))
-                            .map((file, id) => ({ id,...file }))
+                        if(playlists.length == 1) {
+                            return convertPlayerJSPlaylist(JSON.parse(playlists[0]))
+                                .map((file, id) => ({ id, ...file }))
+                        } else {
+                            let id = 0
+                            return playlists.reduce((files, playlist, i) => {
+                                const playlistFiles = convertPlayerJSPlaylist(JSON.parse(playlist))
+                                    .map((file) => ({ id: ++id, ...file, name: `${seasons[i]}/${file.name}` }))
+                                return [...files, ...playlistFiles]
+                            }, [])
+                        }
                     }
                 }
             }

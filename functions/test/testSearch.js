@@ -1,9 +1,9 @@
 const providers = require('../providers')
 const util = require('util')
 
-const providerName = 'anigato'
+// const providerName = 'anigato'
 // const providerName = 'anidub'
-// const providerName = 'animedia'
+const providerName = 'animedia'
 // const providerName = 'kinovod'
 // const providerName = 'kinogo'
 // const providerName = 'rezka'

@@ -12,7 +12,6 @@ import BotUsersPage from './pages/BotUsersPage'
 import GADashboard from './pages/GADashboard'
 import StorageDashboard from './pages/StorageDashboard'
 import ErrorLogDashboard from './pages/ErrorLogDashboard'
-import TopWatchesDashboard from './pages/TopWatchesDashboard'
 
 const useStyles = makeStyles({
     root: {
