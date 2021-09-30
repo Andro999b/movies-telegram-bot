@@ -20,13 +20,19 @@ class AnimediaProvider extends Provider {
                     transform: async ($el) => {
                         const { baseUrl, timeout } = this.config 
                         const dataId = $el.find('>ul').attr('data-entry_id')
-                        const seasons = $el.find('>ul>li>a').toArray().map((el) => $(el).text())
+                        const seasons = $el.find('>ul>li>a')
+                            .toArray()
+                            .map((el) => {
+                                const $el = $(el)
+                                return {
+                                    seasonNum: parseInt($el.attr('href').substr(4)) + 1, 
+                                    name: $el.text()
+                                }
+                            })
 
-                        console.log(seasons)
-
-                        const playlistsLoaders = seasons.map((_, i) => 
+                        const playlistsLoaders = seasons.map(({ seasonNum }) => 
                             superagent
-                                .get(`${baseUrl}/embeds/playlist-j.txt/${dataId}/${i + 1}`)
+                                .get(`${baseUrl}/embeds/playlist-j.txt/${dataId}/${seasonNum}`)
                                 .timeout(timeout)
                                 .then(it => it.text)
                         )
@@ -39,7 +45,8 @@ class AnimediaProvider extends Provider {
                             let id = 0
                             return playlists.reduce((files, playlist, i) => {
                                 const playlistFiles = convertPlayerJSPlaylist(JSON.parse(playlist))
-                                    .map((file) => ({ id: ++id, ...file, name: `${seasons[i]}/${file.name}` }))
+                                    .map((file) => ({ id: ++id, ...file, name: `${seasons[i].name}/${file.name}` }))
+                                console.log(playlistFiles)
                                 return [...files, ...playlistFiles]
                             }, [])
                         }
