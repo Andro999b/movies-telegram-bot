@@ -70,7 +70,7 @@ class KinogoProvider extends DataLifeProvider {
         const script = $el.nextAll(':not([src])').toArray()[0].children[0].data
 
         var files = this._tryExtractMp4(script)
-
+       
         if (!files) {
             files = this._tryExtractHls(script)
         }
@@ -122,7 +122,10 @@ class KinogoProvider extends DataLifeProvider {
 
         if (config) {
             const { file } = config
-            return convertPlayerJSPlaylist(file)
+            return convertPlayerJSPlaylist(file).map((file) => {
+                file.name = file.name.replace(/<[^>]*>?/g, ' ');
+                return file
+            })
         }
     }
 
