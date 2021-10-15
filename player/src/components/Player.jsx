@@ -15,7 +15,7 @@ import { observer, inject } from 'mobx-react'
 
 import { isTouchDevice } from '../utils'
 
-const IDLE_TIMEOUT = 3000
+const IDLE_TIMEOUT = 10000
 
 class HandleActionListener extends Component {
 

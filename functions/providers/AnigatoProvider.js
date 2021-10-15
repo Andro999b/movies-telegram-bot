@@ -44,6 +44,7 @@ class AnigatoProvider extends DataLifeProvider {
 
                         const $iframe = $(res.text)
                         const $seasons = $iframe.find('.series-options')
+                            .first()
                             .children()
                             .toArray()
 

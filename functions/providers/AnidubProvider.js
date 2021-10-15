@@ -40,7 +40,7 @@ class AnidubProvider extends DataLifeProvider {
                 },
                 trailer: {
                     selector: '.video-box .series-tab',
-                    transform: ($el) => $el.eq(0).children()
+                    transform: ($el) => $el.first().children()
                         .toArray()
                         .map((el) => $(el).attr('data'))
                         .filter((data) => data && data.includes('youtube'))[0]

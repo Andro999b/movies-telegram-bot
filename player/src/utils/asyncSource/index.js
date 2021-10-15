@@ -1,6 +1,6 @@
 import parsePlayerJSFile from "../parsePlayerJSFile"
 
-function getRezkaSource({ dataId, translatorId, season, episode }) {
+function getRezkaSourceTranslation({ dataId, translatorId, season, episode }) {
   let formData
 
   if(season) {
@@ -26,6 +26,33 @@ function getRezkaSource({ dataId, translatorId, season, episode }) {
         urls: parsePlayerJSFile(json.url)
       })
     )
+}
+
+function getRezkaSource(source) {
+  const { translatorId } = source
+  if(typeof translatorId === 'object') {
+    const names = Object.values(translatorId)
+    const promisies = Object
+      .keys(translatorId)
+      .map((tid) => 
+        getRezkaSourceTranslation({...source, translatorId: tid})
+          .catch(() => ({ urls: []}))
+      )
+
+    return Promise.all(promisies)
+      .then((answers) => {
+        const urls = answers
+          .flatMap(({ urls }, idx) => {
+            urls.forEach((url) => url.audio = names[idx])
+            return urls
+          })
+
+
+        return { urls }
+      })
+  } else {
+    return getRezkaSourceTranslation(source)
+  }
 }
 
 export default {

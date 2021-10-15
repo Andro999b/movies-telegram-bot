@@ -110,6 +110,10 @@ class SeasonvarProvider extends DirectMediaProvider {
             const playlist = JSON.parse(plistRes.text)
 
             return convertPlayerJSPlaylist(playlist, (x) => this._decryptFilePath(x))
+                .map((file) => {
+                    file.name = file.name.replace(/<[^>]*>?/g, '');
+                    return file
+                })
             // return translations
         } catch (e) {
             console.error('Seasonvar sesson extractor failed', e)

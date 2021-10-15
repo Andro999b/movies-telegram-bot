@@ -88,7 +88,7 @@ class Crawler {
     }
 
     async _extractData($el, $root, config, url) {
-        let transform = ($el) => $el.text().trim()
+        let transform = ($el) => $el.first().text().trim()
         let selector = config
 
         if (typeof selector !== 'string') {

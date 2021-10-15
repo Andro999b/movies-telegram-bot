@@ -92,7 +92,6 @@ class WatchHistoryStore {
         return this._remoteGet(key)
             .then((item) => item || this._localGet(key))
             .then((item) => {
-                console.log(item.startTime || store.get(`playlist:${provider}:${id}:ts`))
                 if(item && item.fileIndex) {
                     return {
                         fileIndex: item.fileIndex,
@@ -113,7 +112,7 @@ class WatchHistoryStore {
                 this._localUpdate(key, { audio }),
                 this._remoteUpdate(key, { audio })
             ])
-            .catch(console.log)
+            .catch(console.error)
     }
 
     audioTrack = ({provider, id}) => {

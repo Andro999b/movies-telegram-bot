@@ -1,7 +1,7 @@
 module.exports = {
     'timeout': 5,
     'infoTimeout': 20,
-    'pageSize': 15,
+    'pageSize': 10,
     'rezka': {
         'baseUrl': 'https://corsproxy.movies-player.workers.dev/?https://rezka.ag',
         'searchUrl': 'https://corsproxy.movies-player.workers.dev/?https://rezka.ag/search/?do=search&subaction=search'
@@ -9,7 +9,7 @@ module.exports = {
     'videocdn': {
         'baseUrl': 'https://videocdn.tv/api',
         'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
-        'token': 'VPqJBfTMlSJfe3NeGanYjpvH2iky0SUE'
+        'token': 'BuKYUNoUnwQ560ZbZMIaNkFA4eTkIQk7'
     },
     'nekomori': {
         'baseUrl': 'http://nekomori.ch/api',
@@ -52,6 +52,7 @@ module.exports = {
         'searchUrl': 'https://kinogo.la/index.php?do=search'
     },
     'seasonvar': {
+        'pageSize': 30,
         'encryptKey': 'ololo',
         'baseUrl': 'http://seasonvar.ru',
         'searchUrl': 'http://seasonvar.ru/autocomplete.php'

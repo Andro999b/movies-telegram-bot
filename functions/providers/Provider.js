@@ -8,7 +8,7 @@ class Provider {
         this.config = Object.assign(
             {
                 ...PROVIDERS_CONFIG[name],
-                pageSize: PROVIDERS_CONFIG[name].pageSize || PROVIDERS_CONFIG.pageSize || 5,
+                pageSize: PROVIDERS_CONFIG[name].pageSize || PROVIDERS_CONFIG.pageSize || 10,
                 timeout: (PROVIDERS_CONFIG[name].timeout || PROVIDERS_CONFIG.timeout || 10) * 1000,
                 infoTimeout: (PROVIDERS_CONFIG[name].infoTimeout || PROVIDERS_CONFIG.infoTimeout || 10) * 1000,
                 scope: '',
@@ -23,7 +23,7 @@ class Provider {
         )
     }
 
-    async search(query, page, pageCount) {
+    async search(query, page, pageCount = 1) {
         if (page < 1) page = 1
         if (pageCount < 1) pageCount = 1
 
@@ -66,6 +66,7 @@ class Provider {
                 item.provider = name
                 return item
             })
+            .slice(0, pageSize)
     }
 
     async getInfo(resultsId) {

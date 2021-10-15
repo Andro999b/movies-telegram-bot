@@ -45,7 +45,7 @@ class AnimediaProvider extends Provider {
                             let id = 0
                             return playlists.reduce((files, playlist, i) => {
                                 const playlistFiles = convertPlayerJSPlaylist(JSON.parse(playlist))
-                                    .map((file) => ({ id: ++id, ...file, name: `${seasons[i].name}/${file.name}` }))
+                                    .map((file) => ({ id: ++id, ...file, path: seasons[i].name }))
                                 console.log(playlistFiles)
                                 return [...files, ...playlistFiles]
                             }, [])
