@@ -54,9 +54,8 @@ module.exports = async (url, timeout = 10) => {
             })
         }, {})
 
-    const files = $('#files').attr('value')
-    const playlists = JSON.parse(files)
-
+    const playlists = JSON.parse($('#files').attr('value'))
+    
     if (Object.keys(translations).length == 0) {
         const translationId = $('#translation_id').attr('value') || '0'
         return _extractNoTranslations(playlists[translationId])

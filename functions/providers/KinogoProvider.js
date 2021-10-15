@@ -31,31 +31,31 @@ class KinogoProvider extends DataLifeProvider {
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
-                    selector: 'ul.tabs',
-                    transform: async ($el, $root) => {
-                        const onlcickAttr = $el.children().eq(1).attr('onclick')
+                    selector: '#1212',
+                    transform: async ($el) => {
+                        // const onlcickAttr = $el.first().children().eq(1).attr('onclick')
 
-                        let matches = onlcickAttr.match(/\/engine\/ajax\/player_vse_pc\.php\?string_name=\d+/)
+                        // let matches = onlcickAttr.match(/\/engine\/ajax\/player_vse_pc\.php\?string_name=\d+/)
 
-                        if (!matches || matches.length == 0) 
-                            return this._extractFallback($root.find('#1212'))
+                        // if (!matches || matches.length == 0) 
+                        //     return this._extractFallback($root.find('#1212'))
 
-                        try {
-                            const iframeRes = await superagent
-                                .get(`${this.config.baseUrl}${matches[0]}`)
-                                .timeout(this.config.infoTimeout)
+                        // try {
+                        //     const iframeRes = await superagent
+                        //         .get(`${this.config.baseUrl}${matches[0]}`)
+                        //         .timeout(this.config.infoTimeout)
 
-                            matches = iframeRes.text.match(/https?[^\s"]+/)
+                        //     matches = iframeRes.text.match(/https?[^\s"]+/)
 
-                            if (matches.length == 0) return []
+                        //     if (matches.length == 0) return []
 
-                            const playlist = await videocdnembed(matches[0], this.config.infoTimeout / 2)
+                        //     const playlist = await videocdnembed(matches[0])
 
-                            return playlist.map((file, id) => ({ id, ...file }))
-                        } catch(e) {
-                            console.error('Kinogo get files failed with', e)
-                            return this._extractFallback($root.find('#1212'))
-                        }
+                        //     return playlist.map((file, id) => ({ id, ...file }))
+                        // } catch(e) {
+                        //     console.error('Kinogo get files failed with', e)
+                            return this._extractFallback($el.first())
+                        // }
                     }
                 },
                 trailer: {
