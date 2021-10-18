@@ -2,7 +2,7 @@ const providers = require('../providers')
 const util = require('util')
 
 const provider = 'kinogo'
-const id = 'https://kinogo.la/11741-zvezdnyy-put-1-sezon.html'
+const id = 'https%3A%2F%2Fkinogo.la%2F7796-family-guy-1-20-sezon.html'
 
 console.log(decodeURIComponent(id))
 

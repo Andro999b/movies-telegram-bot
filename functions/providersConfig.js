@@ -48,6 +48,7 @@ module.exports = {
     //     'searchUrl': 'https://kinogo-net.org/v46/index.php?do=search'
     // },
     'kinogo': {
+        'infoTimeout': 40,
         'baseUrl': 'https://kinogo.la',
         'searchUrl': 'https://kinogo.la/index.php?do=search'
     },

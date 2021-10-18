@@ -32,30 +32,30 @@ class KinogoProvider extends DataLifeProvider {
                 },
                 files: {
                     selector: '#1212',
-                    transform: async ($el) => {
-                        // const onlcickAttr = $el.first().children().eq(1).attr('onclick')
+                    transform: async ($el, $root) => {
+                        let files = [] // = this._extractFilesFromMainPlayer($el.first())
 
-                        // let matches = onlcickAttr.match(/\/engine\/ajax\/player_vse_pc\.php\?string_name=\d+/)
+                        if(!files.length) {
+                            const onlcickAttr =  $root.find('ul.tabs').children().eq(1).attr('onclick')
+                            let matches = onlcickAttr.match(/\/engine\/ajax\/player_vse_pc\.php\?string_name=\d+/)
 
-                        // if (!matches || matches.length == 0) 
-                        //     return this._extractFallback($root.find('#1212'))
+                            if (!matches || matches.length == 0) 
+                                return []
 
-                        // try {
-                        //     const iframeRes = await superagent
-                        //         .get(`${this.config.baseUrl}${matches[0]}`)
-                        //         .timeout(this.config.infoTimeout)
+                            const iframeRes = await superagent
+                                .get(`${this.config.baseUrl}${matches[0]}`)
+                                .timeout(this.config.infoTimeout)
 
-                        //     matches = iframeRes.text.match(/https?[^\s"]+/)
+                            matches = iframeRes.text.match(/https?[^\s"]+/)
 
-                        //     if (matches.length == 0) return []
+                            if (matches.length == 0) return []
 
-                        //     const playlist = await videocdnembed(matches[0])
+                            const playlist = await videocdnembed(matches[0])
 
-                        //     return playlist.map((file, id) => ({ id, ...file }))
-                        // } catch(e) {
-                        //     console.error('Kinogo get files failed with', e)
-                            return this._extractFallback($el.first())
-                        // }
+                            return playlist.map((file, id) => ({ id, ...file }))
+                        }
+
+                        return files
                     }
                 },
                 trailer: {
@@ -66,7 +66,7 @@ class KinogoProvider extends DataLifeProvider {
         })
     }
 
-    _extractFallback($el) {
+    _extractFilesFromMainPlayer($el) {
         const script = $el.nextAll(':not([src])').toArray()[0].children[0].data
 
         var files = this._tryExtractMp4(script)

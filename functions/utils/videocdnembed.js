@@ -35,7 +35,7 @@ function _extractTranslations(translations, playlists) {
         .map((file, id) => ({...file, id}) )
 }
 
-module.exports = async (url, timeout = 10) => {
+module.exports = async (url, timeout = 60) => {
     let res
 
     res = await superagent
@@ -44,6 +44,9 @@ module.exports = async (url, timeout = 10) => {
 
     const $ = cheerio.load(res.text)
 
+    const headerScript = $('head > script').first().get()[0].children[0].data
+    const userKey = headerScript.substring(15, 47)
+    
     const translations = $('.translations > select > option')
         .toArray()
         .reduce((acc, el) => {
@@ -54,8 +57,9 @@ module.exports = async (url, timeout = 10) => {
             })
         }, {})
 
-    const playlists = JSON.parse($('#files').attr('value'))
-    
+    const playlistString = $('#files').attr('value')
+    const playlists = JSON.parse(playlistString.replace(new RegExp(userKey, 'g'), '.mp4'))
+
     if (Object.keys(translations).length == 0) {
         const translationId = $('#translation_id').attr('value') || '0'
         return _extractNoTranslations(playlists[translationId])
