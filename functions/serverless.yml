@@ -19,7 +19,7 @@ provider:
     ANALYTIC_RETENTION: 90
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
     STAGE: ${opt:stage, 'dev'}
-    CACHE_TTL: 300
+    CACHE_TTL: 3600
     FILMS_PROVIDERS: 'kinogo,kinovod,rezka,seasonvar'
     ANIME_PROVIDERS: 'animevost,anigato,anidub,animedia'
     PLAYER_URL: ${self:custom.playerUrl}

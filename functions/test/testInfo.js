@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'kinogo'
-const id = 'https%3A%2F%2Fkinogo.la%2F7796-family-guy-1-20-sezon.html'
+const provider = 'rezka'
+const id = 'https%3A%2F%2Frezka.ag%2Fanimation%2Faction%2F2373-kovboy-bibop-2001.html'
 
 console.log(decodeURIComponent(id))
 

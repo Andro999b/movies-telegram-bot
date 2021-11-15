@@ -3,6 +3,7 @@ module.exports = {
     'infoTimeout': 20,
     'pageSize': 10,
     'rezka': {
+        'cfbypass': true,
         'baseUrl': 'https://corsproxy.movies-player.workers.dev/?https://rezka.ag',
         'searchUrl': 'https://corsproxy.movies-player.workers.dev/?https://rezka.ag/search/?do=search&subaction=search'
     },
