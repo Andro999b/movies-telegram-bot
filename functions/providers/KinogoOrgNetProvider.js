@@ -2,7 +2,7 @@ const DataLifeProvider = require('./DataLifeProvider')
 const superagent = require('superagent')
 const urlencode = require('urlencode')
 
-const { extractObjectProperty, extractStringProperty, extractArrayProperty, extractJSStringProperty } = require('../utils/extractScriptVariable')
+const { extractArrayProperty, extractJSStringProperty } = require('../utils/extractScriptVariable')
 
 class KinogoProvider extends DataLifeProvider {
     constructor() {
@@ -31,7 +31,7 @@ class KinogoProvider extends DataLifeProvider {
                     transform: async ($el) => {
                         const iframeres = await superagent.get($el.attr('src'))
 
-                        const seasons = extractArrayProperty(iframeres.text, "seasons")
+                        const seasons = extractArrayProperty(iframeres.text, 'seasons')
                         if(seasons) {
                             const files = []
 
@@ -49,7 +49,7 @@ class KinogoProvider extends DataLifeProvider {
                             return files
                         }
 
-                        const url = extractJSStringProperty(iframeres.text, "hls")
+                        const url = extractJSStringProperty(iframeres.text, 'hls')
                         if(url) {
                             return [{
                                 id: 0,

@@ -2,7 +2,6 @@ const Provider = require('./Provider')
 const superagent = require('superagent')
 const $ = require('cheerio')
 const urlencode = require('urlencode')
-const stripPlayerJSConfig = require('../utils/stripPlayerJSConfig')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 
 class AnimediaProvider extends Provider {
@@ -34,7 +33,7 @@ class AnimediaProvider extends Provider {
                             superagent
                                 .get(`${baseUrl}/embeds/playlist-j.txt/${dataId}/${seasonNum}`)
                                 .timeout(timeout)
-                                .then(it => it.text)
+                                .then((it) => it.text)
                         )
                         const playlists = await Promise.all(playlistsLoaders)
 
@@ -46,7 +45,7 @@ class AnimediaProvider extends Provider {
                             return playlists.reduce((files, playlist, i) => {
                                 const playlistFiles = convertPlayerJSPlaylist(JSON.parse(playlist))
                                     .map((file) => ({ id: ++id, ...file, path: seasons[i].name }))
-                                console.log(playlistFiles)
+  
                                 return [...files, ...playlistFiles]
                             }, [])
                         }

@@ -111,7 +111,7 @@ class SeasonvarProvider extends DirectMediaProvider {
 
             return convertPlayerJSPlaylist(playlist, (x) => this._decryptFilePath(x))
                 .map((file) => {
-                    file.name = file.name.replace(/<[^>]*>?/g, '');
+                    file.name = file.name.replace(/<[^>]*>?/g, '')
                     return file
                 })
             // return translations

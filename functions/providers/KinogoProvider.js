@@ -124,7 +124,7 @@ class KinogoProvider extends DataLifeProvider {
             const { file } = config
             return convertPlayerJSPlaylist(file).map((file) => {
                 if(file.name) {
-                    file.name = file.name.replace(/<[^>]*>?/g, ' ');
+                    file.name = file.name.replace(/<[^>]*>?/g, ' ')
                 }
                 return file
             })

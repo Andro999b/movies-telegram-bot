@@ -1,12 +1,12 @@
 const Provider = require('./Provider')
 const urlencode = require('urlencode')
-const invokeCFBypass = require("../utils/invokeCFBypass");
+const invokeCFBypass = require('../utils/invokeCFBypass')
 
 class DataLifeProvider extends Provider {
     getSearchUrl() {}
 
     _getSiteEncoding() {
-        return "utf8"
+        return 'utf8'
     }
 
     _crawlerSearchRequestGenerator(query) {
@@ -17,13 +17,13 @@ class DataLifeProvider extends Provider {
             return invokeCFBypass(
                 searchUrl, 
                 'post', 
-                { ...headers, "Content-Type": "application/x-www-form-urlencoded" }, 
+                { ...headers, 'Content-Type': 'application/x-www-form-urlencoded' }, 
                 `do=search&subaction=search&story=${urlencode.encode(query, encoding)}`
             )
         }
     }
 
-    _crawlerInfoRequestGenerator(resultsId) { 
+    _crawlerInfoRequestGenerator() { 
         return (url) => {
             return invokeCFBypass(url)
         }

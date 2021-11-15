@@ -3,12 +3,14 @@ const providersService = require('../../../providers')
 const getQueryAndProviders = require('./getQueryAndProviders')
 const Markup = require('telegraf/markup')
 const getSuggestions = require('../../../utils/suggestions')
+const arrayChunk = require('../../../utils/arrayChunk')
 
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
 const STAGE = process.env.STAGE || 3
 const MAX_QUERY_LENGTH = 63
 const MAX_QUERY_LENTH_WITH_PROVIDER = 50
 const PLAYER_URL = process.env.PLAYER_URL
+const MAX_RESULTS_PER_MESSAGE = 10
 
 function getResultsKeyboad(providersResults, query, i18n) {
     return Markup.inlineKeyboard(
@@ -44,8 +46,6 @@ function createResultButtons(res, query) {
     )
 }
 
-
-
 async function getNoResults({ reply, i18n, track }, providers, query) {
     const suggestions = await getSuggestions(query)
 
@@ -53,10 +53,10 @@ async function getNoResults({ reply, i18n, track }, providers, query) {
 
     if (suggestions && suggestions.length) {
         const tooLong = suggestions.some((suggestion) => Buffer.byteLength(suggestion, 'utf-8') > MAX_QUERY_LENGTH)
-        if(tooLong) {
+        if (tooLong) {
             return reply(
-                i18n.t('no_results', { query }) + '\n' + 
-                i18n.t('spell_check_too_long', { suggestion: suggestions.join(',') }) 
+                i18n.t('no_results', { query }) + '\n' +
+                i18n.t('spell_check_too_long', { suggestion: suggestions.join(',') })
             )
         } else {
             return reply(
@@ -68,7 +68,7 @@ async function getNoResults({ reply, i18n, track }, providers, query) {
             )
         }
     } else {
-        if(Buffer.byteLength(query, 'utf-8') > MAX_QUERY_LENGTH) {
+        if (Buffer.byteLength(query, 'utf-8') > MAX_QUERY_LENGTH) {
             return reply(i18n.t('no_results', { query }))
         } else {
             return reply(
@@ -81,7 +81,7 @@ async function getNoResults({ reply, i18n, track }, providers, query) {
     }
 }
 
-async function doSimpleSearch(ctx, providers, query) {
+async function doTextSearch(ctx, providers, query) {
     const { i18n, reply, track } = ctx
 
     let providersResults = await Promise.all(providers.map((providerName) =>
@@ -100,19 +100,23 @@ async function doSimpleSearch(ctx, providers, query) {
 
     const replySingleProvider = (results) => {
         const provider = results[0].provider
-        return reply(
-            i18n.t('provider_results', { query, provider }),
-            Markup.inlineKeyboard(createResultButtons(results, query), { columns: 1 }).extra()
-        )
+
+        // chunk results
+        return arrayChunk(results, MAX_RESULTS_PER_MESSAGE).map(async (chunk) => {
+            await reply(
+                i18n.t('provider_results', { query, provider }),
+                Markup.inlineKeyboard(createResultButtons(chunk, query), { columns: 1 }).extra()
+            )
+        })
     }
 
     // retur single provider results
     if (providersResults.length == 1) {
         const results = providersResults[0]
         return replySingleProvider(results)
-    } else if(Buffer.byteLength(query, 'utf8') > MAX_QUERY_LENTH_WITH_PROVIDER) {
+    } else if (Buffer.byteLength(query, 'utf8') > MAX_QUERY_LENTH_WITH_PROVIDER) {
         return Promise.all(providersResults.map(replySingleProvider))
-    } else { //return multiple provders results
+    } else {
         return reply(
             i18n.t('results', { query }),
             getResultsKeyboad(providersResults, query, i18n).extra()
@@ -142,8 +146,8 @@ async function doSearch(ctx, defaultProviders, text) {
     }
     // check link ends
 
-    return doSimpleSearch(ctx, providers, query)
+    return doTextSearch(ctx, providers, query)
 }
 
 module.exports = doSearch
-module.exports.doSimpleSearch = doSimpleSearch
+module.exports.doSimpleSearch = doTextSearch

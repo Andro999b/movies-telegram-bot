@@ -14,8 +14,8 @@ module.exports = {
     },
     base64UrlDecode: (str) => {
         str = str
-            .replace(/\-/g, '+')
-            .replace(/\-/g, '/')
+            .replace(/-/g, '+')
+            .replace(/-/g, '/')
 
         const encodedUrl = Buffer.from(str, 'base64')
             .toString('binary')

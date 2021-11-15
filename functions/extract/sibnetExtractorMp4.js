@@ -11,7 +11,7 @@ module.exports = regExprExtractor([{
             .head(sibnetUrl)
             .set('Referer', 'https://video.sibnet.ru')
             .redirects(0)
-            .ok(res => res.status == 302)
+            .ok((res) => res.status == 302)
 
         const { location } = res.header
 

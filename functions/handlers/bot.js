@@ -19,7 +19,6 @@ const bot = new Telegraf(process.env.TOKEN)
 bot.use(i18n.middleware())
 bot.use(analytics(tracker(), BOT_TYPE))
 
-require('./bot/library')(bot, PROVIDERS, BOT_TYPE)
 require('./bot/start')(bot, PROVIDERS)
 require('./bot/search')(bot, PROVIDERS)
 

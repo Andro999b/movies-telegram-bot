@@ -48,7 +48,7 @@ module.exports = async (params) => {
         ref_sign: targetUrl.searchParams.get('ref_sign'),
         type: type,
         bad_user: false,
-        info: "{}"
+        info: '{}'
     }
 
     const videoInfoRes = await superagent

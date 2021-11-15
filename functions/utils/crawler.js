@@ -29,22 +29,22 @@ class Crawler {
 
     _createDefaultRequest(nextUrl) {
         const targetUrl = nextUrl != this._url ?
-                new URL(nextUrl, this._url).toString() :
-                nextUrl
+            new URL(nextUrl, this._url).toString() :
+            nextUrl
 
-            let request = superagent
-                .get(targetUrl)
+        let request = superagent
+            .get(targetUrl)
 
-            if(this._realip) {
-                request = request.connect(this._realip)
-            }
+        if(this._realip) {
+            request = request.connect(this._realip)
+        }
 
-            return request
-                .buffer(true)
-                .charset()
-                .timeout(this._timeoutMs)
-                .disableTLSCerts()
-                .set(this._headers || {})
+        return request
+            .buffer(true)
+            .charset()
+            .timeout(this._timeoutMs)
+            .disableTLSCerts()
+            .set(this._headers || {})
     }
 
     cfbypass(bypass) {

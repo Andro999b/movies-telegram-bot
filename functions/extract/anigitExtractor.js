@@ -8,7 +8,7 @@ module.exports = ({ url }) => kodikExtractor({
     linkExtractor: (links, hls) => {
         const bestQuality = Object.keys(links).pop()
         let redirectUrl = links[bestQuality][0].src
-        redirectUrl = Buffer.from(redirectUrl.split("").reverse().join(""), "base64").toString()
+        redirectUrl = Buffer.from(redirectUrl.split('').reverse().join(''), 'base64').toString()
 
         if(!hls) {
             redirectUrl = redirectUrl.replace(':hls:manifest.m3u8', '')

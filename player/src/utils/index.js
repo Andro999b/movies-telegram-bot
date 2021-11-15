@@ -1,5 +1,8 @@
 import { base64UrlEncode } from './base64'
 
+export const animeBot = 'anime_tube_bot'
+export const moviesBot = 'MoviesBroBot'
+
 export function createExtractorUrlBuilder(extractor, additionalParams) {
     let extractorBaseUrl = null
     const { type, params } = extractor
@@ -61,15 +64,18 @@ export function toHHMMSS(timestamp) {
 
 export const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${playlist.id}`
 
+
 export function getAlternativeUrl(provider, query) {
     let bot
     switch(provider) {
         case 'animevost': 
-        case 'nekomori': 
-            bot = 'anime_tube_bot'
+        case 'anigato': 
+        case 'anidub': 
+        case 'animedia': 
+            bot = animeBot
             break 
         default:
-            bot = 'films_search_bot'
+            bot = moviesBot
     }
 
     return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`

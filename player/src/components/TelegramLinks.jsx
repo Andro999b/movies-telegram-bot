@@ -2,6 +2,7 @@ import { Fab } from '@material-ui/core'
 import React, { Component } from 'react'
 
 import { Telegram as TelegramIcon } from '@material-ui/icons'
+import { animeBot, moviesBot } from '../utils'
 
 class TelegramLinks extends Component {
 
@@ -12,13 +13,13 @@ class TelegramLinks extends Component {
     render() {
         return (
             <div className="telegram-links">
-                <Fab variant="extended" size="small" onClick={() => this.openBot('anime_tube_bot')}>
+                <Fab variant="extended" size="small" onClick={() => this.openBot(animeBot)}>
                     <TelegramIcon />
-                    @anime_tube_bot
+                    @{animeBot}
                 </Fab>
-                <Fab variant="extended" size="small" onClick={() => this.openBot('films_search_bot')}>
+                <Fab variant="extended" size="small" onClick={() => this.openBot(moviesBot)}>
                     <TelegramIcon />
-                    @films_search_bot
+                    @{moviesBot}
                 </Fab>
             </div>
         )

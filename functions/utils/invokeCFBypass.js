@@ -4,7 +4,7 @@ const lambda = new AWS.Lambda()
 const ACCOUNT_ID = process.env.ACCOUNT_ID || '534471691183'
 const REGION = process.env.REGION || AWS.config.region
 
-module.exports = (url, method = "get", headers = {}, body = null) => new Promise((resolve, reject) => {
+module.exports = (url, method = 'get', headers = {}, body = null) => new Promise((resolve, reject) => {
     var params = {
         FunctionName: `arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:cloudflare-bypass-prod-proxy`,
         // FunctionName: `arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:cloudflare-bypass-dev-proxy`,

@@ -7,7 +7,7 @@ function _extractNoTranslations(playlist) {
 }
 
 function _extractTranslations(translations, playlists) {
-    const getKey = ({ name, path }) => [path, name].filter(it => it).join('/')
+    const getKey = ({ name, path }) => [path, name].filter((it) => it).join('/')
     const filesByKey = {}
 
     Object.keys(translations)

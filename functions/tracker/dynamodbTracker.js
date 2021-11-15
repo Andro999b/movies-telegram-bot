@@ -59,7 +59,7 @@ module.exports = () => {
                     }
                 },
                 (err) => {
-                    if(err) console.error("Fail to track events", events, err)
+                    if(err) console.error('Fail to track events', events, err)
                     resolve()
                 }
             )
