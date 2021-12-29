@@ -21,7 +21,7 @@ function getResultsKeyboad(providersResults, query, i18n) {
                     return [
                         Markup.callbackButton(
                             i18n.t('more_results', { count: res.length, provider }),
-                            `#${provider} ${query}`
+                            `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}1 ${query}`
                         )
                     ]
                 } else {
