@@ -15,11 +15,11 @@ const providerName = 'videocdn'
 // const searchQuery = 'Звездный путь'
 // const searchQuery = 'Синяя книга'
 // const searchQuery = 'Во все тяжкие'
-// const searchQuery = 'терминатор'
+const searchQuery = 'терминатор'
 // const searchQuery = 'Скрытые вещи'
 // const searchQuery = 'Клинок ведьм'
 // const searchQuery = 'Харли квин'
-const searchQuery = 'Дюна'
+// const searchQuery = 'Дюна'
 // const searchQuery = 'one punch'
 // const searchQuery = 'ID: Вторжение'
 // const searchQuery = 'Дорохедоро'
@@ -33,7 +33,7 @@ const searchQuery = 'Дюна'
 
 providers.searchOne(providerName, searchQuery)
     .then((results) => {
-        console.log('results', results)// eslint-disable-line
+        console.log('results', results.length, results)// eslint-disable-line
 
         return results[0]
     }) 

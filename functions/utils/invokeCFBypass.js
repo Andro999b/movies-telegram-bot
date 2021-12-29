@@ -13,6 +13,8 @@ module.exports = (url, method = 'get', headers = {}, body = null) => new Promise
 
 
     lambda.invoke(params, function (err, data) {
+        console.log(JSON.parse(data.Payload))
+
         if (err) reject(err) 
         else resolve(JSON.parse(data.Payload))           
     })

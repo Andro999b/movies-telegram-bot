@@ -14,7 +14,7 @@ const getCache = async (cacheName) => {
 
 module.exports = {
     getCache,
-    getCahcedInfo: async (provider, resultId, compute) => {
+    getCachedInfo: async (provider, resultId, compute) => {
         const cache = await getCache('info')
         return cache.getOrCompute(
             [provider, resultId], 
@@ -22,10 +22,17 @@ module.exports = {
             (result) => !result.files || result.files.length == 0
         )
     },
-    getCahcedSource: async (provider, resultId, sourceId, compute) => {
+    getCachedSource: async (provider, resultId, sourceId, compute) => {
         const cache = await getCache('source')
         return cache.getOrCompute(
             [provider, resultId, sourceId], 
+            compute
+        )
+    },
+    getCachedSearch: async (provider, query, compute) => {
+        const cache = await getCache('search')
+        return cache.getOrCompute(
+            [provider, query], 
             compute
         )
     }

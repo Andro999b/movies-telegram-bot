@@ -3,9 +3,7 @@ const providersService = require('../../../providers')
 const getQueryAndProviders = require('./getQueryAndProviders')
 const Markup = require('telegraf/markup')
 const getSuggestions = require('../../../utils/suggestions')
-const arrayChunk = require('../../../utils/arrayChunk')
 
-const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
 const STAGE = process.env.STAGE || 3
 const MAX_QUERY_LENGTH = 63
 const MAX_QUERY_LENTH_WITH_PROVIDER = 50
@@ -17,22 +15,15 @@ function getResultsKeyboad(providersResults, query, i18n) {
         providersResults
             .sort((a, b) => a.length - b.length)
             .map((res) => {
-                if (res.length > MAX_UNFOLD_RESULTS) {
-                    const provider = res[0].provider
-                    return [
-                        Markup.callbackButton(
-                            i18n.t('more_results', { count: res.length, provider }),
-                            `#${provider} ${query}`
-                        )
-                    ]
-                } else {
-                    return createResultButtons(res, query)
-                }
+                const provider = res[0].provider
+                return [
+                    Markup.callbackButton(
+                        i18n.t('more_results', { count: res.length, provider }),
+                        `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}1 ${query}`
+                    )
+                ]
             })
-            .reduce((acc, items) => acc.concat(items), [])
-            /* .concat([
-                Markup.callbackButton(i18n.t('repeat_search'), query)
-            ]) */,
+            .reduce((acc, items) => acc.concat(items), []),
         { columns: 1 }
     )
 }
@@ -81,7 +72,7 @@ async function getNoResults({ reply, i18n, track }, providers, query) {
     }
 }
 
-async function doTextSearch(ctx, providers, query) {
+async function doTextSearch(ctx, providers, query, page) {
     const { i18n, reply, track } = ctx
 
     let providersResults = await Promise.all(providers.map((providerName) =>
@@ -101,16 +92,25 @@ async function doTextSearch(ctx, providers, query) {
     const replySingleProvider = (results) => {
         const provider = results[0].provider
 
-        // chunk results
-        return arrayChunk(results, MAX_RESULTS_PER_MESSAGE).map(async (chunk) => {
-            await reply(
-                i18n.t('provider_results', { query, provider }),
-                Markup.inlineKeyboard(createResultButtons(chunk, query), { columns: 1 }).extra()
-            )
-        })
+        const from = (page - 1) * MAX_RESULTS_PER_MESSAGE
+        const to = page * MAX_RESULTS_PER_MESSAGE
+        const chunk = results.slice(from, to)
+        const buttons = createResultButtons(chunk, query)
+
+        if(to < results.length) {
+            buttons.push(Markup.callbackButton(
+                i18n.t('next_page'),
+                `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}${page + 1} ${query}`
+            ))
+        }
+
+        return reply(
+            i18n.t('provider_results', { query, provider }),
+            Markup.inlineKeyboard(buttons, { columns: 1 }).extra()
+        )
     }
 
-    // retur single provider results
+    // return single provider results
     if (providersResults.length == 1) {
         const results = providersResults[0]
         return replySingleProvider(results)
@@ -129,7 +129,7 @@ async function doSearch(ctx, defaultProviders, text) {
 
     await replyWithChatAction('typing')
 
-    let { query, providers } = getQueryAndProviders(text, defaultProviders)
+    let { query, providers, page } = getQueryAndProviders(text, defaultProviders)
 
     // check link
     const parts = query.match(/http?s:\/\/[^\s]+/)
@@ -146,7 +146,7 @@ async function doSearch(ctx, defaultProviders, text) {
     }
     // check link ends
 
-    return doTextSearch(ctx, providers, query)
+    return doTextSearch(ctx, providers, query, page)
 }
 
 module.exports = doSearch

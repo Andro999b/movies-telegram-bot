@@ -134,7 +134,7 @@ class Crawler {
 
                 for (const selectorName in this._selectors) {
                     const selector = this._selectors[selectorName]
-                    item[selectorName] = await this._extractData($(el), $.root(), selector, nextUrl)
+                    item[selectorName] = await this._extractData($(el), $.root(), selector, currentUrl)
                 }
 
                 results.push(item)
@@ -146,7 +146,7 @@ class Crawler {
             }
 
             if (!nextUrl || limitReached) {
-                return results.slice(0, this._limit)
+                return results
             }
 
             return step(nextUrl)

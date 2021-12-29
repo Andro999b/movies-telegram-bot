@@ -1,4 +1,4 @@
-const { getCahcedSource } = require('../cache')
+const { getCachedSource } = require('../cache')
 const providersService = require('../providers')
 const makeResponse = require('../utils/makeResponse')
 
@@ -11,7 +11,7 @@ module.exports.handler = async (event, context) => {
     if (event.pathParameters) {
         const { provider, resultId, sourceId } = event.pathParameters
 
-        result = await getCahcedSource(
+        result = await getCachedSource(
             provider, resultId, sourceId, 
             ([provider, resultId, sourceId]) => providersService.getSource(provider, resultId, sourceId)
         )

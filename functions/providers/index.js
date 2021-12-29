@@ -23,7 +23,7 @@ module.exports = {
         }
         return Promise.reject(`No provider found for ${name}`)
     },
-    async search(providers, query, page = 0) {
+    async search(providers, query) {
         if (!query || !providers || !providers.length) {
             return []
         }
@@ -40,14 +40,14 @@ module.exports = {
 
         return results.reduce((acc, result) => acc.concat(result), [])
     },
-    async searchOne(providerName, query, page = 0) {
+    async searchOne(providerName, query) {
         if (!query) {
             return []
         }
 
         try {
             const provider = await this.getProvider(providerName)
-            return await provider.search(query, page)
+            return await provider.search(query)
         } catch (e) {
             console.error(`Provider ${providerName} failed.`, e)
         }

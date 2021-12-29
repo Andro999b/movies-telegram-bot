@@ -1,4 +1,4 @@
-const { getCahcedInfo } = require('../cache')
+const { getCachedInfo } = require('../cache')
 const providersService = require('../providers')
 const makeResponse = require('../utils/makeResponse')
 
@@ -13,7 +13,7 @@ module.exports.handler = async (event, context) => {
         if (nocache) {
             result = providersService.getInfo(provider, resultId)
         } else {
-            result = await getCahcedInfo(
+            result = await getCachedInfo(
                 provider, resultId,
                 ([provider, resultId]) => providersService.getInfo(provider, resultId)
             )

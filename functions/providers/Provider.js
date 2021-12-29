@@ -8,12 +8,10 @@ class Provider {
         this.config = Object.assign(
             {
                 ...PROVIDERS_CONFIG[name],
-                pageSize: PROVIDERS_CONFIG[name].pageSize || PROVIDERS_CONFIG.pageSize || 10,
                 timeout: (PROVIDERS_CONFIG[name].timeout || PROVIDERS_CONFIG.timeout || 10) * 1000,
                 infoTimeout: (PROVIDERS_CONFIG[name].infoTimeout || PROVIDERS_CONFIG.infoTimeout || 10) * 1000,
                 scope: '',
                 slectors: {},
-                pagenatorSelector: '',
                 headers: {
                     'User-Agent': 'Mozilla/5.0 Gecko/20100101 Firefox/59.0'
                 },
@@ -23,30 +21,23 @@ class Provider {
         )
     }
 
-    async search(query, page, pageCount = 1) {
-        if (page < 1) page = 1
-        if (pageCount < 1) pageCount = 1
-
+    async search(query) {
         const name = this.getName()
         const {
             scope,
             selectors,
-            pagenatorSelector,
             headers,
-            pageSize,
             timeout,
             realip,
             cfbypass
         } = this.config
 
-        const limit = pageCount * pageSize
-
         query = this._prepareQuery(query)
 
         let results = await crawler
             .get(
-                this.getSearchUrl(query, page),
-                this._crawlerSearchRequestGenerator(query, page)
+                this.getSearchUrl(query),
+                this._crawlerSearchRequestGenerator(query)
             )
             .cfbypass(cfbypass)
             .headers(headers)
@@ -54,8 +45,6 @@ class Provider {
             .scope(scope)
             .timeout(timeout)
             .set(selectors)
-            .paginate(pagenatorSelector)
-            .limit(limit)
             .gather()
 
         results = await this._postProcessResult(results)
@@ -66,7 +55,6 @@ class Provider {
                 item.provider = name
                 return item
             })
-            .slice(0, pageSize)
     }
 
     async getInfo(resultsId) {
@@ -86,7 +74,6 @@ class Provider {
             )
             .cfbypass(cfbypass)
             .timeout(infoTimeout)
-            .limit(1)
             .headers(headers)
             .realip(realip)
             .scope(detailsScope)
@@ -109,7 +96,7 @@ class Provider {
     }
 
     // eslint-disable-next-line no-unused-vars
-    getSearchUrl(query, page) {
+    getSearchUrl(query) {
         throw new Error('Provider do not implement getSearchUrl()')
     }
 

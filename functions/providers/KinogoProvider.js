@@ -33,7 +33,7 @@ class KinogoProvider extends DataLifeProvider {
                 files: {
                     selector: '#1212',
                     transform: async ($el, $root) => {
-                        let files = [] // = this._extractFilesFromMainPlayer($el.first())
+                        let files = this._extractFilesFromMainPlayer($el.first())
 
                         if(!files.length) {
                             const onlcickAttr =  $root.find('ul.tabs').children().eq(1).attr('onclick')
@@ -70,7 +70,7 @@ class KinogoProvider extends DataLifeProvider {
         const script = $el.nextAll(':not([src])').toArray()[0].children[0].data
 
         var files = this._tryExtractMp4(script)
-       
+
         if (!files) {
             files = this._tryExtractHls(script)
         }

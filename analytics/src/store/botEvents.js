@@ -36,7 +36,7 @@ export default observable({
         const query = ts ?
             {
                 TableName: TABLE_NAME,
-                KeyConditionExpression: `#key = :value AND #range > :ts`,
+                KeyConditionExpression: '#key = :value AND #range > :ts',
                 ExpressionAttributeNames: {
                     '#key': 'date',
                     '#range': 'time'
@@ -48,7 +48,7 @@ export default observable({
             } :
             {
                 TableName: TABLE_NAME,
-                KeyConditionExpression: `#key = :value`,
+                KeyConditionExpression: '#key = :value',
                 ExpressionAttributeNames: {
                     '#key': 'date'
                 },
@@ -75,6 +75,7 @@ export default observable({
                         ].join(' ')
                         return item
                     })
+                    .reverse()
                     .concat(this.events)
                 this.lastTs = Date.now()
             })
