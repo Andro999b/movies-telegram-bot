@@ -20,7 +20,7 @@ provider:
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
     STAGE: ${opt:stage, 'dev'}
     CACHE_TTL: 300
-    FILMS_PROVIDERS: 'kinogo,kinovod,rezka,seasonvar'
+    FILMS_PROVIDERS: 'kinogo,kinovod,rezka,seasonvar,videocdn'
     ANIME_PROVIDERS: 'animevost,anigato,anidub,animedia'
     PLAYER_URL: ${self:custom.playerUrl}
     ACCOUNT_ID: !Ref AWS::AccountId

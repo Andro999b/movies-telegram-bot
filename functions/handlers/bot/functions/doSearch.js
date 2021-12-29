@@ -4,7 +4,8 @@ const getQueryAndProviders = require('./getQueryAndProviders')
 const Markup = require('telegraf/markup')
 const getSuggestions = require('../../../utils/suggestions')
 
-const STAGE = process.env.STAGE || 3
+const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
+const STAGE = process.env.STAGE || 'prod'
 const MAX_QUERY_LENGTH = 63
 const MAX_QUERY_LENTH_WITH_PROVIDER = 50
 const PLAYER_URL = process.env.PLAYER_URL
@@ -15,13 +16,17 @@ function getResultsKeyboad(providersResults, query, i18n) {
         providersResults
             .sort((a, b) => a.length - b.length)
             .map((res) => {
-                const provider = res[0].provider
-                return [
-                    Markup.callbackButton(
-                        i18n.t('more_results', { count: res.length, provider }),
-                        `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}1 ${query}`
-                    )
-                ]
+                if (res.length > MAX_UNFOLD_RESULTS) {
+                    const provider = res[0].provider
+                    return [
+                        Markup.callbackButton(
+                            i18n.t('more_results', { count: res.length, provider }),
+                            `#${provider} ${query}`
+                        )
+                    ]
+                } else {
+                    return createResultButtons(res, query)
+                }
             })
             .reduce((acc, items) => acc.concat(items), []),
         { columns: 1 }
