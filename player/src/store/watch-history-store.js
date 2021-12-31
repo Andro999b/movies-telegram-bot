@@ -6,9 +6,9 @@ import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, updateDoc, query, orderBy } from 'firebase/firestore'
 import log from '../utils/logger'
 initializeApp({
-  apiKey: "AIzaSyCoQdUA6jN3cWx_yopHDVsC2aIW9Bor2P4",
-  authDomain: "movies-player.firebaseapp.com",
-  projectId: "movies-player"
+    apiKey: 'AIzaSyCoQdUA6jN3cWx_yopHDVsC2aIW9Bor2P4',
+    authDomain: 'movies-player.firebaseapp.com',
+    projectId: 'movies-player'
 })
 
 const auth = getAuth()
@@ -26,7 +26,7 @@ class WatchHistoryStore {
         onAuthStateChanged(auth, (user) => {
             this.insync = user != null  
             if(this.insync) {
-                this.remoteDb = collection(getFirestore(), "library", user.uid, "history")
+                this.remoteDb = collection(getFirestore(), 'library', user.uid, 'history')
             } else {
                 this.remoteDb = null
             }
@@ -40,7 +40,7 @@ class WatchHistoryStore {
             this._localHistory()
         ]).then(([remoteHistory, localHistory]) => {
             if(remoteHistory.length) {
-                const sean = new Set(remoteHistory.map(i => i.key))
+                const sean = new Set(remoteHistory.map((i) => i.key))
                 this.history = remoteHistory.concat(localHistory.filter((i) => !sean.has(i.key)))
             } else {
                 this.history = localHistory
@@ -51,7 +51,7 @@ class WatchHistoryStore {
         signInWithPopup(auth, provider)
             .catch((error) => {
                 console.error('Fail login', error)
-              });
+            })
     }
 
     @action.bound disconnect() {
@@ -66,7 +66,7 @@ class WatchHistoryStore {
             .then(this._loadHistory)
     }
 
-    delete = (key) => {
+    deleteFromHistory = (key) => {
         return Promise.all([
             this._localDelete(key),
             this._remoteDelete(key).catch((e) => log.error(e.message, e))
@@ -77,9 +77,9 @@ class WatchHistoryStore {
     updateLastEpisode = ({provider, id}, fileIndex) => {
         const key = `${provider}#${id}`
         return Promise.all([
-                this._localUpdate(key, { fileIndex }),
-                this._remoteUpdate(key, { fileIndex }).catch((e) => log.error(e.message, e))
-            ])
+            this._localUpdate(key, { fileIndex }),
+            this._remoteUpdate(key, { fileIndex }).catch((e) => log.error(e.message, e))
+        ])
     }
 
 
@@ -109,9 +109,9 @@ class WatchHistoryStore {
     updateAudioTrack = ({provider, id}, audio) => {
         const key = `${provider}#${id}`
         return Promise.all([
-                this._localUpdate(key, { audio }),
-                this._remoteUpdate(key, { audio })
-            ])
+            this._localUpdate(key, { audio }),
+            this._remoteUpdate(key, { audio })
+        ])
             .catch(console.error)
     }
 
@@ -131,14 +131,14 @@ class WatchHistoryStore {
         if(!this.remoteDb)
             return Promise.resolve()
 
-        return getDoc(doc(this.remoteDb, key)).then(snap => snap.data())
+        return getDoc(doc(this.remoteDb, key)).then((snap) => snap.data())
     }
 
     _remoteHistory() {
         if(!this.remoteDb)
             return Promise.resolve([])
 
-        return getDocs(query(this.remoteDb, orderBy("time", "desc"))).then(snap => {
+        return getDocs(query(this.remoteDb, orderBy('time', 'desc'))).then((snap) => {
             const out = []
             snap.forEach((d) => {
                 out.push(d.data())

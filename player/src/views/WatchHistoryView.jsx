@@ -28,7 +28,7 @@ class WatchHistoryView extends Component {
     onDelete = (e, key) => {
         e.preventDefault()
         const { watchHistoryStore } = this.props
-        watchHistoryStore.delete(key)
+        watchHistoryStore.deleteFromHistory(key)
     }
 
     render() {

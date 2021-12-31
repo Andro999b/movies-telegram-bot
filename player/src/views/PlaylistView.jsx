@@ -7,7 +7,7 @@ import analytics from '../utils/analytics'
 import StartScrean from '../components/StartScrean'
 import Player from '../components/Player'
 import DualCirclesLoader from '../components/DualCirclesLoader'
-import BackNavButton from '../components/BackNavButton'
+import HistoryNavButton from '../components/HistoryNavButton'
 import { Typography } from '@material-ui/core'
 import AlternativeLinksError from '../components/AlternativeLinksError'
 
@@ -114,7 +114,7 @@ class PlaylistView extends Component {
             const { query, provider } = this.parseLocation(this.props)
             return (
                 <>
-                    <BackNavButton />
+                    <HistoryNavButton />
                     {query ?
                         <AlternativeLinksError provider={provider} query={query} message={error} /> :
                         <Typography className="center shadow-border" variant="h4">{error}</Typography>
@@ -124,7 +124,7 @@ class PlaylistView extends Component {
         } else if (trailerUrl) {
             return (
                 <>
-                    <BackNavButton />
+                    <HistoryNavButton />
                     <iframe frameBorder="0" height="100%" width="100%" src={trailerUrl} />
                 </>
             ) // redirect??

@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 import { Fab } from '@material-ui/core'
 import { History as HistoryIcon } from '@material-ui/icons'
 
-class BackNavButton extends React.Component {
+class HistoryNavButton extends React.Component {
     render() {
         return (
-            <div className="back-nav">
+            <div className="history-nav">
                 <Link to="/">
                     <Fab size="medium">
                         <HistoryIcon />
@@ -19,8 +19,8 @@ class BackNavButton extends React.Component {
     }
 }
 
-BackNavButton.propTypes = {
+HistoryNavButton.propTypes = {
     children: PropTypes.element
 }
 
-export default BackNavButton
+export default HistoryNavButton
