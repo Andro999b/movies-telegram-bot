@@ -23,7 +23,7 @@ class StartScrean extends Component {
                 >
                     <PlayIcon className="center shadow-icon" fontSize="inherit" />
                 </div>
-                <HistoryNavButton/>
+                <HistoryNavButton showLabel/>
                 <Share playlist={playlist} />
                 <AddHistoryButton playlist={playlist} />
                 <TelegramLinks/>
