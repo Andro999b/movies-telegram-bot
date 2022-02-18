@@ -25,8 +25,8 @@ module.exports = {
         'searchUrl': 'https://anime.anidub.life/index.php?do=search',
     },
     'animedia': {
-        'baseUrl': 'https://m43.animedia.pro',
-        'searchUrl': 'https://m43.animedia.pro/ajax/search_result_search_page_2/P0'
+        'baseUrl': 'https://m46.animedia.pro',
+        'searchUrl': 'https://m46.animedia.pro/ajax/search_result_search_page_2/P0'
     },
     'anigato': {
         // 'realip': '31.31.196.64',
