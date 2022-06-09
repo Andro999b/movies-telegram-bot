@@ -39,16 +39,31 @@ class KinovodProvider extends Provider {
                         if(targetScripts.length != 1)
                             return []
 
+                        console.log(targetScripts[0])
+
                         const targetScript = targetScripts[0]
                         const movieId = extractNumber(targetScript, 'MOVIE_ID')
-                        const vodHash = extractString(targetScript, 'VOD_HASH')
-                        const vodTime = extractString(targetScript, 'VOD_TIME')
+                        const playerCuid = extractString(targetScript, 'PLAYER_CUID')
                         const identifier = extractString(targetScript, 'IDENTIFIER')
 
-                        const url = `${this.config.baseUrl}/vod/${movieId}?identifier=${identifier}&st=${vodHash}&e=${vodTime}`
-
                         let res
-                        
+                        let url = `${this.config.baseUrl}/user_data?page=movie&movie_id=${movieId}&cuid=${playerCuid}&device=DESKTOP&_=${Date.now()}`
+
+                        try{
+                            res = await superagent
+                                .get(url)
+                                .timeout(this.config.timeout)
+                        } catch(e) {
+                            console.error(e)
+                            return []
+                        }
+
+                        const resJson = JSON.parse(res.text)
+                        const vodHash = resJson.vod_hash
+                        const vodTime = resJson.vod_time
+
+                        url = `${this.config.baseUrl}/vod/${movieId}?identifier=${identifier}&player_type=new&file_type=hls&st=${vodHash}&e=${vodTime}&_=${Date.now()}`
+
                         try{
                             res = await superagent
                                 .get(url)

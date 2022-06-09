@@ -3,8 +3,8 @@ const util = require('util')
 
 // const providerName = 'anigato'
 // const providerName = 'anidub'
-const providerName = 'animedia'
-// const providerName = 'kinovod'
+// const providerName = 'animedia'
+const providerName = 'kinovod'
 // const providerName = 'kinogo'
 // const providerName = 'rezka'
 // const providerName = 'seasonvar'
@@ -22,7 +22,7 @@ const providerName = 'animedia'
 // const searchQuery = 'Дюна'
 // const searchQuery = 'one punch'
 // const searchQuery = 'ID: Вторжение'
-const searchQuery = 'Дорохедоро'
+// const searchQuery = 'Дорохедоро'
 // const searchQuery = 'Клинок, рассекающий демонов'
 // const searchQuery = 'Принц-дракон'
 // const searchQuery = 'Полуночная проповедь'
@@ -30,6 +30,7 @@ const searchQuery = 'Дорохедоро'
 // const searchQuery = 'Выдающиеся звери'
 // const searchQuery = 'Акудама Драйв'
 // const searchQuery = 'ванпанчмен'
+const searchQuery = 'Город грехов'
 
 providers.searchOne(providerName, searchQuery)
     .then((results) => {

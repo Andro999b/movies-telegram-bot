@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'animedia'
-const id = '%2Fanime%2Fdorohedoro'
+const provider = 'kinovod'
+const id = '%2Ffilm%2F2164-gorod-grehov'
 
 // eslint-disable-next-line no-console
 console.log(decodeURIComponent(id))
