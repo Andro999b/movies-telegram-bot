@@ -1,9 +1,9 @@
-const kodikExtractor = require('./kodikExtractor')
+const kodikExtractor = require('./kodikExtractorV2')
 
 module.exports = ({ url }) => kodikExtractor({ 
     url, 
     linksApi: 'https://aniqit.com/gvi',
-    referer: 'https://wakanim.online',
+    referer: 'https://anigato.ru/',
     hash2: 'vbWENyTwIn8I',
     linkExtractor: (links, hls) => {
         const bestQuality = Object.keys(links).pop()
