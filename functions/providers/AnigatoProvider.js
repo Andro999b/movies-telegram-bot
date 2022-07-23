@@ -7,7 +7,6 @@ const { extractJSStringProperty } = require('../utils/extractScriptVariable')
 class AnigatoProvider extends DataLifeProvider {
     constructor() {
         super('anigato', {
-            cfbypass: true,
             scope: '.sres-wrap',
             selectors: {
                 id: {
@@ -48,10 +47,13 @@ class AnigatoProvider extends DataLifeProvider {
                             .children()
                             .toArray()
 
-                        const getOptionUrls = (el) => ([{
-                            url: $(el).attr('value').split('?')[0],
-                            extractor: { type: 'anigit' }
-                        }])
+                        const getOptionUrls = (el) => {
+                            const $el = $(el)
+                            return [{
+                                url: iframeSrc,
+                                extractor: { type: 'anigit', params: { hash: $el.attr('data-hash'), id: $el.attr('data-id') } }
+                            }]
+                        }
 
                         if ($seasons.length == 0) {
                             return [{

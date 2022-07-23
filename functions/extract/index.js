@@ -4,7 +4,6 @@ const makeResponse = require('../utils/makeResponse')
 const extractors = {
     'animevost': require('./animevostExtractor'),
     'tortuga': require('./m3u8Extractor'),
-    'kodik': require('./kodikExtractorV1'),
     'anigit': require('./anigitExtractor'),
     'animedia': require('./m3u8Extractor'),
     'sibnethls': require('./sibnetExtractorHls'),

@@ -29,10 +29,11 @@ module.exports = {
         'searchUrl': 'https://m46.animedia.pro/ajax/search_result_search_page_2/P0'
     },
     'anigato': {
+        'cfbypass': true,
         // 'realip': '31.31.196.64',
         // 'hostname': 'anigato.ru',
-        'baseUrl': 'https://anigato.org/',
-        'searchUrl': 'https://anigato.org/index.php?do=search',
+        'baseUrl': 'https://anigato.ru/',
+        'searchUrl': 'https://anigato.ru/index.php?do=search',
         'token': '447d179e875efe44217f20d1ee2146be'
     },
     'kinovod': {

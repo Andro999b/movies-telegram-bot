@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "release": "sls deploy --stage=prod --aws-profile serverless"
+    "release": "sls deploy --stage=prod --aws-profile serverless",
+    "test:info": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node test/testInfo"
   },
   "author": "",
   "license": "ISC",
