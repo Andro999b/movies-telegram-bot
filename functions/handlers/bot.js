@@ -9,7 +9,7 @@ const BOT_TYPE = process.env.BOT_TYPE
 const PROVIDERS = (BOT_TYPE == 'anime' ? process.env.ANIME_PROVIDERS : process.env.FILMS_PROVIDERS).split(',')
 
 const i18n = new TelegrafI18n({
-    defaultLanguage: 'ru',
+    defaultLanguage: 'uk',
     allowMissing: false, // Default true
     directory: path.resolve(__dirname, '..', process.env.LOCALIZATION_TYPE || 'localization')
 })

@@ -25,6 +25,7 @@ module.exports = async (params) => {
             .set({ 'Referer': referer || url })
             .timeout(10000)
 
+    const type = id == undefined ? 'video' : 'seaia'
 
     id = id || extractStringSingleQuote(res.text, 'videoInfo\\.id')
     hash = hash || extractStringSingleQuote(res.text, 'videoInfo\\.hash')
@@ -34,15 +35,17 @@ module.exports = async (params) => {
     const videoInfoParams =  {
         id,
         hash,
-        type: 'seria',
+        type,
         bad_user: false,
         info: '{}',
         ...urlParam,
         ref: decodeURIComponent(urlParam.ref)
     }
 
+    // return videoInfoParams
+
     const videoInfoRes = await superagent
-        .post(linksApi || 'https://kodik.info/video-links')
+        .post(linksApi)
         .type('form')
         .set({ 
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0',
