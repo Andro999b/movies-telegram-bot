@@ -25,7 +25,7 @@ module.exports = async (params) => {
             .set({ 'Referer': referer || url })
             .timeout(10000)
 
-    const type = id == undefined ? 'video' : 'seaia'
+    const type = id == undefined ? 'video' : 'seria'
 
     id = id || extractStringSingleQuote(res.text, 'videoInfo\\.id')
     hash = hash || extractStringSingleQuote(res.text, 'videoInfo\\.hash')
