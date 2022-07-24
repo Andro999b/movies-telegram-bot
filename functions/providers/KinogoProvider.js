@@ -8,6 +8,9 @@ const parsePlayerJSFile = require('../utils/parsePlayerJSFile')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const stripPlayerJSConfig = require('../utils/stripPlayerJSConfig')
 
+const clickRegExp = /\/engine\/ajax\/player_vse_pc\.php\?string_name=\d+/
+const httpsRegExp = /https?[^\s"]+/
+
 class KinogoProvider extends DataLifeProvider {
     constructor() {
         super('kinogo', {
@@ -37,7 +40,7 @@ class KinogoProvider extends DataLifeProvider {
 
                         if(!files.length) {
                             const onlcickAttr =  $root.find('ul.tabs').children().eq(1).attr('onclick')
-                            let matches = onlcickAttr.match(/\/engine\/ajax\/player_vse_pc\.php\?string_name=\d+/)
+                            let matches = onlcickAttr.match(clickRegExp)
 
                             if (!matches || matches.length == 0) 
                                 return []
@@ -46,7 +49,7 @@ class KinogoProvider extends DataLifeProvider {
                                 .get(`${this.config.baseUrl}${matches[0]}`)
                                 .timeout(this.config.infoTimeout)
 
-                            matches = iframeRes.text.match(/https?[^\s"]+/)
+                            matches = iframeRes.text.match(httpsRegExp)
 
                             if (matches.length == 0) return []
 

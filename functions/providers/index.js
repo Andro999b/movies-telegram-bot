@@ -1,7 +1,6 @@
 const providers = [
     new (require('./SeasonvarProvider'))(),
     new (require('./RezkaProvider'))(),
-    // new (require('./Kinogo2Provider'))(),
     new (require('./KinogoProvider'))(),
     new (require('./KinovodProvider'))(),
     new (require('./AnimeVostProvider'))(),
@@ -9,7 +8,7 @@ const providers = [
     new (require('./AnidubProvider'))(),
     new (require('./AnigatoProvider'))(),
     new (require('./VideoCDNProvider'))(),
-    new (require('./NekomoriProvider'))()
+    new (require('./AnitubeUAProvider'))()
 ]
 
 module.exports = {

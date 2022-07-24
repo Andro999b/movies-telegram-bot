@@ -2,43 +2,16 @@ const providers = require('../providers')
 const util = require('util')
 
 // const providerName = 'anigato'
+const providerName = 'anitubeua'
 // const providerName = 'anidub'
 // const providerName = 'animedia'
 // const providerName = 'kinovod'
 // const providerName = 'kinogo'
-const providerName = 'rezka'
 // const providerName = 'seasonvar'
 // const providerName = 'videocdn'
 // const providerName = 'animevost'
-// const providerName = 'nekomori'
-// const providerName = '7serealov'
-// const searchQuery = 'Звездный путь'
-// const searchQuery = 'Синяя книга'
-// const searchQuery = 'Во все тяжкие'
-// const searchQuery = 'терминатор'
-// const searchQuery = 'Скрытые вещи'
-// const searchQuery = 'Клинок ведьм'
-const searchQuery = 'Харли квин'
-// const searchQuery = 'Дюна'
-// const searchQuery = 'one punch'
-// const searchQuery = 'ID: Вторжение'
-// const searchQuery = 'Дорохедоро'
-// const searchQuery = 'Клинок, рассекающий демонов'
-// const searchQuery = 'Принц-дракон'
-// const searchQuery = 'Полуночная проповедь'
-// const searchQuery = 'Дрянь'
-// const searchQuery = 'Выдающиеся звери'
-// const searchQuery = 'Акудама Драйв'
-// const searchQuery = 'ванпанчмен'
-// const searchQuery = 'Город грехов'
+const searchQuery = 'повелитель'
 
 providers.searchOne(providerName, searchQuery)
-    .then((results) => {
-        console.log('results', results.length, results)// eslint-disable-line
-
-        return results[0]
-    }) 
-    .then(({ id, provider }) => 
-        providers.getInfo(provider, id)
-    )
-    .then((details) => console.log(util.inspect(details, false, null, true)))// eslint-disable-line
+    .then((results) => console.log('results', results.length, results))// eslint-disable-line 
+    .catch(console.error)// eslint-disable-line

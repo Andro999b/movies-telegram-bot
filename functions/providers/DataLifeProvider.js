@@ -27,6 +27,7 @@ class DataLifeProvider extends Provider {
                     result_from: 1,
                     story: encoding ? urlencode.encode(query, encoding) : query
                 })
+                .disableTLSCerts()
                 .buffer(true)
                 .charset()
                 .timeout(timeout)

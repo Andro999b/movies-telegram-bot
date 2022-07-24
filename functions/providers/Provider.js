@@ -13,7 +13,8 @@ class Provider {
                 scope: '',
                 slectors: {},
                 headers: {
-                    'User-Agent': 'Mozilla/5.0 Gecko/20100101 Firefox/59.0'
+                    'User-Agent': 'Mozilla/5.0 Gecko/20100101 Firefox/59.0',
+                    ...PROVIDERS_CONFIG[name]?.headers
                 },
                 detailsScope: 'body'
             },
@@ -46,6 +47,8 @@ class Provider {
             .timeout(timeout)
             .set(selectors)
             .gather()
+
+        // console.log(results)
 
         results = await this._postProcessResult(results)
 

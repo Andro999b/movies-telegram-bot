@@ -12,14 +12,6 @@ module.exports = {
         'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
         'token': 'BuKYUNoUnwQ560ZbZMIaNkFA4eTkIQk7'
     },
-    'nekomori': {
-        'baseUrl': 'http://nekomori.ch/api',
-        'postersCDNUrl': 'https://cdn.nekomori.ch/art/poster',
-        'sourceConfig': {
-            'sibnet': { 'extractor': 'sibnetmp4' },
-            'anigit': { 'extractor': 'anigit' }
-        }
-    },
     'anidub': {
         'baseUrl': 'https://anime.anidub.life',
         'searchUrl': 'https://anime.anidub.life/index.php?do=search',
@@ -30,11 +22,17 @@ module.exports = {
     },
     'anigato': {
         'cfbypass': true,
-        // 'realip': '31.31.196.64',
-        // 'hostname': 'anigato.ru',
         'baseUrl': 'https://anigato.ru/',
         'searchUrl': 'https://anigato.ru/index.php?do=search',
         'token': '447d179e875efe44217f20d1ee2146be'
+    },
+    'anitubeua': {
+        'timeout': 10,
+        'baseUrl': 'https://85.208.185.25/',
+        'searchUrl': 'https://85.208.185.25/index.php?do=search',
+        'headers': {
+            'Host': 'anitube.in.ua'
+        }
     },
     'kinovod': {
         'baseUrl': 'https://kinovod339.cc',
@@ -45,10 +43,6 @@ module.exports = {
         'searchUrl': 'https://animevost.org/index.php?do=search',
         'playerUrl': 'https://play.animegost.org',
     },
-    // 'kinogo': {
-    //     'baseUrl': 'https://kinogo-net.org/v46',
-    //     'searchUrl': 'https://kinogo-net.org/v46/index.php?do=search'
-    // },
     'kinogo': {
         'infoTimeout': 40,
         'baseUrl': 'https://kinogo.la',
