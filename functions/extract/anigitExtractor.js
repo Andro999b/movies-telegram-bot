@@ -1,6 +1,7 @@
 const superagent = require('superagent')
 const makeResponse = require('../utils/makeResponse')
 const { extractStringSingleQuote } = require('../utils/extractScriptVariable')
+const PROVIDERS_CONFIG = require('../providersConfig')
 
 function linkExtractor(links, hls) {
     const bestQuality = Object.keys(links).pop()
@@ -22,7 +23,10 @@ module.exports = async (params) => {
 
     const res = await superagent
             .get(url.startsWith('//') ? 'https:' + url : url)
-            .set({ 'Referer': referer || url })
+            .set({ 
+                'User-Agent': PROVIDERS_CONFIG.userAgent,
+                'Referer': referer || url,
+            })
             .timeout(10000)
 
     const type = id == undefined ? 'video' : 'seria'
@@ -48,7 +52,7 @@ module.exports = async (params) => {
         .post(linksApi)
         .type('form')
         .set({ 
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0',
+            'User-Agent': PROVIDERS_CONFIG.userAgent,
             'Referer': url
         })
         .send(videoInfoParams)

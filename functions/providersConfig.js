@@ -2,6 +2,7 @@ module.exports = {
     'timeout': 5,
     'infoTimeout': 20,
     'pageSize': 10,
+    'userAgent': 'Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0',
     'rezka': {
         'cfbypass': true,
         'baseUrl': 'https://corsproxy.movies-player.workers.dev/?https://rezka.ag',

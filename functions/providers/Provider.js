@@ -13,7 +13,7 @@ class Provider {
                 scope: '',
                 slectors: {},
                 headers: {
-                    'User-Agent': 'Mozilla/5.0 Gecko/20100101 Firefox/59.0',
+                    'User-Agent': PROVIDERS_CONFIG[name].userAgent || PROVIDERS_CONFIG.userAgent,
                     ...PROVIDERS_CONFIG[name]?.headers
                 },
                 detailsScope: 'body'
