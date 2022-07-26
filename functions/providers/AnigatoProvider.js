@@ -39,6 +39,7 @@ class AnigatoProvider extends DataLifeProvider {
 
                         const res = await superagent
                             .get(iframeSrc.startsWith('//') ? 'https:' + iframeSrc : iframeSrc)
+                            .set({ ...this.config.headers })
                             .timeout(this.config.timeout)
 
                         const $iframe = $(res.text)
