@@ -2,6 +2,8 @@ const DataLifeProvider = require('./DataLifeProvider')
 const $ = require('cheerio')
 const urlencode = require('urlencode')
 
+const srcRegExp = /src="([^"]+)"/
+
 class AnidubProvider extends DataLifeProvider {
     constructor() {
         super('anidub', {

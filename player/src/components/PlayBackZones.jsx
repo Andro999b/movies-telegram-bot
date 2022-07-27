@@ -24,7 +24,7 @@ class PlayBackZones extends Component {
     }
 
     delayStartSeeking = (e, seekMode) => {
-        if(e) {
+        if (e) {
             e.stopPropagation()
             e.preventDefault()
         }

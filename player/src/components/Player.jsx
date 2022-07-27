@@ -168,9 +168,9 @@ class Player extends Component {
         const { playerStore } = this.props
         const { playlistOpen, idle, fullScreen } = this.state
         const { device } = playerStore
-        const { error, seekTime } = device
+        const { error } = device
         
-        const hideUi = idle && seekTime == null
+        const hideUi = idle
 
         return (
             <Fullscreen
