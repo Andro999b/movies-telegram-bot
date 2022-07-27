@@ -9,6 +9,7 @@ import PlayerTitle from './PlayerTitle'
 import VideoScrean from './VideoScrean'
 import PlayBackZones from './PlayBackZones'
 import Share from './Share'
+import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 
 import { Typography } from '@material-ui/core'
 import { observer, inject } from 'mobx-react'
@@ -94,29 +95,6 @@ class Player extends Component {
         }
     }
 
-    handleKeyUp = (e) => {
-        const { props: { playerStore: { device } } } = this
-
-        const step = e.ctrlKey ? 10 : (e.shiftKey ? 60 : 30)
-
-        if (e.code == 'Space') { //spacebar
-            if (device.isPlaying) {
-                device.pause()
-            } else {
-                device.play()
-            }
-        } else if (e.code == 'ArrowLeft') {
-            device.skip(-step)
-        } else if (e.code == 'ArrowRight') {
-            device.skip(step)
-        } else if (e.code == 'KeyF') {
-            this.handleToggleFullscreen()
-        }
-
-        e.stopPropagation()
-        e.preventDefault()
-    }
-
     handleIdle = (idle) => {
         this.setState({ idle })
     }
@@ -131,6 +109,15 @@ class Player extends Component {
     handleToggleFullscreen = () => {
         const fullScreen = !this.state.fullScreen
         this.setState({ fullScreen })
+    }
+
+    handleTogglePlayback = () => {
+        const { props: { playerStore: { device } } } = this
+        if (device.isPlaying) {
+            device.pause()
+        } else {
+            device.play()
+        }
     }
 
     handleSetFullScreen = (fullScreen) => {
@@ -165,12 +152,15 @@ class Player extends Component {
     componentWillUnmount() {
         const { idleTimeout } = this
         clearTimeout(idleTimeout);
-        window.removeEventListener('keyup', this.handleKeyUp)
+        removeGlobalKey(['Space', 'KeyF', 'Enter', 'PageUp', 'PageDown'])
     }
 
     componentDidMount() {
         this.setIdleTimeout()
-        window.addEventListener('keyup', this.handleKeyUp, true)
+        addGlobalKey('Space', this.handleTogglePlayback)
+        addGlobalKey(['KeyF', 'Enter'], this.handleToggleFullscreen)
+        addGlobalKey('PageUp', () => this.props.playerStore.prevFile())
+        addGlobalKey('PageDown', () => this.props.playerStore.nextFile())
     }
     // --- idle checking ---
 
@@ -178,7 +168,7 @@ class Player extends Component {
         const { playerStore } = this.props
         const { playlistOpen, idle, fullScreen } = this.state
         const { device } = playerStore
-        const { isLoading, error, seekTime } = device
+        const { error, seekTime } = device
         
         const hideUi = idle && seekTime == null
 
@@ -198,7 +188,7 @@ class Player extends Component {
                                 onSeekEnd={this.handleSeekEnd}
                             />
                         }
-                        {!error && <VideoScrean device={device} onEnded={playerStore.nextFile} />}
+                        {!error && <VideoScrean device={device} onEnded={playerStore.fileEnd} />}
                         {!hideUi && <>
                             <PlayerTitle title={playerStore.getPlayerTitle()} />
                             <Share device={device} playlist={device.playlist} />

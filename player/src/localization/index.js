@@ -16,23 +16,12 @@ export default new LocalizedStrings({
         animeBotTip: 'search anime',
         translation: 'Translation',
         watchHistory: 'History',
-        noWatchHistory: 'You havent watch anything yet. Use telegream bots to search something.'
-    },
-    ru: {
-        cantLoadPLaylist: 'Ошибка загрузки',
-        cantPlayMedia: 'Невозможно возпроизвести видео',
-        videoNotFound: 'Видео недоступно',
-        urlCopied: 'URL скопирован',
-        shareWith: 'Поделится в...',
-        curPlaylistPos: 'Серия',
-        curTimePos: 'Время',
-        shuffleOn: 'Случаный режим включен',
-        shuffleOff: 'Случаный режим выключен',
-        searchAlternatives: 'Поискать другие ссылки',
-        moviesBotTip: 'фильмы и сериалы',
-        animeBotTip: 'поиск аниме',
-        translation: 'Перевод',
-        watchHistory: 'История',
-        noWatchHistory: 'Ваша история пустая. Используйте телеграм бот для поиска'
+        noWatchHistory: 'You havent watch anything yet. Use telegream bots to search something.',
+        playMode: {
+            'normal': 'Play all',
+            'play_once': 'Play once',
+            'repeat': 'Repeat',
+            'shuffle': 'Shuffle',
+        }
     }
 })

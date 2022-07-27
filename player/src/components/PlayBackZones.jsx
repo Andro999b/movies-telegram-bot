@@ -6,7 +6,7 @@ import {
     FastRewindRounded as FastRewindIcon,
     PlayCircleFilled as PlayIcon
 } from '@material-ui/icons'
-
+import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 import { observer } from 'mobx-react'
 import { Typography, CircularProgress } from '@material-ui/core'
 
@@ -24,8 +24,10 @@ class PlayBackZones extends Component {
     }
 
     delayStartSeeking = (e, seekMode) => {
-        e.stopPropagation()
-        e.preventDefault()
+        if(e) {
+            e.stopPropagation()
+            e.preventDefault()
+        }
 
         if(this.state.seekMode && this.state.seekMode != seekMode) return
 
@@ -54,8 +56,14 @@ class PlayBackZones extends Component {
         )
     }
 
+    componentDidMount() {
+        addGlobalKey('ArrowRight', this.handleFastFroward)
+        addGlobalKey('ArrowLeft', this.handleFastRewind)
+    }
+
     componentWillUnmount() {
         this.cleanUpListeners()
+        removeGlobalKey(['ArrowLeft', 'ArrowRight'])
     }
 
     cleanUpState() {
@@ -89,19 +97,19 @@ class PlayBackZones extends Component {
                             {seekMode == 'ff' ? '+' : '-'}{accTime}s
                         </Typography>
                     }
-                    {paused && <PlayIcon className="center" fontSize="inherit" />}
+                    {paused && <PlayIcon className="center shadow-icon" fontSize="inherit" />}
                 </div>
                 <div
                     className="playback-skip backward"
                     onClick={this.handleFastRewind}
                 >
-                    {paused && <FastRewindIcon className="center" fontSize="inherit" />}
+                    {paused && <FastRewindIcon className="center shadow-icon" fontSize="inherit" />}
                 </div>
                 <div
                     className="playback-skip forward"
                     onClick={this.handleFastFroward}
                 >
-                    { paused && <FastForwardIcon className="center" fontSize="inherit"/> }
+                    { paused && <FastForwardIcon className="center shadow-icon" fontSize="inherit"/> }
                 </div>
             </div>
         )

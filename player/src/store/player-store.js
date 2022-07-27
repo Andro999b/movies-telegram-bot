@@ -2,7 +2,6 @@ import { observable, action } from 'mobx'
 import analytics from '../utils/analytics'
 import store from '../utils/storage'
 import logger from '../utils/logger'
-import asyncSourceLoaders from '../utils/asyncSource'
 import localization from '../localization'
 import watchHistoryStore from './watch-history-store'
 
@@ -21,7 +20,7 @@ export class Device {
     @observable isMuted = false
     @observable audioTracks = []
     @observable audioTrack = null
-    @observable shuffle = false
+    @observable playMode = 'normal'
     @observable seekTime = null
     @observable quality = null
     @observable qualities = []
@@ -44,8 +43,8 @@ export class Device {
     /* eslint-enable */
 
     @action.bound seeking(seekTime) {
-        if(seekTime < 0) seekTime = 0
-        else if(seekTime > this.duration) seekTime = this.duration
+        if (seekTime < 0) seekTime = 0
+        else if (seekTime > this.duration) seekTime = this.duration
         this.seekTime = seekTime
     }
 
@@ -54,9 +53,9 @@ export class Device {
         store.set('quality', quality)
     }
 
-    @action.bound setShuffle(shuffle) {
-        this.shuffle = shuffle
-        store.set('shuffle', shuffle)
+    @action.bound setPlayMode(playMode) {
+        this.playMode = playMode
+        store.set('playMode', playMode)
     }
 
     skip(sec) {
@@ -74,7 +73,7 @@ export class LocalDevice extends Device {
     constructor() {
         super()
         this.volume = store.get('volume') || 1
-        this.shuffle = store.get('shuffle') || false
+        this.playMode = store.get('playMode') || 'normal'
     }
 
     @action.bound play(currentTime) {
@@ -167,15 +166,8 @@ export class LocalDevice extends Device {
 
             const { provider, id } = this.playlist
 
-            let loader
-
-            const asyncSourceLoader = asyncSourceLoaders[provider]
-            if(asyncSourceLoader) {
-                loader = asyncSourceLoader(file.asyncSource)
-            } else {
-                loader = fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${file.asyncSource}`)
-                    .then((res) => res.json())
-            }
+            let loader = fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${file.asyncSource}`)
+                .then((res) => res.json())
 
             return loader
                 .then((source) => {
@@ -233,7 +225,7 @@ export class LocalDevice extends Device {
         if (audioTracks.length > 0) {
             watchHistoryStore.audioTrack(this.playlist)
                 .then((storedTrack) => {
-                    if(storedTrack) {
+                    if (storedTrack) {
                         const audioTrack = audioTracks.find(({ id }) => id == storedTrack)
                         if (audioTrack) {
                             this.audioTrack = audioTrack.id
@@ -255,8 +247,8 @@ class PlayerStore {
 
     @action.bound openPlaylist(playlist, fileIndex, startTime) {
         let p
-        if(fileIndex == null || isNaN(fileIndex)) {
-            p = watchHistoryStore.lastEpisode(playlist)   
+        if (fileIndex == null || isNaN(fileIndex)) {
+            p = watchHistoryStore.lastEpisode(playlist)
         } else {
             p = Promise.resolve({ fileIndex, startTime })
         }
@@ -265,7 +257,7 @@ class PlayerStore {
             this.device.setPlaylist(playlist, fileIndex, startTime)
             this.device.play()
             document.title = this.getPlayerTitle()
-    
+
             analytics('selectFile', document.title)
         })
     }
@@ -288,15 +280,26 @@ class PlayerStore {
         this.switchFile(this.device.currentFileIndex - 1)
     }
 
+    @action.bound fileEnd() {
+        const { playMode } = this.device
+
+        if(playMode == 'play_once') 
+            return
+        else if(playMode == 'repeat')
+            this.device.play(0)
+        else 
+            this.switchFileOrShuffle(this.device.currentFileIndex + 1)
+    }
+
     @action.bound nextFile() {
         this.switchFileOrShuffle(this.device.currentFileIndex + 1)
     }
 
     @action.bound switchFileOrShuffle(fileIndex) {
-        const { currentFileIndex, shuffle, playlist } = this.device
+        const { currentFileIndex, playMode, playlist } = this.device
         const { files } = playlist
 
-        if (files.length > 1 && shuffle) {
+        if (files.length > 1 && playMode == 'shuffle') {
             let next
 
             do {

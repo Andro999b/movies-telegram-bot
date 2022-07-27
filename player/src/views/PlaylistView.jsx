@@ -10,6 +10,7 @@ import DualCirclesLoader from '../components/DualCirclesLoader'
 import HistoryNavButton from '../components/HistoryNavButton'
 import { Typography } from '@material-ui/core'
 import AlternativeLinksError from '../components/AlternativeLinksError'
+import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 
 @inject(
     ({
@@ -39,19 +40,24 @@ class PlaylistView extends Component {
     fileIndex = 0
     time = 0
 
-    handleStartClick = () => {
-        this.setState({ loading: true })
-        const { openPlaylist, playlist, watching } = this.props
-        watching(playlist)
-            .then(() => openPlaylist(playlist, this.fileIndex, this.time))
-            .then(() => { 
+    handleStart = () => {
+        const { loading, started, openPlaylist, playlist, watching } = this.props
+        if(loading || started) return;
+
+        openPlaylist(playlist, this.fileIndex, this.time)
+            .then(() => {
                 this.setState({ 
                     started: true, 
-                    loading: false,
                     initialFullScreen: isTouchDevice()
                 })
                 analytics('start', document.title)
             })
+
+        watching(playlist)
+    }
+
+    componentWillUnmount() {
+        removeGlobalKey(['Space', 'Enter'])
     }
 
 
@@ -63,6 +69,8 @@ class PlaylistView extends Component {
         this.time = cur.time
 
         loadPlaylist(cur)
+
+        addGlobalKey(['Space', 'Enter'], this.handleStart)
     }
 
     componentDidUpdate(prevProps) {
@@ -133,7 +141,7 @@ class PlaylistView extends Component {
                 return (
                     <StartScrean
                         playlist={playlist}
-                        onStart={this.handleStartClick}
+                        onStart={this.handleStart}
                     />
                 )
             } else {
