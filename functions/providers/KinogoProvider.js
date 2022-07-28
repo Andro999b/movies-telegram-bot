@@ -36,28 +36,16 @@ class KinogoProvider extends DataLifeProvider {
                 files: {
                     selector: '#1212',
                     transform: async ($el, $root) => {
-                        let files = this._extractFilesFromMainPlayer($el.first())
-
-                        if(!files.length) {
-                            const onlcickAttr =  $root.find('ul.tabs').children().eq(1).attr('onclick')
-                            let matches = onlcickAttr.match(clickRegExp)
-
-                            if (!matches || matches.length == 0) 
-                                return []
-
-                            const iframeRes = await superagent
-                                .get(`${this.config.baseUrl}${matches[0]}`)
-                                .timeout(this.config.infoTimeout)
-
-                            matches = iframeRes.text.match(httpsRegExp)
-
-                            if (matches.length == 0) return []
-
-                            const playlist = await videocdnembed(matches[0])
-
-                            return playlist.map((file, id) => ({ id, ...file }))
+                        let files = []
+                        try{
+                            files = await this._extractFilesFromIframe($root)
+                        } catch(e) {
+                            console.error("kinogo fail load iframe files", e)
                         }
 
+                        if(!files.length) {
+                            files = this._extractFilesFromMainPlayer($el.first())
+                        }
                         return files
                     }
                 },
@@ -67,6 +55,13 @@ class KinogoProvider extends DataLifeProvider {
                 }
             }
         })
+    }
+
+    async _extractFilesFromIframe($root) {
+        const iframeSrc = $root.find('.box.visible > iframe').first().attr('src')
+        const playlist = await videocdnembed(iframeSrc)
+
+        return playlist.map((file, id) => ({ id, ...file }))
     }
 
     _extractFilesFromMainPlayer($el) {
@@ -107,7 +102,7 @@ class KinogoProvider extends DataLifeProvider {
 
         if (fmp4) {
             const urls = parsePlayerJSFile(fmp4)
-            
+
             const url = urls[0].url
 
             if (url.endsWith('m3u8')) { // not actual mp4 lol
@@ -126,7 +121,7 @@ class KinogoProvider extends DataLifeProvider {
         if (config) {
             const { file } = config
             return convertPlayerJSPlaylist(file).map((file) => {
-                if(file.name) {
+                if (file.name) {
                     file.name = file.name.replace(/<[^>]*>?/g, ' ')
                 }
                 return file

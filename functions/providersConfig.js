@@ -29,7 +29,8 @@ module.exports = {
     },
     'anitubeua': {
         'timeout': 10,
-        'baseUrl': 'https://85.208.185.25/',
+        'imagesUrl': 'https://anitube.in.ua',
+        'baseUrl': 'https://85.208.185.25',
         'searchUrl': 'https://85.208.185.25/index.php?do=search',
         'headers': {
             'Host': 'anitube.in.ua'
@@ -45,7 +46,7 @@ module.exports = {
         'playerUrl': 'https://play.animegost.org',
     },
     'kinogo': {
-        'infoTimeout': 40,
+        'infoTimeout': 20,
         'baseUrl': 'https://kinogo.la',
         'searchUrl': 'https://kinogo.la/index.php?do=search'
     },

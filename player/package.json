@@ -39,6 +39,7 @@
     "sass-loader": "^8.0.2",
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
+    "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2"
@@ -51,7 +52,7 @@
     "dexie": "^3.0.3",
     "firebase": "^9.0.2",
     "fscreen": "^1.0.2",
-    "hls.js": "^0.13.2",
+    "hls.js": "^1.2.0",
     "lodash.groupby": "^4.6.0",
     "lodash.pick": "^4.4.0",
     "memoize-one": "^5.1.1",

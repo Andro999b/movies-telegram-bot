@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'anidub'
-const id = 'https%3A%2F%2Fanime.anidub.life%2Fanime%2Fanime_ongoing%2F11628-vladyka-tv-4-overlord-tv-iv-01-iz-13.html'
+const provider = 'anitubeua'
+const id = 'https%3A%2F%2Fanitube.in.ua%2F3948-spy-x-family.html'
 
 // eslint-disable-next-line no-console
 console.log(decodeURIComponent(id))

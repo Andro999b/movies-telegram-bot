@@ -68,6 +68,7 @@ export const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${
 export function getAlternativeUrl(provider, query) {
     let bot
     switch(provider) {
+        case 'anitubeua':
         case 'animevost': 
         case 'anigato': 
         case 'anidub': 

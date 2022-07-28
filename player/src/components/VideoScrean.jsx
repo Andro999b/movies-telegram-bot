@@ -2,7 +2,7 @@ import React from 'react'
 import ReactResizeDetector from 'react-resize-detector'
 import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
-import Hls from 'hls.js'
+// import Hls from 'hls.js'
 import BaseScrean from './BaseScrean'
 import { createExtractorUrlBuilder } from '../utils'
 import logger from '../utils/logger'
@@ -161,7 +161,7 @@ class VideoScrean extends BaseScrean {
     setVideoFile(file) {
         this.dispose()
 
-        if(file.url.endsWith("m3u8")) {
+        if(file.url.endsWith("m3u8") || file.hls) {
             this.setHlsVideoFile(file)
         } else { 
             this.setNativeVideoFile(file)
@@ -182,12 +182,10 @@ class VideoScrean extends BaseScrean {
 
     setHlsVideoFile({ url, extractor }) {
         const { props: { device } } = this
-        const { source: { manifestExtractor } } = device
 
-        if (manifestExtractor || extractor) {
-            url = createExtractorUrlBuilder(manifestExtractor)(url)
+        if (extractor) {
+            url = createExtractorUrlBuilder(extractor)(url)
         }
-
 
         const video = this.video.current
         if(video.canPlayType('application/vnd.apple.mpegurl') !== '') {
@@ -195,29 +193,34 @@ class VideoScrean extends BaseScrean {
             return
         }
 
-        const hls = new Hls({
-            startPosition: device.currentTime,
-            xhrSetup: (xhr) => {
-                xhr.timeout = 0
-            }
+        import(/* webpackChunkName: "hlsjs" */ 'hls.js').then(module => {
+            const Hls = module.default
+            const hls = new Hls({
+                manifestLoadingTimeOut: 30* 1000,
+                manifestLoadingMaxRetry: 3,
+                startPosition: device.currentTime,
+                xhrSetup: (xhr) => {
+                    xhr.timeout = 0
+                }
+            })
+    
+            hls.attachMedia(this.video.current)
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                // this.restoreVideoState()
+    
+                if (hls.audioTracks && hls.audioTracks.length > 1) {
+                    this.hlsMultiAudio = true
+                    device.setAudioTracks(
+                        hls.audioTracks.map(({ id, name }) => ({ id, name }))
+                    )
+                }
+            })
+            hls.on(Hls.Events.ERROR, this.handleHLSError)
+            // hls.on(Hls.Events.LEVEL_LOADING, this.handleLoadStart)
+    
+            hls.loadSource(url)
+            this.hls = hls
         })
-
-        hls.attachMedia(this.video.current)
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            // this.restoreVideoState()
-
-            if (hls.audioTracks && hls.audioTracks.length > 1) {
-                this.hlsMultiAudio = true
-                device.setAudioTracks(
-                    hls.audioTracks.map(({ id, name }) => ({ id, name }))
-                )
-            }
-        })
-        hls.on(Hls.Events.ERROR, this.handleHLSError)
-        // hls.on(Hls.Events.LEVEL_LOADING, this.handleLoadStart)
-
-        hls.loadSource(url)
-        this.hls = hls
     }
 
     /**
@@ -237,6 +240,7 @@ class VideoScrean extends BaseScrean {
     }
 
     handleHLSError = (_, data) => {
+        console.log(data)
         if (data.fatal) {
             switch (data.type) {
                 case Hls.ErrorTypes.MEDIA_ERROR:

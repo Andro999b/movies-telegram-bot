@@ -35,7 +35,7 @@ function _extractTranslations(translations, playlists) {
         .map((file, id) => ({...file, id}) )
 }
 
-module.exports = async (url, timeout = 60) => {
+module.exports = async (url, timeout = 20) => {
     let res
 
     res = await superagent

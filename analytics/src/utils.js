@@ -189,11 +189,11 @@ export const isSearchableEvent = ({ type }) => ['search', 'no_results'].includes
 
 export function getBotSearchUrl({ bot, query }) {
     switch(bot) {
-        case 'anime': 
+        case 'ani': 
             bot = 'anime_tube_bot'
             break 
         default:
-            bot = 'films_search_bot'
+            bot = 'MoviesBroBot'
     }
 
     return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`

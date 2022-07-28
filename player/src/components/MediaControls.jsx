@@ -18,6 +18,7 @@ import { observer, inject } from 'mobx-react'
 import AudioTrackSelector from './AudioTrackSelector'
 import VideoQualitySelector from './VideoQualitySelector'
 import PlayModeSelector from './PlayModeSelector'
+import MobileSoundControl from './MobileSoundControl'
 
 @observer
 class MediaControls extends Component {
@@ -76,6 +77,7 @@ class MediaControls extends Component {
                                 <NextIcon />
                             </IconButton>
                             <PlayModeSelector device={device}/>
+                            {mobile && <MobileSoundControl device={device}/>}
                             {!mobile && <SoundControl device={device} />}
                             {hasAudioTracks && <AudioTrackSelector device={device} />}
                         </div>

@@ -25,6 +25,7 @@ export const PROVIDERS = [
     // '7serealov',
     // 'nekomori',
     'anidub',
+    'anitubeua',
     'animedia',
     'animevost',
     'anigato',

@@ -4,7 +4,16 @@ const urlencode = require('urlencode')
 const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
 const srcRegExp = /src="([^"]+)"/
 
-const extractors = ['ashdi', 'sibnet']
+const extractors = {
+    'ashdi': {
+        type: 'ashdi',
+        hls: true
+    },
+    'sibnet': {
+        type: 'sibnetmp4',
+        hls: false
+    }
+}
 
 class AnitubeUAProvider extends DataLifeProvider {
     constructor() {
@@ -52,7 +61,8 @@ class AnitubeUAProvider extends DataLifeProvider {
 
                             file.urls.push({
                                 url,
-                                extractor: { type: extractor },
+                                hls: extractor.hls,
+                                extractor: { type: extractor.type },
                                 audio
                             })
                         }
@@ -62,25 +72,23 @@ class AnitubeUAProvider extends DataLifeProvider {
                             let id = 0
                             for (const episode of episodes) {
                                 const { code } = episode
-                                console.log()
+                                
                                 const srcMatch = code.match(srcRegExp)
 
                                 if(!srcMatch || srcMatch.length < 1)
                                     return
 
                                 const url = srcMatch[1]
-                                const extractor = extractors.find(extr => url.indexOf(extr) != -1)
+                                const extractorName = Object.keys(extractors).find(extr => url.indexOf(extr) != -1)
 
-                                if(!extractor)
+                                if(!extractorName)
                                     return
 
-                                addFile(id, audio, url, extractor)
+                                addFile(id, audio, url, extractors[extractorName])
 
                                 id++
                             }
                         });
-
-                        console.log(files)
 
                         return files
                     }

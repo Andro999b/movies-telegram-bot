@@ -21,7 +21,7 @@ provider:
     STAGE: ${opt:stage, 'dev'}
     CACHE_TTL: 300
     FILMS_PROVIDERS: 'kinogo,kinovod,seasonvar,videocdn'
-    ANIME_PROVIDERS: 'anitubeua,animevost,anigato,anidub,animedia' # anidub
+    ANIME_PROVIDERS: 'animevost,anigato,anidub,animedia' # anidub
     PLAYER_URL: ${self:custom.playerUrl}
     ACCOUNT_ID: !Ref AWS::AccountId
     REGION: ${self:provider.region}

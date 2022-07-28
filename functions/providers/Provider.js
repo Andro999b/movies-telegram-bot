@@ -155,7 +155,8 @@ class Provider {
     }
 
     _absoluteUrl(url) {
-        return url.startsWith('/') ? this.config.baseUrl + url : url
+        const baseUrl = this.config.imagesUrl || this.config.baseUrl
+        return url.startsWith('/') ? baseUrl + url : url
     }
 }
 
