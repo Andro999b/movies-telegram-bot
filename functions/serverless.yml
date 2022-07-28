@@ -1,10 +1,15 @@
 service: movies-telegram-bot
 
+plugins:
+  - serverless-content-encoding
+
 custom:
   cacheTable: cache-${opt:stage, 'dev'}
   playerUrl: 'https://movies-player.firebaseapp.com/#/watch'
   mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
   analyticsTable: analyticsTable-${opt:stage, 'dev'}
+  contentEncoding:
+    minimumCompressionSize: 4096
 
 provider:
   name: aws
