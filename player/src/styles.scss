@@ -352,3 +352,20 @@ html {
     top: 56px;
     right: 5px;
 }
+
+.save-ukraine {
+    position: absolute;
+    z-index: 3;
+    display: block;
+    left: 50%;
+    top: 130px;
+    background: linear-gradient(180deg, #3bb4fd 50%, #fffb00 50%);
+    transform: translate(-50%, 0);
+    box-shadow: rgba(0,0,0,.35) 0px 0px 15px 4px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #000 !important;
+    text-decoration: none !important;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: bold;
+}

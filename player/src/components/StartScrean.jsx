@@ -23,6 +23,7 @@ class StartScrean extends Component {
                 >
                     <PlayIcon className="center shadow-icon" fontSize="inherit" />
                 </div>
+                <a className='save-ukraine' href='https://savelife.in.ua/' target='_blank'>Домогти ЗСУ</a>
                 <HistoryNavButton showLabel/>
                 <Share playlist={playlist} />
                 <AddHistoryButton playlist={playlist} />
