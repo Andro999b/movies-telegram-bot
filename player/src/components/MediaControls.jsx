@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import VideoSeekSlider from './VideoSeekSlider'
 import '../video-slider.scss'
 import PropTypes from 'prop-types'

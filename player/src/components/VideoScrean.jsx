@@ -2,7 +2,6 @@ import React from 'react'
 import ReactResizeDetector from 'react-resize-detector'
 import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
-// import Hls from 'hls.js'
 import BaseScrean from './BaseScrean'
 import { createExtractorUrlBuilder } from '../utils'
 import logger from '../utils/logger'
@@ -161,7 +160,7 @@ class VideoScrean extends BaseScrean {
     setVideoFile(file) {
         this.dispose()
 
-        if(file.url.endsWith("m3u8") || file.hls) {
+        if(file.url.endsWith('m3u8') || file.hls) {
             this.setHlsVideoFile(file)
         } else { 
             this.setNativeVideoFile(file)
@@ -193,7 +192,7 @@ class VideoScrean extends BaseScrean {
             return
         }
 
-        import(/* webpackChunkName: "hlsjs" */ 'hls.js').then(module => {
+        import(/* webpackChunkName: "hlsjs" */ 'hls.js').then((module) => {
             const Hls = module.default
             const hls = new Hls({
                 manifestLoadingTimeOut: 30* 1000,
@@ -203,8 +202,6 @@ class VideoScrean extends BaseScrean {
                     xhr.timeout = 0
                 }
             })
-
-            console.log(hls)
     
             hls.attachMedia(this.video.current)
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -218,9 +215,26 @@ class VideoScrean extends BaseScrean {
                 }
                 this.video.current.play()
             })
-            hls.on(Hls.Events.ERROR, this.handleHLSError)
-            // hls.on(Hls.Events.LEVEL_LOADING, this.handleLoadStart)
-    
+            hls.on(Hls.Events.ERROR, (_, data) => {
+                if (data.fatal) {
+                    switch (data.type) {
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            console.log('fatal media error encountered, try to recover') // eslint-disable-line
+                            this.hls.recoverMediaError()
+                            break
+                        default:
+                            // cannot recover
+                            if(this.tryNextVideoUrl()) 
+                                break
+        
+                            this.props.device.setError(localization.cantPlayMedia)
+                            this.hls.destroy()
+                            this.logError(data)
+                            break
+                    }
+                }
+            })
+
             hls.loadSource(url)
             this.hls = hls
         })
@@ -242,26 +256,6 @@ class VideoScrean extends BaseScrean {
         device.setError(null)
     }
 
-    handleHLSError = (_, data) => {
-        console.log(data)
-        if (data.fatal) {
-            switch (data.type) {
-                case Hls.ErrorTypes.MEDIA_ERROR:
-                    console.log('fatal media error encountered, try to recover') // eslint-disable-line
-                    this.hls.recoverMediaError()
-                    break
-                default:
-                    // cannot recover
-                    if(this.tryNextVideoUrl()) 
-                        break
-
-                    this.props.device.setError(localization.cantPlayMedia)
-                    this.hls.destroy()
-                    this.logError(data)
-                    break
-            }
-        }
-    }
 
     handleError = () => {
         const { props: { device } } = this

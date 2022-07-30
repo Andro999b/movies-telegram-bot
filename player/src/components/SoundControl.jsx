@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import {
     VolumeUpRounded as VolumeUpIcon,
-    VolumeDownRounded as VolumeDownIcon
+    VolumeOffRounded as VolumeOffIcon
 } from '@material-ui/icons'
 import { 
     Slider,
@@ -12,29 +12,24 @@ import { observer } from 'mobx-react'
 
 @observer
 class SoundControl extends Component {
-    handleVolumDown = () => {
-        this.props.device.setVolume(0)
-    }
-
-    handleVolumUp = () => {
-        this.props.device.setVolume(1)
+    handleToggleMute = () => {
+        this.props.device.toggleMute()
     }
 
     handleVolume = (_, volume) => {
-        this.props.device.setVolume(volume / 100)
+        const { device } = this.props
+        device.setVolume(volume / 100)
+        device.setMute(false)
     }
 
     render() {
-        const { device: { volume } } = this.props
-
+        const { device: { volume, isMuted } } = this.props
+  
         return (
             <Fragment>
-                <IconButton onClick={this.handleVolumDown}>
-                    <VolumeDownIcon/>
-                </IconButton>
                 <Slider className="sound-control__slider " value={volume * 100} onChange={this.handleVolume} />
-                <IconButton onClick={this.handleVolumUp}>
-                    <VolumeUpIcon/>
+                <IconButton onClick={this.handleToggleMute}>
+                    { isMuted ? <VolumeOffIcon/> : <VolumeUpIcon/> }
                 </IconButton>
             </Fragment>
         )

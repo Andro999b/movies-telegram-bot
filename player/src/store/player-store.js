@@ -40,6 +40,8 @@ export class Device {
     setPlaylist(playlist, fileIndex, marks) { }
     setAudioTrack(id) { }
     setAudioTracks(audioTracks) { }
+    setNute(mute) {}
+    toggleMute() {}
     /* eslint-enable */
 
     @action.bound seeking(seekTime) {
@@ -239,6 +241,10 @@ export class LocalDevice extends Device {
 
     @action.bound toggleMute() {
         this.isMuted = !this.isMuted
+    }
+
+    @action.bound setMute(mute) {
+        this.isMuted = mute
     }
 }
 
