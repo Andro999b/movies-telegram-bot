@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { FullScreen } from 'react-full-screen'
+import FullScreen from 'react-full-screen'
 
 import MediaControls from './MediaControls'
 import PlayerFilesList from './PlayerPlayList'
@@ -152,7 +152,7 @@ class Player extends Component {
     componentWillUnmount() {
         const { idleTimeout } = this
         clearTimeout(idleTimeout);
-        removeGlobalKey(['Space', 'KeyF', 'Enter', 'PageUp', 'PageDown'])
+        removeGlobalKey(['Space', 'KeyF', 'KeyM', 'Enter', 'PageUp', 'PageDown'])
     }
 
     componentDidMount() {
@@ -161,6 +161,7 @@ class Player extends Component {
         addGlobalKey(['KeyF', 'Enter'], this.handleToggleFullscreen)
         addGlobalKey('PageUp', () => this.props.playerStore.prevFile())
         addGlobalKey('PageDown', () => this.props.playerStore.nextFile())
+        addGlobalKey(['KeyM'], () => this.props.playerStore.device.toggleMute())
     }
     // --- idle checking ---
 
@@ -173,7 +174,7 @@ class Player extends Component {
         const hideUi = idle
 
         return (
-            <Fullscreen
+            <FullScreen
                 enabled={fullScreen}
                 onChange={this.handleSetFullScreen}
             >
@@ -211,7 +212,7 @@ class Player extends Component {
                         </>}
                     </div>
                 </HandleActionListener>
-            </Fullscreen >
+            </FullScreen>
         )
     }
 }

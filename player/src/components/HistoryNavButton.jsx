@@ -13,7 +13,7 @@ class HistoryNavButton extends React.Component {
         return (
             <div className="history-nav">
                 <Link to="/">
-                    <Fab variant={ showLabel ? 'extended' : 'round' } size="medium">
+                    <Fab variant={ showLabel ? 'extended' : 'circular' } size="medium">
                         <HistoryIcon />
                         &nbsp;{ showLabel && localization.watchHistory}
                     </Fab>
