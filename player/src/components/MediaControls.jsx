@@ -14,7 +14,7 @@ import {
 } from '@material-ui/icons'
 import SoundControl from './SoundControl'
 import { isTouchDevice } from '../utils'
-import { observer, inject } from 'mobx-react'
+import { observer } from 'mobx-react'
 import AudioTrackSelector from './AudioTrackSelector'
 import VideoQualitySelector from './VideoQualitySelector'
 import PlayModeSelector from './PlayModeSelector'

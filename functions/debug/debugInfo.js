@@ -1,8 +1,8 @@
 const providers = require('../providers')
 const util = require('util')
 
-const provider = 'anitubeua'
-const id = 'https%3A%2F%2Fanitube.in.ua%2F3948-spy-x-family.html'
+const provider = 'anigato'
+const id = 'https://anigato.ru/anime_movie/4373-zdravstvuj-mir.html'
 
 // eslint-disable-next-line no-console
 console.log(decodeURIComponent(id))

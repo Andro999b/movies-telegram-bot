@@ -203,6 +203,8 @@ class VideoScrean extends BaseScrean {
                     xhr.timeout = 0
                 }
             })
+
+            console.log(hls)
     
             hls.attachMedia(this.video.current)
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -214,6 +216,7 @@ class VideoScrean extends BaseScrean {
                         hls.audioTracks.map(({ id, name }) => ({ id, name }))
                     )
                 }
+                this.video.current.play()
             })
             hls.on(Hls.Events.ERROR, this.handleHLSError)
             // hls.on(Hls.Events.LEVEL_LOADING, this.handleLoadStart)

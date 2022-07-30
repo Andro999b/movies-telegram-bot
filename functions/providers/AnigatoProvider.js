@@ -26,16 +26,11 @@ class AnigatoProvider extends DataLifeProvider {
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
-                    selector: '#kodik-player',
+                    selector: '#kodik-player iframe',
                     transform: async ($el) => {
-                        const script = $el.next('script')
-                            .toArray()[0]
-                            .children[0]
-                            .data
-
-                        const worldArtId = extractJSStringProperty(script, 'worldartAnimationID')
-
-                        const iframeSrc = await this.getKodikPlayer(worldArtId)
+                        const iframeSrc = $el.attr('src')
+                            .replace('kodik.info', 'kodik.biz')
+                            .replace('aniqit.com', 'kodik.biz')
 
                         const res = await superagent
                             .get(iframeSrc.startsWith('//') ? 'https:' + iframeSrc : iframeSrc)

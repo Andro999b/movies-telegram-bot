@@ -5,18 +5,16 @@
   "main": "index.js",
   "scripts": {
     "release": "sls deploy --stage=prod --aws-profile serverless",
-    "test:info": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node test/testInfo",
-    "test:search": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node test/testSearch",
-    "test:extractor": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node test/testExtractor",
-    "test:cfbypass": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node test/testCFBypass"
+    "debug:info": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node debug/debugInfo",
+    "debug:search": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node debug/debugSearch",
+    "debug:extractor": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node debug/debugExtractor",
+    "debug:cfbypass": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node debug/debugCFBypass"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.698.0",
     "cheerio": "^1.0.0-rc.3",
-    "crypto-js": "^4.0.0",
-    "fuse.js": "^6.4.0",
     "json5": "^2.2.0",
     "luxon": "^1.25.0",
     "mongodb": "^3.5.9",

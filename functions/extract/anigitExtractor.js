@@ -18,8 +18,10 @@ function linkExtractor(links, hls) {
 module.exports = async (params) => {
     let { url, id, hash, hls } = params
 
-    const linksApi = 'https://aniqit.com/gvi'
+    const linksApi = 'https://kodik.biz/gvi'
     const referer = 'https://anigato.ru/'
+
+    url = url.replace('aniqit.com', 'kodik.biz')
 
     const res = await superagent
             .get(url.startsWith('//') ? 'https:' + url : url)
