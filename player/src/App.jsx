@@ -31,9 +31,7 @@ class App extends Component {
                     <HashRouter>
                         <Switch>
                             <Route exact path="/watch" component={PlaylistView}/>
-                            <Route path="/">
-                                <WatchHistoryView/>
-                            </Route>
+                            <Route path="/" component={WatchHistoryView}/>
                         </Switch>
                     </HashRouter>
                     <Notification />

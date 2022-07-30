@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import Fullscreen from 'react-full-screen'
+import { FullScreen } from 'react-full-screen'
 
 import MediaControls from './MediaControls'
 import PlayerFilesList from './PlayerPlayList'
