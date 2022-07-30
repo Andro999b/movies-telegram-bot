@@ -151,7 +151,7 @@ class Player extends Component {
 
     componentWillUnmount() {
         const { idleTimeout } = this
-        clearTimeout(idleTimeout);
+        clearTimeout(idleTimeout)
         removeGlobalKey(['Space', 'KeyF', 'KeyM', 'Enter', 'PageUp', 'PageDown'])
     }
 

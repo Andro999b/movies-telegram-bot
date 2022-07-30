@@ -1,8 +1,8 @@
 {
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "env": {
         "browser": true,
-        "commonjs": true,
+        "commonjs": false,
         "es6": true
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"],
@@ -20,13 +20,17 @@
         "indent": ["error", 4, { "SwitchCase": 1 }],
         "quotes": ["warn", "single"],
         "semi": ["warn", "never"],
-        "no-console": ["warn", { "allow": ["warn", "error"] }],
+        "no-console": ["error", { "allow": ["warn", "error"] }],
         "brace-style": ["warn"],
         "arrow-parens": ["warn"]
     },
     "globals": {
         "gtag": "readonly",
-        "mixpanel": "readonly",
-        "mobileApp": "readonly"
+        "process": "readonly"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }

@@ -13,7 +13,7 @@ window.addEventListener('keyup', handleKeyUp, true)
 
 export function addGlobalKey(code, handler) {
     if(Array.isArray(code)) {
-        code.forEach(c => handlers[c] = handler)
+        code.forEach((c) => handlers[c] = handler)
     } else {
         handlers[code] = handler
     }
@@ -21,8 +21,8 @@ export function addGlobalKey(code, handler) {
 
 export function removeGlobalKey(code) {
     if(Array.isArray(code)) {
-        code.forEach(c => delete handlers[c])
+        code.forEach((c) => delete handlers[c])
     } else {
-        delete hadlers[code]
+        delete handlers[code]
     }
 }

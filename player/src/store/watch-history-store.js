@@ -26,7 +26,6 @@ class WatchHistoryStore {
         onAuthStateChanged(auth, (user) => {
             this.insync = user != null  
             if(this.insync) {
-                console.log(user.uid)
                 this.remoteDb = collection(getFirestore(), 'library', user.uid, 'history')
             } else {
                 this.remoteDb = null
@@ -93,7 +92,6 @@ class WatchHistoryStore {
         return this._remoteGet(key)
             .then((item) => item || this._localGet(key))
             .then((item) => {
-                console.log(item)
                 if(item && item.fileIndex) {
                     return {
                         fileIndex: item.fileIndex,
@@ -155,8 +153,6 @@ class WatchHistoryStore {
         if(!this.remoteDb)
             return Promise.resolve()
 
-        console.log("_remoteUpdate", data)
-
         return updateDoc(doc(this.remoteDb, key), data)
     }
 
@@ -174,7 +170,7 @@ class WatchHistoryStore {
         const key = `${provider}#${id}`
 
         return this._remoteGet(key)
-            .then(data => setDoc(doc(this.remoteDb, key), {
+            .then((data) => setDoc(doc(this.remoteDb, key), {
                 ...data,
                 key,
                 provider,
