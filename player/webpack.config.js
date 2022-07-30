@@ -44,11 +44,5 @@ module.exports = {
             template: path.join(__dirname, 'src', 'index.html'),
             favicon: path.join(__dirname, 'src', 'favicon.ico')
         }),
-        new CopyPlugin({
-            patterns: [
-                { from: path.join('src', 'images', 'help'), to: path.join('images', 'help') },
-                { from: path.join('src', 'watch.html'), to: 'watch.html' },
-            ]
-        })
     ]
 }
