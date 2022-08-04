@@ -3,7 +3,7 @@ const { extractNumber, extractString } = require('../utils/extractScriptVariable
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
-const $ = require('cheerio')
+const cheerio = require('cheerio')
 
 class KinovodProvider extends Provider {
     constructor() {
@@ -38,8 +38,6 @@ class KinovodProvider extends Provider {
 
                         if(targetScripts.length != 1)
                             return []
-
-                        console.log(targetScripts[0])
 
                         const targetScript = targetScripts[0]
                         const movieId = extractNumber(targetScript, 'MOVIE_ID')
@@ -84,7 +82,7 @@ class KinovodProvider extends Provider {
                     selector: 'iframe.embed-responsive-item',
                     transform: ($el) => {
                         const src = $el.toArray()
-                            .map((el) => $(el).attr('src'))
+                            .map((el) => cheerio.load(el).root().attr('src'))
                             .find((src) => src.search('youtube') != 1)
 
                         return src

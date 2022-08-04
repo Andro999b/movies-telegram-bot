@@ -1,7 +1,7 @@
 const extractSearchEngineQuery = require('../../../utils/extractSearchEngineQuery')
 const providersService = require('../../../providers')
 const getQueryAndProviders = require('./getQueryAndProviders')
-const Markup = require('telegraf/markup')
+const { Markup } = require('telegraf')
 const getSuggestions = require('../../../utils/suggestions')
 
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
@@ -10,8 +10,9 @@ const MAX_QUERY_LENGTH = 63
 const MAX_QUERY_LENTH_WITH_PROVIDER = 50
 const PLAYER_URL = process.env.PLAYER_URL
 const MAX_RESULTS_PER_MESSAGE = 10
+const HTTPS_PATTERN = /http?s:\/\/[^\s]+/
 
-function getResultsKeyboad(providersResults, query, i18n) {
+const getResultsKeyboad = (providersResults, query, i18n) => {
     return Markup.inlineKeyboard(
         providersResults
             .sort((a, b) => a.length - b.length)
@@ -19,7 +20,7 @@ function getResultsKeyboad(providersResults, query, i18n) {
                 if (res.length > MAX_UNFOLD_RESULTS) {
                     const provider = res[0].provider
                     return [
-                        Markup.callbackButton(
+                        Markup.button.callback(
                             i18n.t('more_results', { count: res.length, provider }),
                             `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}1 ${query}`
                         )
@@ -33,52 +34,53 @@ function getResultsKeyboad(providersResults, query, i18n) {
     )
 }
 
-function createResultButtons(res, query) {
+const createResultButtons = (res, query) => {
     return res.map((result) =>
-        Markup.urlButton(
+        Markup.button.url(
             `[${result.provider}] ${result.name}`,
             `${PLAYER_URL}?provider=${result.provider}&id=${result.id}&query=${encodeURIComponent(query)}${STAGE == 'dev' ? '&dev' : ''}`
         )
     )
 }
 
-async function getNoResults({ reply, i18n, track }, providers, query) {
+const getNoResults = async (ctx, providers, query) => {
     const suggestions = await getSuggestions(query)
+    const { i18n, track } = ctx
 
     track('no_results', { query, providers, suggestions })
 
     if (suggestions && suggestions.length) {
         const tooLong = suggestions.some((suggestion) => Buffer.byteLength(suggestion, 'utf-8') > MAX_QUERY_LENGTH)
         if (tooLong) {
-            return reply(
+            return ctx.reply(
                 i18n.t('no_results', { query }) + '\n' +
                 i18n.t('spell_check_too_long', { suggestion: suggestions.join(',') })
             )
         } else {
-            return reply(
+            return ctx.reply(
                 i18n.t('no_results', { query }) + '\n' + i18n.t('spell_check'),
                 Markup.inlineKeyboard([
-                    ...suggestions.map((suggestion) => Markup.callbackButton(suggestion, suggestion)),
-                    Markup.callbackButton(i18n.t('repeat_search'), query)
-                ], { columns: 1 }).extra()
+                    ...suggestions.map((suggestion) => Markup.button.callback(suggestion, suggestion)),
+                    Markup.button.callback(i18n.t('repeat_search'), query)
+                ], { columns: 1 })
             )
         }
     } else {
         if (Buffer.byteLength(query, 'utf-8') > MAX_QUERY_LENGTH) {
-            return reply(i18n.t('no_results', { query }))
+            return ctx.reply(i18n.t('no_results', { query }))
         } else {
-            return reply(
+            return ctx.reply(
                 i18n.t('no_results', { query }),
                 Markup.inlineKeyboard([
-                    Markup.callbackButton(i18n.t('repeat_search'), query)
-                ]).extra()
+                    Markup.button.callback(i18n.t('repeat_search'), query)
+                ])
             )
         }
     }
 }
 
-async function doTextSearch(ctx, providers, query, page) {
-    const { i18n, reply, track } = ctx
+const doTextSearch = async (ctx, providers, query, page) => {
+    const { i18n, track } = ctx
 
     let providersResults = await Promise.all(providers.map((providerName) =>
         providersService.searchOne(providerName, query)
@@ -103,15 +105,15 @@ async function doTextSearch(ctx, providers, query, page) {
         const buttons = createResultButtons(chunk, query)
 
         if(to < results.length) {
-            buttons.push(Markup.callbackButton(
+            buttons.push(Markup.button.callback(
                 i18n.t('next_page'),
                 `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}${page + 1} ${query}`
             ))
         }
 
-        return reply(
+        return ctx.reply(
             i18n.t('provider_results', { query, provider }),
-            Markup.inlineKeyboard(buttons, { columns: 1 }).extra()
+            Markup.inlineKeyboard(buttons, { columns: 1 })
         )
     }
 
@@ -122,22 +124,22 @@ async function doTextSearch(ctx, providers, query, page) {
     } else if (Buffer.byteLength(query, 'utf8') > MAX_QUERY_LENTH_WITH_PROVIDER) {
         return Promise.all(providersResults.map(replySingleProvider))
     } else {
-        return reply(
+        return ctx.reply(
             i18n.t('results', { query }),
-            getResultsKeyboad(providersResults, query, i18n).extra()
+            getResultsKeyboad(providersResults, query, i18n)
         )
     }
 }
 
-async function doSearch(ctx, defaultProviders, text) {
-    const { i18n, reply, replyWithChatAction, track } = ctx
+const doSearch = async (ctx, defaultProviders, text) => {
+    const { i18n, track } = ctx
 
-    await replyWithChatAction('typing')
+    await ctx.replyWithChatAction('typing')
 
     let { query, providers, page } = getQueryAndProviders(text, defaultProviders)
 
     // check link
-    const parts = query.match(/http?s:\/\/[^\s]+/)
+    const parts = query.match(HTTPS_PATTERN)
 
     if (parts && parts.length > 0) {
         const searchEngineQuery = await extractSearchEngineQuery(parts[0])
@@ -146,7 +148,7 @@ async function doSearch(ctx, defaultProviders, text) {
             query = searchEngineQuery
         } else {
             track('no_results', { query, providers })
-            return reply(i18n.t('no_results', { query }))// do nothing in case if user send link
+            return ctx.reply(i18n.t('no_results', { query }))// do nothing in case if user send link
         }
     }
     // check link ends

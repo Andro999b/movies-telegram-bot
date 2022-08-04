@@ -1,5 +1,5 @@
 const superagent = require('superagent')
-const $ = require('cheerio')
+const cheerio = require('cheerio')
 
 const googleSuggestion = async (searchQuery) => { // eslint-disable-line
     try {
@@ -11,8 +11,8 @@ const googleSuggestion = async (searchQuery) => { // eslint-disable-line
                 'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3'
             })
 
-        const $page = $(res.text)
-        const suggestion = $page.find('p.card-section a').eq(0).text()
+        const $page = cheerio.load(res.text)
+        const suggestion = $page('p.card-section a').eq(0).text()
 
         return suggestion ? [suggestion] : []
     } catch (e) {
@@ -32,8 +32,8 @@ const yandexSuggestion = async (searchQuery) => { // eslint-disable-line
                 'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3'
             })
 
-        const $page = $(res.text)
-        const s2 = $page.find('.misspell__message a').first().text()
+        const $page = cheerio.load(res.text)
+        const s2 = $page('.misspell__message a').first().text()
 
         return [s2].filter((it) => it)
     } catch (e) {

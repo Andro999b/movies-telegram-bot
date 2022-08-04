@@ -48,8 +48,6 @@ class Provider {
             .set(selectors)
             .gather()
 
-        // console.log(results)
-
         results = await this._postProcessResult(results)
 
         return results

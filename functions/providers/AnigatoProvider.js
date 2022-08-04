@@ -1,8 +1,7 @@
 const DataLifeProvider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
-const $ = require('cheerio')
-const { extractJSStringProperty } = require('../utils/extractScriptVariable')
+const cheerio = require('cheerio')
 
 class AnigatoProvider extends DataLifeProvider {
     constructor() {
@@ -30,6 +29,7 @@ class AnigatoProvider extends DataLifeProvider {
                     transform: async ($el) => {
                         const iframeSrc = $el.attr('src')
                             .replace('kodik.info', 'kodik.biz')
+                            .replace('kodik.cc', 'kodik.biz')
                             .replace('aniqit.com', 'kodik.biz')
 
                         const res = await superagent
@@ -37,14 +37,14 @@ class AnigatoProvider extends DataLifeProvider {
                             .set({ ...this.config.headers })
                             .timeout(this.config.timeout)
 
-                        const $iframe = $(res.text)
-                        const $seasons = $iframe.find('.series-options')
+                        const $iframe = cheerio.load(res.text)
+                        const $seasons = $iframe('.series-options')
                             .first()
                             .children()
                             .toArray()
 
                         const getOptionUrls = (el) => {
-                            const $el = $(el)
+                            const $el = cheerio.load(el).root()
                             return [{
                                 url: iframeSrc,
                                 extractor: { type: 'anigit', params: { hash: $el.attr('data-hash'), id: $el.attr('data-id') } }
@@ -60,22 +60,23 @@ class AnigatoProvider extends DataLifeProvider {
                                 }]
                             }]
                         } else if ($seasons.length == 1) {
-                            const $season = $($seasons[0])
+                            const $season = cheerio.load($seasons[0]).root()
                             return $season.find('option')
                                 .toArray()
                                 .map((el, id) => ({
                                     id,
-                                    name: $(el).text(),
+                                    name: cheerio.text(el),
                                     urls: getOptionUrls(el)
                                 }))
                         } else {
                             return $seasons
                                 .map((el, season) => {
-                                    return $(el)
+                                    return cheerio.load(el)
+                                        .root()
                                         .find('option')
                                         .toArray()
                                         .map((el) => ({
-                                            name: $(el).text(),
+                                            name: cheerio.load(el).text(),
                                             path: `Season ${season + 1}`,
                                             urls: getOptionUrls(el)
                                         }))

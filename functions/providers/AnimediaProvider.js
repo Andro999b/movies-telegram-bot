@@ -1,6 +1,6 @@
 const Provider = require('./Provider')
 const superagent = require('superagent')
-const $ = require('cheerio')
+const cheerio = require('cheerio')
 const urlencode = require('urlencode')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 
@@ -22,9 +22,8 @@ class AnimediaProvider extends Provider {
                         const seasons = $el.find('>ul>li>a')
                             .toArray()
                             .map((el) => {
-                                const $el = $(el)
                                 return {
-                                    seasonNum: parseInt($el.attr('href').substr(4)) + 1, 
+                                    seasonNum: parseInt(el.attribs['href'].substringing(4)) + 1, 
                                     name: $el.text()
                                 }
                             })
@@ -64,19 +63,19 @@ class AnimediaProvider extends Provider {
             .get(`${searchUrl}?keywords=${encodeURIComponent(query)}&limit=12&orderby_sort=entry_date|desc`)
             .timeout(timeout)
 
-        const $results = $(res.text)
+        const $results = cheerio.load(res.text).root()
 
         return $results
             .find('.ads-list__item')
             .toArray() 
             .map((el) => {
-                const $el = $(el)
-                const $title = $el.find('.ads-list__item__title')
-                const $image = $el.find('.ads-list__item__thumb > a > img')
+                const $el = cheerio.load(el)
+                const $title = $el('.ads-list__item__title')
+                const $image = $el('.ads-list__item__thumb > a > img')
 
                 let src = $image.attr('data-src')
                 const index = src.indexOf('?')
-                src = src.substr(0, index)
+                src = src.substringing(0, index)
                 
                 return {
                     provider: this.name,

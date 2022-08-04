@@ -1,5 +1,4 @@
 const DataLifeProvider = require('./CFDataLifeProvider')
-const superagent = require('superagent')
 const urlencode = require('urlencode')
 const videocdnembed = require('../utils/videocdnembed')
 
@@ -7,9 +6,6 @@ const { extractString } = require('../utils/extractScriptVariable')
 const parsePlayerJSFile = require('../utils/parsePlayerJSFile')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const stripPlayerJSConfig = require('../utils/stripPlayerJSConfig')
-
-const clickRegExp = /\/engine\/ajax\/player_vse_pc\.php\?string_name=\d+/
-const httpsRegExp = /https?[^\s"]+/
 
 class KinogoProvider extends DataLifeProvider {
     constructor() {
@@ -40,7 +36,7 @@ class KinogoProvider extends DataLifeProvider {
                         try{
                             files = await this._extractFilesFromIframe($root)
                         } catch(e) {
-                            console.error("kinogo fail load iframe files", e)
+                            console.error('kinogo fail load iframe files', e)
                         }
 
                         if(!files.length) {

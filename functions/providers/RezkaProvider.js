@@ -1,5 +1,5 @@
 const Provider = require('./Provider')
-const $ = require('cheerio')
+const cheerio = require('cheerio')
 const urlencode = require('urlencode')
 
 class RezkaProvider extends Provider {
@@ -62,7 +62,7 @@ class RezkaProvider extends Provider {
             .children()
             .toArray()
             .reduce((acc, el) => {
-                const $el = $(el)
+                const $el = cheerio.load(el).root()
                 return {
                     ...acc,
                     [$el.attr('data-translator_id')]: $el.text()
@@ -78,19 +78,18 @@ class RezkaProvider extends Provider {
             .reverse()
 
         return seasonsEl.flatMap((seasonEl) => {
-            const $season = $(seasonEl)
+            const $season = cheerio.load(seasonEl)
 
-            return $season
-                .find('.b-post__schedule_table>tbody>tr')
+            return $season('.b-post__schedule_table>tbody>tr')
                 .toArray()
                 .reverse()
                 .map((el) => {
-                    const $el = $(el)
+                    const $el = cheerio.load(el)
 
-                    const text = $el.find('.td-1').first().text()
+                    const text = $el('.td-1').first().text()
                     if(!text) return null
 
-                    const released = $el.find('.td-5').first().children('.exists-episode').length > 0
+                    const released = $el('.td-5').first().children('.exists-episode').length > 0
                     if(!released) return null
 
                     const parts = text.split(' ')
@@ -122,7 +121,7 @@ class RezkaProvider extends Provider {
             .find('#simple-episodes-tabs .b-simple_episode__item')
             .toArray()
             .map((el) => {
-                const $el = $(el)
+                const $el = cheerio.load(el).root()
                 const dataId = $el.attr('data-id')
                 const season = $el.attr('data-season_id')
                 const episode = $el.attr('data-episode_id')

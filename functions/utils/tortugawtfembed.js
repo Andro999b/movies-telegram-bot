@@ -1,5 +1,4 @@
 const superagent = require('superagent')
-const cheerio = require('cheerio')
 const convertPlayerJSPlaylist = require('./convertPlayerJSPlaylist')
 const stripPlayerJSConfig = require('./stripPlayerJSConfig')
 

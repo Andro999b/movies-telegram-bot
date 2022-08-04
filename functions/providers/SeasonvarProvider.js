@@ -89,20 +89,7 @@ class SeasonvarProvider extends DirectMediaProvider {
 
             let matches = res.text.match(/'0': "(.+)"/)
             const plist = matches[1]
-            //TODO: Default translation
-            // const translations = { 0: plist }
 
-            // matches = res.text.match(/pl\[\d+\] = "[^"]+"/g)
-            // if(matches.length > 0) {
-            //     matches.forEach((match) => {
-            //         const parts = match.split(' = ')
-            //         const transId = parts[0].substring(3, parts[0].length - 1)
-            //         const url = parts[1].substring(1, parts[1].length - 1)
-            //         translations[transId] = url
-            //     })
-            // }
-
-            // console.log(translations);
             const plistRes = await superagent
                 .get(`${this.config.baseUrl}${plist}`)
                 .timeout(this.config.timeout)
@@ -124,7 +111,7 @@ class SeasonvarProvider extends DirectMediaProvider {
     _decryptFilePath(x) {
         const { encryptKey } = this.config
 
-        let a = x.substr(2)
+        let a = x.substring(2)
 
         a = a.replace('//' + base64encode(encryptKey), '')
 

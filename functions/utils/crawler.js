@@ -4,11 +4,11 @@ const invokeCFBypass = require('./invokeCFBypass')
 
 require('superagent-charset')(superagent)
 
-cheerio.prototype[Symbol.iterator] = function* () {
-    for (let i = 0; i < this.length; i += 1) {
-        yield this[i]
-    }
-}
+// cheerio.prototype[Symbol.iterator] = function* () {
+//     for (let i = 0; i < this.length; i += 1) {
+//         yield this[i]
+//     }
+// }
 
 class Crawler {
     constructor(url, requestGenerator) {

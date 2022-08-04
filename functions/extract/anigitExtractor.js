@@ -24,19 +24,19 @@ module.exports = async (params) => {
     url = url.replace('aniqit.com', 'kodik.biz')
 
     const res = await superagent
-            .get(url.startsWith('//') ? 'https:' + url : url)
-            .set({ 
-                'User-Agent': PROVIDERS_CONFIG.userAgent,
-                'Referer': referer || url,
-            })
-            .timeout(10000)
+        .get(url.startsWith('//') ? 'https:' + url : url)
+        .set({ 
+            'User-Agent': PROVIDERS_CONFIG.userAgent,
+            'Referer': referer || url,
+        })
+        .timeout(10000)
 
     const type = id == undefined ? 'video' : 'seria'
 
     id = id || extractStringSingleQuote(res.text, 'videoInfo\\.id')
     hash = hash || extractStringSingleQuote(res.text, 'videoInfo\\.hash')
     const urlParamStr = extractStringSingleQuote(res.text, 'urlParams')
-    const urlParam = JSON.parse(urlParamStr);
+    const urlParam = JSON.parse(urlParamStr)
 
     const videoInfoParams =  {
         id,

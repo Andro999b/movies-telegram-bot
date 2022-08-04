@@ -44,7 +44,7 @@ class AnitubeUAProvider extends DataLifeProvider {
                         const matches = script.match(playesRegExp)
                        
                         if(!matches || matches.length < 1)
-                            return [];
+                            return []
 
                         const audios = JSON.parse(matches[1])
                         const videos = JSON.parse(matches[2])
@@ -79,7 +79,7 @@ class AnitubeUAProvider extends DataLifeProvider {
                                     return
 
                                 const url = srcMatch[1]
-                                const extractorName = Object.keys(extractors).find(extr => url.indexOf(extr) != -1)
+                                const extractorName = Object.keys(extractors).find((extr) => url.indexOf(extr) != -1)
 
                                 if(!extractorName)
                                     return
@@ -88,7 +88,7 @@ class AnitubeUAProvider extends DataLifeProvider {
 
                                 id++
                             }
-                        });
+                        })
 
                         return files
                     }

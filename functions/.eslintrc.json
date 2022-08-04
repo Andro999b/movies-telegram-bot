@@ -10,15 +10,16 @@
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 2018
+        "sourceType": "module",
+        "ecmaVersion": 2021
     },
     "rules": {
         "indent": ["error", 4, { "SwitchCase": 1 }],
         "quotes": ["warn", "single"],
         "semi": ["warn", "never"],
-        "no-console": ["warn", { "allow": ["warn", "error"] }],
+        "no-console": ["error", { "allow": ["warn", "error"] }],
         "brace-style": ["warn"],
-        "arrow-parens": ["warn"],
-        "require-atomic-updates": "off"
+        "arrow-parens": ["warn"]
+        // "require-atomic-updates": "off"
     }
 }

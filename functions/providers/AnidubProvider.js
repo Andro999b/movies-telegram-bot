@@ -1,8 +1,6 @@
 const DataLifeProvider = require('./DataLifeProvider')
-const $ = require('cheerio')
+const cheerio = require('cheerio')
 const urlencode = require('urlencode')
-
-const srcRegExp = /src="([^"]+)"/
 
 class AnidubProvider extends DataLifeProvider {
     constructor() {
@@ -27,12 +25,11 @@ class AnidubProvider extends DataLifeProvider {
                     selector: '.video-box .series-tab span',
                     transform: ($el) => $el
                         .toArray()
-                        .map((el) => $(el))
-                        .filter(($el) => $el.attr('data').includes('video.sibnet.ru'))
-                        .map(($el,id) => {
+                        .filter((el) => el.attribs['data'].includes('video.sibnet.ru'))
+                        .map((el, id) => {
                             return {
                                 id,
-                                name: $el.text(),
+                                name: cheerio.text(el),
                                 urls: [{
                                     url: $el.attr('data'),
                                     extractor: { type: 'sibnetmp4' }
@@ -44,7 +41,7 @@ class AnidubProvider extends DataLifeProvider {
                     selector: '.video-box .series-tab',
                     transform: ($el) => $el.first().children()
                         .toArray()
-                        .map((el) => $(el).attr('data'))
+                        .map((el) => cheerio.load(el).root().attr('data'))
                         .filter((data) => data && data.includes('youtube'))[0]
                 }
             }

@@ -3,14 +3,14 @@ const providers = require('../providers')
 
 // const providerName = 'anigato'
 // const providerName = 'anitubeua'
-const providerName = 'anidub'
+// const providerName = 'anidub'
 // const providerName = 'animedia'
 // const providerName = 'kinovod'
 // const providerName = 'kinogo'
 // const providerName = 'seasonvar'
-// const providerName = 'videocdn'
+const providerName = 'videocdn'
 // const providerName = 'animevost'
-const searchQuery = 'Владыка'
+const searchQuery = 'Терминатор'
 
 providers.searchOne(providerName, searchQuery)
     .then((results) => console.log('results', results.length, results))// eslint-disable-line 

@@ -4,29 +4,36 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "release": "sls deploy --stage=prod --aws-profile serverless",
-    "debug:info": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node debug/debugInfo",
-    "debug:search": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node debug/debugSearch",
-    "debug:extractor": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node debug/debugExtractor",
-    "debug:cfbypass": "export AWS_SDK_LOAD_CONFIG=1 && export AWS_PROFILE=serverless && node debug/debugCFBypass"
+    "lint": "eslint --fix **/*.js",
+    "release": "npm run lint && sls deploy --stage=prod --aws-profile serverless",
+    "release:dev": "npm run lint && sls deploy --stage=dev --aws-profile serverless",
+    "debug:info": "env-cmd node debug/debugInfo",
+    "debug:search": "env-cmd node debug/debugSearch",
+    "debug:extractor": "env-cmd node debug/debugExtractor",
+    "debug:cfbypass": "env-cmd node debug/debugCFBypass",
+    "debug:bot": "env-cmd sls invoke local --function bot --aws-profile serverless --debug * --path debug/botEvent.json",
+    "debug:bot:remote": "env-cmd sls invoke --function bot --aws-profile serverless --debug * --path debug/botEvent.json"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.698.0",
-    "cheerio": "^1.0.0-rc.3",
-    "json5": "^2.2.0",
-    "luxon": "^1.25.0",
-    "mongodb": "^3.5.9",
-    "superagent": "^5.2.2",
+    "aws-sdk": "^2.1185.0",
+    "cheerio": "^1.0.0-rc.12",
+    "debug": "^4.3.4",
+    "json5": "^2.2.1",
+    "lambda-request-handler": "^0.5.1-alpha1",
+    "luxon": "^3.0.1",
+    "mongodb": "^4.8.1",
+    "superagent": "^8.0.0",
     "superagent-charset": "^1.2.0",
-    "telegraf": "^3.38.0",
+    "telegraf": "^4.8.6",
     "telegraf-i18n": "^6.6.0",
     "urlencode": "^1.1.0",
-    "uuid": "^8.1.0"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "eslint": "^7.2.0",
+    "env-cmd": "^10.1.0",
+    "eslint": "^8.20.0",
     "serverless-content-encoding": "^1.1.0"
   }
 }

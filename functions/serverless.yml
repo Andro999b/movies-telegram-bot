@@ -13,11 +13,12 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   region: eu-central-1
   versionFunctions: false
   memorySize: 512
   environment:
+    # DEBUG: 'telegraf:*'
     ANALYTIC_TABLE: ${self:custom.analyticsTable}
     CACHE_TABLE: ${self:custom.cacheTable}
     MONGODB_URI: ${self:custom.mongoUrl}
