@@ -5,10 +5,12 @@ import {
 } from '@material-ui/icons'
 import { 
     Slider,
-    IconButton
+    IconButton,
+    Tooltip
 } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
+import localization from '../localization'
 
 @observer
 class SoundControl extends Component {
@@ -28,9 +30,11 @@ class SoundControl extends Component {
         return (
             <Fragment>
                 <Slider className="sound-control__slider " value={volume * 100} onChange={this.handleVolume} />
-                <IconButton onClick={this.handleToggleMute}>
-                    { isMuted ? <VolumeOffIcon/> : <VolumeUpIcon/> }
-                </IconButton>
+                <Tooltip title={localization.formatString(localization.hotkey, 'M')}>
+                    <IconButton onClick={this.handleToggleMute}>
+                        { isMuted ? <VolumeOffIcon/> : <VolumeUpIcon/> }
+                    </IconButton>
+                </Tooltip>
             </Fragment>
         )
     }

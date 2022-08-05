@@ -2,7 +2,6 @@ import LocalizedStrings from 'react-localization'
 
 export default new LocalizedStrings({
     en: {
-        cantLoadPLaylist: 'Can`t load playlist',
         videoNotFound: 'Video not found',
         cantPlayMedia: 'Could not play media',
         urlCopied: 'URL copied!',
@@ -22,6 +21,7 @@ export default new LocalizedStrings({
             'play_once': 'Play once',
             'repeat': 'Repeat',
             'shuffle': 'Shuffle',
-        }
+        },
+        hotkey: 'Hotkey: {0}'
     }
 })

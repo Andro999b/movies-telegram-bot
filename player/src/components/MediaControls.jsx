@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import VideoSeekSlider from './VideoSeekSlider'
 import '../video-slider.scss'
 import PropTypes from 'prop-types'
-import { Paper, IconButton, Slide } from '@material-ui/core'
+import { Paper, IconButton, Slide, Tooltip } from '@material-ui/core'
 import {
     PlayArrow as PlayIcon,
     Pause as PauseIcon,
@@ -19,6 +19,7 @@ import AudioTrackSelector from './AudioTrackSelector'
 import VideoQualitySelector from './VideoQualitySelector'
 import PlayModeSelector from './PlayModeSelector'
 import MobileSoundControl from './MobileSoundControl'
+import localization from '../localization'
 
 @observer
 class MediaControls extends Component {
@@ -60,22 +61,30 @@ class MediaControls extends Component {
                     />
                     <div className="player-controls__panel">
                         <div className="player-controls__panel-section">
-                            <IconButton onClick={onPrev} disabled={disablePrev}>
-                                <PreviousIcon />
-                            </IconButton>
-                            {!device.isPlaying &&
-                                <IconButton onClick={() => onPlayPause()}>
-                                    <PlayIcon />
+                            <Tooltip title={localization.formatString(localization.hotkey, 'PgUp')}>
+                                <IconButton onClick={onPrev} disabled={disablePrev}>
+                                    <PreviousIcon />
                                 </IconButton>
+                            </Tooltip>
+                            {!device.isPlaying &&
+                                <Tooltip title={localization.formatString(localization.hotkey, 'Space')}>
+                                    <IconButton onClick={() => onPlayPause()}>
+                                        <PlayIcon />
+                                    </IconButton>
+                                </Tooltip>
                             }
                             {device.isPlaying &&
-                                <IconButton onClick={() => onPlayPause()}>
-                                    <PauseIcon />
-                                </IconButton>
+                                <Tooltip title={localization.formatString(localization.hotkey, 'Space')}>
+                                    <IconButton onClick={() => onPlayPause()}>
+                                        <PauseIcon />
+                                    </IconButton>
+                                </Tooltip>
                             }
-                            <IconButton onClick={onNext} disabled={disableNext}>
-                                <NextIcon />
-                            </IconButton>
+                            <Tooltip title={localization.formatString(localization.hotkey, 'PgDn')}>
+                                <IconButton onClick={onNext} disabled={disableNext}>
+                                    <NextIcon />
+                                </IconButton>
+                            </Tooltip>
                             <PlayModeSelector device={device}/>
                             {mobile && <MobileSoundControl device={device}/>}
                             {!mobile && <SoundControl device={device} />}
@@ -83,15 +92,17 @@ class MediaControls extends Component {
                         </div>
                         <div className="player-controls__panel-section">
                             {hasQualities && <VideoQualitySelector device={device} />}
-                            {!window.mobileApp &&
+                            <Tooltip title={localization.formatString(localization.hotkey, 'F, Enter')}>
                                 <IconButton onClick={() => onFullScreenToggle()}>
                                     {!fullScreen && <FullscreenIcon />}
                                     {fullScreen && <FullscreenExitIcon />}
                                 </IconButton>
-                            }
-                            <IconButton onClick={() => onPlaylistToggle()}>
-                                <ListIcon />
-                            </IconButton>
+                            </Tooltip>
+                            <Tooltip title={localization.formatString(localization.hotkey, 'P')}>
+                                <IconButton onClick={() => onPlaylistToggle()}>
+                                    <ListIcon />
+                                </IconButton>
+                            </Tooltip>
                         </div>
                     </div>
                 </Paper>

@@ -152,7 +152,7 @@ class Player extends Component {
     componentWillUnmount() {
         const { idleTimeout } = this
         clearTimeout(idleTimeout)
-        removeGlobalKey(['Space', 'KeyF', 'KeyM', 'Enter', 'PageUp', 'PageDown'])
+        removeGlobalKey(['Space', 'KeyF', 'KeyM', 'KeyP', 'Enter', 'PageUp', 'PageDown'])
     }
 
     componentDidMount() {
@@ -162,6 +162,7 @@ class Player extends Component {
         addGlobalKey('PageUp', () => this.props.playerStore.prevFile())
         addGlobalKey('PageDown', () => this.props.playerStore.nextFile())
         addGlobalKey(['KeyM'], () => this.props.playerStore.device.toggleMute())
+        addGlobalKey(['KeyP'], () => this.handleTogglePlayList())
     }
     // --- idle checking ---
 
