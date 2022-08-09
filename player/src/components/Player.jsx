@@ -162,7 +162,13 @@ class Player extends Component {
         addGlobalKey('PageUp', () => this.props.playerStore.prevFile())
         addGlobalKey('PageDown', () => this.props.playerStore.nextFile())
         addGlobalKey(['KeyM'], () => this.props.playerStore.device.toggleMute())
-        addGlobalKey(['KeyP'], () => this.handleTogglePlayList())
+        addGlobalKey(['KeyP'], () => {
+            if(this.state.idle) {
+                this.setState({ playlistOpen: true }, () => this.handleActivity())
+            } else {
+                this.handleTogglePlayList()
+            }
+        })
     }
     // --- idle checking ---
 
