@@ -49,19 +49,6 @@ provider:
           Resource: "arn:aws:lambda:${self:provider.region}:*:function:cloudflare-bypass-prod-proxy"
 
 functions:
-  library:
-    handler: handlers/library.handler
-    events:
-      - http: 
-          path: api/library
-          method: get
-          cors: true
-          request:
-            parameters:
-              querystrings:
-                q: true
-                type: true
-
   search:
     handler: handlers/search.handler
     timeout: 12
@@ -80,14 +67,6 @@ functions:
     events:
       - http: 
           path: api/trackers/{provider}/items/{resultId}/source/{sourceId}
-          method: get
-          cors: true
-
-  provider:
-    handler: handlers/provider.handler
-    events:
-      - http: 
-          path: api/trackers
           method: get
           cors: true
 
