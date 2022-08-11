@@ -6,11 +6,11 @@
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev-server.config.js",
     "build": "rm -rf dist/* && webpack --mode production --config webpack.prod.config.js",
-    "deploy-surge": "surge dist movie-player.surge.sh",
-    "deploy-firebase": "firebase deploy",
-    "release-firebase": "npm run build && npm run deploy-firebase",
-    "release-surge": "npm run build && npm run deploy-surge",
-    "release": "npm run build && npm run deploy-firebase && npm run deploy-surge"
+    "deploy:surge": "surge dist movie-player.surge.sh",
+    "deploy:firebase": "firebase deploy",
+    "release:firebase": "npm run build && npm run deploy:firebase",
+    "release:surge": "npm run build && npm run deploy:surge",
+    "release": "npm run build && npm run deploy:firebase && npm run deploy:surge"
   },
   "keywords": [],
   "author": "",
