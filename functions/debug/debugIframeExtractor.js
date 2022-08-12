@@ -1,6 +1,6 @@
-const extractor = require('../utils/videocdnembed')
+const extractor = require('../utils/tortugawtfembed')
 const util = require('util')
 
-extractor('https://video.kinogo.lu/33cHYTFTAlwP/tv-series/3672')
+extractor('https://tortuga.wtf/embed/117')
     .then((files) => console.log(util.inspect(files, false, null, true)))// eslint-disable-line
     .catch(console.error)

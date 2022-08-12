@@ -11,6 +11,7 @@
     "debug:search": "env-cmd node debug/debugSearch",
     "debug:extractor": "env-cmd node debug/debugExtractor",
     "debug:cfbypass": "env-cmd node debug/debugCFBypass",
+    "debug:iframe": "env-cmd node debug/debugIframeExtractor",
     "debug:bot": "env-cmd sls invoke local --function bot --aws-profile serverless --debug * --path debug/botEvent.json",
     "debug:bot:remote": "env-cmd sls invoke --function bot --aws-profile serverless --debug * --path debug/botEvent.json"
   },

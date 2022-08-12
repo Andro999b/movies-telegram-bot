@@ -50,6 +50,10 @@ module.exports = {
         'baseUrl': 'https://kinogo.la',
         'searchUrl': 'https://kinogo.la/index.php?do=search'
     },
+    'eneyida': {
+        'baseUrl': 'https://eneyida.tv',
+        'searchUrl': 'https://eneyida.tv/index.php?do=search'
+    },
     'seasonvar': {
         'pageSize': 30,
         'encryptKey': 'ololo',

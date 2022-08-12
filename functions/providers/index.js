@@ -8,7 +8,8 @@ const providers = [
     new (require('./AnidubProvider'))(),
     new (require('./AnigatoProvider'))(),
     new (require('./VideoCDNProvider'))(),
-    new (require('./AnitubeUAProvider'))()
+    new (require('./AnitubeUAProvider'))(),
+    new (require('./EneyidaProvider'))(),
 ]
 
 module.exports = {

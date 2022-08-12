@@ -40,7 +40,7 @@ module.exports = function (playlist, linksExtractor = getBestPlayerJSQuality) {
                 const path = title || comment || `Season ${index + 1}`
      
                 return convertFolder(
-                    prefix ? prefix + '/' + path : path, 
+                    prefix ? prefix + '/' + path.trim() : path.trim(), 
                     folder || playlist, 
                     linksExtractor
                 )

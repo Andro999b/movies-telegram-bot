@@ -8,9 +8,9 @@ const providers = require('../providers')
 // const providerName = 'kinovod'
 // const providerName = 'kinogo'
 // const providerName = 'seasonvar'
-const providerName = 'videocdn'
+const providerName = 'eneyida'
 // const providerName = 'animevost'
-const searchQuery = 'Терминатор'
+const searchQuery = 'Зоряна брама'
 
 providers.searchOne(providerName, searchQuery)
     .then((results) => console.log('results', results.length, results))// eslint-disable-line 
