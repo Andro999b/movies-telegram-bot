@@ -1,4 +1,4 @@
-const DataLifeProvider = require('./DataLifeProvider')
+const Provider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
 
 const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
@@ -15,7 +15,7 @@ const extractors = {
     }
 }
 
-class AnitubeUAProvider extends DataLifeProvider {
+class AnitubeUAProvider extends Provider {
     constructor() {
         super('anitubeua', {
             scope: '.story',

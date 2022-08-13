@@ -1,4 +1,4 @@
-const DataLifeProvider = require('./CFDataLifeProvider')
+const Provider = require('./CFDataLifeProvider')
 const urlencode = require('urlencode')
 const videocdnembed = require('../utils/videocdnembed')
 
@@ -7,7 +7,7 @@ const parsePlayerJSFile = require('../utils/parsePlayerJSFile')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const stripPlayerJSConfig = require('../utils/stripPlayerJSConfig')
 
-class KinogoProvider extends DataLifeProvider {
+class KinogoProvider extends Provider {
     constructor() {
         super('kinogo', {
             scope: 'div.shortstory',

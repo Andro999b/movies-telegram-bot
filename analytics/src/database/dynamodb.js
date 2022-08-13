@@ -1,9 +1,9 @@
 import moment from 'moment'
-import { DATE_FORMAT } from '../constants'
+import { DATE_FORMAT, REGION } from '../constants'
 
 let docClient
 export const getDocClient = () => {
-    if (!docClient) docClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10' })
+    if (!docClient) docClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10', region: REGION })
 
     return docClient
 }

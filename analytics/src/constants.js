@@ -1,8 +1,8 @@
-export const REGION = 'eu-central-1'
+export const REGION = 'eu-north-1'
 export const ACCOUNT_ID = '534471691183'
-export const IDENTITY_POOL_ID = 'eu-central-1:3792695e-59ce-40f2-a2bf-2ede7f4f2988'
-export const USER_POOL_ID = 'eu-central-1_ofVThlAy3'
-export const APP_CLIENT_ID = '5rpkhcspe0slqppqqt9oldfc9'
+export const IDENTITY_POOL_ID = 'eu-north-1:3c6432c5-1b1c-461a-9ce4-eb74eae48ab4'
+export const USER_POOL_ID = 'eu-north-1_d8JLDMKpI'
+export const APP_CLIENT_ID = '1elbhdln2i766j6t1237le67sj'
 export const TABLE_NAME = 'analyticsTable-prod'
 export const EVENTS_UPDATE_INTERVAL = 1000 * 30
 export const DATE_FORMAT = 'YYYY-M-D'
@@ -22,13 +22,12 @@ export const PROVIDERS = [
     'kinogo',
     'kinovod',
     'seasonvar',
-    // '7serealov',
-    // 'nekomori',
     'anidub',
     'anitubeua',
     'animedia',
     'animevost',
     'anigato',
+    'eneyida'
 ]
 
 export const PERIODS = Object.keys(NAMES)

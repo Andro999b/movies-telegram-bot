@@ -3,11 +3,6 @@ module.exports = {
     'infoTimeout': 20,
     'pageSize': 10,
     'userAgent': 'Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0',
-    'rezka': {
-        'cfbypass': true,
-        'baseUrl': 'https://corsproxy.movies-player.workers.dev/?https://rezka.ag',
-        'searchUrl': 'https://corsproxy.movies-player.workers.dev/?https://rezka.ag/search/?do=search&subaction=search'
-    },
     'videocdn': {
         'baseUrl': 'https://videocdn.tv/api',
         'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
@@ -51,6 +46,7 @@ module.exports = {
         'searchUrl': 'https://kinogo.la/index.php?do=search'
     },
     'eneyida': {
+        'cfbypass': true,
         'baseUrl': 'https://eneyida.tv',
         'searchUrl': 'https://eneyida.tv/index.php?do=search'
     },

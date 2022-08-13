@@ -1,6 +1,5 @@
 const providers = [
     new (require('./SeasonvarProvider'))(),
-    new (require('./RezkaProvider'))(),
     new (require('./KinogoProvider'))(),
     new (require('./KinovodProvider'))(),
     new (require('./AnimeVostProvider'))(),

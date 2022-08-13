@@ -6,8 +6,8 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs12.x
-  region: eu-central-1
+  runtime: nodejs16.x
+  region: eu-north-1
   versionFunctions: false
 
 functions:

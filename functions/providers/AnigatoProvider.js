@@ -1,9 +1,9 @@
-const DataLifeProvider = require('./DataLifeProvider')
+const Provider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
 const cheerio = require('cheerio')
 
-class AnigatoProvider extends DataLifeProvider {
+class AnigatoProvider extends Provider {
     constructor() {
         super('anigato', {
             scope: '.sres-wrap',
@@ -44,10 +44,15 @@ class AnigatoProvider extends DataLifeProvider {
                             .toArray()
 
                         const getOptionUrls = (el) => {
-                            const $el = cheerio.load(el).root()
                             return [{
                                 url: iframeSrc,
-                                extractor: { type: 'anigit', params: { hash: $el.attr('data-hash'), id: $el.attr('data-id') } }
+                                extractor: { 
+                                    type: 'anigit', 
+                                    params: { 
+                                        hash: el.attribs['data-hash'], 
+                                        id: el.attribs['data-id'] 
+                                    } 
+                                }
                             }]
                         }
 
@@ -65,7 +70,7 @@ class AnigatoProvider extends DataLifeProvider {
                                 .toArray()
                                 .map((el, id) => ({
                                     id,
-                                    name: cheerio.text(el),
+                                    name: cheerio.load(el).text(),
                                     urls: getOptionUrls(el)
                                 }))
                         } else {

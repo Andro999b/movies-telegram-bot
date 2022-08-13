@@ -133,12 +133,14 @@ export function withLogin(Component) {
             const { user, userAttributes } = userData
 
             delete userAttributes.email_verified
+            delete userAttributes.email
+            
             user.completeNewPasswordChallenge(password, userAttributes, {
                 onSuccess: () => {
                     setStep('NOT_SIGNED')
                     setLoading(false)
                 },
-                onFailure: () => {
+                onFailure: (err) => {
                     setError(err.message)
                     setLoading(false)
                     console.error(err)

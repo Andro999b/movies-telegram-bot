@@ -1,10 +1,10 @@
-const DataLifeProvider = require('./DataLifeProvider')
+const Provider = require('./DataLifeProvider')
 const { extractObject, extractStringProperty } = require('../utils/extractScriptVariable')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 
-class AnimeVostProvider extends DataLifeProvider {
+class AnimeVostProvider extends Provider {
     constructor() {
         super('animevost', {
             scope: '.shortstory',

@@ -6,7 +6,7 @@ provider:
   name: aws
   runtime: python3.8
   memorySize: 256
-  region: eu-central-1
+  region: eu-north-1
   versionFunctions: false
 
 plugins:

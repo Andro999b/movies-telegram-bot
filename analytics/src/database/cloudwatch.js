@@ -1,7 +1,7 @@
-import { LOG_GROUPS } from '../constants'
+import { LOG_GROUPS, REGION } from '../constants'
 import { observable } from 'mobx'
 
-export const getCloudWatch = () => new AWS.CloudWatchLogs()
+export const getCloudWatch = () => new AWS.CloudWatchLogs({ region: REGION })
 
 export const searchLogs = (from, to) => {
     const cloudwatchlogs = getCloudWatch()

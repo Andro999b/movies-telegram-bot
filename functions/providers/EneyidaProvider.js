@@ -1,8 +1,8 @@
-const DataLifeProvider = require('./DataLifeProvider')
+const Provider = require('./CFDataLifeProvider')
 const tortugawtfembed = require('../utils/tortugawtfembed')
 const urlencode = require('urlencode')
 
-class EneyidaProvider extends DataLifeProvider {
+class EneyidaProvider extends Provider {
     constructor() {
         super('eneyida', {
             scope: 'article.related_item',

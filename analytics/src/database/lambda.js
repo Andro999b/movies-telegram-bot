@@ -2,7 +2,7 @@ import { REGION, ACCOUNT_ID } from '../constants'
 
 let lambda
 export const getLambda = () => {
-    if (!lambda) lambda = new AWS.Lambda({ apiVersion: '2015-03-31' })
+    if (!lambda) lambda = new AWS.Lambda({ apiVersion: '2015-03-31', reqion: REGION })
 
     return lambda
 }
@@ -13,8 +13,13 @@ export const invokeGA = (from, to) => new Promise((resolve, reject) => {
         Payload: JSON.stringify({from, to})
     }
     getLambda().invoke(params, function (err, data) {
-        if (err) reject(err) 
-        else resolve(JSON.parse(data.Payload))           
+        if (err) {
+            console.error('invokeGA', err)
+            reject(err) 
+        } else {
+            console.log(data.Payload)
+            resolve(JSON.parse(data.Payload))
+        }           
     })
 })
 
@@ -23,7 +28,10 @@ export const invokeMongoStat = () => new Promise((resolve, reject) => {
         FunctionName: `arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:analytics-functions-dev-mongostat`
     }
     getLambda().invoke(params, function (err, data) {
-        if (err) reject(err) 
+        if (err) {
+            console.error('invokeMongoStat', err)
+            reject(err) 
+        }
         else resolve(JSON.parse(data.Payload))           
     })
 })

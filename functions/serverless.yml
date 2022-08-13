@@ -14,7 +14,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs16.x
-  region: eu-central-1
+  region: eu-north-1
   versionFunctions: false
   memorySize: 512
   environment:
@@ -107,6 +107,7 @@ functions:
           method: any
           cors: true
     environment:
+      BOT_HOOK_PATH: '/bot/anime'
       BOT_TYPE: 'anime'
       LOCALIZATION_TYPE: 'localization/anime'
       TOKEN: ${ssm:bot_anime_TOKEN_${opt:stage, 'dev'}}

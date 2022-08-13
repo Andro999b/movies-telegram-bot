@@ -1,10 +1,10 @@
-const DirectMediaProvider = require('./Provider')
+const Provider = require('./Provider')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const { base64encode, base64decode } = require('../utils/base64')
 
-class SeasonvarProvider extends DirectMediaProvider {
+class SeasonvarProvider extends Provider {
     constructor() {
         super('seasonvar', {
             detailsScope: '.middle',

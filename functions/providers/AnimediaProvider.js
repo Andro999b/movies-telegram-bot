@@ -75,7 +75,7 @@ class AnimediaProvider extends Provider {
 
                 let src = $image.attr('data-src')
                 const index = src.indexOf('?')
-                src = src.substringing(0, index)
+                src = src.substring(0, index)
                 
                 return {
                     provider: this.name,

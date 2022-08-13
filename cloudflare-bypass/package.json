@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "sls deploy --aws-profile serverless",
     "release": "sls deploy --stage=prod --aws-profile serverless"
   },
   "author": "",

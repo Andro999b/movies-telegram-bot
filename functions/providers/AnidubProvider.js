@@ -1,8 +1,8 @@
-const DataLifeProvider = require('./DataLifeProvider')
+const Provider = require('./DataLifeProvider')
 const cheerio = require('cheerio')
 const urlencode = require('urlencode')
 
-class AnidubProvider extends DataLifeProvider {
+class AnidubProvider extends Provider {
     constructor() {
         super('anidub', {
             scope: '.th-item',
@@ -29,7 +29,7 @@ class AnidubProvider extends DataLifeProvider {
                         .map((el, id) => {
                             return {
                                 id,
-                                name: cheerio.text(el),
+                                name: cheerio.load(el).text(),
                                 urls: [{
                                     url: $el.attr('data'),
                                     extractor: { type: 'sibnetmp4' }
