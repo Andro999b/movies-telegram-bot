@@ -17,7 +17,6 @@ export const invokeGA = (from, to) => new Promise((resolve, reject) => {
             console.error('invokeGA', err)
             reject(err) 
         } else {
-            console.log(data.Payload)
             resolve(JSON.parse(data.Payload))
         }           
     })
