@@ -1,8 +1,8 @@
-const providers = require('../providers')
+const providers = require('../src/providers')
 const util = require('util')
 
-const provider = 'eneyida'
-const id = 'https%3A%2F%2Feneyida.tv%2F2319-zoryana-brama-sg-1.html'
+const provider = 'kinogo'
+const id = 'https%3A%2F%2Fkinogo.la%2F23979-the-way-back_2020.html'
 
 // eslint-disable-next-line no-console
 console.log(decodeURIComponent(id))

@@ -46,9 +46,12 @@ module.exports = {
         'searchUrl': 'https://kinogo.la/index.php?do=search'
     },
     'eneyida': {
-        'cfbypass': true,
         'baseUrl': 'https://eneyida.tv',
         'searchUrl': 'https://eneyida.tv/index.php?do=search'
+    },
+    'uafilmtv': {
+        'baseUrl': 'https://uafilm.tv',
+        'searchUrl': 'https://uafilm.tv/index.php?do=search'
     },
     'seasonvar': {
         'pageSize': 30,

@@ -1,16 +1,16 @@
-const providers = require('../providers')
-// const util = require('util')
+const providers = require('../src/providers')
 
-const providerName = 'anigato'
+// const providerName = 'anigato'
 // const providerName = 'anitubeua'
 // const providerName = 'anidub'
 // const providerName = 'animedia'
+// const providerName = 'animevost'
 // const providerName = 'kinovod'
 // const providerName = 'kinogo'
 // const providerName = 'seasonvar'
 // const providerName = 'eneyida'
-// const providerName = 'animevost'
-const searchQuery = 'Дорохедоро'
+const providerName = 'uafilmtv'
+const searchQuery = 'Зоряна брама'
 
 providers.searchOne(providerName, searchQuery)
     .then((results) => console.log('results', results.length, results))// eslint-disable-line 

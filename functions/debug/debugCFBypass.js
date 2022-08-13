@@ -1,4 +1,4 @@
-const invokeCFBypass = require('../utils/invokeCFBypass')
+const invokeCFBypass = require('src/utils/invokeCFBypass')
 const url = 'https://corsproxy.movies-player.workers.dev/?https://anitube.in.ua'
 
 invokeCFBypass(url)

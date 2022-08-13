@@ -30,7 +30,7 @@ class KinogoProvider extends Provider {
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
-                    selector: '#1212',
+                    selector: '.box iframe',
                     transform: async ($el, $root) => {
                         let files = []
                         try{

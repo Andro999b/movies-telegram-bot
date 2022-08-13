@@ -1,4 +1,4 @@
-const providers = require('../providers')
+const providers = require('../src/providers')
 const util = require('util')
 
 // const provider = 'animevost'

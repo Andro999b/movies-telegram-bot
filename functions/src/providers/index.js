@@ -9,6 +9,7 @@ const providers = [
     new (require('./VideoCDNProvider'))(),
     new (require('./AnitubeUAProvider'))(),
     new (require('./EneyidaProvider'))(),
+    new (require('./UAFilmTVProvider'))()
 ]
 
 module.exports = {

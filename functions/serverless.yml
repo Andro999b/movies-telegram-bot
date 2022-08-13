@@ -29,7 +29,7 @@ provider:
     FILMS_PROVIDERS: 'kinogo,kinovod,seasonvar,videocdn'
     ANIME_PROVIDERS: 'anitubeua,anigato,animevost,anidub,animedia'
     PLAYER_URL: ${self:custom.playerUrl}
-    ACCOUNT_ID: !Ref AWS::AccountId
+    # ACCOUNT_ID: !Ref AWS::AccountId
     REGION: ${self:provider.region}
   iam:
     role:
@@ -50,7 +50,7 @@ provider:
 
 functions:
   search:
-    handler: handlers/search.handler
+    handler: src/handlers/search.handler
     timeout: 12
     events:
       - http: 
@@ -63,7 +63,7 @@ functions:
                 q: true
 
   source:
-    handler: handlers/source.handler
+    handler: src/handlers/source.handler
     events:
       - http: 
           path: api/trackers/{provider}/items/{resultId}/source/{sourceId}
@@ -71,7 +71,7 @@ functions:
           cors: true
 
   info:
-    handler: handlers/info.handler
+    handler: src/handlers/info.handler
     timeout: 30
     events:
       - http: 
@@ -80,7 +80,7 @@ functions:
           cors: true
 
   extract:
-    handler: handlers/extract.handler
+    handler: src/handlers/extract.handler
     events:
       - http: 
           path: api/extract
@@ -88,7 +88,7 @@ functions:
           cors: true
 
   bot:
-    handler: handlers/bot.handler
+    handler: src/handlers/bot.handler
     timeout: 12
     events:
       - http: 
@@ -97,10 +97,10 @@ functions:
           cors: true
     environment:
       BOT_TYPE: 'films'
-      TOKEN: ${ssm:bot_ru_TOKEN_${opt:stage, 'dev'}}
+      TOKEN: ${ssm:bot_ru_TOKEN_prod}
 
   animebot:
-    handler: handlers/bot.handler
+    handler: src/handlers/bot.handler
     events:
       - http: 
           path: bot/anime
@@ -110,10 +110,10 @@ functions:
       BOT_HOOK_PATH: '/bot/anime'
       BOT_TYPE: 'anime'
       LOCALIZATION_TYPE: 'localization/anime'
-      TOKEN: ${ssm:bot_anime_TOKEN_${opt:stage, 'dev'}}
+      TOKEN: ${ssm:bot_anime_TOKEN_prod}
   
   logger:
-    handler: handlers/logger.handler
+    handler: src/handlers/logger.handler
     events:
       - http: 
           path: api/log
@@ -122,10 +122,6 @@ functions:
     environment:
       ALLOWED_DOMAINS: 'localhost:3000,movie-player.surge.sh,movies-player.firebaseapp.com,movies-player.web.app'
       LOG_GROUP: web-${opt:stage, 'dev'}
-
-package:
-  patterns:
-   - "!debug/**"
 
 resources:
   Resources:

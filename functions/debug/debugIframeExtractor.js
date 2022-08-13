@@ -1,4 +1,4 @@
-const extractor = require('../utils/tortugawtfembed')
+const extractor = require('src/utils/playerjsembed')
 const util = require('util')
 
 extractor('https://tortuga.wtf/embed/117')

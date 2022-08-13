@@ -1,5 +1,5 @@
 const Provider = require('./CFDataLifeProvider')
-const tortugawtfembed = require('../utils/tortugawtfembed')
+const playerjsembeded = require('../utils/playerjsembed')
 const urlencode = require('urlencode')
 
 class EneyidaProvider extends Provider {
@@ -37,7 +37,7 @@ class EneyidaProvider extends Provider {
                 files: {
                     selector: '.video_box iframe',
                     transform: async ($el) => {
-                        const files = await tortugawtfembed($el.attr('src'))
+                        const files = await playerjsembeded($el.attr('src'))
                         files.forEach((file, index) => file.id = index)
                         return files
                     }
