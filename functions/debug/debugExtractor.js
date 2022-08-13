@@ -1,7 +1,7 @@
-const extract = require('src/extract')
+const extract = require('../src/extract')
 
-const url = decodeURIComponent('//aniqit.com/serial/42046/e72c92f9e68d53225d4870fed9aa3f28/720p')
-const params = { id: '988436', hash: '7c2479a7b1ff15083598224dc176235b' }
+const url = decodeURIComponent('/player/index.php?vid=/s2/9488/1.mp4&url=/anime/full/9366-yunost-v-dushe-pushka-v-ruke-aoharu-x-kikanjuu-01-iz-12.html&ses=ff&id=-1')
+const params = { }
 const headers = { 
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0'
 }
@@ -10,6 +10,6 @@ console.log(url)
 
 extract({
     url,
-    type: 'anigit',
+    type: 'anidub',
     ...params
 }, headers).then(console.error) // eslint-disable-line no-console

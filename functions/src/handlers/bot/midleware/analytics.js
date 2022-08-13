@@ -9,6 +9,7 @@ module.exports = (tracker, bot) => async (ctx, next) => {
             firstname: ctx.from.first_name,
             lastname: ctx.from.last_name,
             username: ctx.from.username,
+            language_code: ctx.from.language_code,
             type,
             ...data 
         })

@@ -27,22 +27,28 @@ class AnidubProvider extends Provider {
                         .toArray()
                         .filter((el) => el.attribs['data'].includes('video.sibnet.ru'))
                         .map((el, id) => {
-                            return {
-                                id,
-                                name: cheerio.load(el).text(),
-                                urls: [{
-                                    url: $el.attr('data'),
-                                    extractor: { type: 'sibnetmp4' }
-                                }]
+                            const url = $el.attr('data')
+                            if (url.indexOf('sibnet') != -1) {
+                                return {
+                                    id,
+                                    name: cheerio.load(el).text(),
+                                    urls: [{
+                                        url,
+                                        extractor: { type: 'sibnetmp4' }
+                                    }]
+                                }
+                            } else {
+                                return {
+                                    id,
+                                    name: cheerio.load(el).text(),
+                                    urls: [{
+                                        url,
+                                        hls: true,
+                                        extractor: { type: 'anidub' }
+                                    }]
+                                }
                             }
                         })
-                },
-                trailer: {
-                    selector: '.video-box .series-tab',
-                    transform: ($el) => $el.first().children()
-                        .toArray()
-                        .map((el) => cheerio.load(el).root().attr('data'))
-                        .filter((data) => data && data.includes('youtube'))[0]
                 }
             }
         })

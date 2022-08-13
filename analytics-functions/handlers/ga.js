@@ -36,6 +36,10 @@ module.exports.handler = async ({ from, to }) => {
             'metrics': 'ga:sessions',
             'dimensions': segment
         },
+        'countries' : {
+            'metrics': 'ga:sessions',
+            'dimensions': 'ga:country'
+        },
         'labels': {
             'metrics': 'ga:totalEvents',
             'dimensions': 'ga:eventLabel',

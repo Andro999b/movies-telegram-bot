@@ -7,7 +7,7 @@ const makeHandler = require('lambda-request-handler')
 const debug = require('debug')
 
 const BOT_TYPE = process.env.BOT_TYPE
-const PROVIDERS = (BOT_TYPE == 'anime' ? process.env.ANIME_PROVIDERS : process.env.FILMS_PROVIDERS).split(',')
+const PROVIDERS =  process.env.PROVIDERS.split(',')
 
 const i18n = new TelegrafI18n({
     defaultLanguage: 'uk',

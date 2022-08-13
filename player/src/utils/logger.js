@@ -4,6 +4,11 @@ function log(level, message, data) {
     const browser = `${navigator.userAgent}`
 
     if (process.env.NODE_ENV == 'production') {
+        gtag && gtag('event', 'exception', {
+            'description': message,
+            'fatal': false
+        })
+        
         fetch(`${window.API_BASE_URL}/log`, {
             method: 'POST',
             credentials: 'same-origin',

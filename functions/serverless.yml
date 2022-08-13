@@ -26,8 +26,6 @@ provider:
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
     STAGE: ${opt:stage, 'dev'}
     CACHE_TTL: 300
-    FILMS_PROVIDERS: 'kinogo,kinovod,seasonvar,videocdn'
-    ANIME_PROVIDERS: 'anitubeua,anigato,animevost,anidub,animedia'
     PLAYER_URL: ${self:custom.playerUrl}
     # ACCOUNT_ID: !Ref AWS::AccountId
     REGION: ${self:provider.region}
@@ -96,6 +94,7 @@ functions:
           method: any
           cors: true
     environment:
+      PROVIDERS: 'kinogo,kinovod,seasonvar,videocdn'
       BOT_TYPE: 'films'
       TOKEN: ${ssm:bot_ru_TOKEN_prod}
 
@@ -107,10 +106,25 @@ functions:
           method: any
           cors: true
     environment:
+      PROVIDERS: 'anitubeua,anigato,animevost,anidub,animedia'
       BOT_HOOK_PATH: '/bot/anime'
       BOT_TYPE: 'anime'
       LOCALIZATION_TYPE: 'localization/anime'
       TOKEN: ${ssm:bot_anime_TOKEN_prod}
+  
+  uabot:
+    handler: src/handlers/bot.handler
+    events:
+      - http: 
+          path: bot/ua
+          method: any
+          cors: true
+    environment:
+      PROVIDERS: 'eneyida,uafilmtv'
+      BOT_HOOK_PATH: '/bot/ua'
+      BOT_TYPE: 'ua'
+      LOCALIZATION_TYPE: 'localization'
+      TOKEN: ${ssm:bot_ua_TOKEN_prod}
   
   logger:
     handler: src/handlers/logger.handler

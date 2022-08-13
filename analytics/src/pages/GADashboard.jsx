@@ -7,6 +7,7 @@ import ErrorAwareContainer from '../components/ErrorAwareContainer'
 import ValuesTableVis from '../components/ValuesTableVis'
 import PieChartVis from '../components/PieChartVis'
 import AreaChartVis from '../components/AreaChartVis'
+import BarChartVis from '../components/BarChartVis'
 import DateSelector from '../components/DateSelector'
 import ReloadButton from '../components/ReloadButton'
 import dashboard from '../store/gaDashboard'
@@ -104,7 +105,7 @@ export default observer(() => {
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <PieChartVis data={store.eventsPie} />
+                                    <BarChartVis data={store.eventsData} lines={store.events} legend/>
                                 </LoadingPlaceholder>
                             </Grid>
                         </Grid>

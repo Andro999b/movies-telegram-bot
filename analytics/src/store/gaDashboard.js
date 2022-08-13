@@ -6,9 +6,9 @@ import moment from 'moment'
 import periodStore from './periodStore'
 
 const hoursSegFormatter = (hour) => hour + ':00'
-const dateSegFormatter = (date) => date.substring(0,4) + '-' + date.substring(4,6) + '-' + date.substring(6,8)
+const dateSegFormatter = (date) => date.substring(0, 4) + '-' + date.substring(4, 6) + '-' + date.substring(6, 8)
 
-const reformatBucketSegments = (bucket, formatter) => 
+const reformatBucketSegments = (bucket, formatter) =>
     bucket.chartData.forEach((item) => item.seg = formatter(item.seg))
 
 const parseResult = (segment, { newUsers, users, sessions, devices, events, labels }) => {
@@ -54,8 +54,11 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
         bucketInitState()
     )
 
+    const totalEvents = events.reduce((acc, row) => acc + parseInt(row[2]), 0)
+
     const eventsCountBucket = events.reduce(
-        bucketReducer(
+        segmentBucketReducer(
+            (row) => row[1],
             (row) => row[1],
             (acc, row) => acc + parseInt(row[2])
         ),
@@ -81,7 +84,8 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
         eventsCountBucket,
         eventsBucket,
         sessionsBucket,
-        deviceCountBucket
+        deviceCountBucket,
+        totalEvents
     }
 }
 
@@ -112,7 +116,7 @@ const getGARange = (period) => {
     }
 
     return [
-        period, 
+        period,
         period
     ]
 }
@@ -126,7 +130,8 @@ export default observable({
     usersChart: [],
     sessionsChart: [],
     eventsChart: [],
-    eventsPie: [],
+    eventsData: [],
+    eventsLines: [],
     events: [],
     devicePie: [],
     totalEvents: 0,
@@ -148,7 +153,8 @@ export default observable({
             eventsCountBucket,
             eventsBucket,
             sessionsBucket,
-            deviceCountBucket
+            deviceCountBucket,
+            totalEvents
         }) => {
             if (periodStore.gaPeriod != period) return
 
@@ -157,8 +163,9 @@ export default observable({
             this.sessionsChart = sessionsBucket.chartData
             this.totalSessions = sessionsBucket.chartData.reduce((acc, { sessions }) => acc + sessions, 0)
             this.eventsChart = eventsBucket.chartData
-            this.eventsPie = eventsCountBucket.chartData
-            this.totalEvents = eventsCountBucket.chartData.reduce((acc, { value }) => acc + value, 0)
+            this.eventsData = eventsCountBucket.chartData
+            this.events = Object.keys(eventsCountBucket.acc)
+            this.totalEvents = totalEvents
             this.devicePie = deviceCountBucket.chartData
             this.totalUsers = deviceCountBucket.chartData.reduce((acc, { value }) => acc + value, 0)
         }
@@ -188,6 +195,6 @@ export default observable({
                 cache[period] = data
                 updateCharts(data)
             })
-            .catch((error) => this.error = error.message)   
+            .catch((error) => this.error = error.message)
     }
 })

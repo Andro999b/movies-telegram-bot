@@ -45,9 +45,9 @@ export const searchLogs = (from, to) => {
             cloudwatchlogs.startQuery({
                 startTime: from,
                 endTime: to,
-                queryString: 'fields @timestamp, @message | filter @message like /ERROR/ | sort @timestamp desc',
+                queryString: 'fields @timestamp, @message, @log | filter @message like /ERROR/ | sort @timestamp desc',
                 logGroupNames: LOG_GROUPS
-            }, (err,data) => {
+            }, (err, data) => {
                 if(err) {
                     this.error = err.message
                     return

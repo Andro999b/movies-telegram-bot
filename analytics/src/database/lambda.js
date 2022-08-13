@@ -30,8 +30,7 @@ export const invokeMongoStat = () => new Promise((resolve, reject) => {
         if (err) {
             console.error('invokeMongoStat', err)
             reject(err) 
-        }
-        else resolve(JSON.parse(data.Payload))           
+        } else resolve(JSON.parse(data.Payload))           
     })
 })
 

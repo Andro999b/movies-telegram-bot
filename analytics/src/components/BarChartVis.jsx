@@ -10,10 +10,10 @@ import {
 } from 'recharts'
 import { getColor } from '../utils'
 
-export default ({ data, lines, legend }) => {
+export default ({ data, lines, legend, layout = 'horizontal' }) => {
     return (
         <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
+            <BarChart data={data} layout={layout}>
                 <XAxis dataKey="seg" />
                 <YAxis />
                 <Tooltip />

@@ -42,7 +42,7 @@ const useRowStyles = makeStyles(() => ({
     }
 }))
 
-const Row = ({ timestamp, message }) => {
+const Row = ({ timestamp, message, log }) => {
     const classes = useRowStyles()
     const [open, setOpen] = React.useState(false)
 
@@ -69,6 +69,7 @@ const Row = ({ timestamp, message }) => {
                 </Typography>
             </TableCell>
             <TableCell>
+                <Typography variant='caption'>{log}</Typography>
                 <Typography className={clsx({
                     [classes.message]: true,
                     [classes.messageClose]: !open,
@@ -112,8 +113,8 @@ export default ({ rows }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.slice(fromIndex, toIndex).map(([timestamp, message, ptr]) =>
-                            <Row key={ptr.value} timestamp={timestamp.value} message={message.value} />
+                        {rows.slice(fromIndex, toIndex).map(([timestamp, message, log, ptr]) =>
+                            <Row key={ptr.value} timestamp={timestamp.value} log={log.value} message={message.value} />
                         )}
                     </TableBody>
                 </Table>
