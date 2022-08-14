@@ -1,11 +1,9 @@
 const providers = require('../src/providers')
 const util = require('util')
 
-// const provider = 'animevost'
-const provider = 'rezka'
+const provider = 'animevost'
 const id = ''
-// const source = '2147415932'
-const source = 'eyJkYXRhSWQiOiI0MTY1NiIsInNlYXNvbiI6IjEiLCJlcGlzb2RlIjoiMSIsInRyYW5zbGF0b3JJZCI6IjU2In0='
+const source = '2147417328'
 
 // eslint-disable-next-line no-console
 console.log('resultId', decodeURIComponent(id))

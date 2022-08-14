@@ -8,7 +8,7 @@ import {
     Legend, 
     Bar
 } from 'recharts'
-import { getColor } from '../utils'
+import { COLORS } from '../constants'
 
 export default ({ data, lines, legend, layout = 'horizontal' }) => {
     return (
@@ -18,12 +18,12 @@ export default ({ data, lines, legend, layout = 'horizontal' }) => {
                 <YAxis />
                 <Tooltip />
                 {legend && <Legend/> }
-                {lines.map((line) =>
+                {lines.map((line, index) =>
                     <Bar 
                         key={line} 
                         dataKey={line} 
                         stackId="1"
-                        fill={getColor(line)} 
+                        fill={COLORS[index % COLORS.length]} 
                     />
                 )}
             </BarChart>

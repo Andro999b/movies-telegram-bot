@@ -36,7 +36,7 @@ const processPeriod = (period, reducer, initValue = {}) => {
 
             const query = {
                 TableName: TABLE_NAME,
-                KeyConditionExpression: `#key = :value`,
+                KeyConditionExpression: '#key = :value',
                 ExpressionAttributeNames: {
                     '#key': key
                 },
@@ -101,6 +101,7 @@ registerWebworker(({ period, credentials }) => {
     const eventsReducer = segmentBucketReducer(segmentExtractor, ({ type }) => type)
     const eventsCounterReducer = bucketReducer(({ type }) => type)
     const botsReducer = segmentBucketReducer(segmentExtractor, ({ bot }) => bot)
+    const languageCounterReducer = bucketReducer(({ language_code }) => language_code)
     const botsCounterReducer = bucketReducer(({ bot }) => bot)
     const usersReducer = uniqueBucketReducer(segmentExtractor, ({ uid }) => uid)
 
@@ -111,6 +112,7 @@ registerWebworker(({ period, credentials }) => {
             acc.eventsCountBucket = eventsCounterReducer(acc.eventsCountBucket, item)
             acc.botsBucket = botsReducer(acc.botsBucket, item)
             acc.botsCountBucket = botsCounterReducer(acc.botsCountBucket, item)
+            acc.languageCountBucket = languageCounterReducer(acc.languageCountBucket, item)
             acc.usersBucket = usersReducer(acc.usersBucket, item)
             acc.topUsersBucket = topUsersBucketReducer(acc.topUsersBucket, item)
             return acc
@@ -119,6 +121,7 @@ registerWebworker(({ period, credentials }) => {
             eventsBucket: bucketInitState(),
             eventsCountBucket: bucketInitState(),
             botsBucket: bucketInitState(),
+            languageCountBucket: bucketInitState(),
             botsCountBucket: bucketInitState(),
             usersBucket: bucketInitState(),
             topUsersBucket: {}

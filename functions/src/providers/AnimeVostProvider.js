@@ -24,11 +24,11 @@ class AnimeVostProvider extends Provider {
                     transform: ($el) => this._absoluteUrl($el.attr('src'))
                 },
                 files: {
-                    selector: 'script',
+                    selector: '.functionPanel',
                     transform: ($el) => {
                         let episodesData
 
-                        for (const item of $el.toArray()) {
+                        for (const item of $el.nextAll('script').toArray()) {
                             if (item.children.length != 0) {
                                 const script = item.children[0].data
 
@@ -57,7 +57,7 @@ class AnimeVostProvider extends Provider {
 
     async getSource(resultsId, sourceId) {
         const siteRes = await superagent
-            .get(`${this.config.playerUrl}/${decodeURIComponent(sourceId)}?old=1`)
+            .get(`${this.config.playerUrl}?play=${decodeURIComponent(sourceId)}&old=1`)
             .timeout(5000)
             .disableTLSCerts()
 

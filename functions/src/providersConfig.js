@@ -38,7 +38,7 @@ module.exports = {
     'animevost': {
         'baseUrl': 'https://animevost.org',
         'searchUrl': 'https://animevost.org/index.php?do=search',
-        'playerUrl': 'https://play.animegost.org',
+        'playerUrl': 'https://animevost.org/frame5.php',
     },
     'kinogo': {
         'infoTimeout': 20,

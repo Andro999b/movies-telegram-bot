@@ -60,13 +60,14 @@ export const bucketReducer = (
 ) => {
     return ({ acc = {}, chartData = [] }, item) => {
         const key = keyExtractor(item)
+        if(key) { 
+            if (!acc[key]) {
+                acc[key] = { key, value: initValue}
+                chartData.push(acc[key])
+            }
 
-        if (!acc[key]) {
-            acc[key] = { key, value: initValue}
-            chartData.push(acc[key])
+            acc[key].value = valueReducer(acc[key].value, item)
         }
-
-        acc[key].value = valueReducer(acc[key].value, item)
 
         return { acc, chartData }
     }
@@ -159,28 +160,27 @@ function hash64(str) {
 
 export function getColor(name) {
     switch(name) {
-        case 'search': return COLORS[0]
-        case 'start': return COLORS[1]
-        case 'no_results': return COLORS[2]
-        case 'helpsearch': return COLORS[3]
-        case 'lib': return COLORS[4]
-        case 'top': return COLORS[5]
-        case 'top_help': return COLORS[6]
+        case 'search': return COLORS[Math.floor(COLORS.length / 2)]
+        case 'start': return COLORS[COLORS.length - 1]
+        case 'no_results': return COLORS[0]
         case 'count': return COLORS[0]
+        case 'anime': return COLORS[COLORS.length - 1]
         case 'films': return COLORS[0]
-        case 'anime': return COLORS[1]
+        case 'ua': return COLORS[Math.floor(COLORS.length / 2)]
         case 'selectFile': return COLORS[0]
-        case 'playlistLoaded': return COLORS[2] 
-        case 'errorLoad': return COLORS[3]
-        case 'errorPlayback': return COLORS[4]
+        case 'playlistLoaded': return COLORS[COLORS.length - 1] 
+        case 'errorPlayback': return COLORS[COLORS.length - 1]
+        case 'errorLoad': return COLORS[0]
         case 'downloadFile': return COLORS[5]
         case 'alternativeLink': return COLORS[6]
         case 'rediectTrailer': return COLORS[7]
         case 'share': return COLORS[8]
         case 'sessions': return COLORS[0]
-        case 'mobile': return COLORS[0]
-        case 'desktop': return COLORS[1]
-        case 'tablet': return COLORS[2]
+        case 'mobile': return COLORS[COLORS.length - 1]
+        case 'desktop': return COLORS[0]
+        case 'tablet': return COLORS[Math.floor(COLORS.length / 2)]
+        case 'users': return COLORS[COLORS.length - 1]
+        case 'newUsers': return COLORS[COLORS.length - 1]
         default: return COLORS[hash64(name) % COLORS.length]
     }
 }

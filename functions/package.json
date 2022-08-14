@@ -10,6 +10,7 @@
     "release:dev": "npm run lint && sls deploy --stage=dev --aws-profile serverless",
     "debug:info": "env-cmd node debug/debugInfo",
     "debug:search": "env-cmd node debug/debugSearch",
+    "debug:source": "env-cmd node debug/debugSource",
     "debug:extractor": "env-cmd node debug/debugExtractor",
     "debug:cfbypass": "env-cmd node debug/debugCFBypass",
     "debug:iframe": "env-cmd node debug/debugIframeExtractor",

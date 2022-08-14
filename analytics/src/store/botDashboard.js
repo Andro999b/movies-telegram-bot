@@ -24,6 +24,7 @@ export default observable({
     botPie: [],
     botChart: [],
     bots: [],
+    languagePie: [],
 
     eventsPie: [],
     eventsChart: [],
@@ -42,6 +43,7 @@ export default observable({
             eventsCountBucket,
             botsBucket,
             botsCountBucket,
+            languageCountBucket,
             usersBucket,
             topUsersBucket
         }) => {
@@ -54,6 +56,7 @@ export default observable({
             this.botChart = botsBucket.chartData || []
             this.botPie = botsCountBucket.chartData || []
             this.bots = getBucketKeys(botsCountBucket)
+            this.languagePie = languageCountBucket.chartData
 
             this.usersChart = usersBucket.chartData || []
             this.topUsers = toTopUsersPie(topUsersBucket)

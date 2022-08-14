@@ -60,13 +60,20 @@ export default observer(() => {
                 </Grid>
                 <ErrorAwareContainer error={store.error}>
                     <Grid container item md={7} sm={12} xs={12} className={classes.charts}>
-                        <Grid item sm={12} xs={12} className={classes.sectionTitle}>
-                            <Typography>Users activity</Typography>
-                        </Grid>
-                        <Grid item sm={12} xs={12} className={classes.item}>
-                            <LoadingPlaceholder loading={store.loading}>
-                                <AreaChartVis data={store.usersChart} lines={['count']} />
-                            </LoadingPlaceholder>
+                        <Grid container item>
+                            <Grid item sm={12} xs={12} className={classes.sectionTitle}>
+                                <Typography>Users activity</Typography>
+                            </Grid>
+                            <Grid item sm={9} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <AreaChartVis data={store.usersChart} lines={['count']} />
+                                </LoadingPlaceholder>
+                            </Grid>
+                            <Grid item sm={3} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <PieChartVis data={store.languagePie} sequenceColors/>
+                                </LoadingPlaceholder>
+                            </Grid>
                         </Grid>
                         <Grid container item>
                             <Grid item sm={12} xs={12} className={classes.sectionTitle}>
