@@ -18,6 +18,7 @@ import {
 } from '@material-ui/icons'
 import clsx from 'clsx'
 import Linkify from 'linkifyjs/react'
+import theme from '../theme'
 
 const rowsPerPageOptions = [25, 50, 100]
 
@@ -39,26 +40,34 @@ const useRowStyles = makeStyles(() => ({
     },
     top: {
         verticalAlign: 'top'
+    },
+    link: {
+        color: theme.palette.primary.main
     }
 }))
 
 const Row = ({ timestamp, message, log }) => {
     const classes = useRowStyles()
     const [open, setOpen] = React.useState(false)
+    const [formatedMessage, setFormatedMessage] = React.useState(null)
 
     let displayMessage = message
     if (open) {
-        if (message.startsWith('{')) {
-            try {
-                displayMessage = JSON.stringify(JSON.parse(message), null, 2)
-            } catch {
-                //no-op
-            }
+        if (formatedMessage === null) {
+            displayMessage = message.replace(/({.*})/, (m, p) => {
+                try {
+                    return JSON.stringify(JSON.parse(p), null, 2)
+                } catch {
+                    return p
+                }
+            })
+            displayMessage =
+                (<Linkify options={{ target: { url: '_blank' }, className: classes.link }}>
+                    {displayMessage}
+                </Linkify>)
+            setFormatedMessage(displayMessage)
         }
-        displayMessage =
-            (<Linkify options={{ target: { url: '_blank' } }}>
-                {displayMessage} 
-            </Linkify>)
+        displayMessage = formatedMessage
     }
 
     return (

@@ -1,6 +1,5 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { red } from '@material-ui/core/colors'
 import {
     CognitoUserPool,
     AuthenticationDetails,
@@ -40,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     error: {
-        color: red[900],
+        color: theme.palette.error.dark,
         textAlign: 'center'
     }
 }))

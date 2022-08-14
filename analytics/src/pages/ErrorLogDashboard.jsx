@@ -14,7 +14,6 @@ import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import ErrorAwareContainer from '../components/ErrorAwareContainer'
 import LogsTable from '../components/LogsTable'
 import periodStore from '../store/periodStore'
-import { red } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({
     root: {
