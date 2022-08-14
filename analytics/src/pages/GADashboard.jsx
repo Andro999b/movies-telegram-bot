@@ -59,13 +59,20 @@ export default observer(() => {
                 </Grid>
                 <ErrorAwareContainer error={store.error}>
                     <Grid container item md={7} sm={12} xs={12} className={classes.charts}>
-                        <Grid item sm={12} xs={12} className={classes.sectionTitle}>
-                            <Typography>Users</Typography>
-                        </Grid>
-                        <Grid item sm={12} xs={12} className={classes.item}>
-                            <LoadingPlaceholder loading={store.loading}>
-                                <AreaChartVis data={store.usersChart} lines={['users', 'newUsers']} legend />
-                            </LoadingPlaceholder>
+                        <Grid container item>
+                            <Grid item sm={12} xs={12} className={classes.sectionTitle}>
+                                <Typography>Users</Typography>
+                            </Grid>
+                            <Grid item sm={9} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <AreaChartVis data={store.usersChart} lines={['users', 'new_users']} legend />
+                                </LoadingPlaceholder>
+                            </Grid>
+                            <Grid item sm={3} xs={12} className={classes.item}>
+                                <LoadingPlaceholder loading={store.loading}>
+                                    <PieChartVis data={store.countries} sequenceColors/>
+                                </LoadingPlaceholder>
+                            </Grid>
                         </Grid>
                         <Grid container item>
                             <Grid item sm={12} xs={12} className={classes.sectionTitle}>
@@ -90,22 +97,22 @@ export default observer(() => {
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <AreaChartVis data={store.eventsChart} lines={['playlistLoaded', 'start']} legend />
+                                    <AreaChartVis data={store.eventsChart} lines={['playlist_loaded', 'start']} legend />
                                 </LoadingPlaceholder>
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <AreaChartVis data={store.eventsChart} lines={['selectFile']} legend />
+                                    <AreaChartVis data={store.eventsChart} lines={['select_file']} legend />
                                 </LoadingPlaceholder>
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <AreaChartVis stacked data={store.eventsChart} lines={['errorPlayback', 'errorLoad']} legend />
+                                    <AreaChartVis stacked data={store.eventsChart} lines={['error_playback', 'error_load']} legend />
                                 </LoadingPlaceholder>
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <BarChartVis data={store.eventsData} lines={store.events} legend/>
+                                    <BarChartVis data={store.eventsData} lines={store.events} legend />
                                 </LoadingPlaceholder>
                             </Grid>
                         </Grid>

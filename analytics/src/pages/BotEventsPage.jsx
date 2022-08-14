@@ -31,11 +31,11 @@ const useStyles = makeStyles((theme) => ({
     },
     filterInput: {
         flexGrow: 1,
-        backgroundColor: '#FFF',
+        backgroundColor: theme.palette.background,
         marginRight: theme.spacing(2)
     },
     dataPicker: {
-        backgroundColor: '#FFF',
+        backgroundColor: theme.palette.background,
         width: 110
     }
 }))

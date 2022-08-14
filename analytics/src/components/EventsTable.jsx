@@ -22,11 +22,11 @@ import {
     KeyboardArrowUp as KeyboardArrowUpIcon
 } from '@material-ui/icons'
 import moment from 'moment'
-import { 
-    getUserName, 
-    getEventInputProp, 
-    isSearchableEvent, 
-    getBotSearchUrl 
+import {
+    getUserName,
+    getEventInputProp,
+    isSearchableEvent,
+    getBotSearchUrl
 } from '../utils'
 import { grey } from '@material-ui/core/colors'
 
@@ -48,7 +48,7 @@ const useRowStyles = makeStyles((theme) => ({
     contentCell: {
         paddingTop: 0,
         paddingBottom: 0,
-        backgroundColor: grey[100]
+        backgroundColor: theme.palette.background
     },
     propLabel: {
         display: 'inline-block',
@@ -77,10 +77,16 @@ const Row = ({ data }) => {
     const input = getEventInputProp(data)
     let searchBtn = null
 
-    if(isSearchableEvent(data)) {
+    if (isSearchableEvent(data)) {
         searchBtn = (
             <Box className={classes.searchBtn}>
-                <Button component="a" target="_blank" href={getBotSearchUrl(data)} variant="contained">Search</Button>
+                <Button
+                    component="a"
+                    target="_blank"
+                    href={getBotSearchUrl(data)}
+                    variant="contained">
+                    Search
+                </Button>
             </Box>
         )
     }
@@ -155,11 +161,11 @@ export default ({ rows }) => {
                             <TableCell>Time</TableCell>
                             <TableCell>User</TableCell>
                             <TableCell>Input</TableCell>
-                            <TableCell/>
+                            <TableCell />
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.slice(fromIndex, toIndex).map((row) => 
+                        {rows.slice(fromIndex, toIndex).map((row) =>
                             (<Row key={`${row.type}_${row.uid}_${row.time}`} data={row} />)
                         )}
                     </TableBody>

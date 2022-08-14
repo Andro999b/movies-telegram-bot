@@ -59,17 +59,16 @@ export default observer(() => {
                     </Toolbar>
                 </Grid>
                 <ErrorAwareContainer error={store.error}>
-                    <Grid container item md={7} sm={12} xs={12} className={classes.charts}>
+                    <Grid container item md={8} sm={12} xs={12} className={classes.charts}>
                         <Grid container item>
-                            <Grid item sm={12} xs={12} className={classes.sectionTitle}>
-                                <Typography>Users activity</Typography>
-                            </Grid>
                             <Grid item sm={9} xs={12} className={classes.item}>
+                                <Typography>Users activity</Typography>
                                 <LoadingPlaceholder loading={store.loading}>
                                     <AreaChartVis data={store.usersChart} lines={['count']} />
                                 </LoadingPlaceholder>
                             </Grid>
                             <Grid item sm={3} xs={12} className={classes.item}>
+                                <Typography>Language</Typography>
                                 <LoadingPlaceholder loading={store.loading}>
                                     <PieChartVis data={store.languagePie} sequenceColors/>
                                 </LoadingPlaceholder>
@@ -106,7 +105,7 @@ export default observer(() => {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid container md={5} item sm={12} xs={12}>
+                    <Grid container md={4} item sm={12} xs={12}>
                         <Grid item sm={12} xs={12} className={classes.table}>
                             <LoadingPlaceholder loading={store.loading}>
                                 <ValuesTableVis

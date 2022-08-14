@@ -11,7 +11,7 @@ const styles = {
 }
 
 export default withStyles(styles)(({ onClick, classes }) => (
-    <Fab color="secondary" className={classes.fab} onClick={onClick}>
+    <Fab color="primary" className={classes.fab} onClick={onClick}>
         <RefreshIcon />
     </Fab>
 ))

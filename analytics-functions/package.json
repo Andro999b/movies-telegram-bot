@@ -1,6 +1,10 @@
 {
+  "scripts": {
+    "invoke:ga": "sls invoke local --function ga --aws-profile=serverless",
+    "release": "sls deploy --aws-profile=serverless"
+  },
   "dependencies": {
-    "googleapis": "^59.0.0",
-    "mongodb": "^3.6.0"
+    "googleapis": "^105.0.0",
+    "mongodb": "^4.8.1"
   }
 }

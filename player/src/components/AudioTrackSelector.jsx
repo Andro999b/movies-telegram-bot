@@ -20,7 +20,7 @@ class AudioTrackSelector extends BaseSelector {
         this.props.device.setAudioTrack(id)
         this.handleClose()
 
-        analytics('selectAudio')
+        analytics('select_audio')
     }
 
     renderButton() {

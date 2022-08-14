@@ -16,7 +16,7 @@ class VideoQualitySelector extends BaseSelector {
         this.props.device.setQuality(quality)
         this.handleClose()
 
-        analytics('selectQuality', quality)
+        analytics('select_quality', quality)
     }
 
     renderButton() {

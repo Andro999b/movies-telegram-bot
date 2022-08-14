@@ -9,10 +9,8 @@ import {
     TableBody,
     TableRow
 } from '@material-ui/core'
-import { grey } from '@material-ui/core/colors'
 
-
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     table: {
         minWidth: 320
     },
@@ -21,11 +19,11 @@ const useStyles = makeStyles(() => ({
             borderBottom: 'none'
         },
         '&:nth-child(odd)': {
-            backgroundColor: grey[100]
+            backgroundColor: theme.palette.action.disabledBackground
         }
     },
     title: {
-        backgroundColor: grey[200]
+        backgroundColor: theme.palette.background.paper
     },
     value: {
         textAlign: 'right'

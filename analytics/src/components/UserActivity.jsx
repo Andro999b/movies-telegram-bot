@@ -10,9 +10,8 @@ import {
     Grid,
     Button
 } from '@material-ui/core'
-import { grey } from '@material-ui/core/colors'
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
-import { getEventInputProp, isSearchableEvent, getBotSearchUrl  } from '../utils'
+import { getEventInputProp, isSearchableEvent, getBotSearchUrl } from '../utils'
 import moment from 'moment'
 
 const filterProperties = [
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     details: {
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        backgroundColor: grey[100],
+        backgroundColor: theme.palette.background,
         paddingTop: theme.spacing(2)
     },
     propLabel: {
@@ -50,10 +49,16 @@ export default ({ item }) => {
 
     let searchBtn = null
 
-    if(isSearchableEvent(item)) {
+    if (isSearchableEvent(item)) {
         searchBtn = (
             <AccordionActions>
-                <Button component="a" target="_blank" href={getBotSearchUrl(item)} color="primary">Search</Button>
+                <Button
+                    component="a"
+                    target="_blank"
+                    href={getBotSearchUrl(item)}
+                    variant="contained">
+                    Search
+                </Button>
             </AccordionActions>
         )
     }

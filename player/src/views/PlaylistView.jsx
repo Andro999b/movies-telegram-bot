@@ -41,8 +41,9 @@ class PlaylistView extends Component {
     time = 0
 
     handleStart = () => {
-        const { loading, started, openPlaylist, playlist, watching } = this.props
-        if(loading || started) return;
+        const { loading, openPlaylist, playlist, watching } = this.props
+        const { started } = this.state
+        if(loading || started) return
 
         openPlaylist(playlist, this.fileIndex, this.time)
             .then(() => {

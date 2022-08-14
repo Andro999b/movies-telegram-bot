@@ -11,7 +11,7 @@ const dateSegFormatter = (date) => date.substring(0, 4) + '-' + date.substring(4
 const reformatBucketSegments = (bucket, formatter) =>
     bucket.chartData.forEach((item) => item.seg = formatter(item.seg))
 
-const parseResult = (segment, { newUsers, users, sessions, devices, events, labels }) => {
+const parseResult = (segment, { new_users, users, countries, sessions, devices, events, labels }) => {
     const segFormatter = segment == 'ga:date' ? dateSegFormatter : hoursSegFormatter
 
     //users chart
@@ -25,13 +25,22 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
         usersBucket
     )
 
-    usersBucket = newUsers.reduce(
+    usersBucket = new_users.reduce(
         segmentBucketReducer(
             (row) => row[0],
-            () => 'newUsers',
+            () => 'new_users',
             (acc, row) => acc + parseInt(row[1])
         ),
         usersBucket
+    )
+
+    //countries chart
+    const countriesCountBucket = countries.reduce(
+        bucketReducer(
+            (row) => row[0],
+            (acc, row) => acc + parseInt(row[1])
+        ),
+        bucketInitState()
     )
 
     //sessions chart
@@ -82,6 +91,7 @@ const parseResult = (segment, { newUsers, users, sessions, devices, events, labe
         labels: labels.map(([name, value]) => ({ name, value })),
         usersBucket,
         eventsCountBucket,
+        countriesCountBucket,
         eventsBucket,
         sessionsBucket,
         deviceCountBucket,
@@ -128,6 +138,7 @@ export default observable({
     error: null,
     loading: true,
     usersChart: [],
+    countries: [],
     sessionsChart: [],
     eventsChart: [],
     eventsData: [],
@@ -150,6 +161,7 @@ export default observable({
         const updateCharts = ({
             labels,
             usersBucket,
+            countriesCountBucket,
             eventsCountBucket,
             eventsBucket,
             sessionsBucket,
@@ -157,6 +169,20 @@ export default observable({
             totalEvents
         }) => {
             if (periodStore.gaPeriod != period) return
+
+            const countries = countriesCountBucket.chartData
+                .sort((a, b) => b.value - a.value)
+
+
+            if (countries.length > 5) {
+                const others = countries.slice(5)
+                    .reduce((acc, { value }) => acc + value, 0)
+
+                this.countries = countries.slice(0, 5)
+                    .concat({ key: 'Other', value: others})
+            } else {
+                this.countries = countries
+            }
 
             this.labels = labels
             this.usersChart = usersBucket.chartData

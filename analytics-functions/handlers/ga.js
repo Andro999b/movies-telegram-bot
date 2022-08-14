@@ -24,7 +24,7 @@ module.exports.handler = async ({ from, to }) => {
             'metrics': 'ga:users',
             'dimensions': segment
         },
-        'newUsers': {
+        'new_users': {
             'metrics': 'ga:newUsers',
             'dimensions': segment
         },

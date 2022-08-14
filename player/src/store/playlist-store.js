@@ -34,7 +34,7 @@ class PlaylistStore {
 
                     document.title = playlist.title
 
-                    analytics('playlistLoaded', document.title)
+                    analytics('playlist_loaded', document.title)
                 } else if (playlist.trailer) {
                     this.trailerUrl = playlist.trailer
                 } else {
@@ -53,7 +53,7 @@ class PlaylistStore {
     }
 
     trackError(provider, id, err, message) {
-        analytics('errorLoad', message)
+        analytics('error_load', message)
         logger.error(message, {
             provider,
             id,
