@@ -2,15 +2,14 @@ const { COLLECTION_NAME, connectToDatabase } = require('./db/mongo')
 
 async function runAggregation(pipline) {
     const client = await connectToDatabase()
-    return await new Promise((resolve, reject) => {
-        client.collection(COLLECTION_NAME).aggregate(pipline, (err, cursor) => {
-            if (err) reject(err)
-            else cursor.toArray((err, documents) => {
-                if (err) reject(err)
-                else resolve(documents)
-            })
-        })
-    })
+    const aggCursor = client.collection(COLLECTION_NAME).aggregate(pipline)
+    const docs = []
+
+    for await (const doc of aggCursor) {
+        docs.push(doc);
+    }
+
+    return docs
 }
 
 async function getTopWatchedProviders() {

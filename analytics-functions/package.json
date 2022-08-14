@@ -1,6 +1,7 @@
 {
   "scripts": {
     "invoke:ga": "sls invoke local --function ga --aws-profile=serverless",
+    "invoke:mongostat": "sls invoke local --function mongostat --aws-profile=serverless",
     "release": "sls deploy --aws-profile=serverless"
   },
   "dependencies": {

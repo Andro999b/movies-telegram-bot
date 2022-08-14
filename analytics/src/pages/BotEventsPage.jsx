@@ -18,7 +18,8 @@ import periodStore from '../store/periodStore'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        height: '100%',
+        minHeight: '100%',
+        marginBottom: theme.spacing(10),
         display: 'flex',
         flexDirection: 'column'
     },

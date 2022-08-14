@@ -17,6 +17,11 @@ import periodStore from '../store/periodStore'
 import { red } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        minHeight:'100%',
+        flexGrow: 1,
+        marginBottom: theme.spacing(10)
+    },
     title: {
         flexGrow: 1
     },
@@ -24,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2)
     },
     error: {
-        color: red[900],
+        color: theme.palette.error.dark,
         textAlign: 'center'
     }
 }))
@@ -37,7 +42,7 @@ export default observer(() => {
 
     React.useEffect(() => store.reload(), []) //eslint-disable-line
 
-    return (<div>
+    return (<div className={classes.root}>
         <Toolbar>
             <Box className={classes.title}>
                 <Typography>Errors log</Typography>

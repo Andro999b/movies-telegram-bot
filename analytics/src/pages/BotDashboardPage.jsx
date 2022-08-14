@@ -14,7 +14,9 @@ import AreaChartVis from '../components/AreaChartVis'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1
+        minHeight:'100%',
+        flexGrow: 1,
+        marginBottom: theme.spacing(10)
     },
     title: {
         flexGrow: 1

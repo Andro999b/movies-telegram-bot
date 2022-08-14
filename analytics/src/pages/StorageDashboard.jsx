@@ -13,6 +13,8 @@ import { DATE_FORMAT } from '../constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        minHeight: '100%',
+        marginBottom: theme.spacing(10),
         flexGrow: 1
     },
     title: {
@@ -47,7 +49,7 @@ export default observer(() => {
     const [invalidateDialog, showInvalidateDialog] = React.useState(false)
 
     return (
-        <div>
+        <div className={classes.root}>
             <Toolbar>
                 <Box className={classes.title}>
                     <Typography>Storage Analytics</Typography>

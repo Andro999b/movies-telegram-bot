@@ -4,14 +4,13 @@ import {
     makeStyles,
     Container
 } from '@material-ui/core'
-import { red } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: theme.spacing(2)
     },
     error: {
-        color: red[900],
+        color: theme.palette.error.dark,
         textAlign: 'center'
     }
 }))
