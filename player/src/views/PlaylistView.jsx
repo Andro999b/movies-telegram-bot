@@ -123,7 +123,7 @@ class PlaylistView extends Component {
             const { query, provider } = this.parseLocation(this.props)
             return (
                 <>
-                    <HistoryNavButton showLabel/>
+                    <HistoryNavButton/>
                     {query ?
                         <AlternativeLinksError provider={provider} query={query} message={error} /> :
                         <Typography className="center shadow-border" variant="h4">{error}</Typography>
@@ -133,7 +133,7 @@ class PlaylistView extends Component {
         } else if (trailerUrl) {
             return (
                 <>
-                    <HistoryNavButton showLabel/>
+                    <HistoryNavButton/>
                     <iframe frameBorder="0" height="100%" width="100%" src={trailerUrl} />
                 </>
             ) // redirect??

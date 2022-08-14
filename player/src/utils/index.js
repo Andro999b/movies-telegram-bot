@@ -2,6 +2,7 @@ import { base64UrlEncode } from './base64'
 
 export const animeBot = 'anime_tube_bot'
 export const moviesBot = 'MoviesBroBot'
+export const uaBot = 'UAMoviesBot'
 
 export function createExtractorUrlBuilder(extractor, additionalParams) {
     let extractorBaseUrl = null
@@ -75,6 +76,10 @@ export function getAlternativeUrl(provider, query) {
         case 'animedia': 
             bot = animeBot
             break 
+        case 'eneyida':
+        case 'uafilmstv':
+            bot = uaBot
+            break
         default:
             bot = moviesBot
     }
