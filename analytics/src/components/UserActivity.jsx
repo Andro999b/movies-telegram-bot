@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
     propLabel: {
         display: 'inline-block',
-        width: 110
+        width: 120
     },
     prop: {
         textOverflow: 'ellipsis',

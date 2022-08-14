@@ -25,41 +25,47 @@ const useStyles = makeStyles({
     }
 })
 
-const App = () => {
+const Main = withLogin(() => {
     const classes = useStyles()
 
     return (<div className={classes.root}>
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Router>
-                <Navigation />
-                <main className={classes.content} >
-                    <MuiPickersUtilsProvider utils={MomentUtils}>
-                        <Switch>
-                            <Route exact path="/">
-                                <BotDashboardPage />
-                            </Route>
-                            <Route path="/events">
-                                <BotEventsPage />
-                            </Route>
-                            <Route path="/ga">
-                                <GADashboard />
-                            </Route>
-                            <Route path="/storage">
-                                <StorageDashboard />
-                            </Route>
-                            <Route path="/errors">
-                                <ErrorLogDashboard />
-                            </Route>
-                            <Route path="/users/:uid">
-                                <BotUsersPage />
-                            </Route>
-                        </Switch>
-                    </MuiPickersUtilsProvider>
-                </main>
-            </Router>
-        </ThemeProvider>
+        <CssBaseline />
+        <Router>
+            <Navigation />
+            <main className={classes.content} >
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <Switch>
+                        <Route exact path="/">
+                            <BotDashboardPage />
+                        </Route>
+                        <Route path="/events">
+                            <BotEventsPage />
+                        </Route>
+                        <Route path="/ga">
+                            <GADashboard />
+                        </Route>
+                        <Route path="/storage">
+                            <StorageDashboard />
+                        </Route>
+                        <Route path="/errors">
+                            <ErrorLogDashboard />
+                        </Route>
+                        <Route path="/users/:uid">
+                            <BotUsersPage />
+                        </Route>
+                    </Switch>
+                </MuiPickersUtilsProvider>
+            </main>
+        </Router>
     </div >)
+})
+
+const App = () => {
+    return (
+        <ThemeProvider theme={theme}>
+            <Main/>
+        </ThemeProvider>
+    )
 }
 
-export default withLogin(App)
+export default App

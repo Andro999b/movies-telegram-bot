@@ -21,30 +21,31 @@ import {
     APP_CLIENT_ID
 } from '../constants'
 
-export function withLogin(Component) {
-    const useStyles = makeStyles((theme) => ({
-        container: {
+const useStyles = makeStyles((theme) => ({
+    container: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        backgroundColor: theme.palette.background.default
+    },
+    root: {
+        '&': {
             display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            height: '100%'
+            width: 260
         },
-        root: {
-            '&': {
-                display: 'flex',
-                width: 260
-            },
-            '& > *': {
-                margin: theme.spacing(1)
-            }
-        },
-        error: {
-            color: red[900],
-            textAlign: 'center'
+        '& > *': {
+            margin: theme.spacing(1)
         }
-    }))
+    },
+    error: {
+        color: red[900],
+        textAlign: 'center'
+    }
+}))
 
+export function withLogin(Component) {
     return () => {
         const [step, setStep] = React.useState('RESTORE')
         const [password, setPassword] = React.useState('')

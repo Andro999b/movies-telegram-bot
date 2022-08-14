@@ -28,7 +28,6 @@ import {
     isSearchableEvent,
     getBotSearchUrl
 } from '../utils'
-import { grey } from '@material-ui/core/colors'
 
 const filterProperties = [
     'time', 'uid',
@@ -52,7 +51,7 @@ const useRowStyles = makeStyles((theme) => ({
     },
     propLabel: {
         display: 'inline-block',
-        width: 110
+        width: 120
     },
     prop: {
         textOverflow: 'ellipsis',
