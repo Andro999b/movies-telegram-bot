@@ -16,10 +16,6 @@ module.exports = {
                 use: ['babel-loader']
             },
             {
-                test: /\.(jpe?g|png)(\?[a-z0-9=&.]+)?$/,
-                use: 'base64-inline-loader?limit=1000&name=[name].[ext]'
-            },
-            {
                 test: /\.s?css$/,
                 use: [
                     'style-loader', // creates style nodes from JS strings

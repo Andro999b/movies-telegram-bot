@@ -319,16 +319,7 @@ html {
     }
 }
 
-@each $icon in facebook, vkontakte, viber, whatsapp, twitter, telegram {
-    .icon-#{$icon} {
-        display: inline-block;
-        width: 36px;
-        height: 36px;
-        background: url('./images/#{$icon}.png') no-repeat;
-    }
-}
-
-.icon-copy {
+.icon-share {
     color: white;
     display: inline-block;
     width: 36px;

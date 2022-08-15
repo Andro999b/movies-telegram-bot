@@ -13,7 +13,7 @@ import analytics from '../utils/analytics'
 class DownloadSelector extends BaseSelector {
 
     getTitleAndDownloadUrl = ({ url, quality, audio, extractor }, fileName) => {
-        const proxyUrl = "https://dl.movies-player.workers.dev"
+        const proxyUrl = 'https://dl.movies-player.workers.dev'
      
         let downloadUrl = extractor ? createExtractorUrlBuilder(extractor)(url) : url
         downloadUrl = `${proxyUrl}?url=${encodeURIComponent(downloadUrl)}&title=${encodeURIComponent(fileName)}`
@@ -25,9 +25,7 @@ class DownloadSelector extends BaseSelector {
     }
 
     handleTrackDownload = () => {
-        const { file, title } = this.props
-
-        analytics('download_file', `${title} - ${file.name}`)
+        analytics('download_file')
     }
 
     renderButton() {
@@ -65,7 +63,7 @@ class DownloadSelector extends BaseSelector {
 
         if (urls) {
             const items = urls
-                .filter(({ url }) => !url.endsWith("m3u8"))
+                .filter(({ url }) => !url.endsWith('m3u8'))
                 .map((it, index) => {
                     const { title, downloadUrl } = this.getTitleAndDownloadUrl(it, fileName)
 

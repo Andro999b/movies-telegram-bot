@@ -11,14 +11,18 @@ import {
 } from '@material-ui/core'
 import {
     ShareRounded as ShareIcon,
-    FileCopyRounded as CopyIcon
+    FileCopyRounded as CopyIcon,
+    Facebook as FacebookIcon,
+    Twitter as TwitterIcon,
+    WhatsApp as WhatsAppIcon,
+    Telegram as TelegramIcon
 } from '@material-ui/icons'
 import { inject } from 'mobx-react'
 
 import analytics from '../utils/analytics'
 import localization from '../localization'
 
-@inject(({ notificationStore: { showMessage }}) => ({ showMessage }))
+@inject(({ notificationStore: { showMessage } }) => ({ showMessage }))
 class Share extends BaseSelector {
 
     constructor(props) {
@@ -46,11 +50,11 @@ class Share extends BaseSelector {
         newParams.set('provider', provider)
         newParams.set('id', decodeURIComponent(id))
 
-        if(query) newParams.set('query', query)
+        if (query) newParams.set('query', query)
 
         const { device } = this.props
         if (device !== undefined && sharePosition) {
-            const { currentTime, currentFileIndex } =device
+            const { currentTime, currentFileIndex } = device
 
             newParams.set('file', currentFileIndex)
 
@@ -59,7 +63,7 @@ class Share extends BaseSelector {
             }
         }
 
-        return encodeURIComponent(location.protocol + '//' + location.host + location.pathname + '#/watch?' + newParams.toString()) 
+        return encodeURIComponent(location.protocol + '//' + location.host + location.pathname + '#/watch?' + newParams.toString())
     }
 
     getTitle = (sharePosition) => {
@@ -72,7 +76,7 @@ class Share extends BaseSelector {
     }
 
     handleShare = () => {
-        analytics('share', document.title)
+        analytics('share')
     }
 
     handleCopy = (url) => {
@@ -92,42 +96,38 @@ class Share extends BaseSelector {
                     {localization.shareWith}
                 </Typography>
                 <div>
-                    <a className="icon-vkontakte"
-                        href={`http://vk.com/share.php?url=${url}&title=${title}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => this.handleShare('vk')}
-                    />
-                    <a className="icon-telegram"
+                    <a className="icon-share"
                         href={`https://telegram.me/share/url?url=${url}&text=${title}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => this.handleShare('telegram')}
-                    />
-                    <a className="icon-facebook" href={`https://www.facebook.com/sharer/sharer.php?u=${url}&t=${title}`}
+                    >
+                        <TelegramIcon/>
+                    </a>
+                    <a className="icon-share" href={`https://www.facebook.com/sharer/sharer.php?u=${url}&t=${title}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => this.handleShare('facebook')}
-                    />
-                    <a className="icon-viber"
-                        href={`viber://forward?text=${title}%20$${url}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => this.handleShare('viber')}
-                    />
-                    <a className="icon-whatsapp"
+                    >
+                        <FacebookIcon/>   
+                    </a>
+                    <a className="icon-share"
                         href={`whatsapp://send?text=${title}%20$${url}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => this.handleShare('whatsapp')}
-                    />
-                    <a className="icon-twitter"
+                    >
+                        <WhatsAppIcon/>
+                    </a>
+                    <a className="icon-share"
                         href={`https://twitter.com/intent/tweet?text=${title}%20${url}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => this.handleShare('twitter')}
-                    />
-                    <a className="icon-copy" onClick={() => this.handleCopy(url)}>
+                    >
+                        <TwitterIcon/>
+                    </a>
+                    <a className="icon-share" onClick={() => this.handleCopy(url)}>
                         <CopyIcon />
                     </a>
                 </div>

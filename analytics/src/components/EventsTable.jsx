@@ -15,7 +15,8 @@ import {
     makeStyles,
     Table,
     Button,
-    Box
+    Box,
+    Fade
 } from '@material-ui/core'
 import {
     KeyboardArrowDown as KeyboardArrowDownIcon,
@@ -92,25 +93,27 @@ const Row = ({ data }) => {
 
     return (
         <React.Fragment>
-            <TableRow className={classes.root}>
-                <TableCell width={110}>
-                    <b>{data.bot}#{data.type}</b>
-                </TableCell>
-                <TableCell width={160}>
-                    {moment(data.time).format('YYYY-M-D HH:mm')}
-                </TableCell>
-                <TableCell>
-                    <Link href={`#/users/${data.uid}`}>{getUserName(data)}</Link>
-                </TableCell>
-                <TableCell>
-                    {input && input.value}
-                </TableCell>
-                <TableCell width={30}>
-                    <IconButton size="small" onClick={() => setOpen(!open)}>
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
-                </TableCell>
-            </TableRow>
+            <Fade in timeout={500}>
+                <TableRow className={classes.root}>
+                    <TableCell width={110}>
+                        <b>{data.bot}#{data.type}</b>
+                    </TableCell>
+                    <TableCell width={160}>
+                        {moment(data.time).format('YYYY-M-D HH:mm')}
+                    </TableCell>
+                    <TableCell>
+                        <Link href={`#/users/${data.uid}`}>{getUserName(data)}</Link>
+                    </TableCell>
+                    <TableCell>
+                        {input && input.value}
+                    </TableCell>
+                    <TableCell width={30}>
+                        <IconButton size="small" onClick={() => setOpen(!open)}>
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        </IconButton>
+                    </TableCell>
+                </TableRow>
+            </Fade>
             <TableRow>
                 <TableCell className={classes.contentCell} colSpan={5}>
                     <Collapse in={open} timeout="auto" unmountOnExit>

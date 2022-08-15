@@ -31,7 +31,7 @@ module.exports = (bot, providers) => {
                         track('start', { startPayload })
                         return doSearch(ctx, providers, base64UrlDecode(query))
                     } catch (e) {
-                        console.error(`Fail proccess start peayload ${query}`, e)
+                        console.error(`Fail proccess start payload ${query}`, e)
                     }
             }
         }

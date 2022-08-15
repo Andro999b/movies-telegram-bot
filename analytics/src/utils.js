@@ -187,7 +187,10 @@ export const isSearchableEvent = ({ type }) => ['search', 'no_results'].includes
 
 export function getBotSearchUrl({ bot, query }) {
     switch(bot) {
-        case 'ani': 
+        case 'ua':
+            bot = 'UAMoviesBot'
+            break
+        case 'anime': 
             bot = 'anime_tube_bot'
             break 
         default:

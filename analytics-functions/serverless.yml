@@ -18,6 +18,13 @@ functions:
       PRIVATE_KEY: ${ssm:bot_ga_private_key}
       VIEW_ID: ${ssm:bot_ga_view_id}
 
+  ga4:
+    handler: handlers/ga4.handler
+    environment:
+      CLIENT_EMAIL: ${ssm:bot_ga_client_email}
+      PRIVATE_KEY: ${ssm:bot_ga_private_key}
+      VIEW_ID: ${ssm:bot_ga_view_id}
+
   mongostat:
     handler: handlers/mongostat.handler
     environment:

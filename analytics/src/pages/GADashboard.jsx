@@ -48,7 +48,7 @@ export default observer(() => {
     React.useEffect(() => store.reload(), [])// eslint-disable-line
 
     return (
-        <div>
+        <div className={classes.root}>
             <Grid container>
                 <Grid item xs={12} sm={12} md={12}>
                     <Toolbar>
@@ -60,7 +60,7 @@ export default observer(() => {
                     </Toolbar>
                 </Grid>
                 <ErrorAwareContainer error={store.error}>
-                    <Grid container item md={7} sm={12} xs={12} className={classes.charts}>
+                    <Grid container item md={8} sm={12} xs={12} className={classes.charts}>
                         <Grid container item>
                             <Grid item sm={12} xs={12} className={classes.sectionTitle}>
                                 <Typography>Users</Typography>
@@ -114,18 +114,18 @@ export default observer(() => {
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <BarChartVis data={store.eventsData} lines={store.events} legend />
+                                    <BarChartVis data={store.eventsData} lines={store.events} legend={false} />
                                 </LoadingPlaceholder>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid container md={5} item sm={12} xs={12}>
+                    <Grid container md={4} item sm={12} xs={12}>
                         <Grid item sm={12} xs={12}>
                             <div className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
                                     <ValuesTableVis
                                         data={store.labels}
-                                        title="Event Labels"
+                                        title="Page Titles"
                                         showRows={35}
                                     />
                                 </LoadingPlaceholder>

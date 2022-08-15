@@ -12,7 +12,7 @@ const reformatBucketSegments = (bucket, formatter) =>
     bucket.chartData.forEach((item) => item.seg = formatter(item.seg))
 
 const parseResult = (segment, { new_users, users, countries, sessions, devices, events, labels }) => {
-    const segFormatter = segment == 'ga:date' ? dateSegFormatter : hoursSegFormatter
+    const segFormatter = segment == 'date' ? dateSegFormatter : hoursSegFormatter
 
     //users chart
     let usersBucket = bucketInitState()
@@ -83,7 +83,7 @@ const parseResult = (segment, { new_users, users, countries, sessions, devices, 
         bucketInitState()
     )
 
-    reformatBucketSegments(usersBucket, segFormatter)
+    reformatBucketSegments(usersBucket, dateSegFormatter)
     reformatBucketSegments(eventsBucket, segFormatter)
     reformatBucketSegments(sessionsBucket, segFormatter)
 

@@ -11,36 +11,36 @@ import { inject, observer } from 'mobx-react'
 }))
 @observer
 class AddHistoryButton extends Component {
-  onAddHistory = () => {
-      const { watching, playlist } = this.props
-      watching(playlist)
-  };
+    onAddHistory = () => {
+        const { watching, playlist } = this.props
+        watching(playlist)
+    };
 
-  onDeleteHistory = () => {
-      const { deleteFromHistory, playlist: { provider, id} } = this.props
-      deleteFromHistory(`${provider}#${id}`)
-  };
+    onDeleteHistory = () => {
+        const { deleteFromHistory, playlist: { provider, id } } = this.props
+        deleteFromHistory(`${provider}#${id}`)
+    };
 
-  render() {
-      const { history, playlist } = this.props
-      const inHistory = history && 
-        history.find(
-            ({ provider, id }) => playlist.provider == provider && playlist.id == id
-        ) != null
+    render() {
+        const { history, playlist } = this.props
+        const inHistory = history &&
+            history.find(
+                ({ provider, id }) => playlist.provider == provider && playlist.id == id
+            ) != null
 
-      return (
-          <div className="add-history-btn">
-              { inHistory ? 
-                  <IconButton onClick={this.onDeleteHistory}>
-                      <Favorite />
-                  </IconButton> :
-                  <IconButton onClick={this.onAddHistory}>
-                      <FavoriteBorder />
-                  </IconButton>
-              }
-          </div>
-      )
-  }
+        return (
+            <div className="add-history-btn">
+                {inHistory ?
+                    <IconButton onClick={this.onDeleteHistory}>
+                        <Favorite />
+                    </IconButton> :
+                    <IconButton onClick={this.onAddHistory}>
+                        <FavoriteBorder />
+                    </IconButton>
+                }
+            </div>
+        )
+    }
 }
 
 AddHistoryButton.propTypes = {

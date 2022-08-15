@@ -3,13 +3,18 @@ const { google } = require('googleapis')
 const scopes = 'https://www.googleapis.com/auth/analytics.readonly'
 
 const privateKey = process.env.PRIVATE_KEY.replace(/\\n/gm, '\n')
-const jwt = new google.auth.JWT(process.env.CLIENT_EMAIL, null, privateKey, scopes)
 const view_id = process.env.VIEW_ID
+
+const auth = new google.auth.GoogleAuth({
+    credentials: {
+        private_key: privateKey,
+        client_email: process.env.CLIENT_EMAIL
+    },
+    scopes
+})
 
 
 module.exports.handler = async ({ from, to }) => {
-    await jwt.authorize()
-
     const startDate = from || 'today'
     const endDate = to || 'today'
 
@@ -53,7 +58,6 @@ module.exports.handler = async ({ from, to }) => {
             key,
             params: {
                 ...requestsTmpl[key],
-                'auth': jwt,
                 'ids': 'ga:' + view_id,
                 'start-date': startDate,
                 'end-date': endDate,
@@ -62,7 +66,7 @@ module.exports.handler = async ({ from, to }) => {
 
     const results = await Promise.all(requests.map(async ({ key, params }) => ({
         key,
-        result: (await google.analytics('v3').data.ga.get(params)).data.rows
+        result: (await google.analytics({version: 'v3', auth }).data.ga.get(params)).data.rows
     })))
 
     return { segment, results }

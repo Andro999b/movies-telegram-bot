@@ -51,7 +51,7 @@ class PlaylistView extends Component {
                     started: true, 
                     initialFullScreen: isTouchDevice()
                 })
-                analytics('start', document.title)
+                analytics('start')
             })
 
         watching(playlist)

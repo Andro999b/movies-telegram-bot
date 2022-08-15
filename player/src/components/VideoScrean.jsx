@@ -186,11 +186,11 @@ class VideoScrean extends BaseScrean {
             url = createExtractorUrlBuilder(extractor)(url)
         }
 
-        const video = this.video.current
-        if(video.canPlayType('application/vnd.apple.mpegurl') !== '') {
-            video.src = url
-            return
-        }
+        // const video = this.video.current
+        // if(video.canPlayType('application/vnd.apple.mpegurl') !== '') {
+        //     video.src = url
+        //     return
+        // }
 
         import(/* webpackChunkName: "hlsjs" */ 'hls.js').then((module) => {
             const Hls = module.default
@@ -388,7 +388,7 @@ class VideoScrean extends BaseScrean {
             details: errorData,
         })
 
-        analytics('error_playback', 'Can`t play media')
+        analytics('error_playback')
     }
 
     render() {

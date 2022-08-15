@@ -8,9 +8,10 @@ module.exports.handler = async (event, context) => {
     let result = {}
 
     if (event.pathParameters) {
-        const { provider, resultId, nocache } = event.pathParameters
+        const { provider, resultId } = event.pathParameters
+        const { nocache } = event.queryStringParameters
 
-        if (nocache) {
+        if (nocache === 'true') {
             result = providersService.getInfo(provider, resultId)
         } else {
             result = await getCachedInfo(

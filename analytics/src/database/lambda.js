@@ -9,7 +9,7 @@ export const getLambda = () => {
 
 export const invokeGA = (from, to) => new Promise((resolve, reject) => {
     var params = {
-        FunctionName: `arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:analytics-functions-dev-ga`,
+        FunctionName: `arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:analytics-functions-dev-ga4`,
         Payload: JSON.stringify({from, to})
     }
     getLambda().invoke(params, function (err, data) {
