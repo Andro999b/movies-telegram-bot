@@ -24,9 +24,15 @@ class BaseSelector extends Component {
     render() {
         const { anchorEl } = this.state
 
+        const button = this.renderButton()
+        const list = this.renderList()
+
+        if(button == null || list == null)
+            return null
+
         return (
             <Fragment>
-                {this.renderButton()}
+                {button}
                 <Popover 
                     container={document.getElementById('player_root')}
                     anchorEl={anchorEl} 
@@ -35,7 +41,7 @@ class BaseSelector extends Component {
                     style={{ zIndex: 9999 }}
                 >
                     <Paper>
-                        {this.renderList()}
+                        {list}
                     </Paper>
                 </Popover>
             </Fragment>
