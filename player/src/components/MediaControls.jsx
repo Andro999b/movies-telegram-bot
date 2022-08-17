@@ -61,32 +61,27 @@ class MediaControls extends Component {
                     />
                     <div className="player-controls__panel">
                         <div className="player-controls__panel-section">
-                            <Tooltip title={localization.formatString(localization.hotkey, 'PgUp')}>
-                                <IconButton onClick={onPrev} disabled={disablePrev}>
-                                    <PreviousIcon />
+                            <Tooltip title={localization.formatString(localization.hotkey, 'PgUp, [')}>
+                                <span>
+                                    <IconButton onClick={onPrev} disabled={disablePrev}>
+                                        <PreviousIcon />
+                                    </IconButton>
+                                </span>
+                            </Tooltip>
+                            <Tooltip title={localization.formatString(localization.hotkey, 'Space')}>
+                                <IconButton onClick={() => onPlayPause()}>
+                                    {!device.isPlaying ? <PlayIcon /> : <PauseIcon />}
                                 </IconButton>
                             </Tooltip>
-                            {!device.isPlaying &&
-                                <Tooltip title={localization.formatString(localization.hotkey, 'Space')}>
-                                    <IconButton onClick={() => onPlayPause()}>
-                                        <PlayIcon />
+                            <Tooltip title={localization.formatString(localization.hotkey, 'PgDn, ]')}>
+                                <span>
+                                    <IconButton onClick={onNext} disabled={disableNext}>
+                                        <NextIcon />
                                     </IconButton>
-                                </Tooltip>
-                            }
-                            {device.isPlaying &&
-                                <Tooltip title={localization.formatString(localization.hotkey, 'Space')}>
-                                    <IconButton onClick={() => onPlayPause()}>
-                                        <PauseIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            }
-                            <Tooltip title={localization.formatString(localization.hotkey, 'PgDn')}>
-                                <IconButton onClick={onNext} disabled={disableNext}>
-                                    <NextIcon />
-                                </IconButton>
+                                </span>
                             </Tooltip>
-                            <PlayModeSelector device={device}/>
-                            {mobile && <MobileSoundControl device={device}/>}
+                            <PlayModeSelector device={device} />
+                            {mobile && <MobileSoundControl device={device} />}
                             {!mobile && <SoundControl device={device} />}
                             {hasAudioTracks && <AudioTrackSelector device={device} />}
                         </div>

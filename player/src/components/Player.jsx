@@ -152,15 +152,15 @@ class Player extends Component {
     componentWillUnmount() {
         const { idleTimeout } = this
         clearTimeout(idleTimeout)
-        removeGlobalKey(['Space', 'KeyF', 'KeyM', 'KeyP', 'Enter', 'PageUp', 'PageDown'])
+        removeGlobalKey(['Space', 'KeyF', 'KeyM', 'KeyP', 'Enter', 'PageUp', 'PageDown', 'BracketLeft', 'BracketRight'])
     }
 
     componentDidMount() {
         this.setIdleTimeout()
         addGlobalKey('Space', this.handleTogglePlayback)
         addGlobalKey(['KeyF', 'Enter'], this.handleToggleFullscreen)
-        addGlobalKey('PageUp', () => this.props.playerStore.prevFile())
-        addGlobalKey('PageDown', () => this.props.playerStore.nextFile())
+        addGlobalKey(['PageUp', 'BracketLeft'], () => this.props.playerStore.prevFile())
+        addGlobalKey(['PageDown', 'BracketRight'], () => this.props.playerStore.nextFile())
         addGlobalKey(['KeyM'], () => this.props.playerStore.device.toggleMute())
         addGlobalKey(['KeyP'], () => {
             if(this.state.idle) {
