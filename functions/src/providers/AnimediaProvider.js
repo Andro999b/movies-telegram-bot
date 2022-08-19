@@ -19,12 +19,12 @@ class AnimediaProvider extends Provider {
                     transform: async ($el) => {
                         const { baseUrl, timeout } = this.config 
                         const dataId = $el.find('>ul').attr('data-entry_id')
-                        const seasons = $el.find('>ul>li>a')
+                        const seasons = $el.find('ul li a')
                             .toArray()
                             .map((el) => {
                                 return {
-                                    seasonNum: parseInt(el.attribs['href'].substringing(4)) + 1, 
-                                    name: $el.text()
+                                    seasonNum: parseInt(el.attribs['href'].substring(4)) + 1, 
+                                    name: cheerio.load(el).text()
                                 }
                             })
 

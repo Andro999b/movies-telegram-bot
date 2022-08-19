@@ -262,7 +262,6 @@ class PlayerStore {
         return p.then(({ fileIndex, startTime }) => {
             this.device.setPlaylist(playlist, fileIndex, startTime)
             this.device.play()
-            document.title = this.getPlayerTitle()
 
             analytics('select_file')
         })
@@ -276,7 +275,6 @@ class PlayerStore {
                 } else {
                     this.device.pause()
                 }
-                document.title = this.getPlayerTitle()
 
                 analytics('select_file')
             })

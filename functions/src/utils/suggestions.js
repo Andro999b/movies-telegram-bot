@@ -77,7 +77,7 @@ const yandexSpellerSuggestion = async (searchQuery) => { // eslint-disable-line
             return variants
         }
 
-        function putСorrection(correction) { // eslint-disable-line no-inner-declarations
+        function putCorrection(correction) { // eslint-disable-line no-inner-declarations
             let prev = 0
             const parts = []
             correction.forEach(({ pos, len }) => {
@@ -98,7 +98,7 @@ const yandexSpellerSuggestion = async (searchQuery) => { // eslint-disable-line
             return result.trim()
         }
 
-        return getCorrectionsVariants().map((correction) => putСorrection(correction))
+        return getCorrectionsVariants().map((correction) => putCorrection(correction))
     } catch (e) {
         console.error(`Fail to fetch suggestion from yandex speller for: ${searchQuery}`, e)
     }
