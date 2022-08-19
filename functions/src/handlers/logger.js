@@ -1,8 +1,8 @@
 const makeResponse = require('../utils/makeResponse')
+const isOriginAllowed = require('../utils/isOriginAllowed')
 const AWS = require('aws-sdk')
 const cloudwatchlogs = new AWS.CloudWatchLogs({ apiVersion: '2014-03-28' })
 
-const ALLOWED_DOMAINS = process.env.ALLOWED_DOMAINS.split(',')
 const LOG_GROUP = process.env.LOG_GROUP
 const LOG_STREAM = process.env.LOG_STREAM || 'logs-stream'
 
@@ -48,12 +48,11 @@ const log = async (message) => {
 module.exports.handler = async (event) => {
     const origin = event.headers.origin
 
-    if (!origin || ALLOWED_DOMAINS.findIndex((domain) => origin.endsWith(domain)) == -1) {
+    if (!isOriginAllowed(event))
         return makeResponse('forbiden', 403)
-    } else {
-        await log(event.body)
-        return makeResponse('ok', 200, {
-            'Access-Control-Allow-Origin': origin
-        })
-    }
+
+    await log(event.body)
+    return makeResponse('ok', 200, {
+        'Access-Control-Allow-Origin': origin
+    })
 }

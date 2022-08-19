@@ -1,0 +1,11 @@
+{
+    "pathParameters": {
+        "provider": "kinogo"
+    },
+    "queryStringParameters": {
+        "q": "терминатор"
+    },
+    "headers": {
+        "origin": "http://localhost:3000"
+    }
+}

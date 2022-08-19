@@ -16,7 +16,7 @@ function linkExtractor(links, hls) {
 }
 
 module.exports = async (params) => {
-    let { url, id, hash, hls } = params
+    let { url, id, hash } = params
 
     const linksApi = 'https://kodik.biz/gvi'
     const referer = 'https://anigato.ru/'
@@ -63,7 +63,7 @@ module.exports = async (params) => {
     const videoInfo = JSON.parse(videoInfoRes.text)
     const links = videoInfo.links
 
-    let redirectUrl = linkExtractor(links, hls)
+    let redirectUrl = linkExtractor(links, true)
 
     if(redirectUrl.startsWith('//')) {
         redirectUrl = 'https:' + redirectUrl

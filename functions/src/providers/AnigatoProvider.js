@@ -46,6 +46,7 @@ class AnigatoProvider extends Provider {
                         const getOptionUrls = (el) => {
                             return [{
                                 url: iframeSrc,
+                                hls: true,
                                 extractor: { 
                                     type: 'anigit', 
                                     params: { 
@@ -60,6 +61,7 @@ class AnigatoProvider extends Provider {
                             return [{
                                 id: 0,
                                 urls: [{
+                                    hls: true,
                                     url: iframeSrc,
                                     extractor: { type: 'anigit' }
                                 }]

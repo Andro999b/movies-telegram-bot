@@ -1,7 +1,11 @@
 const providersService = require('../providers')
 const makeResponse = require('../utils/makeResponse')
+const isOriginAllowed = require('../utils/isOriginAllowed')
 
 module.exports.handler = async (event) => {
+    if (!isOriginAllowed(event))
+        return makeResponse('forbiden', 403)
+
     let results = []
 
     if(event.queryStringParameters) {
@@ -13,5 +17,7 @@ module.exports.handler = async (event) => {
         }
     }
 
-    return makeResponse(results)
+    return makeResponse(results, 200, {
+        'Access-Control-Allow-Origin': event.headers.origin
+    })
 }

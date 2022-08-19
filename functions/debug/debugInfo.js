@@ -1,8 +1,8 @@
 const providers = require('../src/providers')
 const util = require('util')
 
-const provider = 'animevost'
-const id = 'https://animevost.org/tip/tv/2571-nanatsu-no-taizai-fundo-no-shinpan.html'
+const provider = 'anigato'
+const id = 'https://anigato.ru/anime/3321-dorohedoro.html'
 
 // eslint-disable-next-line no-console
 console.log(decodeURIComponent(id))

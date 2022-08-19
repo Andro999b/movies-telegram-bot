@@ -27,7 +27,8 @@ provider:
     STAGE: ${opt:stage, 'dev'}
     CACHE_TTL: 300
     PLAYER_URL: ${self:custom.playerUrl}
-    # ACCOUNT_ID: !Ref AWS::AccountId
+    ALLOWED_DOMAINS: 'localhost:3000,movie-player.surge.sh,movies-player.firebaseapp.com,movies-player.web.app'
+    ACCOUNT_ID: !Ref AWS::AccountId
     REGION: ${self:provider.region}
   iam:
     role:
@@ -134,7 +135,6 @@ functions:
           method: post
           cors: true
     environment:
-      ALLOWED_DOMAINS: 'localhost:3000,movie-player.surge.sh,movies-player.firebaseapp.com,movies-player.web.app'
       LOG_GROUP: web-${opt:stage, 'dev'}
 
 resources:

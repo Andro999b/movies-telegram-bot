@@ -1,9 +1,12 @@
 const { getCachedSource } = require('../cache')
 const providersService = require('../providers')
 const makeResponse = require('../utils/makeResponse')
-
+const isOriginAllowed = require('../utils/isOriginAllowed')
 
 module.exports.handler = async (event, context) => {
+    if (!isOriginAllowed(event))
+        return makeResponse('forbiden', 403)
+
     context.callbackWaitsForEmptyEventLoop = false
 
     let result = {}
@@ -17,5 +20,7 @@ module.exports.handler = async (event, context) => {
         )
     }
 
-    return makeResponse(result)
+    return makeResponse(result, 200, {
+        'Access-Control-Allow-Origin': event.headers.origin
+    })
 }
