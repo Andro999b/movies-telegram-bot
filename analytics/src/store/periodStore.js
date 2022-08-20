@@ -8,16 +8,19 @@ export default observable({
     period: today.format(DATE_FORMAT),
     gaPeriod: today.format(GA_DATE_FORMAT),
     date: today.toDate(),
+    isDateRange: false, 
 
     setPeriod(period) {
         if(PERIODS.includes(period)) {
             this.period = period
             this.gaPeriod = period
+            this.isDateRange = true
         } else {
             const momentInst = moment(period, DATE_FORMAT)
             this.period = period
             this.date = momentInst.toDate()
             this.gaPeriod = momentInst.format(GA_DATE_FORMAT)
+            this.isDateRange = false
         }
     },
 

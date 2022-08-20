@@ -4,11 +4,13 @@ import {
     ResponsiveContainer, 
     XAxis, 
     YAxis, 
-    Tooltip, 
+    Tooltip,
     Legend, 
     Bar
 } from 'recharts'
 import { COLORS } from '../constants'
+import { grey } from '@material-ui/core/colors'
+
 
 export default ({ data, lines, legend }) => {
     return (
@@ -16,7 +18,11 @@ export default ({ data, lines, legend }) => {
             <BarChart data={data}>
                 <XAxis dataKey="seg" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip 
+                    cursor={false}
+                    itemStyle={{ color: '#fff' }} 
+                    contentStyle={{ background: grey[700], border: 0, borderRadius: 5 }}
+                />
                 {legend && <Legend/> }
                 {lines.map((line, index) =>
                     <Bar 

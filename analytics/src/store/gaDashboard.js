@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { observable, toJS } from 'mobx'
 import { invokeGA } from '../database/lambda'
 import { segmentBucketReducer, bucketReducer, bucketInitState } from '../utils'
 import { GA_DATE_FORMAT } from '../constants'

@@ -4,11 +4,12 @@ import {
     ResponsiveContainer, 
     XAxis, 
     YAxis, 
-    Tooltip, 
+    Tooltip,
     Legend, 
     Area
 } from 'recharts'
 import { getColor } from '../utils'
+import { grey } from '@material-ui/core/colors'
 
 export default ({ data, lines, stacked, legend }) => {
     return (
@@ -16,7 +17,10 @@ export default ({ data, lines, stacked, legend }) => {
             <AreaChart data={data}>
                 <XAxis dataKey="seg" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip 
+                    itemStyle={{ color: '#fff' }} 
+                    contentStyle={{ background: grey[700], border: 0, borderRadius: 5 }}
+                />
                 {legend && <Legend/> }
                 {lines.map((line, index) =>
                     <Area 

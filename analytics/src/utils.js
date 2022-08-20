@@ -84,6 +84,9 @@ export const getBucketKeys = ({ acc }) => {
 }
 
 
+export const formChartToPieData = (chartData, keys) => keys
+    .map((key) => ({key, value: chartData.reduce((acc, slice) => slice[key], 0)}))
+
 export const getEventInputProp = (event) => {
     let propName
     switch(event.type) {
@@ -164,9 +167,9 @@ export function getColor(name) {
         case 'start': return COLORS[COLORS.length - 1]
         case 'no_results': return COLORS[0]
         case 'count': return COLORS[0]
-        case 'anime': return COLORS[0]
-        case 'films': return COLORS[1]
-        case 'ua': return COLORS[2]
+        case 'anime': return COLORS[COLORS.length - 1]
+        case 'films': return COLORS[0]
+        case 'ua': return COLORS[Math.floor(COLORS.length / 2)]
         case 'select_file': return COLORS[0]
         case 'playlist_loaded': return COLORS[0] 
         case 'error_playback': return COLORS[COLORS.length - 1]

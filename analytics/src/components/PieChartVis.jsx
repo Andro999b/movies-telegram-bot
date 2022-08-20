@@ -2,6 +2,7 @@ import React from 'react'
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts'
 import { getColor } from '../utils'
 import { COLORS } from '../constants'
+import { grey } from '@material-ui/core/colors'
 
 export default ({ data, legend = true, sequenceColors = false }) => {
     return (
@@ -15,7 +16,10 @@ export default ({ data, legend = true, sequenceColors = false }) => {
                     )}
                 </Pie>
                 {legend && <Legend formatter={(value, _, index) => `${value} (${data[index].value})`} />}
-                <Tooltip />
+                <Tooltip 
+                    itemStyle={{ color: '#fff' }} 
+                    contentStyle={{ background: grey[700], border: 0, borderRadius: 5 }}
+                />
             </PieChart>
         </ResponsiveContainer>
     )

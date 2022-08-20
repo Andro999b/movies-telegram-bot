@@ -11,7 +11,8 @@ import BarChartVis from '../components/BarChartVis'
 import DateSelector from '../components/DateSelector'
 import ReloadButton from '../components/ReloadButton'
 import dashboard from '../store/gaDashboard'
-import periodStore from '../store/periodStore'
+import periodStore from '../store/periodStore' 
+import { formChartToPieData } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,6 +48,8 @@ export default observer(() => {
 
     React.useEffect(() => store.reload(), [])// eslint-disable-line
 
+    const { isDateRange } = curPeriodStore
+
     return (
         <div className={classes.root}>
             <Grid container>
@@ -67,7 +70,8 @@ export default observer(() => {
                             </Grid>
                             <Grid item sm={9} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <AreaChartVis data={store.usersChart} lines={['users', 'new_users']} legend />
+                                    {isDateRange && <AreaChartVis data={store.usersChart} lines={['users', 'new_users']} legend />}
+                                    {!isDateRange && <PieChartVis data={formChartToPieData(store.usersChart, ['users', 'new_users'])} legend />}
                                 </LoadingPlaceholder>
                             </Grid>
                             <Grid item sm={3} xs={12} className={classes.item}>
