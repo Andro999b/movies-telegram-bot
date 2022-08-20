@@ -179,7 +179,7 @@ class Player extends Component {
         const { error } = device
         
         // always show ui in case of error
-        const hideUi = idle || error != null
+        const hideUi = error != null ? false : idle
 
         return (
             <FullScreen

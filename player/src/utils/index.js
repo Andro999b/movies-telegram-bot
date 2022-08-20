@@ -4,23 +4,6 @@ export const animeBot = 'anime_tube_bot'
 export const moviesBot = 'MoviesBroBot'
 export const uaBot = 'UAMoviesBot'
 
-export function createExtractorUrlBuilder(extractor, additionalParams) {
-    let extractorBaseUrl = null
-    const { type, params } = extractor
-    extractorBaseUrl = `${window.API_BASE_URL}/extract?`
-    extractorBaseUrl += `type=${type}`
-
-    const finalParams = {...params, ...additionalParams}
-
-    Object.keys(finalParams).forEach((key) => 
-        extractorBaseUrl += `&${key}=${finalParams[key]}`
-    )
-
-    return (url) => {
-        return `${extractorBaseUrl}&url=${encodeURIComponent(url)}`
-    }
-}
-
 export function invokeAll() {
     const invockes = Array.from(arguments)
     return function () {
@@ -65,6 +48,15 @@ export function toHHMMSS(timestamp) {
 
 export const getPlaylistPrefix = (playlist) => `playlist:${playlist.provider}:${playlist.id}`
 
+
+export const download = (path, filename) => {
+    const anchor = document.createElement('a')
+    anchor.href = path
+    anchor.download = filename
+    document.body.appendChild(anchor)
+    anchor.click()
+    document.body.removeChild(anchor)
+}
 
 export function getAlternativeUrl(provider, query) {
     let bot

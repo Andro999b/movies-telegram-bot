@@ -14,11 +14,11 @@
     "debug:extract": "env-cmd node debug/debugExtractor",
     "debug:cfbypass": "env-cmd node debug/debugCFBypass",
     "debug:iframe": "env-cmd node debug/debugIframeExtractor",
-    "invoke:bot": "env-cmd sls invoke local --function bot --aws-profile serverless --debug * --path debug/botEvent.json",
-    "invoke:bot:remote": "env-cmd sls invoke --function bot --aws-profile serverless --debug * --path debug/botEvent.json",
-    "invoke:info": "env-cmd sls invoke local --function info --aws-profile serverless --debug * --path debug/events/info.json",
-    "invoke:search": "env-cmd sls invoke local --function search --aws-profile serverless --debug * --path debug/events/search.json",
-    "invoke:extract": "env-cmd sls invoke local --function extract --aws-profile serverless --debug * --path debug/events/extractor.json"
+    "invoke:bot": "env-cmd sls invoke local --function bot --stage=prod --aws-profile serverless --debug * --path debug/botEvent.json",
+    "invoke:bot:remote": "env-cmd sls invoke --function bot --stage=prod --aws-profile serverless --debug * --path debug/botEvent.json",
+    "invoke:info": "env-cmd sls invoke local --function info  --stage=prod--aws-profile serverless --debug * --path debug/events/info.json",
+    "invoke:search": "env-cmd sls invoke local --function search --stage=prod --aws-profile serverless --debug * --path debug/events/search.json",
+    "invoke:extract": "env-cmd sls invoke --function extract --stage=prod --aws-profile serverless --debug * --path debug/events/extractor.json"
   },
   "author": "",
   "license": "ISC",

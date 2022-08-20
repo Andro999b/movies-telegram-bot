@@ -4,10 +4,10 @@ plugins:
   - serverless-content-encoding
 
 custom:
-  cacheTable: cache-${opt:stage, 'dev'}
+  cacheTable: cache-${opt:stage}
   playerUrl: 'https://movies-player.firebaseapp.com/#/watch'
   mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
-  analyticsTable: analyticsTable-${opt:stage, 'dev'}
+  analyticsTable: analyticsTable-${opt:stage}
   contentEncoding:
     minimumCompressionSize: 4096
 
@@ -24,11 +24,11 @@ provider:
     MONGODB_URI: ${self:custom.mongoUrl}
     ANALYTIC_RETENTION: 90
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
-    STAGE: ${opt:stage, 'dev'}
+    STAGE: ${opt:stage}
     CACHE_TTL: 300
     PLAYER_URL: ${self:custom.playerUrl}
     ALLOWED_DOMAINS: 'localhost:3000,movie-player.surge.sh,movies-player.firebaseapp.com,movies-player.web.app'
-    ACCOUNT_ID: !Ref AWS::AccountId
+    ACCOUNT_ID: ${AWS::AccountId}
     REGION: ${self:provider.region}
   iam:
     role:
@@ -41,7 +41,7 @@ provider:
           Action:
             - logs:PutLogEvents
             - logs:DescribeLogStreams
-          Resource: "arn:aws:logs:${self:provider.region}:*:log-group:web-${opt:stage, 'dev'}:log-stream:*"
+          Resource: "arn:aws:logs:${self:provider.region}:*:log-group:web-${opt:stage }:log-stream:*"
         - Effect: Allow
           Action:
             - lambda:InvokeFunction
@@ -121,7 +121,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'eneyida,uafilmtv'
+      PROVIDERS: 'eneyida,uafilmtv,anitubeua'
       BOT_HOOK_PATH: '/bot/ua'
       BOT_TYPE: 'ua'
       LOCALIZATION_TYPE: 'localization'
@@ -135,7 +135,7 @@ functions:
           method: post
           cors: true
     environment:
-      LOG_GROUP: web-${opt:stage, 'dev'}
+      LOG_GROUP: web-${opt:stage}
 
 resources:
   Resources:

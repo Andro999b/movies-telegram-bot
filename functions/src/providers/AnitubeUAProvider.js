@@ -12,6 +12,12 @@ const extractors = {
     'sibnet': {
         type: 'sibnetmp4',
         hls: false
+    },
+    'secvideo1': {
+        type: 'mp4local'
+    },
+    'csst.online': {
+        type: 'mp4local'
     }
 }
 
@@ -58,13 +64,15 @@ class AnitubeUAProvider extends Provider {
                             }
 
                             files[index] = file
-
-                            file.urls.push({
+                            const fileUrl = {
                                 url,
-                                hls: extractor.hls,
                                 extractor: { type: extractor.type },
                                 audio
-                            })
+                            }
+                            if(extractor.hls) {
+                                fileUrl.hls = true
+                            }
+                            file.urls.push(fileUrl)
                         }
 
                         videos.forEach((episodes, i) => {

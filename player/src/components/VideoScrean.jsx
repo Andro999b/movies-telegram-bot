@@ -3,7 +3,7 @@ import ReactResizeDetector from 'react-resize-detector'
 import { observer } from 'mobx-react'
 import { toJS } from 'mobx'
 import BaseScrean from './BaseScrean'
-import { createExtractorUrlBuilder } from '../utils'
+import { createExtractorUrlBuilder } from '../utils/extract'
 import logger from '../utils/logger'
 import analytics from '../utils/analytics'
 import localization from '../localization'
@@ -20,7 +20,7 @@ class VideoScrean extends BaseScrean {
      */
     componentDidMount() {
         super.componentDidMount()
-        this.initVideo()
+        this.initVideo().then()
     }
 
     componentWillUnmount() {
@@ -58,19 +58,19 @@ class VideoScrean extends BaseScrean {
         video.volume = volume
     }
 
-    onSource() {
-        this.initVideo()
+    onSource = async () => {
+        await this.initVideo()
     }
 
-    onQuality() {
-        this.startVideo()
+    onQuality = async () => {
+        await this.startVideo()
     }
 
-    onAudioTrack(trackId) {
+    onAudioTrack = async (trackId) => {
         if (this.hlsMultiAudio) {
             this.hls.audioTrack = trackId
         } else {
-            this.startVideo()
+            await this.startVideo()
         }
     }
 
@@ -108,19 +108,15 @@ class VideoScrean extends BaseScrean {
         device.setLoading(true)
     }
 
-    initVideo() {
+    initVideo = async () => {
         const { props: { device: { source } } } = this
 
         if(!source) return
 
-        const { manifestUrl, urls }  = source
+        const { urls }  = source
 
         if (urls && urls.length > 0) {
-            this.startVideo()
-        } else if (manifestUrl) {
-            this.dispose()
-            this.setHlsVideoFile({ url: manifestUrl })
-            this.restoreVideoState()
+            await this.startVideo()
         } else {
             const { device } = this.props
 
@@ -131,7 +127,7 @@ class VideoScrean extends BaseScrean {
         }
     }
 
-    startVideo() {
+    startVideo = async () => {
         const { device: { source: { urls }, quality, audioTrack } } = this.props
         let videoFiles
 
@@ -151,46 +147,40 @@ class VideoScrean extends BaseScrean {
         const selectedIndex = this.videoFiles.findIndex((it) => it.quality == selectedQuality)
 
         if(selectedIndex == -1) {
-            this.setVideoFile(this.videoFiles.shift())
+            await this.setVideoFile(this.videoFiles.shift())
         } else {
-            this.setVideoFile(this.videoFiles.splice(selectedIndex, 1)[0])
+            await this.setVideoFile(this.videoFiles.splice(selectedIndex, 1)[0])
         }
     }
 
-    setVideoFile(file) {
+    setVideoFile = async (file) => {
         this.dispose()
 
         if(file.url.endsWith('m3u8') || file.hls) {
-            this.setHlsVideoFile(file)
+            await this.setHlsVideoFile(file)
         } else { 
-            this.setNativeVideoFile(file)
+            await this.setNativeVideoFile(file)
         }
 
         this.restoreVideoState()
     }
 
-    setNativeVideoFile({ url, extractor }) {
+    setNativeVideoFile = async ({ url, extractor }) => {
         const video = this.video.current
 
         if (extractor) {
-            video.src = createExtractorUrlBuilder(extractor)(url)
+            video.src = await createExtractorUrlBuilder(extractor)(url)
         } else {
             video.src = url.startsWith('//') ? 'https:' + url : url
         }
     }
 
-    setHlsVideoFile({ url, extractor }) {
+    setHlsVideoFile = async ({ url, extractor }) => {
         const { props: { device } } = this
 
         if (extractor) {
-            url = createExtractorUrlBuilder(extractor)(url)
+            url = await createExtractorUrlBuilder(extractor)(url)
         }
-
-        // const video = this.video.current
-        // if(video.canPlayType('application/vnd.apple.mpegurl') !== '') {
-        //     video.src = url
-        //     return
-        // }
 
         import(/* webpackChunkName: "hlsjs" */ 'hls.js').then((module) => {
             const Hls = module.default

@@ -7,7 +7,8 @@ import {
     MenuList
 } from '@material-ui/core'
 import { GetAppRounded as DownloadIcon } from '@material-ui/icons'
-import { createExtractorUrlBuilder } from '../utils'
+import { createExtractorUrlBuilder } from '../utils/extract'
+import { download } from '../utils'
 import analytics from '../utils/analytics'
 
 class DownloadSelector extends BaseSelector {
@@ -18,28 +19,31 @@ class DownloadSelector extends BaseSelector {
         this.urls = props.file.urls.filter(this.canDownload)
     }
 
-    getTitleAndDownloadUrl = ({ url, quality, audio, extractor }, fileName) => {
+    getDownloadUrl = async ({ url, extractor }, fileName) => {
         const proxyUrl = 'https://dl.movies-player.workers.dev'
 
-        let downloadUrl = extractor ? createExtractorUrlBuilder(extractor)(url) : url
+        let downloadUrl = extractor ? await createExtractorUrlBuilder(extractor)(url) : url
         downloadUrl = `${proxyUrl}?url=${encodeURIComponent(downloadUrl)}&title=${encodeURIComponent(fileName)}`
 
-        return {
-            downloadUrl,
-            title: [audio, quality].filter((it) => it).join(' - ')
-        }
+        return downloadUrl
     }
 
-    handleTrackDownload = () => {
+    getTitle = ({ quality, audio }) => [audio, quality].filter((it) => it).join(' - ')
+
+    handleDownload = async (url) => {
+        const { file, title } = this.props
+        const fileName = `${title} - ${file.name}`
+
+        const downloadUrl = await this.getDownloadUrl(url, fileName)
+
+        download(downloadUrl, fileName)
+
         analytics('download_file')
     }
 
     canDownload = ({ url, hls }) => !url.endsWith('m3u8') && !hls
 
     renderButton() {
-        const { file, title } = this.props
-        const fileName = `${title} - ${file.name}`
-
         if(this.urls.length == 0) {
             return null
         }
@@ -51,15 +55,9 @@ class DownloadSelector extends BaseSelector {
                 </IconButton>
             )
         } else {
-            const { downloadUrl } = this.getTitleAndDownloadUrl(this.urls[0], fileName)
-
             return (
                 <IconButton
-                    component='a'
-                    href={downloadUrl}
-                    download={fileName}
-                    target="_blank"
-                    onClick={this.handleTrackDownload}
+                    onClick={async () => this.handleDownload(this.urls[0])}
                 >
                     <DownloadIcon />
                 </IconButton>
@@ -68,25 +66,19 @@ class DownloadSelector extends BaseSelector {
     }
 
     renderList() {
-        const { file, title } = this.props
-        const fileName = `${title} - ${file.name}`
-
         if(this.urls.length == 0) {
             return null
         }
 
         const items = this.urls
             .map((it, index) => {
-                const { title, downloadUrl } = this.getTitleAndDownloadUrl(it, fileName)
+                const title = this.getTitle(it)
 
                 return (
                     <MenuItem
                         component='a'
-                        href={downloadUrl}
-                        download={fileName}
-                        target="_blank"
                         key={index}
-                        onClick={this.handleTrackDownload}
+                        onClick={async () => this.handleDownload(it)}
                     >
                         {title}
                     </MenuItem>

@@ -31,21 +31,20 @@ export const PROVIDERS = [
 ]
 
 export const PERIODS = Object.keys(NAMES)
+export const COLORS = [
+    '#00429d', 
+    '#1e50a4', 
+    '#305eab', 
+    '#406db0', 
+    '#507bb5', 
+    '#618ab7', 
+    '#7399b8', 
+    '#86a7b5', 
+    '#9cb6ae', 
+    '#b7c39f', 
+    '#ffc40c'
+].reverse()
 
-// export const COLORS = [
-//     '#35618f', 
-//     '#e71761', 
-//     '#dc3c07', 
-//     '#214324', 
-//     '#18857f', 
-//     '#66c7d3', 
-//     '#391d74', 
-//     '#a194dc', 
-//     '#62ce75'
-// ]
-export const COLORS = 
-
-['#00429d', '#1e50a4', '#305eab', '#406db0', '#507bb5', '#618ab7', '#7399b8', '#86a7b5', '#9cb6ae', '#b7c39f', '#ffc40c'].reverse()
 export const LOG_GROUPS = [
     '/aws/lambda/movies-telegram-bot-prod-info',
     '/aws/lambda/movies-telegram-bot-prod-extract',

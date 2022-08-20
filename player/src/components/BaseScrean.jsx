@@ -25,15 +25,15 @@ class MPVScrean extends Component {
             ),
             reaction(
                 () => this.props.device.source,
-                (source) => this.onSource(source, this.props.device.currentTime)
+                async (source) => this.onSource(source, this.props.device.currentTime)
             ),
             reaction(
                 () => this.props.device.audioTrack,
-                (track) => this.onAudioTrack(track)
+                async (track) => this.onAudioTrack(track)
             ),
             reaction(
                 () => this.props.device.quality,
-                (quality) => this.onQuality(quality)
+                async (quality) => this.onQuality(quality)
             )
         )
     }

@@ -25,7 +25,6 @@ class AnidubProvider extends Provider {
                     selector: '.video-box .series-tab span',
                     transform: ($el) => $el
                         .toArray()
-                        .filter((el) => el.attribs['data'].includes('video.sibnet.ru'))
                         .map((el, id) => {
                             const url = $el.attr('data')
                             if (url.indexOf('sibnet') != -1) {
