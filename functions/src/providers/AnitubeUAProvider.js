@@ -5,10 +5,10 @@ const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
 const srcRegExp = /src="([^"]+)"/
 
 const extractors = {
-    'ashdi': {
-        type: 'ashdi',
-        hls: true
-    },
+    // 'ashdi': {
+    //     type: 'ashdi',
+    //     hls: true
+    // },
     'sibnet': {
         type: 'sibnetmp4',
         hls: false
