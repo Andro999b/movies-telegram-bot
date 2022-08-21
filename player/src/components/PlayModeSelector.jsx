@@ -5,7 +5,8 @@ import { observer } from 'mobx-react'
 import {
     IconButton,
     MenuItem,
-    MenuList
+    MenuList,
+    Tooltip
 } from '@material-ui/core'
 import { PlaylistPlay as PlaylistPlayIcon } from '@material-ui/icons'
 import localization from '../localization'
@@ -19,10 +20,12 @@ class PlayModeSelector extends BaseSelector {
     }
 
     renderButton() {
-        return(
-            <IconButton onClick={this.handleClick}>
-                <PlaylistPlayIcon/>
-            </IconButton>
+        return (
+            <Tooltip title={localization.playModeLabel}>
+                <IconButton onClick={this.handleClick}>
+                    <PlaylistPlayIcon />
+                </IconButton>
+            </Tooltip>
         )
     }
 

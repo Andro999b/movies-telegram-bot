@@ -5,7 +5,7 @@ plugins:
 
 custom:
   cacheTable: cache-${opt:stage}
-  playerUrl: 'https://movies-player.firebaseapp.com/#/watch'
+  playerUrl: 'https://movies-player.web.app#/watch'
   mongoUrl: 'mongodb+srv://lambda:${ssm:MONGODB_PASSWORD}@moviescachecluster-mex1w.mongodb.net/test'
   analyticsTable: analyticsTable-${opt:stage}
   contentEncoding:
@@ -121,7 +121,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'eneyida,uafilmtv,anitubeua'
+      PROVIDERS: 'eneyida,uaserials,anitubeua'
       BOT_HOOK_PATH: '/bot/ua'
       BOT_TYPE: 'ua'
       LOCALIZATION_TYPE: 'localization'

@@ -103,11 +103,9 @@ class PlaylistView extends Component {
     }
 
     render() {
-        const content = this.renderContent()
-
         return (
             <div className="screan-content">
-                {content}
+                {this.renderContent()}
             </div>
         )
     }

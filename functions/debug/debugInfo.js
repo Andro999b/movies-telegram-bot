@@ -1,8 +1,9 @@
 const providers = require('../src/providers')
 const util = require('util')
 
-const provider = 'kinogo'
-const id = 'https%3A%2F%2Fkinogo.la%2F14967-gary-and-his-demons_2018.html'
+const provider = 'uaserials'
+const id = 'https%3A%2F%2Fuaserials.pro%2F196-zoryana-brama-sezon-1.html'
+// const id = 'https://uaserials.pro/6573-nastupni-365-dniv.html'
 
 // eslint-disable-next-line no-console
 console.log(decodeURIComponent(id))

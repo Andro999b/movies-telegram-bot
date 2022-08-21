@@ -116,6 +116,7 @@ export default observer(() => {
             </ErrorAwareContainer>
             <ReloadButton onClick={() => store.reload(true)} />
             <InvalidateDialog
+                providers={store.providers}
                 open={invalidateDialog}
                 onInvalidate={({ provider, resultId }) => store.invalidate(provider, resultId)}
                 onClose={() => showInvalidateDialog(false)}

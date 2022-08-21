@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react'
-import { PROVIDERS } from '../constants'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -20,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-export default ({ open, providers = PROVIDERS, onInvalidate, onClose }) => {
+export default ({ open, providers, onInvalidate, onClose }) => {
     const classes = useStyles()
 
     const [provider, setProvider] = React.useState(providers[0])

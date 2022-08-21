@@ -7,11 +7,13 @@ import Share from './Share'
 import HistoryNavButton from './HistoryNavButton'
 import TelegramLinks from './TelegramLinks'
 import AddHistoryButton from './AddHistoryButton'
+import analytics from '../utils/analytics'
+import localization from '../localization'
 
 class StartScrean extends Component {
     render() {
         const { onStart, playlist } = this.props
-        const { image  } = playlist
+        const { image } = playlist
 
 
         return (
@@ -23,11 +25,18 @@ class StartScrean extends Component {
                 >
                     <PlayIcon className="center shadow-icon" fontSize="inherit" />
                 </div>
-                <a className='save-ukraine' href='https://savelife.in.ua/' target='_blank' rel="noreferrer">Домогти ЗСУ</a>
-                <HistoryNavButton/>
+                <a className='save-ukraine'
+                    href='https://savelife.in.ua/'
+                    target='_blank'
+                    rel="noreferrer"
+                    onClick={() => analytics('save_ukraine')}
+                >
+                    {localization.saveUkraine}
+                </a>
+                <HistoryNavButton />
                 <Share playlist={playlist} />
                 <AddHistoryButton playlist={playlist} />
-                <TelegramLinks/>
+                <TelegramLinks />
             </div>
         )
     }

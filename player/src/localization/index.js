@@ -2,26 +2,45 @@ import LocalizedStrings from 'react-localization'
 
 export default new LocalizedStrings({
     en: {
-        videoNotFound: 'Video not found',
+        videoNotFound: 'Video is blocked or removed',
         cantPlayMedia: 'Could not play media',
         urlCopied: 'URL copied!',
         shareWith: 'Share with...',
         curPlaylistPos: 'Current playlist position',
         curTimePos: 'Current time',
-        shuffleOn: 'Shuffle playlist mode ON',
-        shuffleOff: 'Shuffle playlist mode OFF',
         searchAlternatives: 'Search alternatives',
-        moviesBotTip: 'movies and tv shows',
-        animeBotTip: 'search anime',
         translation: 'Translation',
         watchHistory: 'History',
         noWatchHistory: 'You havent watch anything yet. Use telegream bots to search something.',
+        playModeLabel: 'Play Mode',
         playMode: {
             'normal': 'Play all',
             'play_once': 'Play once',
             'repeat': 'Repeat',
             'shuffle': 'Shuffle',
         },
-        hotkey: 'Hotkey: {0}'
+        hotkey: 'Hotkey: {0}',
+        saveUkraine: 'Save Ukraine'
+    },
+    uk: {
+        videoNotFound: 'Відео заблоковано або видалено',
+        cantPlayMedia: 'Помилка відтворення відео',
+        urlCopied: 'URL скопіїован!',
+        shareWith: 'Поділитись...',
+        curPlaylistPos: 'Поділитись епізодом',
+        curTimePos: 'Поділитись міткою часу',
+        searchAlternatives: 'Пошукати еще',
+        translation: 'Переклади',
+        watchHistory: 'Історія',
+        noWatchHistory: 'Ваша історія порожня. Скристайтесь телегам ботом.',
+        playModeLabel: 'Режим відтворення',
+        playMode: {
+            'normal': 'По-порядку',
+            'play_once': 'Відтоврити одноразово',
+            'repeat': 'Повторювати',
+            'shuffle': 'Випадковий',
+        },
+        hotkey: 'Гаряча клавіша: {0}',
+        saveUkraine: 'Допомогти ЗСУ'
     }
 })

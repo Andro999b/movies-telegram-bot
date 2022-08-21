@@ -60,21 +60,20 @@ export const download = (path, filename) => {
 
 export function getAlternativeUrl(provider, query) {
     let bot
-    switch(provider) {
-        case 'anitubeua':
-        case 'animevost': 
-        case 'anigato': 
-        case 'anidub': 
-        case 'animedia': 
-            bot = animeBot
-            break 
-        case 'eneyida':
-        case 'uafilmstv':
-            bot = uaBot
-            break
-        default:
-            bot = moviesBot
+    if(provider.startsWith('ani')) {
+        bot = animeBot
+    } else if(provider.startsWith('ua')) {
+        bot = uaBot
+    } else {
+        switch(provider) {
+            case 'eneyida':
+                bot = uaBot
+                break
+            default:
+                bot = moviesBot
+        }
     }
+    
 
     return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`
 }

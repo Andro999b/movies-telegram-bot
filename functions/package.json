@@ -28,6 +28,7 @@
   "dependencies": {
     "aws-sdk": "^2.1185.0",
     "cheerio": "^1.0.0-rc.12",
+    "crypto-js": "^4.1.1",
     "debug": "^4.3.4",
     "json5": "^2.2.1",
     "lambda-request-handler": "^0.5.1-alpha1",

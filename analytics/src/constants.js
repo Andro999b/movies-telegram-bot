@@ -16,20 +16,6 @@ export const NAMES ={
     last3months: 'Three months',
 }
 
-export const PROVIDERS = [
-    'videocdn',
-    'rezka',
-    'kinogo',
-    'kinovod',
-    'seasonvar',
-    'anidub',
-    'anitubeua',
-    'animedia',
-    'animevost',
-    'anigato',
-    'eneyida'
-]
-
 export const PERIODS = Object.keys(NAMES)
 export const COLORS = [
     '#00429d', 

@@ -52,6 +52,11 @@ module.exports = {
     'uafilmtv': {
         'baseUrl': 'https://uafilm.tv',
         'searchUrl': 'https://uafilm.tv/index.php?do=search'
+    },    
+    'uaserials': {
+        'password': '297796CCB81D2551',
+        'baseUrl': 'https://uaserials.pro',
+        'searchUrl': 'https://uaserials.pro/index.php?do=search'
     },
     'seasonvar': {
         'pageSize': 30,
