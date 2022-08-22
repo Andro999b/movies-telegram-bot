@@ -167,8 +167,22 @@ export class LocalDevice extends Device {
             this.source = null
 
             const { provider, id } = this.playlist
+            let sourceId, params = {}, sourceParams
 
-            let loader = fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${file.asyncSource}`)
+            if(typeof file.asyncSource === 'string') {
+                sourceId = file.asyncSource
+            } else {
+                sourceId = file.asyncSource.sourceId
+                params = file.asyncSource.params
+            }
+
+            sourceParams = Object.keys(params)
+                .map((key) => `${key}=${params[key]}`)
+                .join(',')
+            
+            if(!sourceParams) sourceParams = `?${sourceParams}`
+
+            let loader = fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
                 .then((res) => res.json())
 
             return loader

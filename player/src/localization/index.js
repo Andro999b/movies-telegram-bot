@@ -23,7 +23,7 @@ export default new LocalizedStrings({
         saveUkraine: 'Save Ukraine'
     },
     uk: {
-        videoNotFound: 'Відео заблоковано або видалено',
+        videoNotFound: 'Нажаль відео не доступне',
         cantPlayMedia: 'Помилка відтворення відео',
         urlCopied: 'URL скопіїован!',
         shareWith: 'Поділитись...',
@@ -32,7 +32,7 @@ export default new LocalizedStrings({
         searchAlternatives: 'Пошукати еще',
         translation: 'Переклади',
         watchHistory: 'Історія',
-        noWatchHistory: 'Ваша історія порожня. Скристайтесь телегам ботом.',
+        noWatchHistory: 'Ваша історія порожня. Скористайтесь телегам ботом.',
         playModeLabel: 'Режим відтворення',
         playMode: {
             'normal': 'По-порядку',
