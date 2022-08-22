@@ -3,7 +3,7 @@ const { extractNumber, extractString } = require('../utils/extractScriptVariable
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
-const cheerio = require('cheerio')
+const $ = require('cheerio').default
 
 class KinovodProvider extends Provider {
     constructor() {
@@ -82,7 +82,7 @@ class KinovodProvider extends Provider {
                     selector: 'iframe.embed-responsive-item',
                     transform: ($el) => {
                         const src = $el.toArray()
-                            .map((el) => cheerio.load(el).root().attr('src'))
+                            .map((el) => $(el).attr('src'))
                             .find((src) => src.search('youtube') != 1)
 
                         return src

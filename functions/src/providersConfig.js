@@ -20,7 +20,15 @@ module.exports = {
         'cfbypass': true,
         'baseUrl': 'https://anigato.ru/',
         'searchUrl': 'https://anigato.ru/index.php?do=search',
-        'token': '447d179e875efe44217f20d1ee2146be'
+        'token': '447d179e875efe44217f20d1ee2146be',
+        'kodicSign': {
+            'd': 'anigato.ru',
+            'd_sign': 'cf40e6e20f1db41da51ba9838a01f05bf7f861eb799fedc164f63e83c660de25',
+            'pd': 'kodik.info',
+            'pd_sign': '09ffe86e9e452eec302620225d9848eb722efd800e15bf707195241d9b7e4b2b',
+            'ref': 'https://anigato.ru/',
+            'ref_sign': '751d0cd2bc5db44f9d47f30cc5ac3eace8dac460ad9b16399ef5c938b0c9d290'
+        }
     },
     'anitubeua': {
         'timeout': 10,
@@ -52,7 +60,7 @@ module.exports = {
     'uafilmtv': {
         'baseUrl': 'https://uafilm.tv',
         'searchUrl': 'https://uafilm.tv/index.php?do=search'
-    },    
+    },
     'uaserials': {
         'password': '297796CCB81D2551',
         'baseUrl': 'https://uaserials.pro',

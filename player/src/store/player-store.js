@@ -178,7 +178,7 @@ export class LocalDevice extends Device {
 
             sourceParams = Object.keys(params)
                 .map((key) => `${key}=${params[key]}`)
-                .join(',')
+                .join('&')
             
             if(!sourceParams) sourceParams = `?${sourceParams}`
 

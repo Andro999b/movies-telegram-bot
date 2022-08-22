@@ -16,7 +16,12 @@ module.exports.handler = async (event, context) => {
 
         result = await getCachedSource(
             provider, resultId, sourceId, 
-            ([provider, resultId, sourceId]) => providersService.getSource(provider, resultId, sourceId)
+            ([provider, resultId, sourceId]) => providersService.getSource(
+                provider, 
+                resultId, 
+                sourceId,
+                event.queryStringParameters
+            )
         )
     }
 

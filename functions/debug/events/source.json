@@ -1,0 +1,14 @@
+{
+    "pathParameters": {
+        "provider": "anigato",
+        "resultId": "https%3A%2F%2Fanigato.ru%2Fanime%2F8763-semja-shpiona-tv-1.html",
+        "sourceId": "db1f0147a4ad55b8d2e5155026c93415"
+    },
+    "queryStringParameters": {
+        "iframe": "//kodik.biz/serial/42024/507cfca32bdc0c195a8fcf525134d686/720p",
+        "id": "1020988"
+    },
+    "headers": {
+        "origin": "http://localhost:3000"
+    }
+}

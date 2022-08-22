@@ -2,13 +2,14 @@ const superagent = require('superagent')
 const makeResponse = require('../utils/makeResponse')
 const { extractStringSingleQuote } = require('../utils/extractScriptVariable')
 const PROVIDERS_CONFIG = require('../providersConfig')
+const ANIGATO_CONFIG = PROVIDERS_CONFIG['anigato']
 
 function linkExtractor(links, hls) {
     const bestQuality = Object.keys(links).pop()
     let redirectUrl = links[bestQuality][0].src
     redirectUrl = Buffer.from(redirectUrl.split('').reverse().join(''), 'base64').toString()
 
-    if(!hls) {
+    if (!hls) {
         redirectUrl = redirectUrl.replace(':hls:manifest.m3u8', '')
     }
 
@@ -16,36 +17,42 @@ function linkExtractor(links, hls) {
 }
 
 module.exports = async (params) => {
-    let { url, id, hash } = params
+    let { url, ttype, tid, thash, season } = params
 
     const linksApi = 'https://kodik.biz/gvi'
     const referer = 'https://anigato.ru/'
 
-    url = url.replace('aniqit.com', 'kodik.biz')
+    const signParams = Object.keys(ANIGATO_CONFIG.kodicSign)
+        .map((key) => `${key}=${ANIGATO_CONFIG.kodicSign[key]}`)
+        .join('&')
 
-    const res = await superagent
-        .get(url.startsWith('//') ? 'https:' + url : url)
-        .set({ 
+    let type = 'seria'
+    let iframeUrl
+
+    if (ttype == 'serial') {
+        iframeUrl = `https://kodik.biz/serial/${tid}/${thash}/720p?${signParams}&season=${season}&episode=${url}`
+    } else {
+        iframeUrl = `https://kodik.biz/video/${tid}/${thash}/720p?${signParams}`
+        type = 'video'
+    }
+
+    const res = await superagent.get(iframeUrl)
+        .set({
             'User-Agent': PROVIDERS_CONFIG.userAgent,
-            'Referer': referer || url,
+            'Referer': referer,
         })
         .timeout(10000)
 
-    const type = id == undefined ? 'video' : 'seria'
+    const id = extractStringSingleQuote(res.text, 'videoInfo\\.id')
+    const hash = extractStringSingleQuote(res.text, 'videoInfo\\.hash')
 
-    id = id || extractStringSingleQuote(res.text, 'videoInfo\\.id')
-    hash = hash || extractStringSingleQuote(res.text, 'videoInfo\\.hash')
-    const urlParamStr = extractStringSingleQuote(res.text, 'urlParams')
-    const urlParam = JSON.parse(urlParamStr)
-
-    const videoInfoParams =  {
+    const videoInfoParams = {
         id,
         hash,
         type,
         bad_user: false,
         info: '{}',
-        ...urlParam,
-        ref: decodeURIComponent(urlParam.ref)
+        ...ANIGATO_CONFIG.kodicSign
     }
 
     // return videoInfoParams
@@ -53,7 +60,7 @@ module.exports = async (params) => {
     const videoInfoRes = await superagent
         .post(linksApi)
         .type('form')
-        .set({ 
+        .set({
             'User-Agent': PROVIDERS_CONFIG.userAgent,
             'Referer': url
         })
@@ -65,7 +72,7 @@ module.exports = async (params) => {
 
     let redirectUrl = linkExtractor(links, true)
 
-    if(redirectUrl.startsWith('//')) {
+    if (redirectUrl.startsWith('//')) {
         redirectUrl = 'https:' + redirectUrl
     }
 

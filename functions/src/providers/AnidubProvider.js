@@ -1,5 +1,5 @@
 const Provider = require('./DataLifeProvider')
-const cheerio = require('cheerio')
+const $ = require('cheerio').default
 const urlencode = require('urlencode')
 
 class AnidubProvider extends Provider {
@@ -30,7 +30,7 @@ class AnidubProvider extends Provider {
                             if (url.indexOf('sibnet') != -1) {
                                 return {
                                     id,
-                                    name: cheerio.load(el).text(),
+                                    name: $(el).text(),
                                     urls: [{
                                         url,
                                         extractor: { type: 'sibnetmp4' }
@@ -39,7 +39,7 @@ class AnidubProvider extends Provider {
                             } else {
                                 return {
                                     id,
-                                    name: cheerio.load(el).text(),
+                                    name: $(el).text(),
                                     urls: [{
                                         url,
                                         hls: true,

@@ -59,8 +59,8 @@ module.exports = {
         const provider = await this.getProvider(providerName)
         return provider.getInfo(resultsId)
     },
-    async getSource(providerName, resultsId, sourceId) {
+    async getSource(providerName, resultsId, sourceId, params) {
         const provider = await this.getProvider(providerName)
-        return provider.getSource(resultsId, sourceId)
+        return provider.getSource(resultsId, sourceId, params)
     }
 }

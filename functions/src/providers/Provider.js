@@ -148,7 +148,7 @@ class Provider {
         return this.config.baseUrl + url
     }
 
-    async getSource(resultsId, sourceId) {// eslint-disable-line
+    async getSource(resultsId, sourceId, params) {// eslint-disable-line
         return {}
     }
 

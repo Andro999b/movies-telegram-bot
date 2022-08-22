@@ -1,6 +1,7 @@
 const Provider = require('./DataLifeProvider')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
+const $ = require('cheerio').default
 const cheerio = require('cheerio')
 
 class AnigatoProvider extends Provider {
@@ -43,50 +44,54 @@ class AnigatoProvider extends Provider {
                             .children()
                             .toArray()
 
-                        const getOptionUrls = (el) => {
-                            return [{
-                                url: iframeSrc,
-                                hls: true,
-                                extractor: { 
-                                    type: 'anigit', 
-                                    params: { 
-                                        hash: el.attribs['data-hash'], 
-                                        id: el.attribs['data-id'] 
-                                    } 
-                                }
-                            }]
-                        }
+                        const $translations = $iframe('.serial-translations-box, .movie-translations-box').find('option').toArray()
 
                         if ($seasons.length == 0) {
                             return [{
                                 id: 0,
-                                urls: [{
-                                    hls: true,
-                                    url: iframeSrc,
-                                    extractor: { type: 'anigit' }
-                                }]
+                                urls: $translations.map((t) => {
+                                    const $t = $(t)
+                                    return {
+                                        url: 0,
+                                        audio: $t.text(),
+                                        hls: true,
+                                        extractor: {
+                                            type: 'anigit',
+                                            params: this._getTranslationParams($t)
+                                        }
+                                    }
+                                })
                             }]
                         } else if ($seasons.length == 1) {
-                            const $season = cheerio.load($seasons[0]).root()
-                            return $season.find('option')
+                            const $season = $($seasons[0])
+                            const seasonNum = this._getSeassonNum($season)
+                            return $season
+                                .find('option')
                                 .toArray()
-                                .map((el, id) => ({
-                                    id,
-                                    name: cheerio.load(el).text(),
-                                    urls: getOptionUrls(el)
-                                }))
+                                .map((el, id) => {
+                                    const $el = $(el)
+                                    return {
+                                        id,
+                                        name: $el.text(),
+                                        urls: this.getSeasonEpisodeUrls($el, seasonNum)
+                                    }
+                                })
                         } else {
                             return $seasons
-                                .map((el, season) => {
-                                    return cheerio.load(el)
-                                        .root()
+                                .map((el) => {
+                                    const $season = $(el)
+                                    const seasonNum = this._getSeassonNum($season)
+                                    return $season
                                         .find('option')
                                         .toArray()
-                                        .map((el) => ({
-                                            name: cheerio.load(el).text(),
-                                            path: `Season ${season + 1}`,
-                                            urls: getOptionUrls(el)
-                                        }))
+                                        .map((el) => {
+                                            const $el = $(el)
+                                            return {
+                                                name: $el.text(),
+                                                path: `Season ${seasonNum}`,
+                                                urls: this.getSeasonEpisodeUrls($el, seasonNum, $translations)
+                                            }
+                                        })
                                 })
                                 .reduce((acc, items) => acc.concat(items), [])
                                 .map((items, id) => ({ id, ...items }))
@@ -96,6 +101,38 @@ class AnigatoProvider extends Provider {
             }
         })
     }
+
+    _getTranslationParams($t) {
+        return {
+            thash: $t.attr('data-media-hash'),
+            tid: $t.attr('data-media-id'),
+            ttype: $t.attr('data-media-type'),
+        }
+    }
+
+    getSeasonEpisodeUrls($el, seasonNum, $translations) {
+        return $translations.map((t) => {
+            const $t = $(t)
+
+            return {
+                url: $el.val(),
+                audio: $t.text(),
+                hls: true,
+                extractor: {
+                    type: 'anigit',
+                    params: {
+                        season: seasonNum,
+                        ...this.getTranslationParams($t)
+                    }
+                }
+            }
+        })
+    }
+
+    _getSeassonNum($season) {
+        return $season.attr('class').substring('season-'.length)
+    }
+
 
     async getKodikPlayer(worldartAnimationID) {
         const { token, infoTimeout } = this.config

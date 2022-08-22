@@ -1,9 +1,9 @@
 {
     "pathParameters": {
-        "provider": "uaserials"
+        "provider": "anigato"
     },
     "queryStringParameters": {
-        "q": "Зоряна брама"
+        "q": "Семья шпиона"
     },
     "headers": {
         "origin": "http://localhost:3000"

@@ -21,7 +21,9 @@
     "invoke:search": "env-cmd sls invoke --function search --stage=prod --aws-profile serverless --debug * --path debug/events/search.json",
     "invoke:local:search": "env-cmd sls invoke local --function search --stage=prod --aws-profile serverless --debug * --path debug/events/search.json",
     "invoke:extract": "env-cmd sls invoke --function extract --stage=prod --aws-profile serverless --debug * --path debug/events/extractor.json",
-    "invoke:local:extract": "env-cmd sls invoke local --function extract --stage=prod --aws-profile serverless --debug * --path debug/events/extractor.json"
+    "invoke:local:extract": "env-cmd sls invoke local --function extract --stage=prod --aws-profile serverless --debug * --path debug/events/extractor.json",
+    "invoke:source": "env-cmd sls invoke --function source --stage=prod --aws-profile serverless --debug * --path debug/events/source.json",
+    "invoke:local:source": "env-cmd sls invoke local --function source --stage=prod --aws-profile serverless --debug * --path debug/events/source.json"
   },
   "author": "",
   "license": "ISC",

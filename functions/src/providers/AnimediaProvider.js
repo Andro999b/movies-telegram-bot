@@ -1,6 +1,7 @@
 const Provider = require('./Provider')
 const superagent = require('superagent')
 const cheerio = require('cheerio')
+const $ = require('cheerio').default
 const urlencode = require('urlencode')
 const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
 
@@ -22,9 +23,10 @@ class AnimediaProvider extends Provider {
                         const seasons = $el.find('ul li a')
                             .toArray()
                             .map((el) => {
+                                const $el = $(el)
                                 return {
-                                    seasonNum: parseInt(el.attribs['href'].substring(4)) + 1, 
-                                    name: cheerio.load(el).text()
+                                    seasonNum: parseInt($el.attr('href').substring(4)) + 1, 
+                                    name: $el.text()
                                 }
                             })
 
@@ -69,7 +71,7 @@ class AnimediaProvider extends Provider {
             .find('.ads-list__item')
             .toArray() 
             .map((el) => {
-                const $el = cheerio.load(el)
+                const $el = $(el)
                 const $title = $el('.ads-list__item__title')
                 const $image = $el('.ads-list__item__thumb > a > img')
 
