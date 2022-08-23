@@ -1,4 +1,4 @@
-import { COLORS } from './constants'
+import { COLORS, PLAYER_URL } from './constants'
 
 export const range = (to) => Array.from({ length: to }, (_, k) => k + 1)
 
@@ -73,6 +73,8 @@ export const bucketReducer = (
     }
 }
 
+export const sortSegmentsChartData = (a, b) => b[b.seg] - a[a.seg]
+
 export const bucketInitState = () => ({ acc: {}, chartData: [] })
 
 export const getBucketKeys = ({ acc }) => {
@@ -126,7 +128,7 @@ export const isToday = (date) => {
         date.getFullYear() === today.getFullYear()
 }
 
-export function isTouchDevice() {
+export const isTouchDevice = () => {
     if('ontouchstart' in document.documentElement) {
         return true
     }
@@ -139,7 +141,7 @@ export function isTouchDevice() {
     return false
 }
 
-export function isPwa() {
+export const isPwa = () => {
     return ['fullscreen', 'standalone', 'minimal-ui'].some(
         (displayMode) => window.matchMedia('(display-mode: ' + displayMode + ')').matches
     )
@@ -161,7 +163,7 @@ function hash64(str) {
     return h1 + hash32(h1 + str)  // 64 bit (as 16 byte hex string)
 }
 
-export function getColor(name) {
+export const getColor = (name) => {
     switch(name) {
         case 'search': return COLORS[Math.floor(COLORS.length / 2)]
         case 'start': return COLORS[COLORS.length - 1]
@@ -188,7 +190,7 @@ export function getColor(name) {
 
 export const isSearchableEvent = ({ type }) => ['search', 'no_results'].includes(type)
 
-export function getBotSearchUrl({ bot, query }) {
+export const getBotSearchUrl = ({ bot, query }) => {
     switch(bot) {
         case 'ua':
             bot = 'UAMoviesBot'
@@ -202,6 +204,8 @@ export function getBotSearchUrl({ bot, query }) {
 
     return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`
 }
+
+export const getWatchUrl = (provider, id) => `${PLAYER_URL}#/watch?provider=${provider}&id=${id}`
 
 export function base64UrlEncode(str) {
     // first we use encodeURIComponent to get percent-encoded UTF-8,

@@ -72,8 +72,8 @@ class AnimediaProvider extends Provider {
             .toArray() 
             .map((el) => {
                 const $el = $(el)
-                const $title = $el('.ads-list__item__title')
-                const $image = $el('.ads-list__item__thumb > a > img')
+                const $title = $el.find('.ads-list__item__title')
+                const $image = $el.find('.ads-list__item__thumb > a > img')
 
                 let src = $image.attr('data-src')
                 const index = src.indexOf('?')

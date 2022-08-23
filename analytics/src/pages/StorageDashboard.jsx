@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import React from 'react'
-import { makeStyles, Grid, Toolbar, Box, Typography, Container, Button } from '@material-ui/core'
+import { makeStyles, Grid, Toolbar, Box, Typography, Container, Button, Link } from '@material-ui/core'
 import dashboard from '../store/storageDashboard'
 import ReloadButton from '../components/ReloadButton'
 import InvalidateDialog from '../components/InvalidateDialog'
@@ -10,6 +10,7 @@ import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import ErrorAwareContainer from '../components/ErrorAwareContainer'
 import BarChartVis from '../components/BarChartVis'
 import { DATE_FORMAT } from '../constants'
+import { getWatchUrl } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+const dbIdWatchUrl = (dbId) => {
+    const [provider, id] = dbId.split(':')
+    return getWatchUrl(provider, id)
+}
 
 export default observer(() => {
     const classes = useStyles()
@@ -47,6 +52,13 @@ export default observer(() => {
     React.useEffect(() => store.reload(), [])// eslint-disable-line
 
     const [invalidateDialog, showInvalidateDialog] = React.useState(false)
+
+    const renderResultName = ({ _id, result: { provider, title } }) => (
+        <span>
+            <b className={classes.provider}>{provider}</b>
+            <Link href={dbIdWatchUrl(_id)} target='_blank'>{title}</Link>
+        </span>
+    )
 
     return (
         <div className={classes.root}>
@@ -84,9 +96,7 @@ export default observer(() => {
                                     <ValuesTableVis
                                         data={store.top}
                                         title="Top Watched"
-                                        renderName={({ result: { provider, title } }) => (
-                                            <span><b className={classes.provider}>{provider}</b>{title}</span>
-                                        )}
+                                        renderName={renderResultName}
                                         renderValue={({ hit }) => hit}
                                     />
                                 </LoadingPlaceholder>
@@ -96,9 +106,7 @@ export default observer(() => {
                                     <ValuesTableVis
                                         data={store.recient}
                                         title="Recient cached"
-                                        renderName={({ result: { provider, title } }) => (
-                                            <span><b className={classes.provider}>{provider}</b>{title}</span>
-                                        )}
+                                        renderName={renderResultName}
                                         renderValue={({ lastModifiedDate }) =>
                                             moment(lastModifiedDate).calendar(null, {
                                                 sameDay: 'HH:mm',

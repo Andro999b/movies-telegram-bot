@@ -52,7 +52,7 @@ class AnigatoProvider extends Provider {
                                 urls: $translations.map((t) => {
                                     const $t = $(t)
                                     return {
-                                        url: 0,
+                                        url: '',
                                         audio: $t.text(),
                                         hls: true,
                                         extractor: {
@@ -73,7 +73,7 @@ class AnigatoProvider extends Provider {
                                     return {
                                         id,
                                         name: $el.text(),
-                                        urls: this.getSeasonEpisodeUrls($el, seasonNum)
+                                        urls: this.getSeasonEpisodeUrls($el, seasonNum, $translations)
                                     }
                                 })
                         } else {
@@ -115,14 +115,14 @@ class AnigatoProvider extends Provider {
             const $t = $(t)
 
             return {
-                url: $el.val(),
+                url: '' + $el.val(),
                 audio: $t.text(),
                 hls: true,
                 extractor: {
                     type: 'anigit',
                     params: {
                         season: seasonNum,
-                        ...this.getTranslationParams($t)
+                        ...this._getTranslationParams($t)
                     }
                 }
             }

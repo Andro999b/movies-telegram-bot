@@ -118,7 +118,7 @@ export default observer(() => {
                             </Grid>
                             <Grid item md={6} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <BarChartVis data={store.eventsData} lines={store.events} legend={false} />
+                                    <BarChartVis data={store.eventsData} lines={store.events} legend layout="vertical" />
                                 </LoadingPlaceholder>
                             </Grid>
                         </Grid>

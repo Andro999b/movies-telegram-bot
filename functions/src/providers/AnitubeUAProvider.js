@@ -18,7 +18,8 @@ const extractors = {
     },
     'csst.online': {
         type: 'mp4local'
-    }
+    },
+    'veoh.com': null
 }
 
 class AnitubeUAProvider extends Provider {
@@ -48,8 +49,8 @@ class AnitubeUAProvider extends Provider {
                     transform: ($el) => {
                         const script = $el.prev('script').get()[0].children[0].data
                         const matches = script.match(playesRegExp)
-                       
-                        if(!matches || matches.length < 1)
+
+                        if (!matches || matches.length < 1)
                             return []
 
                         const audios = JSON.parse(matches[1])
@@ -66,11 +67,14 @@ class AnitubeUAProvider extends Provider {
                             files[index] = file
                             const fileUrl = {
                                 url,
-                                extractor: { type: extractor.type },
                                 audio
                             }
-                            if(extractor.hls) {
-                                fileUrl.hls = true
+
+                            if (extractor) {
+                                file.extractor = { type: extractor.type }
+                                if (extractor.hls) {
+                                    fileUrl.hls = true
+                                }
                             }
                             file.urls.push(fileUrl)
                         }
@@ -80,16 +84,16 @@ class AnitubeUAProvider extends Provider {
                             let id = 0
                             for (const episode of episodes) {
                                 const { code } = episode
-                                
+
                                 const srcMatch = code.match(srcRegExp)
 
-                                if(!srcMatch || srcMatch.length < 1)
+                                if (!srcMatch || srcMatch.length < 1)
                                     return
 
                                 const url = srcMatch[1]
                                 const extractorName = Object.keys(extractors).find((extr) => url.indexOf(extr) != -1)
 
-                                if(!extractorName)
+                                if (!extractorName)
                                     return
 
                                 addFile(id, audio, url, extractors[extractorName])

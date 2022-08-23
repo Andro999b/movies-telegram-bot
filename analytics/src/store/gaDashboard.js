@@ -1,6 +1,6 @@
 import { observable, toJS } from 'mobx'
 import { invokeGA } from '../database/lambda'
-import { segmentBucketReducer, bucketReducer, bucketInitState } from '../utils'
+import { segmentBucketReducer, bucketReducer, bucketInitState, sortSegmentsChartData } from '../utils'
 import { GA_DATE_FORMAT } from '../constants'
 import moment from 'moment'
 import periodStore from './periodStore'
@@ -184,13 +184,14 @@ export default observable({
                 this.countries = countries
             }
 
+            const sortedEventsCounts = eventsCountBucket.chartData.sort(sortSegmentsChartData)
             this.labels = labels
             this.usersChart = usersBucket.chartData
             this.sessionsChart = sessionsBucket.chartData
             this.totalSessions = sessionsBucket.chartData.reduce((acc, { sessions }) => acc + sessions, 0)
             this.eventsChart = eventsBucket.chartData
-            this.eventsData = eventsCountBucket.chartData
-            this.events = Object.keys(eventsCountBucket.acc)
+            this.eventsData = eventsCountBucket.chartData.sort(sortSegmentsChartData)
+            this.events = sortedEventsCounts.map(({ seg }) => seg)
             this.totalEvents = totalEvents
             this.devicePie = deviceCountBucket.chartData
             this.totalUsers = deviceCountBucket.chartData.reduce((acc, { value }) => acc + value, 0)

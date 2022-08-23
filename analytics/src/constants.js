@@ -7,6 +7,7 @@ export const TABLE_NAME = 'analyticsTable-prod'
 export const EVENTS_UPDATE_INTERVAL = 1000 * 30
 export const DATE_FORMAT = 'YYYY-M-D'
 export const GA_DATE_FORMAT = 'YYYY-MM-DD'
+export const PLAYER_URL = 'https://movies-player.web.app'
 
 export const NAMES ={
     last7days: 'Last 7 days',

@@ -3,7 +3,7 @@ const { google } = require('googleapis')
 const scopes = 'https://www.googleapis.com/auth/analytics.readonly'
 
 const privateKey = process.env.PRIVATE_KEY.replace(/\\n/gm, '\n')
-const projectId = '327088943'//process.env.VIEW_ID
+const projectId = process.env.PROJECT_ID
 
 const auth = new google.auth.GoogleAuth({
     credentials: {

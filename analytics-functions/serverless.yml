@@ -1,3 +1,5 @@
+org: andro999b
+console: true
 service: analytics-functions
 
 custom:
@@ -23,7 +25,7 @@ functions:
     environment:
       CLIENT_EMAIL: ${ssm:bot_ga_client_email}
       PRIVATE_KEY: ${ssm:bot_ga_private_key}
-      VIEW_ID: ${ssm:bot_ga_view_id}
+      PROJECT_ID: ${ssm:bot_ga_project_id}
 
   mongostat:
     handler: handlers/mongostat.handler

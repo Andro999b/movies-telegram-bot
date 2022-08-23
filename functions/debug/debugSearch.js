@@ -1,6 +1,6 @@
 const providers = require('../src/providers')
 
-// const providerName = 'anigato'
+const providerName = 'anigato'
 // const providerName = 'anitubeua'
 // const providerName = 'anidub'
 // const providerName = 'animedia'
@@ -10,7 +10,7 @@ const providers = require('../src/providers')
 // const providerName = 'seasonvar'
 // const providerName = 'eneyida'
 // const providerName = 'uafilmtv'
-const providerName = 'uaserials'
+// const providerName = 'uaserials'
 const searchQuery = 'Зоряна брама'
 
 providers.searchOne(providerName, searchQuery)
