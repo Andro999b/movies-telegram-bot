@@ -4,7 +4,7 @@ const path = require('path')
 const { Telegraf } = require('telegraf')
 const TelegrafI18n = require('telegraf-i18n')
 const makeHandler = require('lambda-request-handler')
-const debug = require('debug')
+const debug = require('debug')('bot')
 
 const BOT_TYPE = process.env.BOT_TYPE
 const PROVIDERS =  process.env.PROVIDERS.split(',')

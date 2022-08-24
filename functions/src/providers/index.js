@@ -32,7 +32,7 @@ module.exports = {
         const results = await Promise.all(providers.map(async (providerName) => {
             try {
                 const provider = await this.getProvider(providerName)
-                return provider.search(query)
+                return await provider.search(query)
             } catch (e) {
                 console.error(`Provider ${providerName} failed.`, e)
                 return []
@@ -48,7 +48,7 @@ module.exports = {
 
         try {
             const provider = await this.getProvider(providerName)
-            return provider.search(query)
+            return await provider.search(query)
         } catch (e) {
             console.error(`Provider ${providerName} failed.`, e)
         }

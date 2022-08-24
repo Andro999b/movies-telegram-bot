@@ -18,7 +18,7 @@ provider:
   versionFunctions: false
   memorySize: 512
   environment:
-    # DEBUG: 'telegraf:*'
+    # DEBUG: '*'
     ANALYTIC_TABLE: ${self:custom.analyticsTable}
     CACHE_TABLE: ${self:custom.cacheTable}
     MONGODB_URI: ${self:custom.mongoUrl}

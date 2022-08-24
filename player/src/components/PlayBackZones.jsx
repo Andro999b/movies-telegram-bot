@@ -86,7 +86,7 @@ class PlayBackZones extends Component {
                 className={`player__pause-zone ${(isPlaying || isLoading) ? '' : 'player__pause-cover'}`}
                 onClick={() => onPlayPause() }
             >
-                {(accTime === null && isLoading) && 
+                {(accTime === null && isPlaying && isLoading) && 
                     <div className="player_loader-indicator center">
                         <CircularProgress color="primary" />
                     </div>
