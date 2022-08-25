@@ -2,8 +2,8 @@ const providers = require('../src/providers')
 const util = require('util')
 const debug = require('debug')('info')
 
-const provider = 'animedia'
-const id = '%2Fanime%2Fdorohedoro'
+const provider = 'anitubeua'
+const id = 'https%3A%2F%2Fanitube.in.ua%2F3948-spy-x-family.html'
 
 // eslint-disable-next-line no-console
 debug(decodeURIComponent(id))

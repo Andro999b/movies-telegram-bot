@@ -71,7 +71,7 @@ class AnitubeUAProvider extends Provider {
                             }
 
                             if (extractor) {
-                                file.extractor = { type: extractor.type }
+                                fileUrl.extractor = { type: extractor.type }
                                 if (extractor.hls) {
                                     fileUrl.hls = true
                                 }
@@ -81,6 +81,7 @@ class AnitubeUAProvider extends Provider {
 
                         videos.forEach((episodes, i) => {
                             const audio = audios[i]
+
                             let id = 0
                             for (const episode of episodes) {
                                 const { code } = episode
