@@ -50,7 +50,7 @@ provider:
 functions:
   search:
     handler: src/handlers/search.handler
-    timeout: 12
+    timeout: 15
     events:
       - http: 
           path: api/trackers/{provider}/search
@@ -88,7 +88,7 @@ functions:
 
   bot:
     handler: src/handlers/bot.handler
-    timeout: 12
+    timeout: 15
     events:
       - http: 
           path: bot
@@ -101,6 +101,7 @@ functions:
 
   animebot:
     handler: src/handlers/bot.handler
+    timeout: 15
     events:
       - http: 
           path: bot/anime
@@ -115,6 +116,7 @@ functions:
   
   uabot:
     handler: src/handlers/bot.handler
+    timeout: 15
     events:
       - http: 
           path: bot/ua

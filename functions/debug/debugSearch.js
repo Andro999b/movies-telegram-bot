@@ -1,10 +1,10 @@
 const providers = require('../src/providers')
 const debug = require('debug')('search')
 
-// const providerName = 'anigato'
+const providerName = 'anigato'
 // const providerName = 'anitubeua'
 // const providerName = 'anidub'
-const providerName = 'animedia'
+// const providerName = 'animedia'
 // const providerName = 'animevost'
 // const providerName = 'kinovod'
 // const providerName = 'kinogo'

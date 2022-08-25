@@ -5,6 +5,7 @@ import { toJS } from 'mobx'
 import BaseScrean from './BaseScrean'
 import { createExtractorUrlBuilder } from '../utils/extract'
 import logger from '../utils/logger'
+import { handleSpecialHLSUrls } from '../utils/extract'
 import analytics from '../utils/analytics'
 import localization from '../localization'
 
@@ -42,7 +43,7 @@ class VideoScrean extends BaseScrean {
     }
 
     onSeek(seekTo) {
-        if(seekTo !== null) {
+        if (seekTo !== null) {
             const video = this.video.current
             video.currentTime = seekTo
         }
@@ -84,7 +85,7 @@ class VideoScrean extends BaseScrean {
         const video = this.video.current
         video.removeAttribute('src')
         video.load()
-        
+
         if (this.keepAliveInterval) {
             clearInterval(this.keepAliveInterval)
         }
@@ -111,9 +112,9 @@ class VideoScrean extends BaseScrean {
     initVideo = async () => {
         const { props: { device: { source } } } = this
 
-        if(!source) return
+        if (!source) return
 
-        const { urls }  = source
+        const { urls } = source
 
         if (urls && urls.length > 0) {
             await this.startVideo()
@@ -146,7 +147,7 @@ class VideoScrean extends BaseScrean {
 
         const selectedIndex = this.videoFiles.findIndex((it) => it.quality == selectedQuality)
 
-        if(selectedIndex == -1) {
+        if (selectedIndex == -1) {
             await this.setVideoFile(this.videoFiles.shift())
         } else {
             await this.setVideoFile(this.videoFiles.splice(selectedIndex, 1)[0])
@@ -156,9 +157,9 @@ class VideoScrean extends BaseScrean {
     setVideoFile = async (file) => {
         this.dispose()
 
-        if(file.url.endsWith('m3u8') || file.hls) {
+        if (file.url.endsWith('m3u8') || file.hls) {
             await this.setHlsVideoFile(file)
-        } else { 
+        } else {
             await this.setNativeVideoFile(file)
         }
 
@@ -184,19 +185,32 @@ class VideoScrean extends BaseScrean {
 
         import(/* webpackChunkName: "hlsjs" */ 'hls.js').then((module) => {
             const Hls = module.default
+            
+
+            class loader extends Hls.DefaultConfig.loader {
+                constructor(config) {
+                    super(config)
+                    var load = this.load.bind(this)
+                    this.load = function (context, config, callbacks) {
+                        if(!handleSpecialHLSUrls(context, callbacks)) {
+                            load(context, config, callbacks)
+                        }
+                    }
+                }
+            }
+
             const hls = new Hls({
-                manifestLoadingTimeOut: 30* 1000,
+                manifestLoadingTimeOut: 30 * 1000,
                 manifestLoadingMaxRetry: 3,
                 startPosition: device.currentTime,
                 xhrSetup: (xhr) => {
                     xhr.timeout = 0
-                }
+                },
+                loader
             })
-    
+
             hls.attachMedia(this.video.current)
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                // this.restoreVideoState()
-    
                 if (hls.audioTracks && hls.audioTracks.length > 1) {
                     this.hlsMultiAudio = true
                     device.setAudioTracks(
@@ -209,14 +223,14 @@ class VideoScrean extends BaseScrean {
                 if (data.fatal) {
                     switch (data.type) {
                         case Hls.ErrorTypes.MEDIA_ERROR:
-                            console.log('fatal media error encountered, try to recover') // eslint-disable-line
+                            console.error('fatal media error encountered, try to recover')
                             this.hls.recoverMediaError()
                             break
                         default:
                             // cannot recover
-                            if(this.tryNextVideoUrl()) 
+                            if (this.tryNextVideoUrl())
                                 break
-        
+
                             this.props.device.setError(localization.cantPlayMedia)
                             this.hls.destroy()
                             this.logError(data)
@@ -238,8 +252,8 @@ class VideoScrean extends BaseScrean {
         const { device } = this.props
         device.setLoading(true)
         device.setError(null)
-    }    
-    
+    }
+
     handleLoadEnd = () => {
         const { device } = this.props
         device.setLoading(false)
@@ -285,7 +299,7 @@ class VideoScrean extends BaseScrean {
             }
         }
 
-        if(this.tryNextVideoUrl())
+        if (this.tryNextVideoUrl())
             return
 
         device.setError(localization.cantPlayMedia)

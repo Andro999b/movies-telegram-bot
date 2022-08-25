@@ -19,6 +19,7 @@ module.exports = {
         'searchUrl': 'https://online.animedia.tv/ajax/search_result_search_page_2/P0'
     },
     'anigato': {
+        'timeout': 15,
         'cfbypass': true,
         'baseUrl': 'https://anigato.ru/',
         'searchUrl': 'https://anigato.ru/index.php?do=search',
