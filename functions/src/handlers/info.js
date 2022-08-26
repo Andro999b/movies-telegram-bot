@@ -16,7 +16,7 @@ module.exports.handler = async (event, context) => {
         const nocache = event.queryStringParameters?.nocache
 
         if (nocache === 'true') {
-            result = providersService.getInfo(provider, resultId)
+            result = await providersService.getInfo(provider, resultId)
         } else {
             result = await getCachedInfo(
                 provider, resultId,

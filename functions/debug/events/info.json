@@ -3,6 +3,9 @@
         "provider": "anigato",
         "resultId": "https%3A%2F%2Fanigato.ru%2Fanime%2F8763-semja-shpiona-tv-1.html"
     },
+    "queryStringParameters": {
+        "nocache": true
+    },
     "headers": {
         "origin": "http://localhost:3000"
     }
