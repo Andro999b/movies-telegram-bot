@@ -37,6 +37,12 @@ class PlaylistStore {
                     analytics('playlist_loaded')
                 } else if (playlist.trailer) {
                     this.trailerUrl = playlist.trailer
+                    logger.error('Trailer showed but no video found', {
+                        provider,
+                        id,
+                        href: location.href,
+                        trailer: playlist.trailer
+                    })
                 } else {
                     this.error = playlist.errorDetail || localization.videoNotFound
                     this.trackError(provider, id, null, this.error)

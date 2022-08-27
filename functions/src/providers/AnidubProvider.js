@@ -36,7 +36,7 @@ class AnidubProvider extends Provider {
                                         extractor: { type: 'sibnetmp4' }
                                     }]
                                 }
-                            } else {
+                            } else if(url.startsWith('/player')) {
                                 return {
                                     id,
                                     name: $(el).text(),
@@ -48,6 +48,17 @@ class AnidubProvider extends Provider {
                                 }
                             }
                         })
+                        .filter((f) => f)
+                },
+                trailer: {
+                    selector: '.video-box .series-tab span',
+                    transform: ($el) => {
+                        const url = $el.eq(0).attr('data')
+                        
+                        if(url != null && url.indexOf('youtube.com')) {
+                            return url
+                        }
+                    }
                 }
             }
         })

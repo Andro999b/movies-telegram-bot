@@ -1,9 +1,9 @@
 {
     "pathParameters": {
-        "provider": "anigato"
+        "provider": "anitubeua"
     },
     "queryStringParameters": {
-        "q": "Семья шпиона"
+        "q": "шпигун"
     },
     "headers": {
         "origin": "http://localhost:3000"

@@ -66,11 +66,7 @@ class UASerialsProvider extends Provider {
                             })
                         }
                     }
-                },
-                // trailer: {
-                //     selector: '#trailer_place iframe',
-                //     transform: ($el) => $el.attr('src')
-                // }
+                }
             }
         })
     }

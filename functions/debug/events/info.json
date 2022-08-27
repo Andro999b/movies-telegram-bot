@@ -1,10 +1,10 @@
 {
     "pathParameters": {
-        "provider": "anigato",
-        "resultId": "https%3A%2F%2Fanigato.ru%2Fanime%2F8763-semja-shpiona-tv-1.html"
+        "provider": "anidub",
+        "resultId": "https%3A%2F%2Fanime.anidub.life%2Fvideoblog%2F9688-novosti-anime-industrii-za-mart-2016.html"
     },
     "queryStringParameters": {
-        "nocache": true
+        "nocache": "true"
     },
     "headers": {
         "origin": "http://localhost:3000"

@@ -10,8 +10,7 @@ const extractors = {
     //     hls: true
     // },
     'sibnet': {
-        type: 'sibnetmp4',
-        hls: false
+        type: 'sibnetmp4'
     },
     'secvideo1': {
         type: 'mp4local'
@@ -19,7 +18,11 @@ const extractors = {
     'csst.online': {
         type: 'mp4local'
     },
-    'veoh.com': null
+    'veoh.com': null,
+    'tortuga.wtf': {
+        type: 'tortuga',
+        hls: true
+    }
 }
 
 class AnitubeUAProvider extends Provider {
@@ -104,6 +107,16 @@ class AnitubeUAProvider extends Provider {
                         })
 
                         return files
+                    }
+                },
+                trailer: {
+                    selector: 'a.rollover',
+                    transform: ($el) => {
+                        let url = $el.attr('href')
+
+                        url = url.replace('youtube.com/watch?v=', 'youtube.com/embed/')
+
+                        return url
                     }
                 }
             }
