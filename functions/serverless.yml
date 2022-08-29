@@ -16,7 +16,6 @@ provider:
   runtime: nodejs16.x
   region: eu-north-1
   versionFunctions: false
-  memorySize: 512
   environment:
     # DEBUG: '*'
     ANALYTIC_TABLE: ${self:custom.analyticsTable}
@@ -138,6 +137,12 @@ functions:
           cors: true
     environment:
       LOG_GROUP: web-${opt:stage}
+
+package:
+  excludeDevDependencies: true
+  patterns:
+    - 'node_modules/**'
+    - 'src/**'
 
 resources:
   Resources:

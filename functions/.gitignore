@@ -5,4 +5,4 @@ jspm_packages
 # Serverless directories
 .serverless
 
-debug/botEvent.json
+debug/events/botEvent.json

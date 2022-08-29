@@ -102,13 +102,15 @@ const doTextSearch = async (ctx, providers, query, page) => {
         const from = (page - 1) * MAX_RESULTS_PER_MESSAGE
         const to = page * MAX_RESULTS_PER_MESSAGE
         const chunk = results.slice(from, to)
-        const buttons = createResultButtons(chunk, query)
+        let buttons = createResultButtons(chunk, query)
 
         if(to < results.length) {
-            buttons.push(Markup.button.callback(
-                i18n.t('next_page'),
-                `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}${page + 1} ${query}`
-            ))
+            const data = `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}${page + 1} ${query}`
+            if(Buffer.byteLength(data, 'utf-8') < MAX_QUERY_LENGTH) { // add more if query short enouge
+                buttons.push(Markup.button.callback(i18n.t('next_page'), data))
+            } else { // else  return all results
+                buttons = createResultButtons(results, query)
+            }
         }
 
         return ctx.reply(
