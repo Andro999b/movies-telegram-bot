@@ -22,29 +22,32 @@ module.exports = async (params) => {
     const linksApi = 'https://kodik.biz/gvi'
     const referer = 'https://anigato.ru/'
 
-    const signParams = Object.keys(ANIGATO_CONFIG.kodicSign)
-        .map((key) => `${key}=${ANIGATO_CONFIG.kodicSign[key]}`)
-        .join('&')
+    let id, hash, type = 'video'
 
-    let type = 'seria'
-    let iframeUrl
+    if (tid) {
+        const signParams = Object.keys(ANIGATO_CONFIG.kodicSign)
+            .map((key) => `${key}=${ANIGATO_CONFIG.kodicSign[key]}`)
+            .join('&')
 
-    if (ttype == 'serial') {
-        iframeUrl = `https://kodik.biz/serial/${tid}/${thash}/720p?${signParams}&season=${season}&episode=${url}`
+        if (ttype == 'serial') {
+            type = 'seria'
+            url = `https://kodik.biz/serial/${tid}/${thash}/720p?${signParams}&season=${season}&episode=${url}`
+        } else {
+            url = `https://kodik.biz/video/${tid}/${thash}/720p?${signParams}`
+        }
+
+        const res = await superagent.get(url)
+            .set({
+                'User-Agent': PROVIDERS_CONFIG.userAgent,
+                'Referer': referer,
+            })
+            .timeout(10000)
+
+        id = extractStringSingleQuote(res.text, 'videoInfo\\.id')
+        hash = extractStringSingleQuote(res.text, 'videoInfo\\.hash')
     } else {
-        iframeUrl = `https://kodik.biz/video/${tid}/${thash}/720p?${signParams}`
-        type = 'video'
+        [,, id, hash] = new URL(url).pathname.split('/')
     }
-
-    const res = await superagent.get(iframeUrl)
-        .set({
-            'User-Agent': PROVIDERS_CONFIG.userAgent,
-            'Referer': referer,
-        })
-        .timeout(10000)
-
-    const id = extractStringSingleQuote(res.text, 'videoInfo\\.id')
-    const hash = extractStringSingleQuote(res.text, 'videoInfo\\.hash')
 
     const videoInfoParams = {
         id,

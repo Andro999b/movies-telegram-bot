@@ -47,21 +47,32 @@ class AnigatoProvider extends Provider {
                         const $translations = $iframe('.serial-translations-box, .movie-translations-box').find('option').toArray()
 
                         if ($seasons.length == 0) {
-                            return [{
-                                id: 0,
-                                urls: $translations.map((t) => {
-                                    const $t = $(t)
-                                    return {
-                                        url: '',
-                                        audio: $t.text(),
+                            if ($translations.length == 0) {
+                                return [{
+                                    id: 0,
+                                    urls: [{
+                                        url: iframeSrc,
                                         hls: true,
-                                        extractor: {
-                                            type: 'anigit',
-                                            params: this._getTranslationParams($t)
+                                        extractor: { type: 'anigit' }
+                                    }]
+                                }]
+                            } else {
+                                return [{
+                                    id: 0,
+                                    urls: $translations.map((t) => {
+                                        const $t = $(t)
+                                        return {
+                                            url: '',
+                                            audio: $t.text(),
+                                            hls: true,
+                                            extractor: {
+                                                type: 'anigit',
+                                                params: this._getTranslationParams($t)
+                                            }
                                         }
-                                    }
-                                })
-                            }]
+                                    })
+                                }]
+                            }
                         } else if ($seasons.length == 1) {
                             const $season = $($seasons[0])
                             const seasonNum = this._getSeassonNum($season)

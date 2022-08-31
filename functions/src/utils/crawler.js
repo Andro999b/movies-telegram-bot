@@ -96,8 +96,17 @@ class Crawler {
             selector = config.selector
         }
 
-        $el = selector ? $el.find(selector) : $el
-
+        if(typeof selector === 'string') {
+            $el = $el.find(selector) 
+        } else if(Array.isArray(selector)) {
+            let $r
+            for (const s of selector) {
+                $r = $el.find(s)
+                if($r.length) break
+            }
+            $el = $r
+        }
+        
         if ($el.length) {
             return transform($el, $root, url)
         } else {

@@ -98,19 +98,23 @@ const doTextSearch = async (ctx, providers, query, page) => {
 
     const replySingleProvider = (results) => {
         const provider = results[0].provider
+        if (Buffer.byteLength(query, 'utf8') > MAX_QUERY_LENTH_WITH_PROVIDER) {
+            return ctx.reply(
+                i18n.t('provider_results', { query, provider }),
+                Markup.inlineKeyboard(createResultButtons(results, query), { columns: 1 })
+            )
+        }
 
         const from = (page - 1) * MAX_RESULTS_PER_MESSAGE
         const to = page * MAX_RESULTS_PER_MESSAGE
         const chunk = results.slice(from, to)
-        let buttons = createResultButtons(chunk, query)
+        const buttons = createResultButtons(chunk, query)
 
         if(to < results.length) {
-            const data = `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}${page + 1} ${query}`
-            if(Buffer.byteLength(data, 'utf-8') < MAX_QUERY_LENGTH) { // add more if query short enouge
-                buttons.push(Markup.button.callback(i18n.t('next_page'), data))
-            } else { // else  return all results
-                buttons = createResultButtons(results, query)
-            }
+            buttons.push(Markup.button.callback(
+                i18n.t('next_page'),
+                `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}${page + 1} ${query}`
+            ))
         }
 
         return ctx.reply(
