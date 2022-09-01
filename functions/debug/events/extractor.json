@@ -1,7 +1,7 @@
 {
     "queryStringParameters": {
         "type": "anigit",
-        "url": "https://kodik.biz/video/59004/302a1cf84c1a57de140328a89052df96/720p"
+        "url": "//kodik.biz/video/59004/302a1cf84c1a57de140328a89052df96/720p"
     },
     "headers": {
         "origin": "http://localhost:3000"

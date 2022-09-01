@@ -24,7 +24,7 @@ module.exports = {
         'baseUrl': 'https://anigato.ru/',
         'searchUrl': 'https://anigato.ru/index.php?do=search',
         'token': '447d179e875efe44217f20d1ee2146be',
-        'kodicSign': {
+        'kodikSign': {
             'd': 'anigato.ru',
             'd_sign': 'cf40e6e20f1db41da51ba9838a01f05bf7f861eb799fedc164f63e83c660de25',
             'pd': 'kodik.info',

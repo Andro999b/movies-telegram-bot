@@ -25,8 +25,8 @@ module.exports = async (params) => {
     let id, hash, type = 'video'
 
     if (tid) {
-        const signParams = Object.keys(ANIGATO_CONFIG.kodicSign)
-            .map((key) => `${key}=${ANIGATO_CONFIG.kodicSign[key]}`)
+        const signParams = Object.keys(ANIGATO_CONFIG.kodikSign)
+            .map((key) => `${key}=${ANIGATO_CONFIG.kodikSign[key]}`)
             .join('&')
 
         if (ttype == 'serial') {
@@ -46,6 +46,7 @@ module.exports = async (params) => {
         id = extractStringSingleQuote(res.text, 'videoInfo\\.id')
         hash = extractStringSingleQuote(res.text, 'videoInfo\\.hash')
     } else {
+        if(url.startsWith('//')) url = 'https:' + url;
         [,, id, hash] = new URL(url).pathname.split('/')
     }
 
