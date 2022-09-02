@@ -51,8 +51,6 @@
     "firebase": "^9.9.1",
     "fscreen": "^1.2.0",
     "hls.js": "^1.2.0",
-    "lodash.groupby": "^4.6.0",
-    "lodash.pick": "^4.4.0",
     "memoize-one": "^6.0.0",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",

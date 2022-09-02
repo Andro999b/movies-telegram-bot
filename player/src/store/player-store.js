@@ -272,8 +272,6 @@ class PlayerStore {
         }
 
         return p.then(({ fileIndex, startTime }) => {
-            console.log(playlist, fileIndex, startTime) // eslint-disable-line
-
             this.device.setPlaylist(playlist, fileIndex, startTime)
             this.device.play()
 

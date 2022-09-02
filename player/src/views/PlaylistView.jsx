@@ -61,7 +61,6 @@ class PlaylistView extends Component {
         removeGlobalKey(['Space', 'Enter'])
     }
 
-
     componentDidMount() {
         const { loadPlaylist } = this.props
         const cur = this.parseLocation(this.props)

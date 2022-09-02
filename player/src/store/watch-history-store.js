@@ -52,6 +52,8 @@ class RemoteHistoryStorage {
     }
 
     set = async (key, data) => {
+        if(!Object.keys(data).length) return
+
         const remoteDb = await this._getRemoteDB()
 
         if (!remoteDb) return
@@ -63,6 +65,8 @@ class RemoteHistoryStorage {
     }
 
     update = async (key, data) => {
+        if(!Object.keys(data).length) return
+
         const remoteDb = await this._getRemoteDB()
 
         if (!remoteDb) return
@@ -132,6 +136,7 @@ class LocalHistoryStorage {
 class ComposedHistoryStorage {
     initialLoad = false
     updatedKeys = new Set()
+    localKeys = ['startTime']
 
     constructor(localHistory, remoteHistory) {
         this.loadHistory = localHistory
@@ -151,16 +156,22 @@ class ComposedHistoryStorage {
     }
 
     set = async (key, data) => {
+        const remoteData = {...data}
+        this.localKeys.forEach((key) => delete remoteData[key])
+
         await Promise.all([
             this.loadHistory.set(key, data),
-            this.remoteHistory.set(key, data)
+            this.remoteHistory.set(key, remoteData)
         ])
     }
 
     update = async (key, data) => {
+        const remoteData = {...data}
+        this.localKeys.forEach((key) => delete remoteData[key])
+
         await Promise.all([
             this.loadHistory.update(key, data),
-            this.remoteHistory.update(key, data)
+            this.remoteHistory.update(key, remoteData)
         ])
     }
 
@@ -188,7 +199,7 @@ class ComposedHistoryStorage {
     _updateLocalItem = async (item) => {
         const localItem = await this.loadHistory.get(item.key)
         if (localItem == null || localItem.time < item.time) {
-            await this.loadHistory.set(item.key, item)
+            await this.loadHistory.set(item.key, { ...localItem, ...item })
             return item
         }
         return localItem
@@ -249,16 +260,15 @@ class WatchHistoryStore {
         this.composedHistory.update(this._getItemKey(provider, id), { fileIndex, time: Date.now() })
 
     updateLastEpisodePosition = async ({ provider, id }, startTime) => {
-        store.set(`playlist:${provider}:${id}:ts`, startTime)
+        this.composedHistory.update(this._getItemKey(provider, id), { startTime })
     }
 
     lastEpisode = async ({ provider, id }) => {
         const key = this._getItemKey(provider, id)
         const item = await this.composedHistory.get(key)
-        const startTime = store.get(`playlist:${provider}:${id}:ts`)
         return {
             fileIndex: item?.fileIndex ?? 0,
-            startTime
+            startTime: item?.startTime ?? store.get(`playlist:${provider}:${id}:ts`)
         }
     }
 
