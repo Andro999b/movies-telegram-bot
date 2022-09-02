@@ -85,7 +85,9 @@ class RemoteHistoryStorage {
 
         const snap = await get(query(remoteDb))
         const out = []
-        snap.forEach((d) => out.push(d.val()))
+        snap.forEach((d) => {
+            out.push(d.val())
+        })
         return out
     }
 
@@ -174,12 +176,7 @@ class ComposedHistoryStorage {
         if (!this.initialLoad) {
             const items = await this.remoteHistory.all()
 
-            await Promise.all(items.map(async (item) => {
-                const localItem = await this.loadHistory.get(item.key)
-                if (localItem == null || localItem.time < item.time) {
-                    await this.loadHistory.set(item.key, item)
-                }
-            }))
+            await Promise.all(items.map(this._updateLocalItem))
 
             items.forEach(({ key }) => this.updatedKeys.add(key))
             this.initialLoad = true
@@ -188,10 +185,10 @@ class ComposedHistoryStorage {
         return this.loadHistory.all()
     }
 
-    async _updateLocalItem(item) {
+    _updateLocalItem = async (item) => {
         const localItem = await this.loadHistory.get(item.key)
         if (localItem == null || localItem.time < item.time) {
-            await this.loadHistory.set(item)
+            await this.loadHistory.set(item.key, item)
             return item
         }
         return localItem
