@@ -36,15 +36,16 @@ import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 @observer
 class PlaylistView extends Component {
 
-    state = { started: false, initialFullScreen: false }
+    state = { started: false, starting: false, initialFullScreen: false }
     fileIndex = 0
     time = 0
 
     handleStart = () => {
         const { loading, openPlaylist, playlist, watching } = this.props
-        const { started } = this.state
-        if(loading || started) return
+        const { started, starting } = this.state
+        if(loading || started || starting) return
 
+        this.setState({ starting: true })
         openPlaylist(playlist, this.fileIndex, this.time)
             .then(() => {
                 this.setState({ 
@@ -53,8 +54,7 @@ class PlaylistView extends Component {
                 })
                 analytics('start')
             })
-
-        watching(playlist)
+            .then(() => watching(playlist))
     }
 
     componentWillUnmount() {
@@ -113,7 +113,7 @@ class PlaylistView extends Component {
     renderContent() {
         const { loading, trailerUrl, playlist, error } = this.props
 
-        const { started, initialFullScreen } = this.state
+        const { started, initialFullScreen, starting } = this.state
 
         if (loading) {
             return (<DualCirclesLoader />)
@@ -139,6 +139,7 @@ class PlaylistView extends Component {
             if (!started) {
                 return (
                     <StartScrean
+                        starting={starting}
                         playlist={playlist}
                         onStart={this.handleStart}
                     />

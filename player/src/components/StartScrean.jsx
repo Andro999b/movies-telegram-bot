@@ -9,10 +9,11 @@ import TelegramLinks from './TelegramLinks'
 import AddHistoryButton from './AddHistoryButton'
 import analytics from '../utils/analytics'
 import localization from '../localization'
+import { CircularProgress } from '@material-ui/core'
 
 class StartScrean extends Component {
     render() {
-        const { onStart, playlist } = this.props
+        const { onStart, playlist, starting } = this.props
         const { image } = playlist
 
 
@@ -23,7 +24,8 @@ class StartScrean extends Component {
                     style={{ backgroundImage: image ? `url(${image})` : null, cursor: 'pointer' }}
                     onClick={onStart}
                 >
-                    <PlayIcon className="center shadow-icon" fontSize="inherit" />
+                    { starting && <div className="loader-indicator center"><CircularProgress/></div>}
+                    { !starting && <PlayIcon className="center shadow-icon" fontSize="inherit" /> }
                 </div>
                 <a className='save-ukraine'
                     href='https://savelife.in.ua/'
@@ -43,6 +45,7 @@ class StartScrean extends Component {
 }
 
 StartScrean.propTypes = {
+    starting: PropTypes.bool,
     playlist: PropTypes.object,
     onStart: PropTypes.func
 }

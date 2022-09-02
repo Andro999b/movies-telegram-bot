@@ -4,7 +4,7 @@ import { observable, action } from 'mobx'
 import { getAuth, signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider } from 'firebase/auth'
 import { initializeApp } from 'firebase/app'
 import { getDatabase, ref, child, get, set, query, update, remove } from 'firebase/database'
-import log from '../utils/logger'
+// import log from '../utils/logger'
 const app = initializeApp({
     apiKey: 'AIzaSyCoQdUA6jN3cWx_yopHDVsC2aIW9Bor2P4',
     authDomain: 'movies-player.firebaseapp.com',
@@ -15,42 +15,213 @@ const app = initializeApp({
 const auth = getAuth()
 const provider = new GoogleAuthProvider()
 
+class RemoteHistoryStorage {
+    remoteDb = null
+    inited = false
+
+    _getRemoteDB = async () => {
+        if (this.inited) return this.remoteDb
+
+        return new Promise((resolve, reject) => {
+            onAuthStateChanged(auth, (user) => {
+                if (this.inited) {
+                    resolve(this.remoteDb)
+                    return
+                }
+
+                if (user) {
+                    this.remoteDb = ref(getDatabase(app), `library/${user.uid}/history`)
+                } else {
+                    this.remoteDb = null
+                }
+
+                this.inited = true
+
+                resolve(this.remoteDb)
+            }, reject)
+        })
+    }
+
+    get = async (key) => {
+        const remoteDb = await this._getRemoteDB()
+
+        if (!remoteDb) return
+
+        const snap = await get(child(remoteDb, this._toRemoteKey(key)))
+        return snap.val()
+    }
+
+    set = async (key, data) => {
+        const remoteDb = await this._getRemoteDB()
+
+        if (!remoteDb) return
+
+        await set(child(remoteDb, this._toRemoteKey(key)), {
+            key,
+            ...data
+        })
+    }
+
+    update = async (key, data) => {
+        const remoteDb = await this._getRemoteDB()
+
+        if (!remoteDb) return
+
+        await update(child(remoteDb, this._toRemoteKey(key)), data)
+    }
+
+    delete = async (key) => {
+        const remoteDb = await this._getRemoteDB()
+
+        if (!remoteDb) return
+
+        await remove(child(remoteDb, this._toRemoteKey(key)))
+    }
+
+    all = async () => {
+        const remoteDb = await this._getRemoteDB()
+
+        if (!remoteDb) return []
+
+        const snap = await get(query(remoteDb))
+        const out = []
+        snap.forEach((d) => out.push(d.val()))
+        return out
+    }
+
+    _toRemoteKey(key) {
+        return key.replace(/[#.]/g, '_')
+    }
+}
+
+class LocalHistoryStorage {
+    localDB = new Dexie('HistoryDatabase')
+
+    constructor() {
+        this.localDB
+            .version(3)
+            .stores({
+                history: '&key,provider,id,title,image,time,fileIndex,startTime,audio'
+            })
+    }
+
+    get = async (key) => this.localDB.history.get(key)
+
+    set = async (key, data) => {
+        await this.localDB.history.put({
+            key,
+            ...data
+        })
+    }
+
+    update = async (key, data) => {
+        await this.localDB.history.update(key, data)
+    }
+
+    delete = async (key) => {
+        await this.localDB.history
+            .where({ key })
+            .delete()
+    }
+
+    all = async () => this.localDB.history.toArray()
+}
+
+class ComposedHistoryStorage {
+    initialLoad = false
+    updatedKeys = new Set()
+
+    constructor(localHistory, remoteHistory) {
+        this.loadHistory = localHistory
+        this.remoteHistory = remoteHistory
+    }
+
+    get = async (key) => {
+        if (!this.updatedKeys.has(key)) {
+            const item = await this.remoteHistory.get(key)
+            if (item != null) {
+                this.updatedKeys.add(key)
+                return this._updateLocalItem(item)
+            }
+        }
+
+        return await this.loadHistory.get(key)
+    }
+
+    set = async (key, data) => {
+        await Promise.all([
+            this.loadHistory.set(key, data),
+            this.remoteHistory.set(key, data)
+        ])
+    }
+
+    update = async (key, data) => {
+        await Promise.all([
+            this.loadHistory.update(key, data),
+            this.remoteHistory.update(key, data)
+        ])
+    }
+
+    delete = async (key) => {
+        await Promise.all([
+            this.loadHistory.delete(key),
+            this.remoteHistory.delete(key)
+        ])
+        this.updatedKeys.delete(key)
+    }
+
+    all = async () => {
+        if (!this.initialLoad) {
+            const items = await this.remoteHistory.all()
+
+            await Promise.all(items.map(async (item) => {
+                const localItem = await this.loadHistory.get(item.key)
+                if (localItem == null || localItem.time < item.time) {
+                    await this.loadHistory.set(item.key, item)
+                }
+            }))
+
+            items.forEach(({ key }) => this.updatedKeys.add(key))
+            this.initialLoad = true
+        }
+
+        return this.loadHistory.all()
+    }
+
+    async _updateLocalItem(item) {
+        const localItem = await this.loadHistory.get(item.key)
+        if (localItem == null || localItem.time < item.time) {
+            await this.loadHistory.set(item)
+            return item
+        }
+        return localItem
+    }
+}
+
+
 class WatchHistoryStore {
     @observable insync = false
     @observable history = null
 
+    composedHistory = new ComposedHistoryStorage(
+        new LocalHistoryStorage(),
+        new RemoteHistoryStorage()
+    )
+
     constructor() {
-        this.localDB = new Dexie('HistoryDatabase')
-        this.localDB.version(3).stores({
-            history: '&key,provider,id,title,image,time,fileIndex,startTime,audio'
-        })
         onAuthStateChanged(auth, (user) => {
             this.insync = user != null
-            if (this.insync) {
-                this.remoteDb = ref(getDatabase(app), `library/${user.uid}/history`)
-            } else {
-                this.remoteDb = null
-            }
-            this._loadHistory()
         })
     }
 
-    _loadHistory = async () => {
-        const [remoteHistory, localHistory] = await Promise.all([
-            this._remoteHistory(),
-            this._localHistory()
-        ])
-
-        if (remoteHistory.length) {
-            const sean = new Set(remoteHistory.map((i) => i.key))
-            this.history = remoteHistory.concat(localHistory.filter((i) => !sean.has(i.key)))
-        } else {
-            this.history = localHistory
-        }
+    @action.bound loadHistory = async () => {
+        const items = await this.composedHistory.all()
+        this.history = items.sort((a, b) => b.time - a.time)
     }
 
     @action.bound connect() {
         signInWithPopup(auth, provider)
+            .then(this.loadHistory)
             .catch((error) => {
                 console.error('Fail login', error)
             })
@@ -60,169 +231,47 @@ class WatchHistoryStore {
         signOut(auth)
     }
 
-    watching = (playlist) => {
-        return Promise.all([
-            this._localWatching(playlist),
-            this._remoteWatching(playlist).catch((e) => log.error(e.message, e))
-        ])
-            .then(this._loadHistory)
+    watching = async ({ provider, id, title, image }) => {
+        const key = this._getItemKey(provider, id)
+        const item = await this.composedHistory.get(key)
+        await this.composedHistory.set(key, {
+            ...item,
+            key,
+            provider,
+            id,
+            title,
+            image,
+            time: Date.now()
+        })
     }
 
-    deleteFromHistory = (key) => {
-        Promise.all([
-            this._localDelete(key),
-            this._remoteDelete(key).catch((e) => log.error(e.message, e))
-        ])
-            .then(this._loadHistory)
-    }
+    deleteFromHistory = async (key) =>
+        this.composedHistory.delete(key)
 
-    updateLastEpisode = ({ provider, id }, fileIndex) => {
-        const key = `${provider}#${id}`
-        return Promise.all([
-            this._localUpdate(key, { fileIndex }),
-            this._remoteUpdate(key, { fileIndex }).catch((e) => log.error(e.message, e))
-        ])
-    }
+    updateLastEpisode = async ({ provider, id }, fileIndex) =>
+        this.composedHistory.update(this._getItemKey(provider, id), { fileIndex, time: Date.now() })
 
-
-    updateLastEpisodePosition = ({ provider, id }, startTime) => {
+    updateLastEpisodePosition = async ({ provider, id }, startTime) => {
         store.set(`playlist:${provider}:${id}:ts`, startTime)
     }
 
-    lastEpisode = ({ provider, id }) => {
-        const key = `${provider}#${id}`
-        return this._remoteGet(key)
-            .then((item) => item || this._localGet(key))
-            .then((item) => {
-                if (item && item.fileIndex) {
-                    return {
-                        fileIndex: item.fileIndex,
-                        startTime: store.get(`playlist:${provider}:${id}:ts`)
-                    }
-                } else {
-                    return {
-                        fileIndex: store.get(`playlist:${provider}:${id}:current`),
-                        startTime: store.get(`playlist:${provider}:${id}:ts`)
-                    }
-                }
-            })
-    }
-
-    updateAudioTrack = ({ provider, id }, audio) => {
+    lastEpisode = async ({ provider, id }) => {
         const key = this._getItemKey(provider, id)
-        return Promise.all([
-            this._localUpdate(key, { audio }),
-            this._remoteUpdate(key, { audio })
-        ])
-            .catch(console.error)
+        const item = await this.composedHistory.get(key)
+        const startTime = store.get(`playlist:${provider}:${id}:ts`)
+        return {
+            fileIndex: item?.fileIndex ?? 0,
+            startTime
+        }
     }
 
-    audioTrack = ({ provider, id }) => {
+    updateAudioTrack = async ({ provider, id }, audio) =>
+        this.composedHistory.update(this._getItemKey(provider, id), { audio, time: Date.now() })
+
+    audioTrack = async ({ provider, id }) => {
         const key = this._getItemKey(provider, id)
-        return this.localDB.history.get(key)
-            .then((item) => {
-                if (item && item.audio) {
-                    return item.audio
-                } else {
-                    return store.get(`playlist:${provider}:${id}:audio`)
-                }
-            })
-    }
-
-    async _remoteGet(key) {
-        if (!this.remoteDb)
-            return Promise.resolve()
-
-        const snap = await get(child(this.remoteDb, this._toRemoteKey(key)))
-        return snap.val()
-    }
-
-    async _remoteHistory() {
-        if (!this.remoteDb) return []
-
-        const snap = await get(query(this.remoteDb))
-        const out = []
-        snap.forEach((d) => {
-            out.push(d.val())
-        })
-        return out.sort((a, b) => b.time - a.time)
-    }
-
-    async _remoteUpdate(key, data) {
-        if (!this.remoteDb)
-            return
-
-        return update(child(this.remoteDb, this._toRemoteKey(key)), data)
-    }
-
-    async _remoteDelete(key) {
-        if (!this.remoteDb)
-            return
-
-        return remove(child(this.remoteDb, this._toRemoteKey(key)))
-    }
-
-    async _remoteWatching({ provider, id, title, image }) {
-        if (!this.remoteDb)
-            return
-
-        const key = this._getItemKey(provider, id)
-        const remoteKey = this._toRemoteKey(key)
-
-        const data = await this._remoteGet(remoteKey)
-        await set(child(this.remoteDb, remoteKey), {
-            ...data,
-            key,
-            provider,
-            id,
-            title,
-            image,
-            time: Date.now()
-        })
-    }
-
-    _toRemoteKey(key) {
-        return key.replace(/[#.]/g, '_')
-    }
-
-    _localHistory() {
-        return this.localDB.history.orderBy('time')
-            .reverse()
-            .toArray()
-    }
-
-    _localGet(key) {
-        return this.localDB.history.get(key)
-    }
-
-    _localUpdate(key, data) {
-        return this.localDB.history.update(key, data)
-    }
-
-    _localDelete(key) {
-        return this.localDB.history
-            .where({ key })
-            .delete()
-    }
-
-    async _localWatching({ provider, id, title, image }) {
-        const key = this._getItemKey(provider, id)
-        const updated = await this.localDB.history
-            .update(key, {
-                time: Date.now()
-            })
-
-        if (updated != 0)
-            return
-
-        await this.localDB.history.put({
-            key,
-            provider,
-            id,
-            title,
-            image,
-            time: Date.now()
-        })
+        const item = await this.composedHistory.get(key)
+        return item?.audio
     }
 
     _getItemKey(provider, id) {

@@ -133,7 +133,7 @@ export class LocalDevice extends Device {
             if (this.duration) {
                 const timeLimit = Math.max(0, this.duration - END_FILE_TIME_OFFSET)
                 const mark = Math.min(timeLimit, currentTime)
-                watchHistoryStore.updateLastEpisodePosition(this.playlist, mark)
+                watchHistoryStore.updateLastEpisodePosition(this.playlist, mark).then()
             }
         }
     }
@@ -155,8 +155,6 @@ export class LocalDevice extends Device {
             return Promise.resolve()
 
         this.setError(null)
-
-        watchHistoryStore.updateLastEpisode(this.playlist, fileIndex)
 
         this.currentFileIndex = fileIndex
 
@@ -232,7 +230,7 @@ export class LocalDevice extends Device {
     @action.bound setAudioTrack(id) {
         this.audioTrack = id
         this.setError(null)
-        watchHistoryStore.updateAudioTrack(this.playlist, id)
+        watchHistoryStore.updateAudioTrack(this.playlist, id).then()
     }
 
     @action.bound setAudioTracks(audioTracks) {
@@ -274,6 +272,8 @@ class PlayerStore {
         }
 
         return p.then(({ fileIndex, startTime }) => {
+            console.log(playlist, fileIndex, startTime) // eslint-disable-line
+
             this.device.setPlaylist(playlist, fileIndex, startTime)
             this.device.play()
 
@@ -292,6 +292,7 @@ class PlayerStore {
 
                 analytics('select_file')
             })
+            .then(() => watchHistoryStore.updateLastEpisode(this.device.playlist, fileIndex))
     }
 
     @action.bound prevFile() {

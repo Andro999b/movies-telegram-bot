@@ -22,13 +22,18 @@ class WatchHistoryView extends Component {
 
     componentDidMount() {
         document.title = localization.watchHistory
-    }
 
+        const { watchHistoryStore } = this.props
+        watchHistoryStore.loadHistory().then()
+    }
 
     onDelete = (e, key) => {
         e.preventDefault()
         const { watchHistoryStore } = this.props
-        watchHistoryStore.deleteFromHistory(key)
+
+        watchHistoryStore
+            .deleteFromHistory(key)
+            .then(watchHistoryStore.loadHistory)
     }
 
     render() {
@@ -80,9 +85,9 @@ class WatchHistoryView extends Component {
                         <Typography variant="h4">
                             {localization.watchHistory}
                         </Typography>
-                        <SyncButton  insync={insync} onConnect={connect} onDisconnect={disconnect}/>
+                        <SyncButton insync={insync} onConnect={connect} onDisconnect={disconnect} />
                     </div>
-                    {history.length == 0  && 
+                    {history.length == 0 &&
                         <Typography className="center" variant="h4">{localization.noWatchHistory}</Typography>
                     }
                     {history.length > 0 &&
