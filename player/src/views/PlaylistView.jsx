@@ -40,21 +40,19 @@ class PlaylistView extends Component {
     fileIndex = 0
     time = 0
 
-    handleStart = () => {
+    handleStart = async () => {
         const { loading, openPlaylist, playlist, watching } = this.props
         const { started, starting } = this.state
-        if(loading || started || starting) return
+        if (loading || started || starting) return
 
         this.setState({ starting: true })
-        openPlaylist(playlist, this.fileIndex, this.time)
-            .then(() => {
-                this.setState({ 
-                    started: true, 
-                    initialFullScreen: isTouchDevice()
-                })
-                analytics('start')
-            })
-            .then(() => watching(playlist))
+        await openPlaylist(playlist, this.fileIndex, this.time)
+        this.setState({
+            started: true,
+            initialFullScreen: isTouchDevice()
+        })
+        analytics('start')
+        watching(playlist)
     }
 
     componentWillUnmount() {
@@ -120,7 +118,7 @@ class PlaylistView extends Component {
             const { query, provider } = this.parseLocation(this.props)
             return (
                 <>
-                    <HistoryNavButton/>
+                    <HistoryNavButton />
                     {query ?
                         <AlternativeLinksError provider={provider} query={query} message={error} /> :
                         <Typography className="center shadow-border" variant="h4">{error}</Typography>
@@ -130,7 +128,7 @@ class PlaylistView extends Component {
         } else if (trailerUrl) {
             return (
                 <>
-                    <HistoryNavButton/>
+                    <HistoryNavButton />
                     <iframe frameBorder="0" height="100%" width="100%" src={trailerUrl} />
                 </>
             ) // redirect??

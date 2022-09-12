@@ -40,8 +40,8 @@ export class Device {
     setPlaylist(playlist, fileIndex, marks) { }
     setAudioTrack(id) { }
     setAudioTracks(audioTracks) { }
-    setNute(mute) {}
-    toggleMute() {}
+    setNute(mute) { }
+    toggleMute() { }
     /* eslint-enable */
 
     @action.bound seeking(seekTime) {
@@ -133,22 +133,18 @@ export class LocalDevice extends Device {
             if (this.duration) {
                 const timeLimit = Math.max(0, this.duration - END_FILE_TIME_OFFSET)
                 const mark = Math.min(timeLimit, currentTime)
-                watchHistoryStore.updateLastEpisodePosition(this.playlist, mark).then()
+                watchHistoryStore.updateLastFilePosition(this.playlist, this.currentFileIndex, mark).then()
             }
         }
     }
 
-    @action.bound setPlaylist(playlist, fileIndex, startTime) {
+    @action.bound async setPlaylist(playlist, fileIndex, startTime) {
         this.playlist = playlist
-        this.selectFile(fileIndex || 0)
-            .then((selected) => {
-                if (selected) {
-                    this.play(startTime)
-                }
-            })
+        await this.selectFile(fileIndex || 0)
+        this.play(startTime)
     }
 
-    @action.bound selectFile(fileIndex) {
+    @action.bound async selectFile(fileIndex) {
         const { files } = this.playlist
 
         if (fileIndex < 0 || fileIndex >= files.length)
@@ -167,7 +163,7 @@ export class LocalDevice extends Device {
             const { provider, id } = this.playlist
             let sourceId, params = {}, sourceParams
 
-            if(typeof file.asyncSource === 'string') {
+            if (typeof file.asyncSource === 'string') {
                 sourceId = file.asyncSource
             } else {
                 sourceId = file.asyncSource.sourceId
@@ -177,41 +173,36 @@ export class LocalDevice extends Device {
             sourceParams = Object.keys(params)
                 .map((key) => `${key}=${params[key]}`)
                 .join('&')
-            
-            if(!sourceParams) sourceParams = `?${sourceParams}`
 
-            let loader = fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
-                .then((res) => res.json())
+            if (!sourceParams) sourceParams = `?${sourceParams}`
 
-            return loader
-                .then((source) => {
-                    if (fileIndex == this.currentFileIndex) {
-                        Object.keys(source).forEach((key) => file[key] = source[key])
-                        file.asyncSource = null
-                        this.setSource(file)
-                    }
+            const res = fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
+            const source = res.json()
+
+            try {
+                if (fileIndex == this.currentFileIndex) {
+                    Object.keys(source).forEach((key) => file[key] = source[key])
+                    file.asyncSource = null
+                    this.setSource(file)
+                }
+            } catch (e) {
+                logger.error('Can`t load async source', {
+                    title: document.title,
+                    url: location.href,
+                    source: file,
+                    errorData: e
                 })
-                .then(() => true)
-                .catch((e) => {
-                    logger.error('Can`t load async source', {
-                        title: document.title,
-                        url: location.href,
-                        source: file,
-                        errorData: e
-                    })
 
-                    analytics('error_playback')
+                analytics('error_playback')
 
-                    this.setError(localization.cantPlayMedia)
-                    this.setLoading(false)
+                this.setError(localization.cantPlayMedia)
+                this.setLoading(false)
 
-                    return false
-                })
+                return false
+            }
         } else {
             this.setSource(file)
         }
-
-        return Promise.resolve(true)
     }
 
     @action.bound setLoading(loading) {
@@ -233,21 +224,20 @@ export class LocalDevice extends Device {
         watchHistoryStore.updateAudioTrack(this.playlist, id).then()
     }
 
-    @action.bound setAudioTracks(audioTracks) {
+    @action.bound async setAudioTracks(audioTracks) {
         this.audioTracks = audioTracks
 
         if (audioTracks.length > 0) {
-            watchHistoryStore.audioTrack(this.playlist)
-                .then((storedTrack) => {
-                    if (storedTrack) {
-                        const audioTrack = audioTracks.find(({ id }) => id == storedTrack)
-                        if (audioTrack) {
-                            this.audioTrack = audioTrack.id
-                        } else {
-                            this.audioTrack = audioTracks[0].id
-                        }
-                    }
-                })
+            const storedTrack = await watchHistoryStore.audioTrack(this.playlist)
+            if (storedTrack) {
+                const audioTrack = audioTracks.find(({ id }) => id == storedTrack)
+                if (audioTrack) {
+                    this.audioTrack = audioTrack.id
+                } else {
+                    this.audioTrack = audioTracks[0].id
+                }
+            }
+
         }
     }
 
@@ -263,34 +253,28 @@ export class LocalDevice extends Device {
 class PlayerStore {
     @observable device = new LocalDevice()
 
-    @action.bound openPlaylist(playlist, fileIndex, startTime) {
+    @action.bound async openPlaylist(playlist, fileIndex, startTime) {
         let p
         if (fileIndex == null || isNaN(fileIndex)) {
-            p = watchHistoryStore.lastEpisode(playlist)
+            p = await watchHistoryStore.lastEpisode(playlist)
         } else {
-            p = Promise.resolve({ fileIndex, startTime })
+            p = { fileIndex, startTime }
         }
 
-        return p.then(({ fileIndex, startTime }) => {
-            this.device.setPlaylist(playlist, fileIndex, startTime)
-            this.device.play()
+        this.device.setPlaylist(playlist, p.fileIndex, p.startTime)
+        this.device.play()
 
-            analytics('select_file')
-        })
+        analytics('select_file')
     }
 
-    @action.bound switchFile(fileIndex) {
-        this.device.selectFile(fileIndex)
-            .then((selected) => {
-                if (selected) {
-                    this.device.play()
-                } else {
-                    this.device.pause()
-                }
+    @action.bound async switchFile(fileIndex) {
+        await this.device.selectFile(fileIndex)
+        const item = await watchHistoryStore.getHistoryItem(this.device.playlist)
 
-                analytics('select_file')
-            })
-            .then(() => watchHistoryStore.updateLastEpisode(this.device.playlist, fileIndex))
+        this.device.play(item?.startTime ?? 0)
+
+        analytics('select_file')
+        await watchHistoryStore.updateLastFile(this.device.playlist, fileIndex)
     }
 
     @action.bound prevFile() {
@@ -300,11 +284,11 @@ class PlayerStore {
     @action.bound fileEnd() {
         const { playMode } = this.device
 
-        if(playMode == 'play_once') 
+        if (playMode == 'play_once')
             return
-        else if(playMode == 'repeat')
+        else if (playMode == 'repeat')
             this.device.play(0)
-        else 
+        else
             this.switchFileOrShuffle(this.device.currentFileIndex + 1)
     }
 

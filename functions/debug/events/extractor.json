@@ -1,7 +1,7 @@
 {
     "queryStringParameters": {
-        "type": "anigit",
-        "url": "//kodik.biz/video/59004/302a1cf84c1a57de140328a89052df96/720p"
+        "type": "mp4",
+        "url": "https://csst.online/embed/609622/"
     },
     "headers": {
         "origin": "http://localhost:3000"

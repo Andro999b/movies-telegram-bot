@@ -13,6 +13,12 @@ export default new LocalizedStrings({
         watchHistory: 'History',
         noWatchHistory: 'You havent watch anything yet. Use telegream bots to search something.',
         playModeLabel: 'Play Mode',
+        settingsLabel: 'Settings',
+        autoSkip: {
+            label: 'Autoskip',
+            reset: 'Play from start',
+            fromCurrent: 'Play from {0}',
+        },
         playMode: {
             'normal': 'Play all',
             'play_once': 'Play once',
@@ -34,6 +40,12 @@ export default new LocalizedStrings({
         watchHistory: 'Історія',
         noWatchHistory: 'Ваша історія порожня. Скористайтесь телегам ботом.',
         playModeLabel: 'Режим відтворення',
+        settingsLabel: 'Налаштування',
+        autoSkip: {
+            label: 'Автоперемотка',
+            reset: 'Починати з початку',
+            fromCurrent: 'Перемотувати до {0}',
+        },
         playMode: {
             'normal': 'По-порядку',
             'play_once': 'Відтоврити одноразово',

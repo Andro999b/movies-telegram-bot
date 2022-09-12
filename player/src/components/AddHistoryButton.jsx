@@ -4,29 +4,36 @@ import { Favorite, FavoriteBorder } from '@material-ui/icons'
 import PropTypes from 'prop-types'
 import { inject, observer } from 'mobx-react'
 
-@inject(({ watchHistoryStore: { watching, deleteFromHistory, history } }) => ({
+@inject(({ watchHistoryStore: { watching, deleteFromHistory, getHistoryItem } }) => ({
     watching,
-    history,
+    getHistoryItem,
     deleteFromHistory
 }))
 @observer
 class AddHistoryButton extends Component {
-    onAddHistory = () => {
-        const { watching, playlist } = this.props
-        watching(playlist)
-    };
+    state = {
+        inHistory: false
+    }
 
-    onDeleteHistory = () => {
+    onAddHistory = async () => {
+        const { watching, playlist } = this.props
+        await watching(playlist)
+        this.setState({ inHistory: true })
+    }
+
+    onDeleteHistory = async () => {
         const { deleteFromHistory, playlist: { provider, id } } = this.props
-        deleteFromHistory(`${provider}#${id}`)
-    };
+        await deleteFromHistory(`${provider}#${id}`)
+        this.setState({ inHistory: false })
+    }
+
+    async componentDidMount() {
+        const item = await this.props.getHistoryItem(this.props.playlist)
+        this.setState({ inHistory: item != null })
+    }
 
     render() {
-        const { history, playlist } = this.props
-        const inHistory = history &&
-            history.find(
-                ({ provider, id }) => playlist.provider == provider && playlist.id == id
-            ) != null
+        const { inHistory } = this.state
 
         return (
             <div className="add-history-btn">
@@ -47,7 +54,7 @@ AddHistoryButton.propTypes = {
     playlist: PropTypes.object.isRequired,
     deleteFromHistory: PropTypes.func,
     watching: PropTypes.func,
-    history: PropTypes.object,
+    getHistoryItem: PropTypes.func,
 }
 
 export default AddHistoryButton

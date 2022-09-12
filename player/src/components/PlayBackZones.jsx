@@ -9,6 +9,7 @@ import {
 import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 import { observer } from 'mobx-react'
 import { Typography, CircularProgress } from '@material-ui/core'
+import { toHHMMSS } from '../utils'
 
 @observer
 class PlayBackZones extends Component {
@@ -16,14 +17,22 @@ class PlayBackZones extends Component {
     state = { seekMode: null, accTime: null }
 
     handleFastFroward = (e) => {
-        this.delayStartSeeking(e, 'ff')
+        this.delayStartSeeking(e, 'ff', 10)
+    }
+
+    handleFastFroward1Min = (e) => {
+        this.delayStartSeeking(e, 'ff', 60)
     }
 
     handleFastRewind = (e) => {
-        this.delayStartSeeking(e, 'fr')
+        this.delayStartSeeking(e, 'fr', 10)
     }
 
-    delayStartSeeking = (e, seekMode) => {
+    handleFastRewind1Min = (e) => {
+        this.delayStartSeeking(e, 'fr', 60)
+    }
+
+    delayStartSeeking = (e, seekMode, skipTime) => {
         if (e) {
             e.stopPropagation()
             e.preventDefault()
@@ -35,7 +44,7 @@ class PlayBackZones extends Component {
 
         const { device, onSeek, onSeekEnd } = this.props
 
-        this.accTime =(this.accTime || 0) + 10
+        this.accTime =(this.accTime || 0) + skipTime
 
         this.setState({ seekMode, accTime: this.accTime })
 
@@ -59,11 +68,13 @@ class PlayBackZones extends Component {
     componentDidMount() {
         addGlobalKey('ArrowRight', this.handleFastFroward)
         addGlobalKey('ArrowLeft', this.handleFastRewind)
+        addGlobalKey('ArrowUp', this.handleFastFroward1Min)
+        addGlobalKey('ArrowDown', this.handleFastRewind1Min)
     }
 
     componentWillUnmount() {
         this.cleanUpListeners()
-        removeGlobalKey(['ArrowLeft', 'ArrowRight'])
+        removeGlobalKey(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'])
     }
 
     cleanUpState() {
@@ -94,7 +105,7 @@ class PlayBackZones extends Component {
                 <div className="playback-skip__indicator">
                     {accTime !== null &&
                         <Typography className="center shadow-border" variant="h2">
-                            {seekMode == 'ff' ? '+' : '-'}{accTime}s
+                            {seekMode == 'ff' ? '+' : '-'}{toHHMMSS(accTime)}
                         </Typography>
                     }
                     {paused && <PlayIcon className="center shadow-icon" fontSize="inherit" />}

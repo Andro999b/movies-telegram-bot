@@ -56,7 +56,7 @@ module.exports = async (params) => {
         type,
         bad_user: false,
         info: '{}',
-        ...ANIGATO_CONFIG.kodicSign
+        ...ANIGATO_CONFIG.kodikSign
     }
 
     // return videoInfoParams

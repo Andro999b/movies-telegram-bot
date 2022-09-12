@@ -10,7 +10,7 @@ class Notification extends Component {
 
     handleClose = () => {
         this.props.notificationStore.hideMessage()
-    };
+    }
 
     render() {
         const { notificationStore } = this.props

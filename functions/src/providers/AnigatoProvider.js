@@ -28,13 +28,14 @@ class AnigatoProvider extends Provider {
                 files: {
                     selector: '#kodik-player iframe',
                     transform: async ($el) => {
-                        const iframeSrc = $el.attr('src')
+                        let iframeSrc = $el.attr('src')
                             .replace('kodik.info', 'kodik.biz')
                             .replace('kodik.cc', 'kodik.biz')
                             .replace('aniqit.com', 'kodik.biz')
 
+                        iframeSrc = iframeSrc.startsWith('//') ? 'https:' + iframeSrc : iframeSrc
                         const res = await superagent
-                            .get(iframeSrc.startsWith('//') ? 'https:' + iframeSrc : iframeSrc)
+                            .get(iframeSrc)
                             .set({ ...this.config.headers })
                             .timeout(this.config.timeout)
 
@@ -45,10 +46,10 @@ class AnigatoProvider extends Provider {
                             .toArray()
 
                         const $translations = $iframe('.serial-translations-box, .movie-translations-box').find('option').toArray()
-
+                        let files
                         if ($seasons.length == 0) {
                             if ($translations.length == 0) {
-                                return [{
+                                files = [{
                                     id: 0,
                                     urls: [{
                                         url: iframeSrc,
@@ -57,7 +58,7 @@ class AnigatoProvider extends Provider {
                                     }]
                                 }]
                             } else {
-                                return [{
+                                files = [{
                                     id: 0,
                                     urls: $translations.map((t) => {
                                         const $t = $(t)
@@ -76,7 +77,7 @@ class AnigatoProvider extends Provider {
                         } else if ($seasons.length == 1) {
                             const $season = $($seasons[0])
                             const seasonNum = this._getSeassonNum($season)
-                            return $season
+                            files = $season
                                 .find('option')
                                 .toArray()
                                 .map((el, id) => {
@@ -84,11 +85,11 @@ class AnigatoProvider extends Provider {
                                     return {
                                         id,
                                         name: $el.text(),
-                                        urls: this.getSeasonEpisodeUrls($el, seasonNum, $translations)
+                                        urls: this.getSeasonEpisodeUrls($el, seasonNum, $translations, iframeSrc)
                                     }
                                 })
                         } else {
-                            return $seasons
+                            files = $seasons
                                 .map((el) => {
                                     const $season = $(el)
                                     const seasonNum = this._getSeassonNum($season)
@@ -100,13 +101,15 @@ class AnigatoProvider extends Provider {
                                             return {
                                                 name: $el.text(),
                                                 path: `Season ${seasonNum}`,
-                                                urls: this.getSeasonEpisodeUrls($el, seasonNum, $translations)
+                                                urls: this.getSeasonEpisodeUrls($el, seasonNum, $translations, iframeSrc)
                                             }
                                         })
                                 })
                                 .reduce((acc, items) => acc.concat(items), [])
                                 .map((items, id) => ({ id, ...items }))
                         }
+
+                        return files.filter((f) => f.urls.length > 0)
                     }
                 }
             }
@@ -121,23 +124,32 @@ class AnigatoProvider extends Provider {
         }
     }
 
-    getSeasonEpisodeUrls($el, seasonNum, $translations) {
-        return $translations.map((t) => {
-            const $t = $(t)
-
-            return {
+    getSeasonEpisodeUrls($el, season, $translations, iframeSrc) {
+        if ($translations.length == 0) {
+            const [, ttype, tid, thash] = new URL(iframeSrc).pathname.split('/')
+            return [{
                 url: '' + $el.val(),
-                audio: $t.text(),
                 hls: true,
-                extractor: {
-                    type: 'anigit',
-                    params: {
-                        season: seasonNum,
-                        ...this._getTranslationParams($t)
+                extractor: { type: 'anigit', params: { season, ttype, tid, thash } }
+            }]
+        } else {
+            return $translations.map((t) => {
+                const $t = $(t)
+
+                return {
+                    url: '' + $el.val(),
+                    audio: $t.text(),
+                    hls: true,
+                    extractor: {
+                        type: 'anigit',
+                        params: {
+                            season,
+                            ...this._getTranslationParams($t)
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
     }
 
     _getSeassonNum($season) {

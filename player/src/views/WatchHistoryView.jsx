@@ -24,16 +24,15 @@ class WatchHistoryView extends Component {
         document.title = localization.watchHistory
 
         const { watchHistoryStore } = this.props
-        watchHistoryStore.loadHistory().then()
+        watchHistoryStore.loadHistory()
     }
 
-    onDelete = (e, key) => {
+    onDelete = async (e, key) => {
         e.preventDefault()
         const { watchHistoryStore } = this.props
 
-        watchHistoryStore
-            .deleteFromHistory(key)
-            .then(watchHistoryStore.loadHistory)
+        await watchHistoryStore.deleteFromHistory(key)
+        watchHistoryStore.loadHistory()
     }
 
     render() {

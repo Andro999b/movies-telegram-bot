@@ -129,8 +129,10 @@ class VideoScrean extends BaseScrean {
     }
 
     startVideo = async () => {
-        const { device: { source: { urls }, quality, audioTrack } } = this.props
+        const { device: { setLoading, source: { urls }, quality, audioTrack } } = this.props
         let videoFiles
+
+        setLoading(true)
 
         if (audioTrack) {
             videoFiles = urls.filter((it) => it.audio == audioTrack)
@@ -147,10 +149,15 @@ class VideoScrean extends BaseScrean {
 
         const selectedIndex = this.videoFiles.findIndex((it) => it.quality == selectedQuality)
 
-        if (selectedIndex == -1) {
-            await this.setVideoFile(this.videoFiles.shift())
-        } else {
-            await this.setVideoFile(this.videoFiles.splice(selectedIndex, 1)[0])
+        try {
+            if (selectedIndex == -1) {
+                await this.setVideoFile(this.videoFiles.shift())
+            } else {
+                await this.setVideoFile(this.videoFiles.splice(selectedIndex, 1)[0])
+            }
+        } catch (e) {
+            this.handleError()
+            this.logError({ message: e.message })
         }
     }
 
@@ -185,14 +192,14 @@ class VideoScrean extends BaseScrean {
 
         import(/* webpackChunkName: "hlsjs" */ 'hls.js').then((module) => {
             const Hls = module.default
-            
+
 
             class loader extends Hls.DefaultConfig.loader {
                 constructor(config) {
                     super(config)
                     var load = this.load.bind(this)
                     this.load = function (context, config, callbacks) {
-                        if(!handleSpecialHLSUrls(context, callbacks)) {
+                        if (!handleSpecialHLSUrls(context, callbacks)) {
                             load(context, config, callbacks)
                         }
                     }
@@ -265,25 +272,25 @@ class VideoScrean extends BaseScrean {
         const { props: { device } } = this
         const video = this.video.current
 
-        let code
-        let retry = true
+        let code = null
+        let retry = false
         let videoErrorCode = video.error && video.error.code
         let videoErrorMessage = video.error && video.error.message
 
         switch (videoErrorCode) {
             case MediaError.MEDIA_ERR_ABORTED:
                 code = 'MEDIA_ERR_ABORTED'
-                retry = false
                 break
             case MediaError.MEDIA_ERR_NETWORK:
                 code = 'MEDIA_ERR_NETWORK'
+                retry = true
                 break
             case MediaError.MEDIA_ERR_DECODE:
                 code = 'MEDIA_ERR_DECODE'
+                retry = true
                 break
             case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
                 code = 'MEDIA_ERR_SRC_NOT_SUPPORTED'
-                retry = false
                 break
         }
 
@@ -305,11 +312,13 @@ class VideoScrean extends BaseScrean {
         device.setError(localization.cantPlayMedia)
         device.setLoading(false)
 
-        this.logError({
-            code,
-            message: videoErrorMessage,
-            videoSrc: video.src
-        })
+        if (code) {
+            this.logError({
+                code,
+                message: videoErrorMessage,
+                videoSrc: video.src
+            })
+        }
     }
 
     tryNextVideoUrl = () => {

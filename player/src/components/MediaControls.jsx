@@ -17,7 +17,7 @@ import { isTouchDevice } from '../utils'
 import { observer } from 'mobx-react'
 import AudioTrackSelector from './AudioTrackSelector'
 import VideoQualitySelector from './VideoQualitySelector'
-import PlayModeSelector from './PlayModeSelector'
+import PlaySettingsSelector from './PlaySettingsSelector'
 import MobileSoundControl from './MobileSoundControl'
 import localization from '../localization'
 
@@ -80,7 +80,7 @@ class MediaControls extends Component {
                                     </IconButton>
                                 </span>
                             </Tooltip>
-                            <PlayModeSelector device={device} />
+                            <PlaySettingsSelector device={device} />
                             {mobile && <MobileSoundControl device={device} />}
                             {!mobile && <SoundControl device={device} />}
                             {hasAudioTracks && <AudioTrackSelector device={device} />}

@@ -11,7 +11,8 @@ const extractors = {
     'sibnetmp4': require('./sibnetExtractorMp4'),
     'stormo': require('./mp4PlayerJsExtractor'),
     'anidub': require('./anidubExtractor'),
-    'mp4': require('./mp4PlayerJsExtractor')
+    'mp4': require('./mp4PlayerJsExtractor'),
+    'm3u8': require('./m3u8Extractor')
 }
 
 module.exports = async (parmas, headers) => {
