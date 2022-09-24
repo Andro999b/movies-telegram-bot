@@ -20,6 +20,7 @@ import VideoQualitySelector from './VideoQualitySelector'
 import PlaySettingsSelector from './PlaySettingsSelector'
 import MobileSoundControl from './MobileSoundControl'
 import localization from '../localization'
+import AutoPlaySwitch from './AutoPlaySwitcher'
 
 @observer
 class MediaControls extends Component {
@@ -80,12 +81,13 @@ class MediaControls extends Component {
                                     </IconButton>
                                 </span>
                             </Tooltip>
-                            <PlaySettingsSelector device={device} />
                             {mobile && <MobileSoundControl device={device} />}
                             {!mobile && <SoundControl device={device} />}
                             {hasAudioTracks && <AudioTrackSelector device={device} />}
                         </div>
                         <div className="player-controls__panel-section">
+                            <AutoPlaySwitch device={device}/>
+                            <PlaySettingsSelector device={device} />
                             {hasQualities && <VideoQualitySelector device={device} />}
                             <Tooltip title={localization.formatString(localization.hotkey, 'F, Enter')}>
                                 <IconButton onClick={() => onFullScreenToggle()}>

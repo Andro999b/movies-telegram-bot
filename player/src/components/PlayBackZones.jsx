@@ -68,8 +68,8 @@ class PlayBackZones extends Component {
     componentDidMount() {
         addGlobalKey('ArrowRight', this.handleFastFroward)
         addGlobalKey('ArrowLeft', this.handleFastRewind)
-        addGlobalKey('ArrowUp', this.handleFastFroward1Min)
-        addGlobalKey('ArrowDown', this.handleFastRewind1Min)
+        addGlobalKey('ArrowDown', this.handleFastFroward1Min)
+        addGlobalKey('ArrowUp', this.handleFastRewind1Min)
     }
 
     componentWillUnmount() {

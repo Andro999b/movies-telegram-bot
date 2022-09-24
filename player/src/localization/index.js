@@ -16,12 +16,11 @@ export default new LocalizedStrings({
         settingsLabel: 'Settings',
         autoSkip: {
             label: 'Autoskip',
-            reset: 'Play from start',
-            fromCurrent: 'Play from {0}',
+            reset: 'Disable autoskip',
+            fromCurrent: 'Always skip to {0}',
         },
         playMode: {
             'normal': 'Play all',
-            'play_once': 'Play once',
             'repeat': 'Repeat',
             'shuffle': 'Shuffle',
         },
@@ -43,12 +42,11 @@ export default new LocalizedStrings({
         settingsLabel: 'Налаштування',
         autoSkip: {
             label: 'Автоперемотка',
-            reset: 'Починати з початку',
+            reset: 'Вимкнути перемотку',
             fromCurrent: 'Перемотувати до {0}',
         },
         playMode: {
             'normal': 'По-порядку',
-            'play_once': 'Відтоврити одноразово',
             'repeat': 'Повторювати',
             'shuffle': 'Випадковий',
         },

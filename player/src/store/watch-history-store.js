@@ -1,10 +1,9 @@
 import { Dexie } from 'dexie'
-import localStore from '../utils/storage'
 import { observable, action } from 'mobx'
 import { getAuth, signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider } from 'firebase/auth'
 import { initializeApp } from 'firebase/app'
 import { getDatabase, ref, child, get, set, query, update, remove } from 'firebase/database'
-// import log from '../utils/logger'
+
 const app = initializeApp({
     apiKey: 'AIzaSyCoQdUA6jN3cWx_yopHDVsC2aIW9Bor2P4',
     authDomain: 'movies-player.firebaseapp.com',
@@ -14,6 +13,8 @@ const app = initializeApp({
 
 const auth = getAuth()
 const provider = new GoogleAuthProvider()
+
+const LAST_TIME_SAVE_INTERVAL = 30 * 1000
 
 class RemoteHistoryStorage {
     remoteDb = null
@@ -52,7 +53,7 @@ class RemoteHistoryStorage {
     }
 
     set = async (key, data) => {
-        if(!Object.keys(data).length) return
+        if (!Object.keys(data).length) return
 
         const remoteDb = await this._getRemoteDB()
 
@@ -65,7 +66,7 @@ class RemoteHistoryStorage {
     }
 
     update = async (key, data) => {
-        if(!Object.keys(data).length) return
+        if (!Object.keys(data).length) return
 
         const remoteDb = await this._getRemoteDB()
 
@@ -199,7 +200,6 @@ class ComposedHistoryStorage {
     }
 }
 
-
 class WatchHistoryStore {
     @observable insync = false
     @observable history = null
@@ -250,15 +250,20 @@ class WatchHistoryStore {
         this.composedHistory.delete(key)
 
     updateLastFile = async ({ provider, id }, fileIndex) =>
-        this.composedHistory.update(this._getItemKey(provider, id), { fileIndex, time: Date.now() })
+        this.composedHistory.update(this._getItemKey(provider, id), { fileIndex, lastTime: 0, time: Date.now() })
 
     updateStartTime = async ({ provider, id }, startTime) =>
         this.composedHistory.update(this._getItemKey(provider, id), { startTime })
 
-    updateLastFilePosition = async ({ provider, id }, fileIndex, time) => {
-        const key = this._getItemKey(provider, id)
-        localStore.set(`p#${key}`, `${fileIndex}_${Math.ceil(time)}`)
-    }
+
+    _lastTimeSavedTS = 0
+    updateLastFilePosition =
+        async ({ provider, id }, lastTime) => {
+            if(Date.now() - this._lastTimeSavedTS < LAST_TIME_SAVE_INTERVAL) return
+            this._lastTimeSavedTS = Date.now()
+            await this.composedHistory.update(this._getItemKey(provider, id), { lastTime })
+        }
+            
 
     getHistoryItem = async ({ provider, id }) => {
         const key = this._getItemKey(provider, id)
@@ -269,19 +274,8 @@ class WatchHistoryStore {
         const key = this._getItemKey(provider, id)
         const item = await this.composedHistory.get(key)
         const fileIndex = item?.fileIndex ?? 0
-        let startTime = item?.startTime ?? 0
-
-        const lastFilePosition = localStore.get(`p#${key}`)
-        if(lastFilePosition) {
-            try {
-                const [lastFileIndex, lastFileTime] = lastFilePosition.split('_')
-                if(fileIndex == parseInt(lastFileIndex)) {
-                    startTime = parseInt(lastFileTime)
-                }
-            } catch(e) {
-                console.error('Fail to get last episode position', e)
-            }
-        }
+        let startTime = item?.lastTime ?? 0
+        if(startTime == 0) startTime = item?.startTime ?? 0
 
         return {
             fileIndex,

@@ -94,7 +94,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'kinogo,kinovod,seasonvar,videocdn'
+      PROVIDERS: 'videocdn,kinogo,kinovod,seasonvar'
       BOT_TYPE: 'films'
       TOKEN: ${ssm:bot_ru_TOKEN_prod}
 

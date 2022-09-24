@@ -3,6 +3,7 @@ const makeResponse = require('../utils/makeResponse')
 
 const extractors = {
     'animevost': require('./animevostExtractor'),
+    'kinogo': require('./kinogoExtractor'),
     'tortuga': require('./m3u8Extractor'),
     'ashdi': require('./m3u8Extractor'),
     'anigit': require('./anigitExtractor'),

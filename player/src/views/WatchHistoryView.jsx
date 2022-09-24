@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom'
 import localization from '../localization'
 import { Delete } from '@material-ui/icons'
 import SyncButton from '../components/SyncButton'
+import AutoPlaySwitch from '../components/AutoPlaySwitcher'
 
 @inject('watchHistoryStore')
 @observer

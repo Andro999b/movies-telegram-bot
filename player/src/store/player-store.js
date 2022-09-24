@@ -21,6 +21,7 @@ export class Device {
     @observable audioTracks = []
     @observable audioTrack = null
     @observable playMode = 'normal'
+    @observable autoPlay = true
     @observable seekTime = null
     @observable quality = null
     @observable qualities = []
@@ -41,6 +42,7 @@ export class Device {
     setAudioTrack(id) { }
     setAudioTracks(audioTracks) { }
     setNute(mute) { }
+    setAutoPlay(autoPlay) { }
     toggleMute() { }
     /* eslint-enable */
 
@@ -133,7 +135,7 @@ export class LocalDevice extends Device {
             if (this.duration) {
                 const timeLimit = Math.max(0, this.duration - END_FILE_TIME_OFFSET)
                 const mark = Math.min(timeLimit, currentTime)
-                watchHistoryStore.updateLastFilePosition(this.playlist, this.currentFileIndex, mark).then()
+                watchHistoryStore.updateLastFilePosition(this.playlist, mark)
             }
         }
     }
@@ -148,7 +150,7 @@ export class LocalDevice extends Device {
         const { files } = this.playlist
 
         if (fileIndex < 0 || fileIndex >= files.length)
-            return Promise.resolve()
+            return
 
         this.setError(null)
 
@@ -197,8 +199,6 @@ export class LocalDevice extends Device {
 
                 this.setError(localization.cantPlayMedia)
                 this.setLoading(false)
-
-                return false
             }
         } else {
             this.setSource(file)
@@ -221,7 +221,7 @@ export class LocalDevice extends Device {
     @action.bound setAudioTrack(id) {
         this.audioTrack = id
         this.setError(null)
-        watchHistoryStore.updateAudioTrack(this.playlist, id).then()
+        watchHistoryStore.updateAudioTrack(this.playlist, id)
     }
 
     @action.bound async setAudioTracks(audioTracks) {
@@ -247,6 +247,10 @@ export class LocalDevice extends Device {
 
     @action.bound setMute(mute) {
         this.isMuted = mute
+    }
+
+    @action.bound setAutoPlay(autoPlay) {
+        this.autoPlay = autoPlay
     }
 }
 
@@ -282,13 +286,13 @@ class PlayerStore {
     }
 
     @action.bound fileEnd() {
-        const { playMode } = this.device
+        const { playMode, playlist, autoPlay } = this.device
 
-        if (playMode == 'play_once')
+        if (!autoPlay)
             return
         else if (playMode == 'repeat')
             this.device.play(0)
-        else
+        else if (playlist.files.length > 1)
             this.switchFileOrShuffle(this.device.currentFileIndex + 1)
     }
 

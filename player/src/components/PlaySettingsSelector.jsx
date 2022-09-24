@@ -58,7 +58,7 @@ class PlaySettingsSelector extends BaseSelector {
     renderPlayModeList() {
         const { playMode } = this.props.device
 
-        const items = ['normal', 'play_once', 'repeat', 'shuffle'].map((id) => (
+        const items = ['normal', 'repeat', 'shuffle'].map((id) => (
             <MenuItem key={id} selected={id == playMode} onClick={() => this.selectPlayMode(id)}>
                 {localization.playMode[id]}
             </MenuItem>
@@ -77,12 +77,12 @@ class PlaySettingsSelector extends BaseSelector {
                 <MenuItem disabled>{localization.playModeLabel}</MenuItem>
                 {this.renderPlayModeList()}
                 <MenuItem disabled>{localization.autoSkip.label} {autoSkipSuffix}</MenuItem>
-                <MenuItem onClick={this.resetStartTime}>
+                {startTime != 0 && <MenuItem onClick={this.resetStartTime}>
                     {localization.autoSkip.reset}
-                </MenuItem>
-                <MenuItem onClick={this.setCurTimeAsStartTime}>
+                </MenuItem> }
+                {startTime == 0 && <MenuItem onClick={this.setCurTimeAsStartTime}>
                     {localization.formatString(localization.autoSkip.fromCurrent, toHHMMSS(currentTime))}
-                </MenuItem>
+                </MenuItem>}
             </MenuList>
         )
     }
