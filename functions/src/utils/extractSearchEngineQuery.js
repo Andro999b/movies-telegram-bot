@@ -45,7 +45,10 @@ const extractFromGoogleShorts = async (link) => {
 
 const removeLink = (link) => link.replace(HTTPS_PATTERN, '')
 
-module.exports = async (link) => {
+module.exports = async (searchQuery) => {
+    const [link] = searchQuery.match(HTTPS_PATTERN) ?? []
+    if(!link) return searchQuery
+
     let query = await extractFromGoogleShorts(link)
     if (query) return query
 
@@ -55,6 +58,6 @@ module.exports = async (link) => {
     query = extractFromUrlParams(link)
     if (query) return query
 
-    return removeLink(link)
+    return removeLink(searchQuery)
 }
 module.exports.HTTPS_PATTERN = HTTPS_PATTERN

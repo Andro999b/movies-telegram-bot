@@ -146,6 +146,17 @@ const doTextSearch = async (ctx, providers, query, page) => {
     }
 }
 
+// Check ukrainan lanuage letters
+const doCheckUkraine = async (ctx, query) => {
+    if(BOT_TYPE == 'ua') return
+
+    const { i18n, track } = ctx
+    if(/[іІїЇєЄ]+/.test(query)) {
+        track('ukraine_detected')
+        await ctx.reply(i18n.t('ukraine_detected'))
+    }
+}
+
 const doSearch = async (ctx, defaultProviders, text) => {
     const { i18n, track } = ctx
 
@@ -153,20 +164,14 @@ const doSearch = async (ctx, defaultProviders, text) => {
 
     let { query, providers, page } = getQueryAndProviders(text, defaultProviders)
 
-    // check link
-    const parts = query.match(extractSearchEngineQuery.HTTPS_PATTERN)
+    query = await extractSearchEngineQuery(query)
 
-    if (parts && parts.length > 0) {
-        const searchEngineQuery = await extractSearchEngineQuery(parts[0])
-
-        if (searchEngineQuery) {
-            query = searchEngineQuery
-        } else {
-            track('no_results', { query, providers })
-            return ctx.reply(i18n.t('no_results', { query }))// do nothing in case if user send link
-        }
+    if (!query) {
+        track('no_results', { query, providers })
+        return ctx.reply(i18n.t('no_results', { query }))// do nothing in case if user send link
     }
-    // check link ends
+
+    await doCheckUkraine(ctx, query)
 
     return doTextSearch(ctx, providers, query, page)
 }
