@@ -48,6 +48,7 @@ class MediaControls extends Component {
         const hasQualities = device.qualities.length > 1
         const disablePrev = playMode == 'shuffle' || currentFileIndex == 0
         const disableNext = currentFileIndex >= files.length - 1 && playMode != 'shuffle'
+        const moreThatOneFile = files.length > 1
 
         return (
             <Slide direction="up" in mountOnEnter unmountOnExit>
@@ -95,11 +96,11 @@ class MediaControls extends Component {
                                     {fullScreen && <FullscreenExitIcon />}
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title={localization.formatString(localization.hotkey, 'P')}>
+                            {moreThatOneFile && <Tooltip title={localization.formatString(localization.hotkey, 'P')}>
                                 <IconButton onClick={() => onPlaylistToggle()}>
                                     <ListIcon />
                                 </IconButton>
-                            </Tooltip>
+                            </Tooltip>}
                         </div>
                     </div>
                 </Paper>
