@@ -1,4 +1,4 @@
 const extractSearchEngineQuery = require('../src/utils/extractSearchEngineQuery')
 
-extractSearchEngineQuery('https://g.co/kgs/7VVFfF')
+extractSearchEngineQuery('https://some-url.com текст')
     .then((it) => console.log(it)) // eslint-disable-line no-console

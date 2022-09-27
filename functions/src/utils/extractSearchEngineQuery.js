@@ -1,5 +1,6 @@
 const superagent = require('superagent')
 const { extractStringProperty } = require('./extractScriptVariable')
+const HTTPS_PATTERN = /http?s:\/\/[^\s]+/
 
 const extractFromKinopoisk = async (link) => {
     if (link.startsWith('https://www.kinopoisk.ru')) {
@@ -19,7 +20,7 @@ const extractFromUrlParams = (link) => {
     if (parts && parts.length > 2) {
         const query = parts[2]
 
-        return decodeURIComponent(query).replace(/\+/g, ' ')
+        return decodeURIComponent(query).replace(HTTPS_PATTERN, '')
     }
 
     return null
@@ -42,6 +43,8 @@ const extractFromGoogleShorts = async (link) => {
     return null
 }
 
+const removeLink = (link) => link.replace(HTTPS_PATTERN, '')
+
 module.exports = async (link) => {
     let query = await extractFromGoogleShorts(link)
     if (query) return query
@@ -49,6 +52,9 @@ module.exports = async (link) => {
     query = await extractFromKinopoisk(link)
     if (query) return query
 
+    query = extractFromUrlParams(link)
+    if (query) return query
 
-    return extractFromUrlParams(link)
+    return removeLink(link)
 }
+module.exports.HTTPS_PATTERN = HTTPS_PATTERN

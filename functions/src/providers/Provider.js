@@ -93,7 +93,7 @@ class Provider {
     }
 
     _prepareQuery(query) {
-        return query.replace(/[^a-zA-Z0-9\u0400-\u04FF]+/g, ' ')
+        return query.replace(/[^a-zA-Z0-9\u0400-\u04FF]+/g, ' ').trim()
     }
 
     // eslint-disable-next-line no-unused-vars

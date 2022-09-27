@@ -10,7 +10,6 @@ const MAX_QUERY_LENGTH = 63
 const MAX_QUERY_LENTH_WITH_PROVIDER = 50
 const PLAYER_URL = process.env.PLAYER_URL
 const MAX_RESULTS_PER_MESSAGE = 10
-const HTTPS_PATTERN = /http?s:\/\/[^\s]+/
 
 const getResultsKeyboad = (providersResults, query, i18n) => {
     return Markup.inlineKeyboard(
@@ -145,7 +144,7 @@ const doSearch = async (ctx, defaultProviders, text) => {
     let { query, providers, page } = getQueryAndProviders(text, defaultProviders)
 
     // check link
-    const parts = query.match(HTTPS_PATTERN)
+    const parts = query.match(extractSearchEngineQuery.HTTPS_PATTERN)
 
     if (parts && parts.length > 0) {
         const searchEngineQuery = await extractSearchEngineQuery(parts[0])

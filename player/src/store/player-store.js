@@ -25,59 +25,13 @@ export class Device {
     @observable seekTime = null
     @observable quality = null
     @observable qualities = []
-
-    isLocal() {
-        return true
-    }
-
-    /* eslint-disable no-unused-vars */
-    resume() { }
-    pause() { }
-    play(currentTime) { }
-    seek(currentTime) { }
-    disconnect() { }
-    setVolume(volume) { }
-    selectFile(fileIndex) { }
-    setPlaylist(playlist, fileIndex, marks) { }
-    setAudioTrack(id) { }
-    setAudioTracks(audioTracks) { }
-    setNute(mute) { }
-    setAutoPlay(autoPlay) { }
-    toggleMute() { }
-    /* eslint-enable */
-
-    @action.bound seeking(seekTime) {
-        if (seekTime < 0) seekTime = 0
-        else if (seekTime > this.duration) seekTime = this.duration
-        this.seekTime = seekTime
-    }
-
-    @action.bound setQuality(quality) {
-        this.quality = quality
-        store.set('quality', quality)
-    }
-
-    @action.bound setPlayMode(playMode) {
-        this.playMode = playMode
-        store.set('playMode', playMode)
-    }
-
-    skip(sec) {
-        if (this.duration) {
-            const seekTo = this.currentTime + sec
-            this.seek(Math.min(Math.max(seekTo, 0), this.duration))
-        }
-    }
-}
-
-export class LocalDevice extends Device {
     @observable seekTo = null
     @observable source = null
 
     constructor() {
-        super()
-        this.volume = store.get('volume') || 1
-        this.playMode = store.get('playMode') || 'normal'
+        this.volume = store.get('volume', 1)
+        this.playMode = store.get('playMode', 'normal')
+        this.autoPlay = store.get('autoPlay', true)
     }
 
     @action.bound play(currentTime) {
@@ -178,8 +132,8 @@ export class LocalDevice extends Device {
 
             if (!sourceParams) sourceParams = `?${sourceParams}`
 
-            const res = fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
-            const source = res.json()
+            const res = await fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
+            const source = await res.json()
 
             try {
                 if (fileIndex == this.currentFileIndex) {
@@ -251,11 +205,35 @@ export class LocalDevice extends Device {
 
     @action.bound setAutoPlay(autoPlay) {
         this.autoPlay = autoPlay
+        store.set('autoPlay', autoPlay)
+    }
+
+    @action.bound seeking(seekTime) {
+        if (seekTime < 0) seekTime = 0
+        else if (seekTime > this.duration) seekTime = this.duration
+        this.seekTime = seekTime
+    }
+
+    @action.bound setQuality(quality) {
+        this.quality = quality
+        store.set('quality', quality)
+    }
+
+    @action.bound setPlayMode(playMode) {
+        this.playMode = playMode
+        store.set('playMode', playMode)
+    }
+
+    @action.bound skip(sec) {
+        if (this.duration) {
+            const seekTo = this.currentTime + sec
+            this.seek(Math.min(Math.max(seekTo, 0), this.duration))
+        }
     }
 }
 
 class PlayerStore {
-    @observable device = new LocalDevice()
+    @observable device = new Device()
 
     @action.bound async openPlaylist(playlist, fileIndex, startTime) {
         let p
