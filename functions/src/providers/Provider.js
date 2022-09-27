@@ -1,4 +1,5 @@
 const crawler = require('../utils/crawler')
+const cleanupQuery = require('../utils/cleanupQuery')
 const PROVIDERS_CONFIG= require('../providersConfig')
 const urlencode = require('urlencode')
 
@@ -93,7 +94,7 @@ class Provider {
     }
 
     _prepareQuery(query) {
-        return query.replace(/[^a-zA-Z0-9\u0400-\u04FF]+/g, ' ').trim()
+        return cleanupQuery(query)
     }
 
     // eslint-disable-next-line no-unused-vars

@@ -30,11 +30,16 @@
 </head>
 <body>
     <script>
-        document.cookie = "firebase-country-override=ru; Max-Age=" + (365 * 24 * 3600);
-        gtag('event', 'no_russain', {
-            'event_category': 'site',
-            'event_label': 'No Russian'
-        })
+        if(window.location.hash == '#GloryToUkraine') {
+            document.cookie = "firebase-country-override=ua; Max-Age=" + (365 * 24 * 3600);
+            window.location.reload()
+        } else {
+            document.cookie = "firebase-country-override=ru; Max-Age=" + (365 * 24 * 3600);
+            gtag('event', 'no_russain', {
+                'event_category': 'site',
+                'event_label': 'No Russian'
+            })
+        }
     </script>
 </body>
 </html>

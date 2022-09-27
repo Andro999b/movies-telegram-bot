@@ -2,8 +2,9 @@ const extractSearchEngineQuery = require('../../../utils/extractSearchEngineQuer
 const providersService = require('../../../providers')
 const getQueryAndProviders = require('./getQueryAndProviders')
 const { Markup } = require('telegraf')
-const getSuggestions = require('../../../utils/suggestions')
+const suggesters = require('../../../utils/suggesters')
 
+const BOT_TYPE = process.env.BOT_TYPE
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
 const STAGE = process.env.STAGE || 'prod'
 const MAX_QUERY_LENGTH = 63
@@ -43,39 +44,48 @@ const createResultButtons = (res, query) => {
 }
 
 const getNoResults = async (ctx, providers, query) => {
-    const suggestions = await getSuggestions(query)
+    const suggeter = suggesters[BOT_TYPE]
+
+    if (!suggeter) {
+        return ctx.reply(i18n.t('no_results', { query }))
+    }
+
+    const suggestions = await suggeter(query)
     const { i18n, track } = ctx
 
     track('no_results', { query, providers, suggestions })
 
     if (suggestions && suggestions.length) {
-        const tooLong = suggestions.some((suggestion) => Buffer.byteLength(suggestion, 'utf-8') > MAX_QUERY_LENGTH)
+        const tooLong = suggestions.some((suggestion) =>
+            Buffer.byteLength(suggestion, 'utf-8') > MAX_QUERY_LENGTH
+        )
+        
         if (tooLong) {
             return ctx.reply(
                 i18n.t('no_results', { query }) + '\n' +
                 i18n.t('spell_check_too_long', { suggestion: suggestions.join(',') })
             )
-        } else {
-            return ctx.reply(
-                i18n.t('no_results', { query }) + '\n' + i18n.t('spell_check'),
-                Markup.inlineKeyboard([
-                    ...suggestions.map((suggestion) => Markup.button.callback(suggestion, suggestion)),
-                    Markup.button.callback(i18n.t('repeat_search'), query)
-                ], { columns: 1 })
-            )
         }
-    } else {
-        if (Buffer.byteLength(query, 'utf-8') > MAX_QUERY_LENGTH) {
-            return ctx.reply(i18n.t('no_results', { query }))
-        } else {
-            return ctx.reply(
-                i18n.t('no_results', { query }),
-                Markup.inlineKeyboard([
-                    Markup.button.callback(i18n.t('repeat_search'), query)
-                ])
-            )
-        }
+
+        return ctx.reply(
+            i18n.t('no_results', { query }) + '\n' + i18n.t('spell_check'),
+            Markup.inlineKeyboard([
+                ...suggestions.map((suggestion) => Markup.button.callback(suggestion, suggestion)),
+                Markup.button.callback(i18n.t('repeat_search'), query)
+            ], { columns: 1 })
+        )
     }
+
+    if (Buffer.byteLength(query, 'utf-8') > MAX_QUERY_LENGTH) {
+        return ctx.reply(i18n.t('no_results', { query }))
+    }
+
+    return ctx.reply(
+        i18n.t('no_results', { query }),
+        Markup.inlineKeyboard([
+            Markup.button.callback(i18n.t('repeat_search'), query)
+        ])
+    )
 }
 
 const doTextSearch = async (ctx, providers, query, page) => {
@@ -109,7 +119,7 @@ const doTextSearch = async (ctx, providers, query, page) => {
         const chunk = results.slice(from, to)
         const buttons = createResultButtons(chunk, query)
 
-        if(to < results.length) {
+        if (to < results.length) {
             buttons.push(Markup.button.callback(
                 i18n.t('next_page'),
                 `#${provider}${getQueryAndProviders.PAGE_SEPARATOR}${page + 1} ${query}`

@@ -1,4 +1,4 @@
-const suggestions = require('../src/utils/suggestions')
+const suggesters = require('../src/utils/suggesters')
 
 // eslint-disable-next-line no-console
-suggestions('Поймай меняесли сможешь').then((it) => console.log(it))
+suggesters.films('дневники вампира').then((it) => console.log(it))
