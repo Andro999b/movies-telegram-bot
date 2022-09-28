@@ -110,7 +110,6 @@ functions:
       PROVIDERS: 'anitubeua,anigato,animevost,anidub,animedia'
       BOT_HOOK_PATH: '/bot/anime'
       BOT_TYPE: 'anime'
-      LOCALIZATION_TYPE: 'localization/anime'
       TOKEN: ${ssm:bot_anime_TOKEN_prod}
   
   uabot:

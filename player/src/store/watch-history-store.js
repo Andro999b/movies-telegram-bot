@@ -43,6 +43,15 @@ class RemoteHistoryStorage {
         })
     }
 
+    disconnect = () => {
+        this.remoteDb = null
+    }
+
+    reset = () => {
+        this.remoteDb = null
+        this.inited = false
+    }
+
     get = async (key) => {
         const remoteDb = await this._getRemoteDB()
 
@@ -198,15 +207,23 @@ class ComposedHistoryStorage {
         }
         return localItem
     }
+
+    reset = () => {
+        this.initialLoad = false
+        this.updatedKeys = new Set()
+        this.remoteHistory.reset()
+    }
 }
 
 class WatchHistoryStore {
     @observable insync = false
     @observable history = null
 
-    composedHistory = new ComposedHistoryStorage(
+    _remoteHistory = new RemoteHistoryStorage()
+
+    _composedHistory = new ComposedHistoryStorage(
         new LocalHistoryStorage(),
-        new RemoteHistoryStorage()
+        this._remoteHistory
     )
 
     constructor() {
@@ -216,12 +233,13 @@ class WatchHistoryStore {
     }
 
     @action.bound loadHistory = async () => {
-        const items = await this.composedHistory.all()
+        const items = await this._composedHistory.all()
         this.history = items.sort((a, b) => b.time - a.time)
     }
 
     @action.bound connect() {
         signInWithPopup(auth, provider)
+            .then(this._composedHistory.reset)
             .then(this.loadHistory)
             .catch((error) => {
                 console.error('Fail login', error)
@@ -230,12 +248,13 @@ class WatchHistoryStore {
 
     @action.bound disconnect() {
         signOut(auth)
+        this._remoteHistory.disconnect()
     }
 
     watching = async ({ provider, id, title, image }) => {
         const key = this._getItemKey(provider, id)
-        const item = await this.composedHistory.get(key)
-        await this.composedHistory.set(key, {
+        const item = await this._composedHistory.get(key)
+        await this._composedHistory.set(key, {
             ...item,
             key,
             provider,
@@ -247,13 +266,13 @@ class WatchHistoryStore {
     }
 
     deleteFromHistory = async (key) =>
-        this.composedHistory.delete(key)
+        this._composedHistory.delete(key)
 
     updateLastFile = async ({ provider, id }, fileIndex) =>
-        this.composedHistory.update(this._getItemKey(provider, id), { fileIndex, lastTime: 0, time: Date.now() })
+        this._composedHistory.update(this._getItemKey(provider, id), { fileIndex, lastTime: 0, time: Date.now() })
 
     updateStartTime = async ({ provider, id }, startTime) =>
-        this.composedHistory.update(this._getItemKey(provider, id), { startTime })
+        this._composedHistory.update(this._getItemKey(provider, id), { startTime })
 
 
     _lastTimeSavedTS = 0
@@ -261,18 +280,18 @@ class WatchHistoryStore {
         async ({ provider, id }, lastTime) => {
             if(Date.now() - this._lastTimeSavedTS < LAST_TIME_SAVE_INTERVAL) return
             this._lastTimeSavedTS = Date.now()
-            await this.composedHistory.update(this._getItemKey(provider, id), { lastTime })
+            await this._composedHistory.update(this._getItemKey(provider, id), { lastTime })
         }
             
 
     getHistoryItem = async ({ provider, id }) => {
         const key = this._getItemKey(provider, id)
-        return await this.composedHistory.get(key)
+        return await this._composedHistory.get(key)
     }
 
     lastEpisode = async ({ provider, id }) => {
         const key = this._getItemKey(provider, id)
-        const item = await this.composedHistory.get(key)
+        const item = await this._composedHistory.get(key)
         const fileIndex = item?.fileIndex ?? 0
         let startTime = item?.lastTime ?? 0
         if(startTime == 0) startTime = item?.startTime ?? 0
@@ -284,11 +303,11 @@ class WatchHistoryStore {
     }
 
     updateAudioTrack = async ({ provider, id }, audio) =>
-        this.composedHistory.update(this._getItemKey(provider, id), { audio, time: Date.now() })
+        this._composedHistory.update(this._getItemKey(provider, id), { audio, time: Date.now() })
 
     audioTrack = async ({ provider, id }) => {
         const key = this._getItemKey(provider, id)
-        const item = await this.composedHistory.get(key)
+        const item = await this._composedHistory.get(key)
         return item?.audio
     }
 

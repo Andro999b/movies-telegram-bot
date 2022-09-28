@@ -12,7 +12,7 @@ const PROVIDERS =  process.env.PROVIDERS.split(',')
 const i18n = new TelegrafI18n({
     defaultLanguage: 'uk',
     allowMissing: false, // Default true
-    directory: path.resolve(__dirname, '..', process.env.LOCALIZATION_TYPE || 'localization')
+    directory: path.resolve(__dirname, '..', 'localization', BOT_TYPE)
 })
 
 const bot = new Telegraf(process.env.TOKEN, { telegram: { webhookReply: false }})

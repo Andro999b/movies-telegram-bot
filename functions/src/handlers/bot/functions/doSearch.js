@@ -147,15 +147,15 @@ const doTextSearch = async (ctx, providers, query, page) => {
 }
 
 // Check ukrainan lanuage letters
-const doCheckUkraine = async (ctx, query) => {
-    if(BOT_TYPE == 'ua') return
+// const doCheckUkraine = async (ctx, query) => {
+//     if(BOT_TYPE == 'ua') return
 
-    const { i18n, track } = ctx
-    if(/[іІїЇєЄ]+/.test(query)) {
-        track('ukraine_detected')
-        await ctx.reply(i18n.t('ukraine_detected'))
-    }
-}
+//     const { i18n, track } = ctx
+//     if(/[іІїЇєЄ]+/.test(query)) {
+//         track('ukraine_detected')
+//         await ctx.reply(i18n.t('ukraine_detected'))
+//     }
+// }
 
 const doSearch = async (ctx, defaultProviders, text) => {
     const { i18n, track } = ctx
@@ -171,7 +171,7 @@ const doSearch = async (ctx, defaultProviders, text) => {
         return ctx.reply(i18n.t('no_results', { query }))// do nothing in case if user send link
     }
 
-    await doCheckUkraine(ctx, query)
+    // await doCheckUkraine(ctx, query)
 
     return doTextSearch(ctx, providers, query, page)
 }

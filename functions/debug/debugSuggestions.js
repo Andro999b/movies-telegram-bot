@@ -1,4 +1,4 @@
 const suggesters = require('../src/utils/suggesters')
 
 // eslint-disable-next-line no-console
-suggesters.ua('тіні забутих предків').then((it) => console.log(it))
+suggesters.films('Киберпанк Бегущие по краю').then((it) => console.log(it))
