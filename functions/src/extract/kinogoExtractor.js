@@ -6,7 +6,7 @@ const KinogoProvider = require('../providers/KinogoProvider')
 module.exports = async ({ url, file }) => {
     const timeout = 1000
     const { iframeHost, csrfToken, playlistPath } = await KinogoProvider
-        .parseIframe(url, kinogoConfig.baseUrl, timeout)
+        .parseIframeV1(url, kinogoConfig.baseUrl, timeout)
 
     const playlistUrl = `https://${iframeHost}${playlistPath}`
 
@@ -20,7 +20,7 @@ module.exports = async ({ url, file }) => {
     const rootFiles = playlistRes.body
     const [seasonIndex, fileIndex, urlIndex] = file.split(',')
     const filePath = rootFiles[+seasonIndex].folder[+fileIndex].folder[+urlIndex].file
-    const fileUrl = KinogoProvider.getFileUrl(iframeHost, filePath)
+    const fileUrl = KinogoProvider.getFileUrlV1(iframeHost, filePath)
 
     const fileRes = await superagent.post(fileUrl)
         .set({

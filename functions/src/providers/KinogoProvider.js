@@ -1,6 +1,7 @@
 const Provider = require('./CFDataLifeProvider')
 const urlencode = require('urlencode')
 const superagent = require('superagent')
+const videocdnembed = require('../utils/videocdnembed')
 
 const { extractStringProperty } = require('../utils/extractScriptVariable')
 
@@ -30,59 +31,12 @@ class KinogoProvider extends Provider {
                     selector: '.box.visible iframe',
                     transform: async ($el) => {
                         const iframeSrc = $el.attr('src')
-                        const { baseUrl, timeout } = this.config
-                        const { iframeHost, csrfToken, playlistPath } = await KinogoProvider
-                            .parseIframe(iframeSrc, baseUrl, timeout)
-
-                        if (playlistPath.startsWith('~')) {
-                            let fileUrl = KinogoProvider.getFileUrl(iframeHost, playlistPath)
-
-                            const fileRes = await superagent.post(fileUrl)
-                                .set({
-                                    'Referer': `https://${iframeHost}`,
-                                    'X-CSRF-TOKEN': csrfToken
-                                })
-                                .buffer()
-                                .timeout(timeout)
-
-                            fileUrl = fileRes.text
-
-                            return [{
-                                id: 0,
-                                urls: [{ url: fileUrl, hls: true }]
-                            }]
-                        } else {
-                            const playlistUrl = `https://${iframeHost}${playlistPath}`
-
-                            const playlistRes = await superagent.post(playlistUrl)
-                                .set({
-                                    'Referer': `https://${iframeHost}`,
-                                    'X-CSRF-TOKEN': csrfToken
-                                })
-                                .timeout(timeout)
-
-                            const rootFiles = playlistRes.body
-                            if (rootFiles.length == 1) {
-                                return rootFiles[0].folder
-                                    .map(({ title, folder }, fileIndex) => ({
-                                        id: fileIndex,
-                                        name: title,
-                                        urls: this._getUrls(folder, iframeSrc, 0, fileIndex)
-                                    }))
-                            } else {
-                                let id = 0
-                                return rootFiles.flatMap(({ title, folder }, seasonIndex) => {
-                                    const season = title
-                                    return folder
-                                        .map(({ title, folder }, fileIndex) => ({
-                                            id: id++,
-                                            path: season,
-                                            name: title,
-                                            urls: this._getUrls(folder, iframeSrc, seasonIndex, fileIndex)
-                                        }))
-                                })
-                            }
+                        
+                        if(iframeSrc.includes('video.kinogo')) {
+                            return this._extractV2(iframeSrc)
                         }
+
+                        return this._extractV1(iframeSrc)
                     }
                 },
                 trailer: {
@@ -93,7 +47,67 @@ class KinogoProvider extends Provider {
         })
     }
 
-    static async parseIframe(url, referer, timeout) {
+    async _extractV2(iframeSrc) {
+        return videocdnembed(iframeSrc)
+    }
+
+    async _extractV1(iframeSrc) {
+        const { baseUrl, timeout } = this.config
+        const { iframeHost, csrfToken, playlistPath } = await KinogoProvider
+            .parseIframeV1(iframeSrc, baseUrl, timeout)
+
+        if (playlistPath.startsWith('~')) {
+            let fileUrl = KinogoProvider.getFileUrlV1(iframeHost, playlistPath)
+
+            const fileRes = await superagent.post(fileUrl)
+                .set({
+                    'Referer': `https://${iframeHost}`,
+                    'X-CSRF-TOKEN': csrfToken
+                })
+                .buffer()
+                .timeout(timeout)
+
+            fileUrl = fileRes.text
+
+            return [{
+                id: 0,
+                urls: [{ url: fileUrl, hls: true }]
+            }]
+        } else {
+            const playlistUrl = `https://${iframeHost}${playlistPath}`
+
+            const playlistRes = await superagent.post(playlistUrl)
+                .set({
+                    'Referer': `https://${iframeHost}`,
+                    'X-CSRF-TOKEN': csrfToken
+                })
+                .timeout(timeout)
+
+            const rootFiles = playlistRes.body
+            if (rootFiles.length == 1) {
+                return rootFiles[0].folder
+                    .map(({ title, folder }, fileIndex) => ({
+                        id: fileIndex,
+                        name: title,
+                        urls: this._getUrls(folder, iframeSrc, 0, fileIndex)
+                    }))
+            } else {
+                let id = 0
+                return rootFiles.flatMap(({ title, folder }, seasonIndex) => {
+                    const season = title
+                    return folder
+                        .map(({ title, folder }, fileIndex) => ({
+                            id: id++,
+                            path: season,
+                            name: title,
+                            urls: this._getUrls(folder, iframeSrc, seasonIndex, fileIndex)
+                        }))
+                })
+            }
+        }
+    }
+
+    static async parseIframeV1(url, referer, timeout) {
         const iframeRes = await superagent.get(url)
             .set({ 'Referer': referer })
             .timeout(timeout)
@@ -108,7 +122,7 @@ class KinogoProvider extends Provider {
         return { iframeHost, csrfToken, playlistPath }
     }
 
-    static getFileUrl(iframeHost, filePath) {
+    static getFileUrlV1(iframeHost, filePath) {
         return `https://${iframeHost}/playlist/${filePath.substring(1)}.txt`
     }
 
