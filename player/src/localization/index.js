@@ -11,7 +11,10 @@ export default new LocalizedStrings({
         searchAlternatives: 'Search alternatives',
         translation: 'Translation',
         watchHistory: 'History',
-        noWatchHistory: 'You havent watch anything yet. Use telegream bots to search something.',
+        noWatchHistory: {
+            title: 'You havent watched anything yet',
+            subtitle: 'Use telegream bots to search something:'
+        },
         playModeLabel: 'Play Mode',
         settingsLabel: 'Settings',
         autoSkip: {
@@ -37,7 +40,10 @@ export default new LocalizedStrings({
         searchAlternatives: 'Пошукати еще',
         translation: 'Переклади',
         watchHistory: 'Історія',
-        noWatchHistory: 'Ваша історія порожня. Скористайтесь телегам ботом.',
+        noWatchHistory: {
+            title: 'Ваша історія порожня.',
+            subtitle: 'Скористайтесь одним з телеграм ботів для пошуку:'
+        },
         playModeLabel: 'Режим відтворення',
         settingsLabel: 'Налаштування',
         autoSkip: {

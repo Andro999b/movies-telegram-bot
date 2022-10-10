@@ -32,6 +32,10 @@
     <script>
         if(window.location.hash == '#GloryToUkraine') {
             document.cookie = "firebase-country-override=ua; Max-Age=" + (365 * 24 * 3600);
+            gtag('event', 'glory_to_ukraine', {
+                'event_category': 'site',
+                'event_label': 'Glory To Ukraine'
+            })
             window.location.reload()
         } else {
             document.cookie = "firebase-country-override=ru; Max-Age=" + (365 * 24 * 3600);

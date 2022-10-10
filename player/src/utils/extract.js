@@ -73,7 +73,12 @@ export function createExtractorUrlBuilder(extractor, additionalParams) {
 
 const ANIDUB_ENCRYPT_KEY = 'oWQ/ADS/n+4fhEuZmFy6WQ=='
 export const handleSpecialHLSUrls = (context, callbacks) => {
-    if (context.url.startsWith('https://rusanime.ru/player/out.php')) {
+    const { url } = context
+
+    if (
+        url.startsWith('https://rusanime.ru/player/out.php') ||
+        url.startsWith('https://love.statics.life/player/out.php')
+    ) {
         callbacks.onSuccess({
             url: context.url,
             data: base64ToArrayBuffer(ANIDUB_ENCRYPT_KEY)

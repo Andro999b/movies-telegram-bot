@@ -8,13 +8,12 @@ import {
     IconButton,
     Typography
 } from '@material-ui/core'
-
-import TelegramLinks from '../components/TelegramLinks'
 import { Link } from 'react-router-dom'
 
 import localization from '../localization'
 import { Delete } from '@material-ui/icons'
 import SyncButton from '../components/SyncButton'
+import { tgBots } from '../utils'
 
 @inject('watchHistoryStore')
 @observer
@@ -73,6 +72,23 @@ class WatchHistoryView extends Component {
         )
     }
 
+    renderNoHistory() {
+        return <>
+            <Typography className="center" variant="h4" style={{ width: '100%'}}>
+                <div>
+                    {localization.noWatchHistory.title} 
+                </div>
+                <div>
+                    {localization.noWatchHistory.subtitle} 
+                </div>
+                {tgBots.map((bot) => (
+                    <div>
+                        <a key={bot} href={`https://telegram.me/${bot}`} target="_blank">@{bot}</a>
+                    </div> 
+                ))}
+            </Typography>
+        </>
+    }
 
     renderContent() {
         const { insync, connect, disconnect, history } = this.props.watchHistoryStore
@@ -86,16 +102,13 @@ class WatchHistoryView extends Component {
                         </Typography>
                         <SyncButton insync={insync} onConnect={connect} onDisconnect={disconnect} />
                     </div>
-                    {history.length == 0 &&
-                        <Typography className="center" variant="h4">{localization.noWatchHistory}</Typography>
-                    }
+                    {history.length == 0 && this.renderNoHistory()}
                     {history.length > 0 &&
                         <Grid container spacing={1} className="watch-history__tiles">
                             {history.map((item) => this.renderTile(item))}
                         </Grid>
                     }
                 </div>
-                <TelegramLinks />
             </>
         )
     }

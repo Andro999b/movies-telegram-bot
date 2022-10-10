@@ -3,6 +3,7 @@ import { base64UrlEncode } from './base64'
 export const animeBot = 'anime_tube_bot'
 export const moviesBot = 'MoviesBroBot'
 export const uaBot = 'UAMoviesBot'
+export const tgBots = [animeBot, uaBot, moviesBot]
 
 export function invokeAll() {
     const invockes = Array.from(arguments)

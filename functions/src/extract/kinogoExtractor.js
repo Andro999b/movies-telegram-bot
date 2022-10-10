@@ -4,7 +4,7 @@ const kinogoConfig = require('../providersConfig').kinogo
 const KinogoProvider = require('../providers/KinogoProvider')
 
 module.exports = async ({ url, file }) => {
-    const timeout = 1000
+    const timeout = 5000
     const { iframeHost, csrfToken, playlistPath } = await KinogoProvider
         .parseIframeV1(url, kinogoConfig.baseUrl, timeout)
 
