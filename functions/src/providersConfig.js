@@ -43,8 +43,8 @@ module.exports = {
         }
     },
     'kinovod': {
-        'baseUrl': 'https://kinovod339.cc',
-        'searchUrl': 'https://kinovod339.cc/search'
+        'baseUrl': 'https://kinovod.net',
+        'searchUrl': 'https://kinovod.net/search'
     },
     'animevost': {
         'baseUrl': 'https://animevost.org',

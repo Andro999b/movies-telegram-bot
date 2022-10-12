@@ -1,9 +1,9 @@
 {
     "pathParameters": {
-        "provider": "anitubeua"
+        "provider": "kinovod"
     },
     "queryStringParameters": {
-        "q": "шпигун"
+        "q": "терминатор"
     },
     "headers": {
         "origin": "http://localhost:3000"
