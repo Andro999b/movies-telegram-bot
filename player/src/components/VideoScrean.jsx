@@ -33,10 +33,10 @@ class VideoScrean extends BaseScrean {
      *  reaction
      */
 
-    onPlayPause(isPlaying) {
+    async onPlayPause(isPlaying) {
         const video = this.video.current
         if (isPlaying) {
-            video.play()
+            await video.play()
         } else {
             video.pause()
         }
@@ -91,22 +91,21 @@ class VideoScrean extends BaseScrean {
         }
     }
 
-    restoreVideoState = () => {
+    restoreVideoState = async () => {
         const { props: { device } } = this
         const video = this.video.current
 
         video.currentTime = device.seekTo || device.currentTime
         video.muted = device.isMuted
         video.volume = device.volume
-        video.load()
+        
+        device.setLoading(true)
 
         if (device.isPlaying) {
-            video.play()
+            await video.play()
         } else {
             video.pause()
         }
-
-        device.setLoading(true)
     }
 
     initVideo = async () => {
@@ -170,7 +169,7 @@ class VideoScrean extends BaseScrean {
             await this.setNativeVideoFile(file)
         }
 
-        this.restoreVideoState()
+        await this.restoreVideoState()
     }
 
     setNativeVideoFile = async ({ url, extractor }) => {
@@ -272,6 +271,8 @@ class VideoScrean extends BaseScrean {
         const { props: { device } } = this
         const video = this.video.current
 
+        if(video == null) return
+
         let code = null
         let retry = false
         let videoErrorCode = video.error && video.error.code
@@ -340,7 +341,6 @@ class VideoScrean extends BaseScrean {
         this.handleResize()
 
         device.setError(null)
-        // device.setLoading(false)
     }
 
     handleResize = () => {

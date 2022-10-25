@@ -82,8 +82,8 @@ class WatchHistoryView extends Component {
                     {localization.noWatchHistory.subtitle} 
                 </div>
                 {tgBots.map((bot) => (
-                    <div>
-                        <a key={bot} href={`https://telegram.me/${bot}`} target="_blank">@{bot}</a>
+                    <div key={bot}>
+                        <a href={`https://telegram.me/${bot}`} rel="noreferrer" target="_blank">@{bot}</a>
                     </div> 
                 ))}
             </Typography>

@@ -3,6 +3,7 @@ import { observable, action } from 'mobx'
 import { getAuth, signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider } from 'firebase/auth'
 import { initializeApp } from 'firebase/app'
 import { getDatabase, ref, child, get, set, query, update, remove } from 'firebase/database'
+import store from '../utils/storage'
 
 const app = initializeApp({
     apiKey: 'AIzaSyCoQdUA6jN3cWx_yopHDVsC2aIW9Bor2P4',
@@ -110,7 +111,7 @@ class RemoteHistoryStorage {
     }
 }
 
-class LocalHistoryStorage {
+class LocalHistoryStorage { // eslint-disable-line no-unused-vars
     localDB = new Dexie('HistoryDatabase')
 
     constructor() {
@@ -141,6 +142,37 @@ class LocalHistoryStorage {
     }
 
     all = async () => this.localDB.history.toArray()
+}
+
+class LocalStoreHistoryStorage {
+    get = async (key) => store.get(this._toInternalKey(key))
+
+    set = async (key, data) => {
+        store.set(this._toInternalKey(key), { key, ...data })
+    }
+
+    update = async (key, data) => {
+        store.set(this._toInternalKey(key), { key, ...store.get(key), ...data })
+    }
+
+    delete = async (key) => {
+        store.remove(this._toInternalKey(key))
+    }
+
+    all = async () => {
+        const results = []
+
+        store.each((val, key) => {
+            if(key.startsWith('history:')) {
+                results.push(val)
+            }
+        })
+
+        return results
+    }
+
+    _toInternalKey = (key) => `history:${key}`
+    
 }
 
 class ComposedHistoryStorage {
@@ -222,7 +254,8 @@ class WatchHistoryStore {
     _remoteHistory = new RemoteHistoryStorage()
 
     _composedHistory = new ComposedHistoryStorage(
-        new LocalHistoryStorage(),
+        'indexedDB' in window ? new LocalHistoryStorage(): new LocalStoreHistoryStorage(), 
+        new LocalStoreHistoryStorage(), 
         this._remoteHistory
     )
 

@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
     entry: path.join(__dirname, 'src', 'index'),
@@ -12,7 +13,7 @@ module.exports = {
         rules: [
             {
                 test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: /(node_modules)/,
                 use: ['babel-loader']
             },
             {
@@ -35,6 +36,9 @@ module.exports = {
     },
     devtool: 'source-map',
     plugins: [
+        new webpack.EnvironmentPlugin({
+            RELEASE: "movies-player@" +  Buffer.from(new Date().toISOString()).toString('base64')
+        }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: path.join(__dirname, 'src', 'index.html')
