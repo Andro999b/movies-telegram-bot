@@ -15,13 +15,14 @@ class VideoScrean extends BaseScrean {
     state = { videoScale: 'hor' }
     video = React.createRef()
     container = React.createRef()
+    videoReady = false
 
     /**
      * lifecycle
      */
     componentDidMount() {
         super.componentDidMount()
-        this.initVideo().then()
+        this.initVideo()
     }
 
     componentWillUnmount() {
@@ -34,15 +35,27 @@ class VideoScrean extends BaseScrean {
      */
 
     async onPlayPause(isPlaying) {
+        if (!this.videoReady) {
+            return
+        }
+
         const video = this.video.current
+        // if (video.paused == isPlaying) {
+        //     return
+        // }
+
         if (isPlaying) {
-            await video.play()
+            video.play()
         } else {
             video.pause()
         }
     }
 
     onSeek(seekTo) {
+        if (!this.videoReady) {
+            return
+        }
+
         if (seekTo !== null) {
             const video = this.video.current
             video.currentTime = seekTo
@@ -76,18 +89,14 @@ class VideoScrean extends BaseScrean {
     }
 
     dispose() {
+        this._disposeHls()
+    }
+
+    _disposeHls() {
         if (this.hls) {
             this.hls.stopLoad()
             this.hls.detachMedia()
             this.hls.destroy()
-        }
-
-        const video = this.video.current
-        video.removeAttribute('src')
-        video.load()
-
-        if (this.keepAliveInterval) {
-            clearInterval(this.keepAliveInterval)
         }
     }
 
@@ -98,22 +107,33 @@ class VideoScrean extends BaseScrean {
         video.currentTime = device.seekTo || device.currentTime
         video.muted = device.isMuted
         video.volume = device.volume
-        
-        device.setLoading(true)
 
+        device.setLoading(true)
         if (device.isPlaying) {
-            await video.play()
+            try{
+                await video.play()
+            } catch(e) {
+                console.error(e)
+                device.pause()
+            }
         } else {
             video.pause()
         }
+
+        this.videoReady = true
     }
 
     initVideo = async () => {
+        this.videoReady = false
+        
+        const video = this.video.current
         const { props: { device: { source } } } = this
 
         if (!source) return
 
         const { urls } = source
+
+        video.addEventListener('canplaythrough', this.handleCanPlayThrough)
 
         if (urls && urls.length > 0) {
             await this.startVideo()
@@ -161,18 +181,16 @@ class VideoScrean extends BaseScrean {
     }
 
     setVideoFile = async (file) => {
-        this.dispose()
-
         if (file.url.endsWith('m3u8') || file.hls) {
             await this.setHlsVideoFile(file)
         } else {
             await this.setNativeVideoFile(file)
         }
-
-        await this.restoreVideoState()
     }
 
     setNativeVideoFile = async ({ url, extractor }) => {
+        this._disposeHls()
+
         const video = this.video.current
 
         if (extractor) {
@@ -192,61 +210,61 @@ class VideoScrean extends BaseScrean {
         import(/* webpackChunkName: "hlsjs" */ 'hls.js').then((module) => {
             const Hls = module.default
 
-
-            class loader extends Hls.DefaultConfig.loader {
-                constructor(config) {
-                    super(config)
-                    var load = this.load.bind(this)
-                    this.load = function (context, config, callbacks) {
-                        if (!handleSpecialHLSUrls(context, callbacks)) {
-                            load(context, config, callbacks)
+            if (!this.hls) {
+                class loader extends Hls.DefaultConfig.loader {
+                    constructor(config) {
+                        super(config)
+                        var load = this.load.bind(this)
+                        this.load = function (context, config, callbacks) {
+                            if (!handleSpecialHLSUrls(context, callbacks)) {
+                                load(context, config, callbacks)
+                            }
                         }
                     }
                 }
+
+                const hls = new Hls({
+                    manifestLoadingTimeOut: 30 * 1000,
+                    manifestLoadingMaxRetry: 3,
+                    startPosition: device.seekTo || device.currentTime,
+                    xhrSetup: (xhr) => {
+                        xhr.timeout = 0
+                    },
+                    loader
+                })
+
+                hls.attachMedia(this.video.current)
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    if (hls.audioTracks && hls.audioTracks.length > 1) {
+                        this.hlsMultiAudio = true
+                        device.setAudioTracks(
+                            hls.audioTracks.map(({ id, name }) => ({ id, name }))
+                        )
+                    }
+                })
+                hls.on(Hls.Events.ERROR, (_, data) => {
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                console.error('fatal media error encountered, try to recover')
+                                this.hls.recoverMediaError()
+                                break
+                            default:
+                                // cannot recover
+                                if (this.tryNextVideoUrl())
+                                    break
+
+                                this.props.device.setError(localization.cantPlayMedia)
+                                this.hls.destroy()
+                                this.logError(data)
+                                break
+                        }
+                    }
+                })
+                this.hls = hls
             }
 
-            const hls = new Hls({
-                manifestLoadingTimeOut: 30 * 1000,
-                manifestLoadingMaxRetry: 3,
-                startPosition: device.currentTime,
-                xhrSetup: (xhr) => {
-                    xhr.timeout = 0
-                },
-                loader
-            })
-
-            hls.attachMedia(this.video.current)
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                if (hls.audioTracks && hls.audioTracks.length > 1) {
-                    this.hlsMultiAudio = true
-                    device.setAudioTracks(
-                        hls.audioTracks.map(({ id, name }) => ({ id, name }))
-                    )
-                }
-                this.video.current.play()
-            })
-            hls.on(Hls.Events.ERROR, (_, data) => {
-                if (data.fatal) {
-                    switch (data.type) {
-                        case Hls.ErrorTypes.MEDIA_ERROR:
-                            console.error('fatal media error encountered, try to recover')
-                            this.hls.recoverMediaError()
-                            break
-                        default:
-                            // cannot recover
-                            if (this.tryNextVideoUrl())
-                                break
-
-                            this.props.device.setError(localization.cantPlayMedia)
-                            this.hls.destroy()
-                            this.logError(data)
-                            break
-                    }
-                }
-            })
-
-            hls.loadSource(url)
-            this.hls = hls
+            this.hls.loadSource(url)
         })
     }
 
@@ -271,7 +289,7 @@ class VideoScrean extends BaseScrean {
         const { props: { device } } = this
         const video = this.video.current
 
-        if(video == null) return
+        if (video == null) return
 
         let code = null
         let retry = false
@@ -358,6 +376,14 @@ class VideoScrean extends BaseScrean {
     handlePlay = () => {
         const { device } = this.props
         device.setLoading(false)
+    }
+
+    handleCanPlayThrough = () => {
+        const video = this.video.current
+        this.restoreVideoState()
+            .then(() => {
+                video.removeEventListener('canplaythrough', this.handleCanPlayThrough)
+            })
     }
 
     handleUpdate = () => {

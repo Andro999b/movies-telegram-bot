@@ -21,7 +21,7 @@ const IDLE_TIMEOUT = 10000
 class HandleActionListener extends Component {
 
     handleClick = (e) => {
-        if(this.props.idle) {
+        if (this.props.idle) {
             e.preventDefault()
             e.stopPropagation()
             this.props.onAction()
@@ -29,14 +29,14 @@ class HandleActionListener extends Component {
     }
 
     render() {
-        if(isTouchDevice()) { 
+        if (isTouchDevice()) {
             return (<div onClickCapture={this.handleClick} onTouchMoveCapture={() => this.props.onAction()}>
                 {this.props.children}
             </div>)
         } else {
             return (<div onMouseMove={() => this.props.onAction()}>
                 {this.props.children}
-            </div>) 
+            </div>)
         }
     }
 }
@@ -71,7 +71,7 @@ class Player extends Component {
     handlePlayPause = () => {
         const { props: { playerStore: { device } } } = this
 
-        if(device.isLoading) return
+        if (device.isLoading) return
 
         if (device.isPlaying) {
             device.pause()
@@ -88,7 +88,7 @@ class Player extends Component {
     handleSeekEnd = (time, autoPlay = false) => {
         const { props: { playerStore: { device } } } = this
 
-        if(autoPlay) {
+        if (autoPlay) {
             device.play(time, autoPlay)
         } else {
             device.seek(time)
@@ -124,7 +124,9 @@ class Player extends Component {
         this.setState({ fullScreen })
         if (fullScreen) {
             if (isTouchDevice() && screen.orientation) {
-                screen.orientation.lock('landscape')
+                screen.orientation
+                    .lock('landscape')
+                    .catch(console.error)
             }
             this.setState({ idle: true })
         }
@@ -163,7 +165,7 @@ class Player extends Component {
         addGlobalKey(['PageDown', 'BracketRight'], () => this.props.playerStore.nextFile())
         addGlobalKey(['KeyM'], () => this.props.playerStore.device.toggleMute())
         addGlobalKey(['KeyP'], () => {
-            if(this.state.idle) {
+            if (this.state.idle) {
                 this.setState({ playlistOpen: true }, () => this.handleActivity())
             } else {
                 this.handleTogglePlayList()
@@ -177,7 +179,7 @@ class Player extends Component {
         const { playlistOpen, idle, fullScreen } = this.state
         const { device } = playerStore
         const { error } = device
-        
+
         // always show ui in case of error
         const hideUi = error != null ? false : idle
 
@@ -189,9 +191,9 @@ class Player extends Component {
                 <HandleActionListener idle={idle} onAction={this.handleActivity}>
                     <div id="player_root" className={hideUi ? 'idle' : ''}>
                         {error && <Typography className="center" variant="h4">{error}</Typography>}
-                        {!error && 
-                            <PlayBackZones 
-                                device={device} 
+                        {!error &&
+                            <PlayBackZones
+                                device={device}
                                 onPlayPause={this.handlePlayPause}
                                 onSeek={this.handleSeek}
                                 onSeekEnd={this.handleSeekEnd}
