@@ -82,13 +82,13 @@ export default observer(() => {
                             <Grid item md={6} sm={12} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
                                     <Typography>Top watched providers</Typography>
-                                    <BarChartVis data={store.providersHitsChart} lines={store.providers} legend />
+                                    <BarChartVis data={store.providersHitsChart} legend />
                                 </LoadingPlaceholder>
                             </Grid>
                             <Grid item md={6} sm={12} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
                                     <Typography>Top cached providers</Typography>
-                                    <BarChartVis data={store.providersChart} lines={store.providers} legend />
+                                    <BarChartVis data={store.providersChart} legend />
                                 </LoadingPlaceholder>
                             </Grid>
                             <Grid item md={6} sm={12} xs={12} className={classes.table}>
@@ -129,6 +129,6 @@ export default observer(() => {
                 onInvalidate={({ provider, resultId }) => store.invalidate(provider, resultId)}
                 onClose={() => showInvalidateDialog(false)}
             />
-        </div >
+        </div>
     )
 })

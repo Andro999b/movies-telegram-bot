@@ -254,8 +254,7 @@ class WatchHistoryStore {
     _remoteHistory = new RemoteHistoryStorage()
 
     _composedHistory = new ComposedHistoryStorage(
-        'indexedDB' in window ? new LocalHistoryStorage(): new LocalStoreHistoryStorage(), 
-        new LocalStoreHistoryStorage(), 
+        'indexedDB' in window ? new LocalHistoryStorage(): new LocalStoreHistoryStorage(),
         this._remoteHistory
     )
 

@@ -44,7 +44,6 @@ export class Device {
     }
 
     @action.bound setSource(source) {
-        this.source = source
         this.currentTime = source.currentTime || 0
         this.seekTo = null
         this.duration = 0
@@ -52,6 +51,7 @@ export class Device {
         this.audioTrack = null
         this.audioTracks = []
         this.quality = null
+        this.source = source
 
         if (source.urls) {
             this.qualities = Array.from(new Set(source.urls.map((it) => it.quality).filter((it) => it)))

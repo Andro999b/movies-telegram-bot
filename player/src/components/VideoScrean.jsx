@@ -104,7 +104,7 @@ class VideoScrean extends BaseScrean {
         const { props: { device } } = this
         const video = this.video.current
 
-        video.currentTime = device.seekTo || device.currentTime
+        video.currentTime = device.currentTime
         video.muted = device.isMuted
         video.volume = device.volume
 
@@ -387,6 +387,8 @@ class VideoScrean extends BaseScrean {
     }
 
     handleUpdate = () => {
+        if(!this.videoReady) return
+
         const { device } = this.props
         const { buffered, duration, currentTime } = this.video.current
 

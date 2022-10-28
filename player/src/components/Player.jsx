@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import FullScreen from 'react-full-screen'
+import fscreen from 'fscreen'
 
 import MediaControls from './MediaControls'
 import PlayerFilesList from './PlayerPlayList'
@@ -51,6 +51,7 @@ HandleActionListener.propTypes = {
 @inject('playerStore')
 @observer
 class Player extends Component {
+    container = React.createRef()
 
     constructor(props) {
         super(props)
@@ -58,7 +59,7 @@ class Player extends Component {
         this.state = {
             playlistOpen: false,
             idle: false,
-            fullScreen: props.initialFullScreen
+            fullScreen: false
         }
     }
 
@@ -107,8 +108,13 @@ class Player extends Component {
     }
 
     handleToggleFullscreen = () => {
-        const fullScreen = !this.state.fullScreen
-        this.setState({ fullScreen })
+        if(fscreen.fullscreenEnabled) {
+            if(this.state.fullScreen) {
+                fscreen.exitFullscreen()
+            } else {
+                fscreen.requestFullscreen(this.container.current)
+            }  
+        }
     }
 
     handleTogglePlayback = () => {
@@ -120,13 +126,12 @@ class Player extends Component {
         }
     }
 
-    handleSetFullScreen = (fullScreen) => {
+    handleFullScreenChanged = () => {
+        const fullScreen = fscreen.fullscreenElement !== null
         this.setState({ fullScreen })
         if (fullScreen) {
             if (isTouchDevice() && screen.orientation) {
-                screen.orientation
-                    .lock('landscape')
-                    .catch(console.error)
+                screen.orientation.lock('landscape')
             }
             this.setState({ idle: true })
         }
@@ -154,7 +159,13 @@ class Player extends Component {
     componentWillUnmount() {
         const { idleTimeout } = this
         clearTimeout(idleTimeout)
-        removeGlobalKey(['Space', 'KeyF', 'KeyM', 'KeyP', 'Enter', 'PageUp', 'PageDown', 'BracketLeft', 'BracketRight'])
+        removeGlobalKey([
+            'Space', 'Enter',
+            'KeyF', 'KeyM', 'KeyP',
+            'PageUp', 'PageDown',
+            'BracketLeft', 'BracketRight'
+        ])
+        fscreen.removeEventListener('fullscreenchange', this.handleFullScreenChanged)
     }
 
     componentDidMount() {
@@ -171,6 +182,11 @@ class Player extends Component {
                 this.handleTogglePlayList()
             }
         })
+        fscreen.addEventListener('fullscreenchange', this.handleFullScreenChanged, false)
+
+        if(fscreen.fullscreenEnabled && this.props.initialFullScreen) {
+            fscreen.requestFullscreen(this.container.current)
+        }
     }
     // --- idle checking ---
 
@@ -184,10 +200,7 @@ class Player extends Component {
         const hideUi = error != null ? false : idle
 
         return (
-            <FullScreen
-                enabled={fullScreen}
-                onChange={this.handleSetFullScreen}
-            >
+            <div ref={this.container}>
                 <HandleActionListener idle={idle} onAction={this.handleActivity}>
                     <div id="player_root" className={hideUi ? 'idle' : ''}>
                         {error && <Typography className="center" variant="h4">{error}</Typography>}
@@ -222,7 +235,7 @@ class Player extends Component {
                         </>}
                     </div>
                 </HandleActionListener>
-            </FullScreen>
+            </div>
         )
     }
 }

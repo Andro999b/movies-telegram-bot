@@ -13,6 +13,10 @@ import { grey } from '@material-ui/core/colors'
 
 
 export default ({ data, lines, legend, layout = 'horizontal' }) => {
+    if(!lines) {
+        lines = data.map(({ seg }) => seg)
+    }
+
     return (
         <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} layout={layout}>

@@ -12,7 +12,9 @@
     "release:surge": "npm run build && npm run deploy:surge",
     "release": "npm run build && npm run deploy:firebase && npm run deploy:surge"
   },
-  "browserslist": ["ff 5"],
+  "browserslist": [
+    "ff 5"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -26,14 +28,12 @@
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.5",
-    "base64-inline-loader": "^2.0.1",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "eslint": "^8.20.0",
     "eslint-plugin-react": "^7.30.1",
     "eslint-webpack-plugin": "^3.2.0",
     "html-webpack-plugin": "^5.5.0",
-    "mobx-react-devtools": "^6.1.1",
     "sass": "^1.54.0",
     "sass-loader": "^13.0.2",
     "style-loader": "^3.3.1",
@@ -57,7 +57,6 @@
     "mobx-react": "^6.2.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-full-screen": "^0.2.4",
     "react-jss": "^10.9.1",
     "react-localization": "^1.0.19",
     "react-resize-detector": "^4.2.3",

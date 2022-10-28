@@ -1,7 +1,11 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ESLintPlugin = require('eslint-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
+
+const releaseDate = new Date()
+const releaseYaer = releaseDate.getFullYear()
+const releaseDay = Math.floor((releaseDate - new Date(releaseDate.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24))
+const releaseHour = releaseDate.getHours()
 
 module.exports = {
     entry: path.join(__dirname, 'src', 'index'),
@@ -37,12 +41,11 @@ module.exports = {
     devtool: 'source-map',
     plugins: [
         new webpack.EnvironmentPlugin({
-            RELEASE: "movies-player@" +  Buffer.from(new Date().toISOString()).toString('base64')
+            RELEASE: `movies-player@${releaseHour}.${releaseDay}.${releaseYaer}`
         }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: path.join(__dirname, 'src', 'index.html')
-        }),
-        new ESLintPlugin()
+        })
     ]
 }
