@@ -1,46 +1,33 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { Switch } from '@material-ui/core'
 import { grey } from '@material-ui/core/colors'
 import { PlayArrow, Pause } from '@material-ui/icons'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 
 const thumbStyle = {
-    width: 20,
-    height: 20,
-    borderRadius: '50%',
-    lineHeight: '20px'
+  width: 20,
+  height: 20,
+  borderRadius: '50%',
+  lineHeight: '20px'
 }
 
-@observer
-class AutoPlaySwitch extends Component {
-    render() {
-        const { device } = this.props
+export default observer(({ device }) => {
 
-        return (
-            <Switch
-                checked={device.autoPlay}
-                checkedIcon={this.renderThumbIcon(true)}
-                icon={this.renderThumbIcon(false)}
-                onChange={(e) => device.setAutoPlay(e.currentTarget.checked)}
-            />
-        )
-    }
+  const renderThumbIcon = (checked) => (
+    <span style={{ ...thumbStyle, backgroundColor: checked ? '#fff' : grey[700] }}>
+      {checked ?
+        <PlayArrow fontSize='small' htmlColor={grey[700]} /> :
+        <Pause fontSize='small' htmlColor='#fff' />
+      }
+    </span>
+  )
 
-    renderThumbIcon(checked) {
-        return (
-            <span style={{ ...thumbStyle, backgroundColor: checked ? '#fff' : grey[700] }}>
-                {checked ? 
-                    <PlayArrow fontSize='small' htmlColor={grey[700]}/>:
-                    <Pause fontSize='small' htmlColor='#fff'/>
-                }
-            </span>
-        )
-    }
-}
-
-AutoPlaySwitch.propTypes = {
-    device: PropTypes.object.isRequired
-}
-
-export default AutoPlaySwitch
+  return (
+    <Switch
+      checked={device.autoPlay}
+      checkedIcon={renderThumbIcon(true)}
+      icon={renderThumbIcon(false)}
+      onChange={(e) => device.setAutoPlay(e.currentTarget.checked)}
+    />
+  )
+})

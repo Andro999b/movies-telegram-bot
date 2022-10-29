@@ -1,70 +1,67 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import BaseSelector from './BaseSelector'
-import { observer } from 'mobx-react'
+import Selector from './Selector'
+import { observer } from 'mobx-react-lite'
 import {
-    IconButton,
-    Button,
-    MenuItem,
-    MenuList
+  IconButton,
+  Button,
+  MenuItem,
+  MenuList
 } from '@material-ui/core'
 import { AudiotrackRounded as AudioTrackIcon } from '@material-ui/icons'
 import { isTouchDevice } from '../utils'
 import localization from '../localization'
 import analytics from '../utils/analytics'
 
-@observer
-class AudioTrackSelector extends BaseSelector {
 
-    selectTrack = (id) => {
-        this.props.device.setAudioTrack(id)
-        this.handleClose()
+export default observer((device) => {
+  const selectTrack = (id) => {
+    device.setAudioTrack(id)
+    analytics('select_audio')
+  }
 
-        analytics('select_audio')
-    }
+  return (<Selector
+    renderButton={({ handleOpen }) => {
+      if (isTouchDevice()) {
+        return (
+          <IconButton onClick={handleOpen}>
+            <AudioTrackIcon />
+          </IconButton>
+        )
+      } else {
+        const { audioTrack, audioTracks } = device
+        const selectedTrack = audioTracks.find((it) => it.id == audioTrack)
 
-    renderButton() {
-        if (isTouchDevice()) {
-            return(
-                <IconButton onClick={this.handleClick}>
-                    <AudioTrackIcon/>
-                </IconButton>
-            )
+        if (selectedTrack) {
+          return (
+            <Button onClick={handleOpen}>
+              {selectedTrack.name}
+            </Button>
+          )
         } else {
-            const { audioTrack, audioTracks } = this.props.device
-            const selectedTrack = audioTracks.find((it) => it.id == audioTrack)
-
-            if(selectedTrack) {
-                return (
-                    <Button onClick={this.handleClick}>
-                        {selectedTrack.name}
-                    </Button>
-                )
-            } else {
-                return(
-                    <Button onClick={this.handleClick}>
-                        {localization.translation}
-                    </Button>
-                )
-            }
+          return (
+            <Button onClick={handleOpen}>
+              {localization.translation}
+            </Button>
+          )
         }
-    }
+      }
+    }}
+    renderList={({ handleClose }) => {
+      const { audioTrack, audioTracks } = device
 
-    renderList() {
-        const { audioTrack, audioTracks } = this.props.device
+      const items = audioTracks.map(({ id, name }) => (
+        <MenuItem
+          key={id}
+          selected={id == audioTrack}
+          onClick={() => {
+            selectTrack(id)
+            handleClose()
+          }}>
+          {name}
+        </MenuItem>
+      ))
 
-        const items = audioTracks.map(({ id, name }) => (
-            <MenuItem key={id} selected={id == audioTrack} onClick={() => this.selectTrack(id)}>
-                {name}
-            </MenuItem>
-        ))
-
-        return (<MenuList>{items}</MenuList>)
-    }
-}
-
-AudioTrackSelector.propTypes = {
-    device: PropTypes.object.isRequired
-}
-
-export default AudioTrackSelector
+      return (<MenuList>{items}</MenuList>)
+    }}
+  />)
+})

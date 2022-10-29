@@ -1,6 +1,5 @@
-import { inject, observer } from 'mobx-react'
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { observer } from 'mobx-react-lite'
+import React, { useState, useMemo, useEffect } from 'react'
 import { isTouchDevice } from '../utils'
 import analytics from '../utils/analytics'
 
@@ -11,157 +10,83 @@ import HistoryNavButton from '../components/HistoryNavButton'
 import { Typography } from '@material-ui/core'
 import AlternativeLinksError from '../components/AlternativeLinksError'
 import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
+import { playlistStore, watchHistoryStore, playerStore } from '../store'
 
-@inject(
-    ({
-        playlistStore: {
-            loading,
-            trailerUrl,
-            playlist,
-            error,
-            loadPlaylist
-        },
-        playerStore: { openPlaylist },
-        watchHistoryStore: { watching }
-    }) => ({
-        loading,
-        trailerUrl,
-        playlist,
-        error,
-        openPlaylist,
-        watching,
-        loadPlaylist
-    })
-)
-@observer
-class PlaylistView extends Component {
+const parseLocation = (location) => {
+  const urlParams = new URLSearchParams(location.search)
 
-    state = { started: false, starting: false, initialFullScreen: false }
-    fileIndex = 0
-    time = 0
+  const provider = urlParams.get('provider')
+  const id = urlParams.get('id')
+  const query = urlParams.get('query')
+  const fileIndex = parseInt(urlParams.get('file'))
+  const time = parseFloat(urlParams.get('time'))
 
-    handleStart = async () => {
-        const { loading, openPlaylist, playlist, watching } = this.props
-        const { started, starting } = this.state
-        if (loading || started || starting) return
+  return { provider, id, query, fileIndex, time }
+}
 
-        this.setState({ starting: true })
-        await openPlaylist(playlist, this.fileIndex, this.time)
-        this.setState({
-            started: true,
-            initialFullScreen: isTouchDevice()
-        })
-        analytics('start')
-        watching(playlist)
-    }
+export default observer(({ location }) => {
+  const [started, setStarted] = useState()
+  const [starting, setStarting] = useState()
 
-    componentWillUnmount() {
-        removeGlobalKey(['Space', 'Enter'])
-    }
+  const { loading, trailerUrl, playlist, error } = playlistStore
+  const params = useMemo(() => parseLocation(location), [location])
 
-    componentDidMount() {
-        const { loadPlaylist } = this.props
-        const cur = this.parseLocation(this.props)
+  useEffect(() => () => removeGlobalKey(['Space', 'Enter']), [])
+  useEffect(() => playlistStore.loadPlaylist(params), [params])
 
-        this.fileIndex = cur.fileIndex
-        this.time = cur.time
+  const handleStart = async () => {
+    if (loading || started || starting) return
 
-        loadPlaylist(cur)
+    setStarting(true)
+    await playerStore.openPlaylist(playlist, params.fileIndex, params.time)
 
-        addGlobalKey(['Space', 'Enter'], this.handleStart)
-    }
+    setStarted(true)
+    analytics('start')
 
-    componentDidUpdate(prevProps) {
-        const cur = this.parseLocation(this.props)
-        const prev = this.parseLocation(prevProps)
+    watchHistoryStore.watching(playlist)
+  }
+  addGlobalKey(['Space', 'Enter'], handleStart)
 
-        if (prev.provider != cur.provider && prev.id != cur.id) {
-            const { loadPlaylist } = this.props
-
-            this.fileIndex = cur.fileIndex
-            this.time = cur.time
-
-            loadPlaylist(cur)
-        }
-    }
-
-    parseLocation(props) {
-        const { location } = props
-
-        const urlParams = new URLSearchParams(location.search)
-
-        const provider = urlParams.get('provider')
-        const id = urlParams.get('id')
-        const query = urlParams.get('query')
-        const fileIndex = parseInt(urlParams.get('file'))
-        const time = parseFloat(urlParams.get('time'))
-
-        return { provider, id, query, fileIndex, time }
-    }
-
-    render() {
+  const renderContent = () => {
+    if (loading) {
+      return (<DualCirclesLoader />)
+    } else if (error) {
+      return (
+        <>
+          <HistoryNavButton />
+          {params.query ?
+            <AlternativeLinksError provider={params.provider} query={params.query} message={error} /> :
+            <Typography className="center shadow-border" variant="h4">{error}</Typography>
+          }
+        </>
+      )
+    } else if (trailerUrl) {
+      return (
+        <>
+          <HistoryNavButton />
+          <iframe frameBorder="0" height="100%" width="100%" src={trailerUrl} />
+        </>
+      )
+    } else {
+      if (!started) {
         return (
-            <div className="screan-content">
-                {this.renderContent()}
-            </div>
+          <StartScrean
+            starting={starting}
+            playlist={playlist}
+            onStart={handleStart}
+          />
         )
+      } else {
+        return (
+          <Player initialFullScreen={isTouchDevice()} />
+        )
+      }
     }
+  }
 
-    renderContent() {
-        const { loading, trailerUrl, playlist, error } = this.props
-
-        const { started, initialFullScreen, starting } = this.state
-
-        if (loading) {
-            return (<DualCirclesLoader />)
-        } else if (error) {
-            const { query, provider } = this.parseLocation(this.props)
-            return (
-                <>
-                    <HistoryNavButton />
-                    {query ?
-                        <AlternativeLinksError provider={provider} query={query} message={error} /> :
-                        <Typography className="center shadow-border" variant="h4">{error}</Typography>
-                    }
-                </>
-            )
-        } else if (trailerUrl) {
-            return (
-                <>
-                    <HistoryNavButton />
-                    <iframe frameBorder="0" height="100%" width="100%" src={trailerUrl} />
-                </>
-            ) // redirect??
-        } else {
-            if (!started) {
-                return (
-                    <StartScrean
-                        starting={starting}
-                        playlist={playlist}
-                        onStart={this.handleStart}
-                    />
-                )
-            } else {
-                return (
-                    <Player initialFullScreen={initialFullScreen} />
-                )
-            }
-        }
-    }
-}
-
-PlaylistView.propTypes = {
-    //load result
-    loading: PropTypes.bool,
-    error: PropTypes.string,
-    trailerUrl: PropTypes.string,
-    playlist: PropTypes.object,
-    loadPlaylist: PropTypes.func,
-    //actions
-    watching: PropTypes.func,
-    openPlaylist: PropTypes.func,
-    //router
-    location: PropTypes.object
-}
-
-export default PlaylistView
+  return (
+    <div className="screan-content">
+      {renderContent()}
+    </div>
+  )
+})

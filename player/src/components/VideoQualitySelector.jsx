@@ -1,52 +1,45 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { observer } from 'mobx-react'
-import BaseSelector from './BaseSelector'
+import { observer } from 'mobx-react-lite'
+import Selector from './Selector'
 import {
-    Button,
-    MenuItem,
-    MenuList
+  Button,
+  MenuItem,
+  MenuList
 } from '@material-ui/core'
 import analytics from '../utils/analytics'
 
-@observer
-class VideoQualitySelector extends BaseSelector {
+export default observer(({ device }) => {
+  const { quality, qualities } = device
 
-    selectQuality = (quality) => {
-        this.props.device.setQuality(quality)
-        this.handleClose()
+  const selectQuality = (handleClose) => {
+    device.setQuality(quality)
+    handleClose()
 
-        analytics('select_quality')
-    }
+    analytics('select_quality')
+  }
 
-    renderButton() {
-        const { quality } = this.props.device
-        return (
-            <Button onClick={this.handleClick}>
-                {quality ? quality : 'Auto'}
-            </Button>
-        )
-    }
-
-    renderList() {
-        const { quality, qualities } = this.props.device
-
-        const items = qualities.map((id) => (
-            <MenuItem key={id} selected={id == quality} onClick={() => this.selectQuality(id)}>
+  return (
+    <Selector
+      renderButton={({ handleOpen }) => (
+        <Button onClick={handleOpen}>
+          {quality ? quality : 'Auto'}
+        </Button>
+      )}
+      renderList={() => (
+        <MenuList>{
+          qualities
+            .map((id) => (
+              <MenuItem key={id} selected={id == quality} onClick={() => selectQuality(id)}>
                 {id}
-            </MenuItem>
-        )).concat([
-            <MenuItem key="auto" selected={quality == null} onClick={() => this.selectQuality(null)}>
+              </MenuItem>
+            ))
+            .concat([
+              <MenuItem key="auto" selected={quality == null} onClick={() => selectQuality(null)}>
                 Auto
-            </MenuItem>
-        ])
-
-        return (<MenuList>{items}</MenuList>)
-    }
-}
-
-VideoQualitySelector.propTypes = {
-    device: PropTypes.object.isRequired
-}
-
-export default VideoQualitySelector
+              </MenuItem>
+            ])
+        }</MenuList>
+      )}
+    />
+  )
+})
