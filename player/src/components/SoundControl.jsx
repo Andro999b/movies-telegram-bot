@@ -1,47 +1,36 @@
-import React, { Component, Fragment } from 'react'
+import React from 'react'
 import {
-    VolumeUpRounded as VolumeUpIcon,
-    VolumeOffRounded as VolumeOffIcon
+  VolumeUpRounded as VolumeUpIcon,
+  VolumeOffRounded as VolumeOffIcon
 } from '@material-ui/icons'
-import { 
-    Slider,
-    IconButton,
-    Tooltip
+import {
+  Slider,
+  IconButton,
+  Tooltip
 } from '@material-ui/core'
-import PropTypes from 'prop-types'
-import { observer } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
 import localization from '../localization'
 
-@observer
-class SoundControl extends Component {
-    handleToggleMute = () => {
-        this.props.device.toggleMute()
-    }
+export default observer(({ device }) => {
+  const { volume, isMuted } = device
 
-    handleVolume = (_, volume) => {
-        const { device } = this.props
-        device.setVolume(volume / 100)
-        device.setMute(false)
-    }
+  const handleToggleMute = () => {
+    device.toggleMute()
+  }
 
-    render() {
-        const { device: { volume, isMuted } } = this.props
-  
-        return (
-            <Fragment>
-                <Slider className="sound-control__slider " value={volume * 100} onChange={this.handleVolume} />
-                <Tooltip title={localization.formatString(localization.hotkey, 'M')}>
-                    <IconButton onClick={this.handleToggleMute}>
-                        { isMuted ? <VolumeOffIcon/> : <VolumeUpIcon/> }
-                    </IconButton>
-                </Tooltip>
-            </Fragment>
-        )
-    }
-}
+  const handleVolume = (_, volume) => {
+    device.setVolume(volume / 100)
+    device.setMute(false)
+  }
 
-SoundControl.propTypes = {
-    device: PropTypes.object.isRequired
-}
-
-export default SoundControl
+  return (
+    <>
+      <Slider className="sound-control__slider " value={volume * 100} onChange={handleVolume} />
+      <Tooltip title={localization.formatString(localization.hotkey, 'M')}>
+        <IconButton onClick={handleToggleMute}>
+          {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+        </IconButton>
+      </Tooltip>
+    </>
+  )
+})

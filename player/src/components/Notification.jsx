@@ -1,36 +1,23 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 
 import { Snackbar } from '@material-ui/core'
 
-import { observer, inject } from 'mobx-react'
+import { observer } from 'mobx-react-lite'
+import { notificationStore } from '../store'
 
-@inject('notificationStore') @observer
-class Notification extends Component {
+export default observer(() => {
+  const { message, open } = notificationStore
 
-    handleClose = () => {
-        this.props.notificationStore.hideMessage()
-    }
+  const handleClose = () => notificationStore.hideMessage()
 
-    render() {
-        const { notificationStore } = this.props
-        const { message, open } = notificationStore
-
-        return (
-            <Snackbar
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                autoHideDuration={2000}
-                open={open}
-                onClose={this.handleClose}
-                onClick={this.handleClose}
-                message={message}
-            />
-        )
-    }
-}
-
-Notification.propTypes = {
-    notificationStore: PropTypes.object
-}
-
-export default Notification
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      autoHideDuration={2000}
+      open={open}
+      onClose={handleClose}
+      onClick={handleClose}
+      message={message}
+    />
+  )
+})

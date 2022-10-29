@@ -1,101 +1,69 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useRef, useState } from 'react'
 import { toHHMMSS, isTouchDevice } from '../utils'
 
-class VideoSeekSlider extends Component {
-    state = { trackWidth: 0 }
+export default ({
+  buffered = 0,
+  currentTime = 0,
+  duration = 100,
+  seekTime, onSeekTime, onSeekEnd
+}) => {
+  const track = useRef()
+  const [trackWidth, setTrackWidth] = useState()
 
-    componentDidMount() {
-        this.setTrackWidthState()
-        window.addEventListener('resize', this.setTrackWidthState)
+  const handleSeekEnd = (e) => {
+    onSeekTime(null)
+    onSeekEnd(calcTime(e))
+  }
+
+  const handleStartHover = (e) => onSeekTime(calcTime(e))
+  const handleEndHover = () => onSeekTime(null)
+
+  const calcTime = (e) => {
+    let posx
+    if (e.touches) {
+      posx = e.touches[0].pageX
+    } else {
+      posx = e.pageX
     }
 
-    setTrackWidthState = () => {
-        if(this.track) {
-            this.setState({ trackWidth: this.track.offsetWidth })
-        }
+    const position = posx - track.current.getBoundingClientRect().left
+    return duration * (position / trackWidth)
+  }
+
+  const getPositionStyle = (time, duration) => {
+    if (time) {
+      return { transform: 'scaleX(' + (time / duration) + ')' }
+    } else {
+      return { transform: 'scaleX(0)' }
     }
+  }
 
-    handleSeekEnd = (e) => {
-        const { onSeekTime, onSeekEnd } = this.props
-        const seekTo = this.calcTime(e)
+  useEffect(() => {
+    const setTrackWidthState = () => setTrackWidth(track.current.offsetWidth)
+    setTrackWidthState()
+    window.addEventListener('resize', setTrackWidthState)
 
-        onSeekTime(null)
-        onSeekEnd(seekTo)
-    }
+    return () => window.removeEventListener('resize', setTrackWidthState)
+  }, [])
 
-    handleStartHover = (e) => {
-        const hoverTime = this.calcTime(e)
-
-        this.props.onSeekTime(hoverTime)
-    }
-
-    handleEndHover = () => {
-        this.props.onSeekTime(null)
-    }
-
-    calcTime(e) {
-        const { trackWidth } = this.state
-        const { duration } = this.props
-
-        let posx
-        if(e.touches) {
-            posx = e.touches[0].pageX
-        } else {
-            posx = e.pageX
-        }
-
-        const position = posx - this.track.getBoundingClientRect().left
-        return duration * (position / trackWidth)
-    }
-
-    getPositionStyle(time, duration) {
-        if(time) {
-            return { transform: 'scaleX(' + (time / duration) + ')' }
-        } else {
-            return { transform: 'scaleX(0)' }
-        }
-    }
-
-    render() {
-        const { buffered, currentTime, duration, seekTime } = this.props
-
-        // const time = (seekTime != null && seekTime < currentTime) ? seekTime : currentTime
-
-        return (
-            <div className="ui-video-seek-slider">
-                <div
-                    className={seekTime != null ? 'track active' : 'track'}
-                    ref={(ref) => this.track = ref}
-                    onPointerUp={this.handleSeekEnd}
-                    onMouseMove={isTouchDevice() ? null : this.handleStartHover}
-                    onMouseLeave={isTouchDevice() ? null : this.handleEndHover}
-                >
-                    <div className="main">
-                        <div className="buffered" style={this.getPositionStyle(buffered, duration)} />
-                        <div className="connect" style={this.getPositionStyle(currentTime, duration)} />
-                        { seekTime != null && <div className="seek-hover" style={this.getPositionStyle(seekTime, duration)} /> }
-                        <div className="time-indicator shadow-border" >{seekTime?toHHMMSS(seekTime):toHHMMSS(currentTime)} / {toHHMMSS(duration)}</div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+  return (
+    <div className="ui-video-seek-slider">
+      <div
+        className={seekTime != null ? 'track active' : 'track'}
+        ref={track}
+        onPointerUp={handleSeekEnd}
+        onMouseMove={isTouchDevice() ? null : handleStartHover}
+        onMouseLeave={isTouchDevice() ? null : handleEndHover}
+      >
+        <div className="main">
+          <div className="buffered" style={getPositionStyle(buffered, duration)} />
+          <div className="connect" style={getPositionStyle(currentTime, duration)} />
+          {seekTime != null && <div className="seek-hover" style={getPositionStyle(seekTime, duration)} />}
+          <div className="time-indicator shadow-border" >
+            {seekTime ? toHHMMSS(seekTime) : toHHMMSS(currentTime)} / {toHHMMSS(duration)}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
-
-VideoSeekSlider.defaultProps = {
-    duration: 100,
-    currentTime: 0,
-    buffered: 0
-}
-
-VideoSeekSlider.propTypes = {
-    buffered: PropTypes.number,
-    duration: PropTypes.number,
-    currentTime: PropTypes.number,
-    seekTime: PropTypes.number,
-    onSeekTime: PropTypes.func.isRequired,
-    onSeekEnd: PropTypes.func.isRequired,
-}
-
-export default VideoSeekSlider
