@@ -11,13 +11,6 @@ import analytics from '../utils/analytics'
 export default observer(({ device }) => {
   const { quality, qualities } = device
 
-  const selectQuality = (handleClose) => {
-    device.setQuality(quality)
-    handleClose()
-
-    analytics('select_quality')
-  }
-
   return (
     <Selector
       renderButton={({ handleOpen }) => (
@@ -25,9 +18,16 @@ export default observer(({ device }) => {
           {quality ? quality : 'Auto'}
         </Button>
       )}
-      renderList={() => (
-        <MenuList>{
-          qualities
+      renderList={({ handleClose }) => {
+        const selectQuality = (quality) => {
+          device.setQuality(quality)
+          handleClose()
+
+          analytics('select_quality')
+        }
+
+        return (
+          <MenuList>{qualities
             .map((id) => (
               <MenuItem key={id} selected={id == quality} onClick={() => selectQuality(id)}>
                 {id}
@@ -37,9 +37,9 @@ export default observer(({ device }) => {
               <MenuItem key="auto" selected={quality == null} onClick={() => selectQuality(null)}>
                 Auto
               </MenuItem>
-            ])
-        }</MenuList>
-      )}
+            ])}</MenuList>
+        )
+      }}
     />
   )
 })

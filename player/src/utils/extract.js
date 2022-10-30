@@ -66,7 +66,7 @@ export function createExtractorUrlBuilder(extractor, additionalParams) {
     extractorBaseUrl += `&${key}=${finalParams[key]}`
   )
 
-  return async (url) => {
+  return (url) => {
     return `${extractorBaseUrl}&url=${encodeURIComponent(url)}`
   }
 }
@@ -77,7 +77,7 @@ export const handleSpecialHLSUrls = (context, callbacks) => {
 
   if (
     url.startsWith('https://rusanime.ru/player/out.php') ||
-        url.startsWith('https://love.statics.life/player/out.php')
+    url.startsWith('https://love.statics.life/player/out.php')
   ) {
     callbacks.onSuccess({
       url: context.url,

@@ -53,6 +53,8 @@ export default ({
     }
   }
 
+  const hasDuration = !isNaN(duration) && duration > 0
+
   return (
     <div className="ui-video-seek-slider">
       <div
@@ -63,12 +65,14 @@ export default ({
         onMouseLeave={isTouchDevice() ? null : handleEndHover}
       >
         <div className="main">
-          {bufferedFragments}
-          <div className="connect" style={getPositionStyle(0, currentTime, duration)} />
-          {seekTime != null && <div className="seek-hover" style={getPositionStyle(0, seekTime, duration)} />}
-          {duration && <div className="time-indicator shadow-border" >
-            {seekTime ? toHHMMSS(seekTime) : toHHMMSS(currentTime)} / {toHHMMSS(duration)}
-          </div>}
+          {hasDuration && <>
+            {bufferedFragments}
+            <div className="connect" style={getPositionStyle(0, currentTime, duration)} />
+            {seekTime != null && <div className="seek-hover" style={getPositionStyle(0, seekTime, duration)} />}
+            <div className="time-indicator shadow-border" >
+              {seekTime ? toHHMMSS(seekTime) : toHHMMSS(currentTime)} / {toHHMMSS(duration)}
+            </div>
+          </>}
         </div>
       </div>
     </div>

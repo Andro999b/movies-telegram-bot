@@ -155,7 +155,7 @@ export class Device {
         if (fileIndex == this.currentFileIndex) {
           Object.keys(source).forEach((key) => file[key] = source[key])
           file.asyncSource = null
-          this.setSource(file)
+          await this.setSource(file)
         }
       } catch (e) {
         logger.error('Can`t load async source', {
@@ -171,7 +171,7 @@ export class Device {
         this.setLoading(false)
       }
     } else {
-      this.setSource(file)
+      await this.setSource(file)
     }
   }
 
@@ -248,8 +248,7 @@ class PlayerStore {
       p = { fileIndex, startTime }
     }
 
-    this.device.setPlaylist(playlist, p.fileIndex, p.startTime)
-    this.device.play()
+    await this.device.setPlaylist(playlist, p.fileIndex, p.startTime)
 
     analytics('select_file')
   }

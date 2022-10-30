@@ -10,9 +10,7 @@ import logger from '../utils/logger'
 import analytics from '../utils/analytics'
 import { toJS } from 'mobx'
 
-const logError = (errorData) => {
-  const { props: { device: { source } } } = this
-
+const logError = (errorData, source) => {
   logger.error('Can`t play media', {
     title: document.title,
     url: location.href,
@@ -72,7 +70,7 @@ export default observer(({ device, onEnded }) => {
     const currentVideo = video.current
 
     const handleCanPlayThrough = async () => {
-      currentVideo.currentTime = device.currentTime
+      currentVideo.currentTime = device.seekTo || device.currentTime
 
       if (device.isPlaying) {
         try {
@@ -84,8 +82,6 @@ export default observer(({ device, onEnded }) => {
       } else {
         currentVideo.pause()
       }
-
-      setVideoReady(true)
       currentVideo.removeEventListener('canplaythrough', handleCanPlayThrough)
     }
     const startVideo = async () => {
@@ -139,7 +135,7 @@ export default observer(({ device, onEnded }) => {
         })
         hls.on(Hls.Events.ERROR, (_, data) => {
           if (data.fatal) {
-            logError(data)
+            logError(data, device.source)
             tryNextVideo()
           }
         })
@@ -187,6 +183,10 @@ export default observer(({ device, onEnded }) => {
     }
   }
 
+  const handleLoadedMetadata = () => {
+    handleResize()
+    setVideoReady(true)
+  }
   const handlePlaying = () => device.setLoading(false)
   const handleWaiting = () => device.setLoading(true)
   const handleError = () => {
@@ -195,7 +195,7 @@ export default observer(({ device, onEnded }) => {
       code: currentVideo?.error?.code,
       message: currentVideo?.error?.message,
       videoSrc: currentVideo?.src
-    })
+    }, source)
     tryNextVideo()
   }
 
@@ -214,7 +214,7 @@ export default observer(({ device, onEnded }) => {
         onDurationChange={handleUpdate}
         onProgress={handleUpdate}
         onTimeUpdate={handleUpdate}
-        onLoadedMetadata={handleResize}
+        onLoadedMetadata={handleLoadedMetadata}
         onPlaying={handlePlaying}
         onWaiting={handleWaiting}
         onError={handleError}
