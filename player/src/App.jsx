@@ -24,17 +24,15 @@ class App extends Component {
 
   render() {
     return (
-      <React.StrictMode>
-        <ThemeProvider theme={theme}>
-          <HashRouter>
-            <Switch>
-              <Route exact path="/watch" component={PlaylistView} />
-              <Route path="/" component={WatchHistoryView} />
-            </Switch>
-          </HashRouter>
-          <Notification />
-        </ThemeProvider>
-      </React.StrictMode>
+      <ThemeProvider theme={theme}>
+        <HashRouter>
+          <Switch>
+            <Route exact path="/watch" component={PlaylistView} />
+            <Route path="/" component={WatchHistoryView} />
+          </Switch>
+        </HashRouter>
+        <Notification />
+      </ThemeProvider>
     )
   }
 }

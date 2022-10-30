@@ -5,7 +5,7 @@ import fscreen from 'fscreen'
 import MediaControls from './MediaControls'
 import PlayerFilesList from './PlayerPlayList'
 import PlayerTitle from './PlayerTitle'
-import VideoScrean from './VideoScrean'
+import Video from './Video'
 import PlayBackZones from './PlayBackZones'
 import Share from './Share'
 import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
@@ -177,7 +177,7 @@ export default observer(({ initialFullScreen }) => {
               onSeekEnd={handleSeekEnd}
             />
           }
-          {!error && <VideoScrean device={device} onEnded={playerStore.fileEnd} />}
+          {(!error && device.source) && <Video device={device} onEnded={playerStore.fileEnd} />}
           {!hideUi && <>
             <PlayerTitle title={playerStore.getPlayerTitle()} />
             <Share device={device} playlist={device.playlist} />

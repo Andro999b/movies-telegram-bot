@@ -12,8 +12,9 @@ import { isTouchDevice } from '../utils'
 import localization from '../localization'
 import analytics from '../utils/analytics'
 
+export default observer(({ device }) => {
+  const { audioTrack, audioTracks } = device
 
-export default observer((device) => {
   const selectTrack = (id) => {
     device.setAudioTrack(id)
     analytics('select_audio')
@@ -28,7 +29,6 @@ export default observer((device) => {
           </IconButton>
         )
       } else {
-        const { audioTrack, audioTracks } = device
         const selectedTrack = audioTracks.find((it) => it.id == audioTrack)
 
         if (selectedTrack) {
