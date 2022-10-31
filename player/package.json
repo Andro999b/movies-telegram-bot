@@ -8,13 +8,11 @@
     "build": "rm -rf dist/* && webpack --mode production --config webpack.prod.config.js",
     "deploy:surge": "surge dist movie-player.surge.sh",
     "deploy:firebase": "firebase deploy",
+    "release:beta:firebase": "npm run build && firebase hosting:channel:deploy beta",
     "release:firebase": "npm run build && npm run deploy:firebase",
     "release:surge": "npm run build && npm run deploy:surge",
     "release": "npm run build && npm run deploy:firebase && npm run deploy:surge"
   },
-  "browserslist": [
-    "ff 5"
-  ],
   "keywords": [],
   "author": "",
   "license": "ISC",

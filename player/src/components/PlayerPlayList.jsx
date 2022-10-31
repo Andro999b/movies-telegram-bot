@@ -82,16 +82,14 @@ const Download = ({ playlist, file }) =>
 const FileRow = ({ playlist, file, style, selected, hundleSelect }) => {
   return (
     <div style={style}>
-      <ListItem
-        button
-        selected={selected}
-        onClick={() => hundleSelect(file)}
-      >
-        <ListItemText primary={
-          <span style={{ wordBreak: 'break-all', whiteSpace: 'normal' }}>
-            {file.name}
-          </span>
-        } />
+      <ListItem style={{ cursor: 'pointer' }} selected={selected}>
+        <ListItemText
+          onClick={() => hundleSelect(file)}
+          primary={
+            <span style={{ wordBreak: 'break-all', whiteSpace: 'normal' }}>
+              {file.name}
+            </span>
+          } />
         <Download file={file} playlist={playlist} />
       </ListItem>
     </div>

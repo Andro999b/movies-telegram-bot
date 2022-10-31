@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { toHHMMSS, isTouchDevice } from '../utils'
 
 export default ({
-  buffered = 0,
+  buffered = null,
   currentTime = 0,
   duration = 100,
   seekTime, onSeekTime, onSeekEnd
@@ -30,12 +30,10 @@ export default ({
     return duration * (position / trackWidth)
   }
 
-  const getPositionStyle = (time, duration) => {
-    if (time) {
-      return { transform: 'scaleX(' + (time / duration) + ')' }
-    } else {
-      return { transform: 'scaleX(0)' }
-    }
+  const getPositionStyle = (startTime, endTime, duration) => {
+    const translate = (startTime / duration) * 100 + '%'
+    const scale = (endTime / duration) + ''
+    return { transform: `scaleX(${scale}) translateX(${translate})` }
   }
 
   useEffect(() => {
@@ -45,6 +43,17 @@ export default ({
 
     return () => window.removeEventListener('resize', setTrackWidthState)
   }, [])
+
+  const bufferedFragments = []
+  if (buffered) {
+    for (let i = 0; i < buffered.length; i++) {
+      bufferedFragments.push(
+        <div key={i} className="buffered" style={getPositionStyle(buffered.start(i), buffered.end(i), duration)} />
+      )
+    }
+  }
+
+  const hasDuration = !isNaN(duration) && duration > 0
 
   return (
     <div className="ui-video-seek-slider">
@@ -56,12 +65,14 @@ export default ({
         onMouseLeave={isTouchDevice() ? null : handleEndHover}
       >
         <div className="main">
-          <div className="buffered" style={getPositionStyle(buffered, duration)} />
-          <div className="connect" style={getPositionStyle(currentTime, duration)} />
-          {seekTime != null && <div className="seek-hover" style={getPositionStyle(seekTime, duration)} />}
-          <div className="time-indicator shadow-border" >
-            {seekTime ? toHHMMSS(seekTime) : toHHMMSS(currentTime)} / {toHHMMSS(duration)}
-          </div>
+          {hasDuration && <>
+            {bufferedFragments}
+            <div className="connect" style={getPositionStyle(0, currentTime, duration)} />
+            {seekTime != null && <div className="seek-hover" style={getPositionStyle(0, seekTime, duration)} />}
+            <div className="time-indicator shadow-border" >
+              {seekTime ? toHHMMSS(seekTime) : toHHMMSS(currentTime)} / {toHHMMSS(duration)}
+            </div>
+          </>}
         </div>
       </div>
     </div>

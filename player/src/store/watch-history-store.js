@@ -21,6 +21,7 @@ class RemoteHistoryStorage {
   remoteDb = null
   inited = false
 
+  // eslint-disable-next-line require-await
   _getRemoteDB = async () => {
     if (this.inited) return this.remoteDb
 
@@ -122,7 +123,7 @@ class LocalHistoryStorage { // eslint-disable-line no-unused-vars
       })
   }
 
-  get = async (key) => this.localDB.history.get(key)
+  get = async (key) => await this.localDB.history.get(key)
 
   set = async (key, data) => {
     await this.localDB.history.put({
@@ -141,25 +142,25 @@ class LocalHistoryStorage { // eslint-disable-line no-unused-vars
       .delete()
   }
 
-  all = async () => this.localDB.history.toArray()
+  all = async () => await this.localDB.history.toArray()
 }
 
 class LocalStoreHistoryStorage {
-  get = async (key) => store.get(this._toInternalKey(key))
+  get = (key) => store.get(this._toInternalKey(key))
 
-  set = async (key, data) => {
+  set = (key, data) => {
     store.set(this._toInternalKey(key), { key, ...data })
   }
 
-  update = async (key, data) => {
+  update = (key, data) => {
     store.set(this._toInternalKey(key), { key, ...store.get(key), ...data })
   }
 
-  delete = async (key) => {
+  delete = (key) => {
     store.remove(this._toInternalKey(key))
   }
 
-  all = async () => {
+  all = () => {
     const results = []
 
     store.each((val, key) => {
@@ -308,13 +309,13 @@ class WatchHistoryStore {
   }
 
   deleteFromHistory = async ({ provider, id }) =>
-    this._composedHistory.delete(this._getItemKey(provider, id))
+    await this._composedHistory.delete(this._getItemKey(provider, id))
 
   updateLastFile = async ({ provider, id }, fileIndex) =>
-    this._composedHistory.update(this._getItemKey(provider, id), { fileIndex, lastTime: 0, time: Date.now() })
+    await this._composedHistory.update(this._getItemKey(provider, id), { fileIndex, lastTime: 0, time: Date.now() })
 
   updateStartTime = async ({ provider, id }, startTime) =>
-    this._composedHistory.update(this._getItemKey(provider, id), { startTime })
+    await this._composedHistory.update(this._getItemKey(provider, id), { startTime })
 
   _lastTimeSavedTS = 0
   updateLastFilePosition =
@@ -344,7 +345,7 @@ class WatchHistoryStore {
   }
 
   updateAudioTrack = async ({ provider, id }, audio) =>
-    this._composedHistory.update(this._getItemKey(provider, id), { audio, time: Date.now() })
+    await this._composedHistory.update(this._getItemKey(provider, id), { audio, time: Date.now() })
 
   audioTrack = async ({ provider, id }) => {
     const key = this._getItemKey(provider, id)
