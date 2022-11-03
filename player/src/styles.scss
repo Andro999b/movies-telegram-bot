@@ -70,16 +70,16 @@ html {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        width: 100%    !important;
-        height: auto   !important;
+        width: 100% !important;
+        height: auto !important;
     }
 
     video.scale_vert {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
-        width: auto    !important;
-        height: 100%   !important;
+        width: auto !important;
+        height: 100% !important;
     }
 }
 
@@ -127,7 +127,7 @@ html {
     padding-right: 60px;
 
     h6 {
-        @extend .shadow-border 
+        @extend .shadow-border
     }
 }
 
@@ -161,7 +161,7 @@ html {
     &.forward {
         right: 0
     }
-    
+
     &.backward {
         left: 0
     }
@@ -207,11 +207,11 @@ html {
 
 .idle {
     cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=), none;
-	user-select: none;
+    user-select: none;
 }
 
 .player__background-cover {
-    background: no-repeat center center fixed; 
+    background: no-repeat center center fixed;
     background-size: contain;
     position: absolute;
     top: 0;
@@ -220,7 +220,7 @@ html {
     right: 0;
 }
 
-.player__pause-cover{
+.player__pause-cover {
     background-color: rgba(0, 0, 0, 0.7);
     position: absolute;
     top: 0;
@@ -337,7 +337,7 @@ html {
     left: 5px;
 }
 
-.add-history-btn { 
+.add-history-btn {
     position: absolute;
     z-index: 3;
     top: 56px;
@@ -352,11 +352,88 @@ html {
     top: 60px;
     background: linear-gradient(180deg, #3bb4fd 50%, #fffb00 50%);
     transform: translate(-50%, 0);
-    box-shadow: rgba(0,0,0,.35) 0px 0px 15px 4px;
+    box-shadow: rgba(0, 0, 0, .35) 0px 0px 15px 4px;
     padding: 10px 20px;
     border-radius: 5px;
     color: #000 !important;
     text-decoration: none !important;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-weight: bold;
+}
+
+.ui-video-seek-slider {
+    position: relative;
+}
+
+.ui-video-seek-slider:focus {
+    outline: none;
+}
+
+.ui-video-seek-slider .track {
+    height: 20px;
+    cursor: pointer;
+    outline: none;
+}
+
+.ui-video-seek-slider .track:focus {
+    border: 0;
+    outline: none;
+}
+
+.ui-video-seek-slider .track .main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    outline: none;
+}
+
+.ui-video-seek-slider .track .main:focus {
+    border: 0;
+    outline: none;
+}
+
+.ui-video-seek-slider .track .main .seek-hover {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    transform-origin: 0 0;
+}
+
+.ui-video-seek-slider .track .main .buffered {
+    position: absolute;
+    background-color: #959595;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    transform-origin: 0 0;
+}
+
+.ui-video-seek-slider .track .main .connect {
+    position: absolute;
+    background-color: #f00;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+}
+
+.ui-video-seek-slider .time-indicator {
+    z-index: 4;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    height: 100%;
+    touch-action: none;
+    pointer-events: none;
+    user-select: none;
+}
+
+.ui-video-seek-slider {
+    display: block;
 }
