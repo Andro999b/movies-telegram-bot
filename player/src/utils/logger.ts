@@ -27,15 +27,6 @@ const log = (
         data: { ...data, browser }
       })
     })
-  } else {
-    fetch('/log', {
-      method: 'POST',
-      body: JSON.stringify({
-        level,
-        message,
-        data: { ...data, browser }
-      })
-    })
   }
 }
 

@@ -1,13 +1,13 @@
-const webpackConfig = require('./webpack.config')
-const CopyPlugin = require("copy-webpack-plugin");
-const ESLintPlugin = require('eslint-webpack-plugin')
-const { merge } = require('webpack-merge')
+import webpackConfig from './webpack.config.js'
+import CopyPlugin from "copy-webpack-plugin"
+import ESLintPlugin from 'eslint-webpack-plugin'
+import { merge } from 'webpack-merge'
 
-module.exports = merge(webpackConfig, {
-    plugins: [
-        new CopyPlugin({
-            patterns: [{ from: "public" }]
-        }),
-        new ESLintPlugin()
-    ]
+export default merge(webpackConfig, {
+  plugins: [
+    new CopyPlugin({
+      patterns: [{ from: "public" }]
+    }),
+    new ESLintPlugin()
+  ]
 })

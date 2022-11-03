@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {
   List,
   ListItem,
@@ -12,21 +12,14 @@ import {
   AppBar
 } from '@material-ui/core'
 import { NavigateBeforeRounded as BackIcon } from '@material-ui/icons'
-import {
-  List as _VirtualizedList,
-  AutoSizer as _AutoSizer,
-  ListProps,
-  AutoSizerProps
-} from 'react-virtualized'
+
 import DownloadSelector from './DownloadSelector'
 import { observer } from 'mobx-react-lite'
 import { Device } from '../store/player-store'
 import { Playlist, File } from '../types'
 
-
-// dirty hack
-const VirtualizedList = _VirtualizedList as unknown as React.FC<ListProps>
-const AutoSizer = _AutoSizer as unknown as React.FC<AutoSizerProps>
+import AutoSizer, { Size } from 'react-virtualized-auto-sizer'
+import { FixedSizeList } from 'react-window'
 
 interface Node {
   id: string
@@ -101,17 +94,19 @@ const Download: React.FC<DownloadProps> = ({ playlist, file }) => (
   </ListItemSecondaryAction>
 )
 
-
-interface FileRowProps {
-  playlist: Playlist
-  fileOrNode: File | Node
-  style: React.CSSProperties
-  selected: boolean
+interface RowActions {
   handleFileSelect: (file: File) => void
   handleFolderSelect: (node: Node) => void
 }
 
-const Row: React.FC<FileRowProps> = ({
+interface RowProps {
+  playlist: Playlist
+  fileOrNode: File | Node
+  style: React.CSSProperties
+  selected: boolean
+}
+
+const Row: React.FC<RowProps & RowActions> = ({
   playlist,
   fileOrNode,
   style,
@@ -137,6 +132,49 @@ const Row: React.FC<FileRowProps> = ({
   )
 }
 
+interface FixedSizeListWrapProps {
+  playlist: Playlist
+  list: (File | Node)[]
+  selectedIndex: number
+}
+
+const FixedSizeListWrap: React.FC<Size & FixedSizeListWrapProps & RowActions> = ({
+  height,
+  width,
+  playlist,
+  list,
+  selectedIndex,
+  handleFileSelect,
+  handleFolderSelect
+}) => {
+  const vlist = useRef<FixedSizeList>(null)
+
+  useEffect(() => {
+    vlist.current?.scrollToItem(selectedIndex, 'center')
+  }, [selectedIndex])
+
+  return (
+    <FixedSizeList
+      ref={vlist}
+      width={width}
+      height={height}
+      itemSize={48}
+      itemCount={list.length}
+    >
+      {({ index, style }): React.ReactElement => (
+        <Row
+          fileOrNode={list[index]}
+          style={style}
+          playlist={playlist}
+          selected={index == selectedIndex}
+          handleFileSelect={handleFileSelect}
+          handleFolderSelect={handleFolderSelect}
+        />
+      )}
+    </FixedSizeList>
+  )
+}
+
 interface Props {
   device: Device
   open: boolean
@@ -146,6 +184,8 @@ interface Props {
 const PlayerPlayList: React.FC<Props> = ({ device, open, onFileSelected }) => {
   const { playlist, currentFileIndex } = device
   const { files } = playlist
+
+
 
   const [path, setPath] = useState<string[]>(() => {
     const path = files[currentFileIndex].path
@@ -198,24 +238,15 @@ const PlayerPlayList: React.FC<Props> = ({ device, open, onFileSelected }) => {
           </AppBar>}
         <List className='player__file-list-container'>
           <AutoSizer>
-            {({ width, height }): React.ReactElement => (
-              <VirtualizedList
-                width={width}
-                height={height}
-                rowCount={list.length}
-                scrollToIndex={selectedIndex}
-                rowHeight={48}
-                rowRenderer={({ key, index, style }): React.ReactElement => (
-                  <Row
-                    key={key}
-                    fileOrNode={list[index]}
-                    style={style}
-                    playlist={playlist}
-                    selected={index == selectedIndex}
-                    handleFileSelect={handleFileSelect}
-                    handleFolderSelect={handleFolderSelect}
-                  />
-                )} />
+            {(size: Size): React.ReactElement => (
+              <FixedSizeListWrap
+                {...size}
+                playlist={playlist}
+                list={list}
+                selectedIndex={selectedIndex}
+                handleFileSelect={handleFileSelect}
+                handleFolderSelect={handleFolderSelect}
+              />
             )}
           </AutoSizer>
         </List>
