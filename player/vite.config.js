@@ -9,9 +9,11 @@ const releaseHour = releaseDate.getHours()
 export default defineConfig({
   root: 'src',
   build: {
-    outDir: 'dist',
+    outDir: '../dist',
     sourcemap: true,
+    emptyOutDir: true
   },
+  publicDir: '../public',
   define: {
     'process.env.RELEASE': JSON.stringify(`movies-player@${releaseHour}.${releaseDay}.${releaseYaer}`)
   },
@@ -23,5 +25,5 @@ export default defineConfig({
       include: '**/*.{jsx,tsx}',
     }),
     splitVendorChunkPlugin()
-  ],
+  ]
 })

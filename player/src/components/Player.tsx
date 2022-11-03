@@ -64,7 +64,7 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
 
   const handleTogglePlayList = useCallback(() => setPlaylistOpen((prev) => !prev), [])
 
-  const handlePlayPause = (): void => {
+  const handlePlayPause = useCallback((): void => {
     if (device.isLoading)
       return
 
@@ -73,7 +73,11 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
     } else {
       device.play()
     }
-  }
+  }, [device])
+
+  useEffect(() => {
+    addGlobalKey('Space', handlePlayPause)
+  }, [handlePlayPause])
 
   const handleSeek = (time: number): void => device.seeking(time)
 
@@ -97,6 +101,7 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
       }
     }
   }, [fullScreen])
+
   useEffect(
     () => addGlobalKey(['KeyF', 'Enter'], handleToggleFullscreen),
     [handleToggleFullscreen]
@@ -127,13 +132,6 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
 
   useEffect(() => {
     addGlobalKey(['KeyM'], () => device.toggleMute())
-    addGlobalKey('Space', () => {
-      if (device.isPlaying) {
-        device.pause()
-      } else {
-        device.play()
-      }
-    })
   }, [device])
 
   useEffect(() => {
