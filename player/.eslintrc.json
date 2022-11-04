@@ -1,5 +1,5 @@
 {
-    "parser": "@babel/eslint-parser",
+    "parser": "@typescript-eslint/parser",
     "env": {
         "browser": true,
         "commonjs": false,
@@ -7,6 +7,7 @@
     },
     "extends": [
         "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
         "plugin:react/recommended",
         "plugin:react-hooks/recommended"
     ],
@@ -20,11 +21,11 @@
         "sourceType": "module"
     },
     "plugins": [
+        "@typescript-eslint",
         "react"
     ],
     "rules": {
         "react/prop-types": "off",
-        "react/display-name": "off",
         "indent": [
             "error",
             2,
@@ -51,7 +52,10 @@
         ],
         "brace-style": "warn",
         "arrow-parens": "warn",
-        "require-await": "error"
+        "require-await": "error",
+        "@typescript-eslint/explicit-function-return-type": "warn",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-non-null-assertion": "off"
     },
     "globals": {
         "gtag": "readonly",

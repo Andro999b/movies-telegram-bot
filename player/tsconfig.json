@@ -1,0 +1,18 @@
+{
+  "exclude": [
+    "**/node_modules"
+  ],
+  "compilerOptions": {
+    "isolatedModules": true,
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "Node",
+    "module": "ES2020",
+    "target": "ES6",
+    "jsx": "react",
+  }
+}
