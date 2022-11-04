@@ -6,11 +6,11 @@ import {
   Grid,
   IconButton,
   Typography
-} from '@material-ui/core'
+} from '@mui/material'
 import { Link } from 'react-router-dom'
 
 import localization from '../localization'
-import { Delete } from '@material-ui/icons'
+import { Delete } from '@mui/icons-material'
 import SyncButton from '../components/SyncButton'
 import { tgBots } from '../utils'
 import { watchHistoryStore } from '../store'
@@ -36,10 +36,13 @@ const Tile: React.FC<TileProps> = ({ item, onDelete }) => {
               </Typography>
             </div>
             <div className="watch-history__tile-title-delete">
-              <IconButton color="primary" onClick={(e: MouseEvent): void => {
-                e.preventDefault()
-                onDelete(item)
-              }}>
+              <IconButton
+                color="secondary"
+                onClick={(e: MouseEvent): void => {
+                  e.preventDefault()
+                  onDelete(item)
+                }}
+                size="large">
                 <Delete />
               </IconButton>
             </div>

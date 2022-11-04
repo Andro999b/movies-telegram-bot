@@ -3,13 +3,13 @@ import {
   VolumeUpRounded as VolumeUpIcon,
   VolumeDownRounded as VolumeDownIcon,
   VolumeOffRounded as VolumeOffIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 import {
   IconButton,
   Paper,
   Popover,
   Typography
-} from '@material-ui/core'
+} from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import { Device } from '../store/player-store'
 
@@ -39,7 +39,7 @@ const MobileSoundControl: React.FC<Props> = ({ device }) => {
 
   return (
     <Fragment>
-      <IconButton onClick={toggleVolumePopup}>
+      <IconButton onClick={toggleVolumePopup} size="large">
         {volume == 0 && <VolumeOffIcon />}
         {volume > 0 && <VolumeUpIcon />}
       </IconButton>
@@ -59,13 +59,13 @@ const MobileSoundControl: React.FC<Props> = ({ device }) => {
       >
         <Paper>
           <div className="sound-control__mobile">
-            <IconButton onClick={handleVolumeDown}>
+            <IconButton onClick={handleVolumeDown} size="large">
               <VolumeDownIcon />
             </IconButton>
             <Typography variant="body2" align="center">
               {Math.ceil(volume * VOLUME_LEVELS)}
             </Typography>
-            <IconButton onClick={handleVolumeUp}>
+            <IconButton onClick={handleVolumeUp} size="large">
               <VolumeUpIcon />
             </IconButton>
           </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Snackbar } from '@material-ui/core'
+import { Snackbar } from '@mui/material'
 
 import { observer } from 'mobx-react-lite'
 import { notificationStore } from '../store'

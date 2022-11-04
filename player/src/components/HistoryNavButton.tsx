@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Fab, Tooltip } from '@material-ui/core'
-import { History as HistoryIcon } from '@material-ui/icons'
+import { Fab, Tooltip } from '@mui/material'
+import { History as HistoryIcon } from '@mui/icons-material'
 import localization from '../localization'
 
 const HistoryNavButton: React.FC = () => (

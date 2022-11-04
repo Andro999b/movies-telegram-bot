@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { PlayCircleFilled as PlayIcon } from '@material-ui/icons'
+import { PlayCircleFilled as PlayIcon } from '@mui/icons-material'
 
 import Share from './Share'
 import HistoryNavButton from './HistoryNavButton'
@@ -8,7 +8,7 @@ import TelegramLinks from './TelegramLinks'
 import AddHistoryButton from './AddHistoryButton'
 import analytics from '../utils/analytics'
 import localization from '../localization'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress } from '@mui/material'
 import { Playlist } from '../types'
 
 interface Props {

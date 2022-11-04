@@ -1,5 +1,5 @@
-import { IconButton, Typography } from '@material-ui/core'
-import { Cloud, CloudOff } from '@material-ui/icons'
+import { IconButton, Typography } from '@mui/material'
+import { Cloud, CloudOff } from '@mui/icons-material'
 import React from 'react'
 
 interface Props {
@@ -13,7 +13,7 @@ const SyncButton: React.FC<Props> = ({ insync, onConnect, onDisconnect }) => {
     return (
       <Typography>
         InSync
-        <IconButton onClick={onDisconnect}>
+        <IconButton onClick={onDisconnect} size="large">
           <Cloud />
         </IconButton>
       </Typography>
@@ -22,7 +22,7 @@ const SyncButton: React.FC<Props> = ({ insync, onConnect, onDisconnect }) => {
     return (
       <Typography>
         Not InSync
-        <IconButton onClick={onConnect}>
+        <IconButton onClick={onConnect} size="large">
           <CloudOff />
         </IconButton>
       </Typography>

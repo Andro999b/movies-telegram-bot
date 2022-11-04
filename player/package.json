@@ -50,8 +50,11 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@material-ui/core": "4.12.4",
-    "@material-ui/icons": "^4.11.3",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/material": "^5.10.12",
+    "@mui/styles": "^5.10.10",
     "@sentry/react": "^7.16.0",
     "@sentry/tracing": "^7.16.0",
     "clipboard-copy": "^4.0.1",
@@ -67,7 +70,6 @@
     "react-localization": "^1.0.19",
     "react-resize-detector": "^7.1.2",
     "react-router-dom": "^5.2.0",
-    "react-virtualized": "^9.22.3",
     "react-virtualized-auto-sizer": "^1.0.7",
     "react-window": "^1.8.8",
     "store2": "^2.14.2"

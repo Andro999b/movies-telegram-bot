@@ -8,7 +8,7 @@ import PlaylistView from './views/PlaylistView'
 import WatchHistoryView from './views/WatchHistoryView'
 import logger from './utils/logger'
 
-import { ThemeProvider } from '@material-ui/styles'
+import { ThemeProvider } from '@mui/material/styles'
 import theme from './theme'
 
 class App extends Component {
@@ -23,15 +23,17 @@ class App extends Component {
 
   render(): React.ReactNode {
     return (
-      <ThemeProvider theme={theme}>
-        <HashRouter>
-          <Switch>
-            <Route exact path="/watch" component={PlaylistView} />
-            <Route path="/" component={WatchHistoryView} />
-          </Switch>
-        </HashRouter>
-        <Notification />
-      </ThemeProvider>
+      <React.StrictMode>
+        <ThemeProvider theme={theme}>
+          <HashRouter>
+            <Switch>
+              <Route exact path="/watch" component={PlaylistView} />
+              <Route path="/" component={WatchHistoryView} />
+            </Switch>
+          </HashRouter>
+          <Notification />
+        </ThemeProvider>
+      </React.StrictMode>
     )
   }
 }

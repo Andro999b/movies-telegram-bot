@@ -4,10 +4,10 @@ import {
   FastForwardRounded as FastForwardIcon,
   FastRewindRounded as FastRewindIcon,
   PlayCircleFilled as PlayIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 import { observer } from 'mobx-react-lite'
-import { Typography, CircularProgress } from '@material-ui/core'
+import { Typography, CircularProgress } from '@mui/material'
 import { toHHMMSS } from '../utils'
 import { Device } from '../store/player-store'
 

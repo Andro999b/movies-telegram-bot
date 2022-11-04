@@ -2,16 +2,16 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
-  ListItemSecondaryAction,
   IconButton,
   Paper,
   Slide,
   Toolbar,
   Typography,
   AppBar
-} from '@material-ui/core'
-import { NavigateBeforeRounded as BackIcon } from '@material-ui/icons'
+} from '@mui/material'
+import { NavigateBeforeRounded as BackIcon } from '@mui/icons-material'
 
 import DownloadSelector from './DownloadSelector'
 import { observer } from 'mobx-react-lite'
@@ -89,9 +89,7 @@ interface DownloadProps {
 }
 
 const Download: React.FC<DownloadProps> = ({ playlist, file }) => (
-  <ListItemSecondaryAction>
-    <DownloadSelector file={file} title={playlist.title} />
-  </ListItemSecondaryAction>
+  <DownloadSelector file={file} title={playlist.title} />
 )
 
 interface RowActions {
@@ -118,15 +116,22 @@ const Row: React.FC<RowProps & RowActions> = ({
   const isFile = node.children === undefined && node.files === undefined
   return (
     <div style={style}>
-      <ListItem style={{ cursor: 'pointer' }} button selected={selected}>
-        <ListItemText
+      <ListItem
+        style={{ cursor: 'pointer' }}
+        selected={selected}
+        disablePadding
+        secondaryAction={isFile && <Download file={fileOrNode} playlist={playlist} />}
+      >
+        <ListItemButton
           onClick={(): void => isFile ? handleFileSelect(fileOrNode) : handleFolderSelect(fileOrNode)}
-          primary={
-            <span style={{ wordBreak: 'break-all', whiteSpace: 'normal' }}>
-              {fileOrNode.name}
-            </span>
-          } />
-        {isFile && <Download file={fileOrNode} playlist={playlist} />}
+        >
+          <ListItemText
+            primary={
+              <span style={{ wordBreak: 'break-all', whiteSpace: 'normal' }}>
+                {fileOrNode.name}
+              </span>
+            } />
+        </ListItemButton>
       </ListItem>
     </div>
   )
@@ -228,7 +233,7 @@ const PlayerPlayList: React.FC<Props> = ({ device, open, onFileSelected }) => {
         {path.length != 0 &&
           <AppBar position="static" color='secondary'>
             <Toolbar>
-              <IconButton edge="start" onClick={hundleBack}>
+              <IconButton edge="start" onClick={hundleBack} size="large">
                 <BackIcon />
               </IconButton>
               <Typography variant="h6">

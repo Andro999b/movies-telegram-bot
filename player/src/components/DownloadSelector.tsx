@@ -4,8 +4,8 @@ import {
   IconButton,
   MenuItem,
   MenuList
-} from '@material-ui/core'
-import { GetAppRounded as DownloadIcon } from '@material-ui/icons'
+} from '@mui/material'
+import { GetAppRounded as DownloadIcon } from '@mui/icons-material'
 import { createExtractorUrlBuilder } from '../utils/extract'
 import { download } from '../utils'
 import analytics from '../utils/analytics'
@@ -51,15 +51,17 @@ const DownloadSelector: React.FC<Props> = ({ file, title }) => {
 
         if (urls.length > 1) {
           return (
-            <IconButton onClick={handleOpen}>
+            <IconButton onClick={handleOpen} size="large">
               <DownloadIcon />
             </IconButton>
           )
         } else {
           return (
-            <IconButton onClick={(): void => {
-              handleDownload(urls[0])
-            }}>
+            <IconButton
+              onClick={(): void => {
+                handleDownload(urls[0])
+              }}
+              size="large">
               <DownloadIcon />
             </IconButton>
           )

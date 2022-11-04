@@ -5,7 +5,7 @@ import {
   Button,
   MenuItem,
   MenuList
-} from '@material-ui/core'
+} from '@mui/material'
 import analytics from '../utils/analytics'
 import { Device } from '../store/player-store'
 

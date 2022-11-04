@@ -10,7 +10,7 @@ import PlayBackZones from './PlayBackZones'
 import Share from './Share'
 import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 
 import { isTouchDevice } from '../utils'

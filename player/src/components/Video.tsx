@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { createExtractorUrlBuilder } from '../utils/extract'
 import { handleSpecialHLSUrls } from '../utils/extract'
-import ReactResizeDetector from 'react-resize-detector'
+import { useResizeDetector } from 'react-resize-detector'
 
 import { observer } from 'mobx-react-lite'
 import localization from '../localization'
@@ -29,9 +29,9 @@ const logError = (errorData: unknown, source: Source | null): void => {
 const Video: React.FC<Props> = ({ device, onEnded }) => {
   const { audioTrack, quality, seekTo, volume, isMuted, isPlaying, playMode } = device
   const source = device.source!
-  const container = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
 
+  const [orientation, setOrientation] = useState('scale_hor')
   const [videoReady, setVideoReady] = useState(false)
   const [fileIndex, setFileIndex] = useState(0)
   const videoFiles = useMemo(() => {
@@ -49,20 +49,21 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     video.current!.volume = volume
   }, [volume])
 
-  const handleResize = (): void => {
+  const handleResize = useCallback((width: number | undefined, height: number | undefined): void => {
     const currentVideo = video.current
-    const currentContainer = container.current
-    if (currentVideo && currentContainer) {
+    if (currentVideo && width && height) {
       const originAspectRatio = currentVideo.videoWidth / currentVideo.videoHeight
-      const containerAspectRatio = currentContainer.clientWidth / currentContainer.clientHeight
+      const containerAspectRatio = width / height
 
       let scale = 'hor'
       if (originAspectRatio < containerAspectRatio)
         scale = 'vert'
 
-      currentVideo.className = `scale_${scale}`
+      setOrientation(`scale_${scale}`)
     }
-  }
+  }, [])
+
+  const { ref: container } = useResizeDetector({ onResize: handleResize })
 
   useEffect(() => {
     setVideoReady(false)
@@ -200,7 +201,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
   }
 
   const handleLoadedMetadata = (): void => {
-    handleResize()
+    handleResize(container.current?.clientWidth, container.current?.clientHeight)
     setVideoReady(true)
   }
   const handlePlaying = (): void => device.setLoading(false)
@@ -216,13 +217,8 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
 
   return (
     <div className="player__player-screen" ref={container}>
-      <ReactResizeDetector
-        skipOnMount
-        handleWidth
-        handleHeight
-        onResize={handleResize}
-      />
       <video
+        className={orientation}
         ref={video}
         muted={isMuted}
         onEnded={handleEnded}

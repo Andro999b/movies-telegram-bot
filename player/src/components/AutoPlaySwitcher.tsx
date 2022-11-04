@@ -1,7 +1,7 @@
 import React from 'react'
-import { Switch } from '@material-ui/core'
-import { grey } from '@material-ui/core/colors'
-import { PlayArrow, Pause } from '@material-ui/icons'
+import { Switch } from '@mui/material'
+import { grey } from '@mui/material/colors'
+import { PlayArrow, Pause } from '@mui/icons-material'
 import { observer } from 'mobx-react-lite'
 import { Device } from '../store/player-store'
 

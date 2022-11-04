@@ -6,8 +6,8 @@ import {
   MenuItem,
   MenuList,
   Tooltip
-} from '@material-ui/core'
-import { Settings as SettingsIcon } from '@material-ui/icons'
+} from '@mui/material'
+import { Settings as SettingsIcon } from '@mui/icons-material'
 import localization from '../localization'
 import { toHHMMSS } from '../utils'
 import { watchHistoryStore } from '../store'
@@ -65,36 +65,38 @@ const PlaySettingsSelector: React.FC<Props> = ({ device }): JSX.Element => {
     fetch()
   }, [device.playlist])
 
-  return (<Selector
-    renderButton={({ handleOpen }): React.ReactElement => {
-      return (
-        <Tooltip title={localization.settingsLabel}>
-          <IconButton onClick={handleOpen}>
-            <SettingsIcon />
-          </IconButton>
-        </Tooltip>
-      )
-    }}
-    renderList={({ handleClose }): React.ReactElement => {
-      const autoSkipSuffix = startTime == 0 ? '' : `(${toHHMMSS(startTime)})`
+  return (
+    <Selector
+      renderButton={({ handleOpen }): React.ReactElement => {
+        return (
+          <Tooltip title={localization.settingsLabel}>
+            <IconButton onClick={handleOpen} size="large">
+              <SettingsIcon />
+            </IconButton>
+          </Tooltip>
+        )
+      }}
+      renderList={({ handleClose }): React.ReactElement => {
+        const autoSkipSuffix = startTime == 0 ? '' : `(${toHHMMSS(startTime)})`
 
-      return (
-        <MenuList>
-          <MenuItem disabled>{localization.playModeLabel}</MenuItem>
-          <PlayModeList
-            playMode={device.playMode}
-            setPlayMode={device.setPlayMode}
-            handleClose={handleClose} />
-          <MenuItem disabled>{localization.autoSkip.label} {autoSkipSuffix}</MenuItem>
-          {startTime != 0 && <MenuItem onClick={resetStartTime}>
-            {localization.autoSkip.reset}
-          </MenuItem>}
-          {startTime == 0 && <MenuItem onClick={setCurTimeAsStartTime}>
-            {localization.formatString(localization.autoSkip.fromCurrent, toHHMMSS(currentTime))}
-          </MenuItem>}
-        </MenuList>
-      )
-    }} />)
+        return (
+          <MenuList>
+            <MenuItem disabled>{localization.playModeLabel}</MenuItem>
+            <PlayModeList
+              playMode={device.playMode}
+              setPlayMode={device.setPlayMode}
+              handleClose={handleClose} />
+            <MenuItem disabled>{localization.autoSkip.label} {autoSkipSuffix}</MenuItem>
+            {startTime != 0 && <MenuItem onClick={resetStartTime}>
+              {localization.autoSkip.reset}
+            </MenuItem>}
+            {startTime == 0 && <MenuItem onClick={setCurTimeAsStartTime}>
+              {localization.formatString(localization.autoSkip.fromCurrent, toHHMMSS(currentTime))}
+            </MenuItem>}
+          </MenuList>
+        )
+      }} />
+  )
 }
 
 export default observer(PlaySettingsSelector)

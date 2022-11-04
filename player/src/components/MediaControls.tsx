@@ -1,6 +1,6 @@
 import React from 'react'
 import VideoSeekSlider from './VideoSeekSlider'
-import { Paper, IconButton, Slide, Tooltip } from '@material-ui/core'
+import { Paper, IconButton, Slide, Tooltip } from '@mui/material'
 import {
   PlayArrow as PlayIcon,
   Pause as PauseIcon,
@@ -9,7 +9,7 @@ import {
   List as ListIcon,
   Fullscreen as FullscreenIcon,
   FullscreenExit as FullscreenExitIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 import SoundControl from './SoundControl'
 import { isTouchDevice } from '../utils'
 import { observer } from 'mobx-react-lite'
@@ -68,19 +68,19 @@ const MediaControls: React.FC<Props> = ({
           <div className="player-controls__panel-section">
             <Tooltip title={localization.formatString(localization.hotkey, 'PgUp, [')}>
               <span>
-                <IconButton onClick={onPrev} disabled={disablePrev}>
+                <IconButton onClick={onPrev} disabled={disablePrev} size="large">
                   <PreviousIcon />
                 </IconButton>
               </span>
             </Tooltip>
             <Tooltip title={localization.formatString(localization.hotkey, 'Space')}>
-              <IconButton onClick={onPlayPause}>
+              <IconButton onClick={onPlayPause} size="large">
                 {!device.isPlaying ? <PlayIcon /> : <PauseIcon />}
               </IconButton>
             </Tooltip>
             <Tooltip title={localization.formatString(localization.hotkey, 'PgDn, ]')}>
               <span>
-                <IconButton onClick={onNext} disabled={disableNext}>
+                <IconButton onClick={onNext} disabled={disableNext} size="large">
                   <NextIcon />
                 </IconButton>
               </span>
@@ -94,13 +94,13 @@ const MediaControls: React.FC<Props> = ({
             <PlaySettingsSelector device={device} />
             {hasQualities && <VideoQualitySelector device={device} />}
             <Tooltip title={localization.formatString(localization.hotkey, 'F, Enter')}>
-              <IconButton onClick={onFullScreenToggle}>
+              <IconButton onClick={onFullScreenToggle} size="large">
                 {!fullScreen && <FullscreenIcon />}
                 {fullScreen && <FullscreenExitIcon />}
               </IconButton>
             </Tooltip>
             <Tooltip title={localization.formatString(localization.hotkey, 'P')}>
-              <IconButton onClick={onPlaylistToggle}>
+              <IconButton onClick={onPlaylistToggle} size="large">
                 <ListIcon />
               </IconButton>
             </Tooltip>

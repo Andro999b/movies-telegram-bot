@@ -1,7 +1,7 @@
-import { Fab } from '@material-ui/core'
+import { Fab } from '@mui/material'
 import React from 'react'
 
-import { Telegram as TelegramIcon } from '@material-ui/icons'
+import { Telegram as TelegramIcon } from '@mui/icons-material'
 import { tgBots } from '../utils'
 
 const openBot = (bot: string): void => {

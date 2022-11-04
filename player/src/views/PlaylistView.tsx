@@ -8,7 +8,7 @@ import StartScrean from '../components/StartScrean'
 import Player from '../components/Player'
 import DualCirclesLoader from '../components/DualCirclesLoader'
 import HistoryNavButton from '../components/HistoryNavButton'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import AlternativeLinksError from '../components/AlternativeLinksError'
 import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 import { playlistStore, watchHistoryStore, playerStore } from '../store'
@@ -46,6 +46,11 @@ const PlaylistView: React.FC<Props> = ({ location }) => {
 
   useEffect(() => () => removeGlobalKey(['Space', 'Enter']), [])
   useEffect(() => playlistStore.loadPlaylist(params), [params])
+  useEffect(() => {
+    if (playlist) {
+      document.title = playlist.title
+    }
+  }, [playlist])
 
   const handleStart = async (): Promise<void> => {
     if (loading || started || starting)

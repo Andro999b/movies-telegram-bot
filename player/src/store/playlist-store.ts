@@ -20,13 +20,22 @@ class PlaylistStore {
 
   abortController: AbortController | null = null
 
+  cache: Record<string, Playlist> = {}
+
   constructor() {
     makeObservable(this)
   }
 
   @action.bound loadPlaylist({ provider, id, query }: LoadPlaylistParams): void {
-    this.loading = true
     this.error = null
+
+    const cacheKey = `${provider}#${id}`
+    if (this.cache[cacheKey]) {
+      this.playlist = this.cache[cacheKey]
+      return
+    }
+
+    this.loading = true
 
     if (this.abortController) this.abortController.abort()
 
@@ -41,9 +50,7 @@ class PlaylistStore {
       .then(action((playlist): void => {
         if (playlist.files && playlist.files.length) {
           this.playlist = { id, provider, query, ...playlist }
-
-          document.title = playlist.title
-
+          this.cache[cacheKey] = this.playlist
           analytics('playlist_loaded')
         } else if (playlist.trailer) {
           this.trailerUrl = playlist.trailer

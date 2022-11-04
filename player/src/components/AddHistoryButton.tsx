@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { IconButton } from '@material-ui/core'
-import { Favorite, FavoriteBorder } from '@material-ui/icons'
+import { IconButton } from '@mui/material'
+import { Favorite, FavoriteBorder } from '@mui/icons-material'
 import { observer } from 'mobx-react-lite'
 import { watchHistoryStore } from '../store'
 import { Playlist } from '../types'
@@ -33,10 +33,10 @@ const AddHistoryButton: React.FC<Props> = ({ playlist }: Props) => {
   return (
     <div className="add-history-btn">
       {inHistory ?
-        <IconButton onClick={onDeleteHistory}>
+        <IconButton onClick={onDeleteHistory} size="large">
           <Favorite />
         </IconButton> :
-        <IconButton onClick={onAddHistory}>
+        <IconButton onClick={onAddHistory} size="large">
           <FavoriteBorder />
         </IconButton>
       }

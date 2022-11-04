@@ -2,12 +2,12 @@ import React from 'react'
 import {
   VolumeUpRounded as VolumeUpIcon,
   VolumeOffRounded as VolumeOffIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 import {
   Slider,
   IconButton,
   Tooltip
-} from '@material-ui/core'
+} from '@mui/material'
 import { observer } from 'mobx-react-lite'
 import localization from '../localization'
 import { Device } from '../store/player-store'
@@ -28,16 +28,14 @@ const SoundControl: React.FC<Props> = ({ device }) => {
     device.setMute(false)
   }
 
-  return (
-    <>
-      <Slider className="sound-control__slider " value={volume * 100} onChange={handleVolume} />
-      <Tooltip title={localization.formatString(localization.hotkey, 'M')}>
-        <IconButton onClick={handleToggleMute}>
-          {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
-        </IconButton>
-      </Tooltip>
-    </>
-  )
+  return <>
+    <Slider className="sound-control__slider " value={volume * 100} onChange={handleVolume} />
+    <Tooltip title={localization.formatString(localization.hotkey, 'M')}>
+      <IconButton onClick={handleToggleMute} size="large">
+        {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+      </IconButton>
+    </Tooltip>
+  </>
 }
 
 export default observer(SoundControl)

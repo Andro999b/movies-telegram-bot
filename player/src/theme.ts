@@ -1,52 +1,14 @@
-import { createTheme } from '@material-ui/core/styles'
-import { red, grey } from '@material-ui/core/colors'
+import { createTheme } from '@mui/material/styles'
+import { red, blue } from '@mui/material/colors'
 
 export default createTheme({
   palette: {
-    secondary: {
-      light: grey.A200,
-      main: grey[700],
-      dark: grey[900],
-      contrastText: '#fff'
-    },
     primary: {
-      light: red.A200,
-      main: red[500],
-      dark: red[900],
-      contrastText: '#fff'
+      main: blue[600]
     },
-    type: 'dark'
-  },
-  overrides: {
-    MuiLinearProgress: {
-      colorSecondary: {
-        backgroundColor: 'transparent'
-      }
+    secondary: {
+      main: red[400]
     },
-    MuiMenuItem: {
-      root: {
-        height: 'initial'
-      }
-    },
-    MuiListItemIcon: {
-      root: {
-        marginRight: 0,
-        minWidth: '30px'
-      }
-    },
-    MuiList: {
-      padding: {
-        paddingTop: 0,
-        paddingBottom: 0
-      }
-    },
-    MuiDrawer: {
-      paper: {
-        minWidth: '100%',
-        '@media (min-width:600px)': {
-          minWidth: '40%',
-        }
-      }
-    }
+    mode: 'dark'
   }
 })

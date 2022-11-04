@@ -2,7 +2,7 @@ import React from 'react'
 
 import localization from '../localization'
 import { getAlternativeUrl } from '../utils'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 
 interface Props {
   query: string

@@ -7,7 +7,7 @@ import {
   FormGroup,
   FormControlLabel,
   Switch
-} from '@material-ui/core'
+} from '@mui/material'
 import {
   ShareRounded as ShareIcon,
   FileCopyRounded as CopyIcon,
@@ -15,7 +15,7 @@ import {
   Twitter as TwitterIcon,
   WhatsApp as WhatsAppIcon,
   Telegram as TelegramIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 import { observer } from 'mobx-react-lite'
 
 import analytics from '../utils/analytics'
@@ -82,7 +82,7 @@ const Share: React.FC<Props> = ({ device, playlist }) => {
     <div className="player__share">
       <Selector
         renderButton={({ handleOpen }): React.ReactElement => (
-          <IconButton onClick={handleOpen}>
+          <IconButton onClick={handleOpen} size="large">
             <ShareIcon />
           </IconButton>
         )}

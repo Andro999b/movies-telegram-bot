@@ -1,5 +1,5 @@
 import React, { useState, MouseEvent } from 'react'
-import { Popover, Paper } from '@material-ui/core'
+import { Popover, Paper } from '@mui/material'
 
 interface RenderFunProps {
   handleOpen: (e: MouseEvent) => void
