@@ -1,6 +1,6 @@
-const superagent = require('superagent')
-const cheerio = require('cheerio')
-const convertPlayerJSPlaylist = require('./convertPlayerJSPlaylist')
+import superagent from 'superagent'
+import cheerio from 'cheerio'
+import convertPlayerJSPlaylist from './convertPlayerJSPlaylist'
 
 function _extractNoTranslations(playlist) {
     return convertPlayerJSPlaylist(playlist)
@@ -35,7 +35,7 @@ function _extractTranslations(translations, playlists) {
         .map((file, id) => ({...file, id}) )
 }
 
-module.exports = async (url, timeout = 20) => {
+export default async (url, timeout = 20) => {
     let res
 
     res = await superagent

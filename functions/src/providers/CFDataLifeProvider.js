@@ -1,9 +1,9 @@
-const Provider = require('./Provider')
-const urlencode = require('urlencode')
-const invokeCFBypass = require('../utils/invokeCFBypass')
+import Provider from './Provider'
+import urlencode from 'urlencode'
+import invokeCFBypass from '../utils/invokeCFBypass'
 
 class DataLifeProvider extends Provider {
-    getSearchUrl() {}
+    getSearchUrl() { }
 
     _getSiteEncoding() {
         return 'utf8'
@@ -15,19 +15,19 @@ class DataLifeProvider extends Provider {
 
         return () => {
             return invokeCFBypass(
-                searchUrl, 
-                'post', 
-                { ...headers, 'Content-Type': 'application/x-www-form-urlencoded' }, 
+                searchUrl,
+                'post',
+                { ...headers, 'Content-Type': 'application/x-www-form-urlencoded' },
                 `do=search&subaction=search&story=${urlencode.encode(query, encoding)}`
             )
         }
     }
 
-    _crawlerInfoRequestGenerator() { 
+    _crawlerInfoRequestGenerator() {
         return (url) => {
             return invokeCFBypass(url)
         }
-    } 
+    }
 }
 
-module.exports = DataLifeProvider
+export default DataLifeProvider

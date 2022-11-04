@@ -1,4 +1,4 @@
-const JSON5 = require('json5')
+import JSON5 from 'json5'
 
 function extractString(script, varName) {
     const parts = script.match(new RegExp(`${varName} = "([^"]+)"`))
@@ -70,7 +70,7 @@ function extractNumber(script, varName) {
     return null
 }
 
-module.exports = {
+export default {
     extractString,
     extractStringSingleQuote,
     extractStringProperty,

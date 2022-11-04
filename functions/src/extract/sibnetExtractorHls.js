@@ -1,6 +1,6 @@
-const superagent = require('superagent')
+import superagent from 'superagent'
 
-module.exports = async (params) => {
+export default async (params) => {
     const { url } = params
 
     let res = await superagent

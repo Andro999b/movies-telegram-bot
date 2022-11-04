@@ -1,5 +1,5 @@
-const Cache = require('./Cache')
-const { connectToDatabase } = require('../db/mongo')
+import Cache from './Cache'
+import { connectToDatabase } from '../db/mongo'
 
 const COLLECTION_NAME = process.env.CACHE_TABLE
 const expirationTime = (process.env.CACHE_TTL || 3600) * 1000
@@ -81,7 +81,7 @@ class MongoDBCache extends Cache {
     }
 }
 
-module.exports = async (name) => {
+export default async (name) => {
     const db = await connectToDatabase()
     return new MongoDBCache(name, db)
 }

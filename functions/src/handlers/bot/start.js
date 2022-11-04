@@ -1,7 +1,7 @@
-const doSearch = require('./functions/doSearch')
-const { base64UrlDecode } = require('../../utils/base64')
+import doSearch from './functions/doSearch'
+import { base64UrlDecode } from '../../utils/base64'
 
-module.exports = (bot, providers) => {
+export default (bot, providers) => {
 
     const renderHello = (ctx) => {
         return ctx.replyWithHTML(

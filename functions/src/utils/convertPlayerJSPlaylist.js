@@ -1,6 +1,6 @@
-const getBestPlayerJSQuality = require('./parsePlayerJSFile')
+import getBestPlayerJSQuality from './parsePlayerJSFile'
 
-module.exports = function (playlist, linksExtractor = getBestPlayerJSQuality) {
+export default function (playlist, linksExtractor = getBestPlayerJSQuality) {
     const idsCache = {}
 
     function extractFile(file, linksExtractor) {

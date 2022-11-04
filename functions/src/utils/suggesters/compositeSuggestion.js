@@ -1,4 +1,4 @@
-module.exports = (suggesters) => {
+export default (suggesters) => {
     return async (searchQuery) => {
         const results = await Promise.all(
             suggesters.map(async (suggester) => suggester(searchQuery))

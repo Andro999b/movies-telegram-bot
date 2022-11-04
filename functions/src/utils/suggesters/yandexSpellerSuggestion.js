@@ -1,6 +1,6 @@
-const superagent = require('superagent')
+import superagent from 'superagent'
 
-module.exports = async (searchQuery) => { // eslint-disable-line
+export default async (searchQuery) => { // eslint-disable-line
     try {
         // const searchUrl = `https://corsproxy.movies-player.workers.dev/?https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
         const searchUrl = `https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`

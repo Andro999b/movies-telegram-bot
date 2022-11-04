@@ -1,10 +1,11 @@
-const analytics = require('./bot/midleware/analytics')
-const tracker = require('../tracker')
-const path = require('path')
-const { Telegraf } = require('telegraf')
-const TelegrafI18n = require('telegraf-i18n')
-const makeHandler = require('lambda-request-handler')
-const debug = require('debug')('bot')
+import analytics from './bot/midleware/analytics'
+import tracker from '../tracker'
+import path from 'path'
+import { Telegraf } from 'telegraf'
+import TelegrafI18n from 'telegraf-i18n'
+import makeHandler from 'lambda-request-handler'
+import debugFactory from 'debug'
+const debug = debugFactory('bot')
 
 const BOT_TYPE = process.env.BOT_TYPE
 const PROVIDERS =  process.env.PROVIDERS.split(',')
@@ -32,7 +33,8 @@ bot.catch((err) => {
 })
 
 const botHanler = makeHandler(bot.webhookCallback(process.env.BOT_HOOK_PATH ?? '/bot'))
-module.exports.handler = async (event, context) => {
+
+export const handler = async (event, context) => {
     debug(JSON.stringify(event)) 
     return botHanler(event, context)
 }

@@ -1,7 +1,7 @@
-const superagent = require('superagent')
-const makeResponse = require('../utils/makeResponse')
+import superagent from 'superagent'
+import makeResponse from '../utils/makeResponse'
 
-module.exports = (patterns) => async (params) => {
+export default (patterns) => async (params) => {
     const { url } = params
     const targetUrl = url.startsWith('//') ? 'https:' + url : url
 

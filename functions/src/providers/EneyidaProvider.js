@@ -1,6 +1,6 @@
-const Provider = require('./CFDataLifeProvider')
-const playerjsembeded = require('../utils/playerjsembed')
-const urlencode = require('urlencode')
+import Provider from './CFDataLifeProvider'
+import playerjsembeded from '../utils/playerjsembed'
+import urlencode from 'urlencode'
 
 class EneyidaProvider extends Provider {
     constructor() {
@@ -51,4 +51,4 @@ class EneyidaProvider extends Provider {
     }
 }
 
-module.exports = EneyidaProvider
+export default EneyidaProvider

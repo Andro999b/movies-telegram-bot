@@ -1,5 +1,5 @@
-const superagent = require('superagent')
-const { extractStringProperty } = require('./extractScriptVariable')
+import superagent from 'superagent'
+import { extractStringProperty } from './extractScriptVariable'
 const HTTPS_PATTERN = /http?s:\/\/[^\s]+/
 
 const extractFromKinopoisk = async (link) => {

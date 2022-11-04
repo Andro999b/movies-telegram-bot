@@ -1,6 +1,7 @@
-const providers = require('../src/providers')
-const util = require('util')
-const debug = require('debug')('info')
+import providers from '../src/providers'
+import util from 'util'
+import debugFactory from 'debug'
+const debug = debugFactory('info')
 
 const provider = 'anitubeua'
 const id = 'https%3A%2F%2Fanitube.in.ua%2F3948-spy-x-family.html'

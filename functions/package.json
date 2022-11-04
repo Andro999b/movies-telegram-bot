@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "sls offline --stage=dev --aws-profile serverless",
-    "lint": "eslint --fix **/*.(js|ts)",
+    "lint": "eslint --fix **/*.[jt]s",
     "build": "npm run lint && sls package --stage=prod --aws-profile serverless",
     "release": "npm run lint && sls deploy --stage=prod --aws-profile serverless",
     "release:dev": "npm run lint && sls deploy --stage=dev --aws-profile serverless",

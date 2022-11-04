@@ -1,6 +1,6 @@
-const extractors = require('../extract')
+import extractors from '../extract'
 
-module.exports.handler = async (event) => {
+export const handler = async (event) => {
     const response = await extractors(event.queryStringParameters, event.headers)
     
     response.headers['Access-Control-Allow-Origin'] = '*'

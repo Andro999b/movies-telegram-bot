@@ -1,19 +1,31 @@
 
-const makeResponse = require('../utils/makeResponse')
+import makeResponse from '../utils/makeResponse';
+import './animevostExtractor';
+import './kinogoExtractor';
+import './m3u8Extractor';
+import './m3u8Extractor';
+import './anigitExtractor';
+import './m3u8Extractor';
+import './sibnetExtractorHls';
+import './sibnetExtractorMp4';
+import './mp4PlayerJsExtractor';
+import './anidubExtractor';
+import './mp4PlayerJsExtractor';
+import './m3u8Extractor';
 
 const extractors = {
-    'animevost': require('./animevostExtractor'),
-    'kinogo': require('./kinogoExtractor'),
-    'tortuga': require('./m3u8Extractor'),
-    'ashdi': require('./m3u8Extractor'),
-    'anigit': require('./anigitExtractor'),
-    'animedia': require('./m3u8Extractor'),
-    'sibnethls': require('./sibnetExtractorHls'),
-    'sibnetmp4': require('./sibnetExtractorMp4'),
-    'stormo': require('./mp4PlayerJsExtractor'),
-    'anidub': require('./anidubExtractor'),
-    'mp4': require('./mp4PlayerJsExtractor'),
-    'm3u8': require('./m3u8Extractor')
+    'animevost',
+    'kinogo',
+    'tortuga',
+    'ashdi',
+    'anigit',
+    'animedia',
+    'sibnethls',
+    'sibnetmp4',
+    'stormo',
+    'anidub',
+    'mp4',
+    'm3u8'
 }
 
 module.exports = async (parmas, headers) => {

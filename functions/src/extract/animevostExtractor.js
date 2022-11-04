@@ -1,6 +1,6 @@
-const regExprExtractor = require('./regExprExtractor')
+import regExprExtractor from './regExprExtractor'
 
-module.exports = regExprExtractor([
+export default regExprExtractor([
     /\[HD[^\]]*\](https?[^\s"]+)/,
     /\[SD[^\]]*\](https?[^\s"]+)/
 ])

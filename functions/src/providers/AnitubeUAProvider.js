@@ -1,7 +1,7 @@
-const Provider = require('./DataLifeProvider')
-const urlencode = require('urlencode')
-const superagent = require('superagent')
-const $ = require('cheerio').default
+import Provider from './DataLifeProvider'
+import urlencode from 'urlencode'
+import superagent from 'superagent'
+import $ from 'cheerio'
 
 const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
 const srcRegExp = /src="([^"]+)"/
@@ -164,4 +164,4 @@ class AnitubeUAProvider extends Provider {
     }
 }
 
-module.exports = AnitubeUAProvider
+export default AnitubeUAProvider

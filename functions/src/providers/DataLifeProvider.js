@@ -1,6 +1,6 @@
-const Provider = require('./Provider')
-const superagent = require('superagent')
-const urlencode = require('urlencode')
+import Provider from './Provider'
+import superagent from 'superagent'
+import urlencode from 'urlencode'
 
 require('superagent-charset')(superagent)
 
@@ -38,4 +38,4 @@ class DataLifeProvider extends Provider {
     }
 }
 
-module.exports = DataLifeProvider
+export default DataLifeProvider

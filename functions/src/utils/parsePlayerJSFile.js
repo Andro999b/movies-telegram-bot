@@ -1,4 +1,4 @@
-module.exports = (input) => {
+export default (input) => {
     const seen = new Set()
     const urls = input
         .replace(/\\/g, '')

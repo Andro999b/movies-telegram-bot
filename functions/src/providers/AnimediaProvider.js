@@ -1,9 +1,9 @@
-const Provider = require('./Provider')
-const superagent = require('superagent')
-const cheerio = require('cheerio')
-const $ = require('cheerio').default
-const urlencode = require('urlencode')
-const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
+import Provider from './Provider'
+import superagent from 'superagent'
+import cheerio from 'cheerio'
+import $ from 'cheerio'
+import urlencode from 'urlencode'
+import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
 
 class AnimediaProvider extends Provider {
     constructor() {
@@ -89,4 +89,4 @@ class AnimediaProvider extends Provider {
     }
 }
 
-module.exports = AnimediaProvider
+export default AnimediaProvider

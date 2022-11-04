@@ -1,7 +1,7 @@
-const crawler = require('../crawler')
-const { userAgent } = require('../../providersConfig')
+import crawler from '../crawler'
+import { userAgent } from '../../providersConfig'
 
-module.exports = async (searchQuery) => {
+export default async (searchQuery) => {
     try {
         const url = `https://kinobaza.com.ua/search?q=${encodeURIComponent(searchQuery)}`
 

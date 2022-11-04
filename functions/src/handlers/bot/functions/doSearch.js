@@ -1,8 +1,8 @@
-const extractSearchEngineQuery = require('../../../utils/extractSearchEngineQuery')
-const providersService = require('../../../providers')
-const getQueryAndProviders = require('./getQueryAndProviders')
-const { Markup } = require('telegraf')
-const suggesters = require('../../../utils/suggesters')
+import extractSearchEngineQuery from '../../../utils/extractSearchEngineQuery'
+import providersService from '../../../providers'
+import getQueryAndProviders from './getQueryAndProviders'
+import { Markup } from 'telegraf'
+import suggesters from '../../../utils/suggesters'
 
 const BOT_TYPE = process.env.BOT_TYPE
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
@@ -176,5 +176,5 @@ const doSearch = async (ctx, defaultProviders, text) => {
     return doTextSearch(ctx, providers, query, page)
 }
 
-module.exports = doSearch
-module.exports.doSimpleSearch = doTextSearch
+export default doSearch
+export const doSimpleSearch = doTextSearch

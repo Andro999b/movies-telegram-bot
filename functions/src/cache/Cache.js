@@ -1,5 +1,5 @@
 
-module.exports = class Cache {
+export default class Cache {
     async getOrCompute(keys, compute, isEmpty = () => false) { // eslint-disable-line
         return compute(keys)
     }

@@ -1,9 +1,8 @@
-const Provider = require('./CFDataLifeProvider')
-const urlencode = require('urlencode')
-const superagent = require('superagent')
-const videocdnembed = require('../utils/videocdnembed')
-
-const { extractStringProperty } = require('../utils/extractScriptVariable')
+import Provider from './CFDataLifeProvider'
+import urlencode from 'urlencode'
+import superagent from 'superagent'
+import videocdnembed from '../utils/videocdnembed'
+import { extractStringProperty } from '../utils/extractScriptVariable'
 
 class KinogoProvider extends Provider {
     constructor() {
@@ -147,4 +146,4 @@ class KinogoProvider extends Provider {
     }
 }
 
-module.exports = KinogoProvider
+export default KinogoProvider

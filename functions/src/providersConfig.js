@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     'timeout': 5,
     'infoTimeout': 20,
     'pageSize': 10,

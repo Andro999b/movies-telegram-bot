@@ -1,6 +1,6 @@
-const doSearch = require('./functions/doSearch')
+import doSearch from './functions/doSearch'
 
-module.exports = (bot, defaultProviders) => {
+export default (bot, defaultProviders) => {
     bot.on('callback_query', async (ctx) => {
         await doSearch(ctx, defaultProviders, ctx.callbackQuery.data)
         return ctx.answerCbQuery()

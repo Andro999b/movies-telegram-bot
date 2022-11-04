@@ -1,4 +1,4 @@
-const mongoDBCache = require('./mongoDBCache')
+import mongoDBCache from './mongoDBCache'
 
 const caches = {}
 const getCache = async (cacheName) => {
@@ -12,7 +12,7 @@ const getCache = async (cacheName) => {
     return cache
 }
 
-module.exports = {
+export default {
     getCache,
     getCachedInfo: async (provider, resultId, compute) => {
         const cache = await getCache('info')

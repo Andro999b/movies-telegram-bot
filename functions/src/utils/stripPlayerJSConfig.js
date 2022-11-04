@@ -1,4 +1,4 @@
-module.exports = (script) => {
+export default (script) => {
     const parts = script.match(/new Playerjs\(([^)]+)\);/)
 
     if (parts) {
