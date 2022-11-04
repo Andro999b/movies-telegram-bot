@@ -1,9 +1,9 @@
-const superagent = require('superagent')
-const makeResponse = require('../utils/makeResponse')
-const kinogoConfig = require('../providersConfig').kinogo
-const KinogoProvider = require('../providers/KinogoProvider')
+import superagent from 'superagent'
+import makeResponse from '../utils/makeResponse'
+import { kinogo as kinogoConfig } from '../providersConfig'
+import KinogoProvider from '../providers/KinogoProvider'
 
-module.exports = async ({ url, file }) => {
+export default async ({ url, file }) => {
     const timeout = 5000
     const { iframeHost, csrfToken, playlistPath } = await KinogoProvider
         .parseIframeV1(url, kinogoConfig.baseUrl, timeout)

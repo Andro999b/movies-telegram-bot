@@ -1,6 +1,7 @@
-const providers = require('../src/providers')
-const util = require('util')
-const debug = require('debug')('source')
+import providers from '../src/providers'
+import util from 'util'
+import debugFactory from 'debug'
+const debug = debugFactory('source')
 
 const provider = 'animevost'
 const id = ''

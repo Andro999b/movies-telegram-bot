@@ -1,8 +1,8 @@
-const Provider = require('./Provider')
-const urlencode = require('urlencode')
-const superagent = require('superagent')
-const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
-const { base64encode, base64decode } = require('../utils/base64')
+import Provider from './Provider'
+import urlencode from 'urlencode'
+import superagent from 'superagent'
+import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
+import { base64encode, base64decode } from '../utils/base64'
 
 class SeasonvarProvider extends Provider {
     constructor() {
@@ -128,4 +128,4 @@ class SeasonvarProvider extends Provider {
     }
 }
 
-module.exports = SeasonvarProvider
+export default SeasonvarProvider

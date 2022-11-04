@@ -1,6 +1,6 @@
-const Provider = require('./DataLifeProvider')
-const $ = require('cheerio').default
-const urlencode = require('urlencode')
+import Provider from './DataLifeProvider'
+import $ from 'cheerio'
+import urlencode from 'urlencode'
 
 class AnidubProvider extends Provider {
     constructor() {
@@ -65,4 +65,4 @@ class AnidubProvider extends Provider {
     }
 }
 
-module.exports = AnidubProvider
+export default AnidubProvider

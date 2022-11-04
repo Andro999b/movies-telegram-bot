@@ -1,7 +1,7 @@
-const cleanupQuery = require('../cleanupQuery')
-const compositeSuggestion = require('./compositeSuggestion')
-const kinobazaSuggestions = require('./kinobazaSuggestions')
-const yandexSpellerSuggestion = require('./yandexSpellerSuggestion')
+import cleanupQuery from '../cleanupQuery'
+import compositeSuggestion from './compositeSuggestion'
+import kinobazaSuggestions from './kinobazaSuggestions'
+import yandexSpellerSuggestion from './yandexSpellerSuggestion'
 
 const getSuggestions = async (suggester, searchQuery) => {
     const lowerSearchQuery = searchQuery.toLowerCase()
@@ -9,7 +9,7 @@ const getSuggestions = async (suggester, searchQuery) => {
         .filter((s) => s.toLowerCase() != lowerSearchQuery)
 }
 
-module.exports = {
+export default {
     ua: async (searchQuery) => getSuggestions(kinobazaSuggestions, searchQuery),
     films: async (searchQuery) => getSuggestions(
         compositeSuggestion([kinobazaSuggestions, yandexSpellerSuggestion]),

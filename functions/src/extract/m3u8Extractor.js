@@ -1,5 +1,5 @@
-const regExprExtractor = require('./regExprExtractor')
+import regExprExtractor from './regExprExtractor'
 
-module.exports = regExprExtractor([
+export default regExprExtractor([
     /(https?.+\.m3u8)/,
 ])

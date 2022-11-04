@@ -1,9 +1,8 @@
-const superagent = require('superagent')
-const cheerio = require('cheerio')
+import superagent from 'superagent'
+import cheerio from 'cheerio'
+import { userAgent } from '../../providersConfig'
 
-const { userAgent } = require('../../providersConfig')
-
-module.exports = async (searchQuery) => { // eslint-disable-line
+export default async (searchQuery) => { // eslint-disable-line
     try {
         const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`
         const res = await superagent

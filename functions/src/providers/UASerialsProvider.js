@@ -1,6 +1,6 @@
-const Provider = require('./CFDataLifeProvider')
-const CryptoJS = require('crypto-js')
-const urlencode = require('urlencode')
+import Provider from './CFDataLifeProvider'
+import CryptoJS from 'crypto-js'
+import urlencode from 'urlencode'
 
 class UASerialsProvider extends Provider {
     constructor() {
@@ -72,4 +72,4 @@ class UASerialsProvider extends Provider {
     }
 }
 
-module.exports = UASerialsProvider
+export default UASerialsProvider

@@ -1,6 +1,6 @@
-const cheerio = require('cheerio')
-const superagent = require('superagent')
-const invokeCFBypass = require('./invokeCFBypass')
+import cheerio from 'cheerio'
+import superagent from 'superagent'
+import invokeCFBypass from './invokeCFBypass'
 
 require('superagent-charset')(superagent)
 
@@ -13,7 +13,7 @@ require('superagent-charset')(superagent)
 class Crawler {
     constructor(url, requestGenerator) {
         this._requestGenerator = requestGenerator || (async (nextUrl) => {
-            if(this._cfbypass) {
+            if (this._cfbypass) {
                 return this._createCFBypassRequest(nextUrl)
             } else {
                 return this._createDefaultRequest(nextUrl)
@@ -35,7 +35,7 @@ class Crawler {
         let request = superagent
             .get(targetUrl)
 
-        if(this._realip) {
+        if (this._realip) {
             request = request.connect(this._realip)
         }
 
@@ -96,17 +96,17 @@ class Crawler {
             selector = config.selector
         }
 
-        if(typeof selector === 'string') {
-            $el = $el.find(selector) 
-        } else if(Array.isArray(selector)) {
+        if (typeof selector === 'string') {
+            $el = $el.find(selector)
+        } else if (Array.isArray(selector)) {
             let $r
             for (const s of selector) {
                 $r = $el.find(s)
-                if($r.length) break
+                if ($r.length) break
             }
             $el = $r
         }
-        
+
         if ($el.length) {
             return transform($el, $root, url)
         } else {
@@ -163,7 +163,7 @@ class Crawler {
     }
 }
 
-module.exports = {
+export default {
     Crawler,
     get(url, requestGenerator) {
         return new Crawler(url, requestGenerator)

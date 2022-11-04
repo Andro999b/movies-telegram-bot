@@ -1,9 +1,9 @@
-const Provider = require('./Provider')
-const { extractNumber, extractString } = require('../utils/extractScriptVariable')
-const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
-const urlencode = require('urlencode')
-const superagent = require('superagent')
-const $ = require('cheerio').default
+import Provider from './Provider'
+import { extractNumber, extractString } from '../utils/extractScriptVariable'
+import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
+import urlencode from 'urlencode'
+import superagent from 'superagent'
+import $ from 'cheerio'
 
 class KinovodProvider extends Provider {
     constructor() {
@@ -97,4 +97,4 @@ class KinovodProvider extends Provider {
     }
 }
 
-module.exports = KinovodProvider
+export default KinovodProvider

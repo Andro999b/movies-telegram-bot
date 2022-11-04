@@ -1,7 +1,7 @@
-const superagent = require('superagent')
-const makeResponse = require('../utils/makeResponse')
-const { extractStringSingleQuote } = require('../utils/extractScriptVariable')
-const PROVIDERS_CONFIG = require('../providersConfig')
+import superagent from 'superagent'
+import makeResponse from '../utils/makeResponse'
+import { extractStringSingleQuote } from '../utils/extractScriptVariable'
+import PROVIDERS_CONFIG from '../providersConfig'
 const ANIGATO_CONFIG = PROVIDERS_CONFIG['anigato']
 
 function linkExtractor(links, hls) {
@@ -16,7 +16,7 @@ function linkExtractor(links, hls) {
     return redirectUrl
 }
 
-module.exports = async (params) => {
+export default async (params) => {
     let { url, ttype, tid, thash, season } = params
 
     const linksApi = 'https://kodik.biz/gvi'

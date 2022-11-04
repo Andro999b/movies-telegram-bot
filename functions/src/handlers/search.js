@@ -1,8 +1,8 @@
-const providersService = require('../providers')
-const makeResponse = require('../utils/makeResponse')
-const isOriginAllowed = require('../utils/isOriginAllowed')
+import providersService from '../providers'
+import makeResponse from '../utils/makeResponse'
+import isOriginAllowed from '../utils/isOriginAllowed'
 
-module.exports.handler = async (event) => {
+export const handler = async (event) => {
     if (!isOriginAllowed(event))
         return makeResponse('forbiden', 403)
 

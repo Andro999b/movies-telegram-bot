@@ -1,6 +1,6 @@
-const invokeCFBypass = require('src/utils/invokeCFBypass')
+import invokeCFBypass from 'src/utils/invokeCFBypass'
 const url = 'https://corsproxy.movies-player.workers.dev/?https://anitube.in.ua'
 
 invokeCFBypass(url)
-    // eslint-disable-next-line no-console
-    .then(({ text }) => console.log(text))
+  // eslint-disable-next-line no-console
+  .then(({ text }) => console.log(text))

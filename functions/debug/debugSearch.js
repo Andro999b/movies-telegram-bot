@@ -1,5 +1,6 @@
-const providers = require('../src/providers')
-const debug = require('debug')('search')
+import providers from '../src/providers'
+import debugFactory from 'debug'
+const debug = debugFactory('search')
 
 const providerName = 'anigato'
 // const providerName = 'anitubeua'

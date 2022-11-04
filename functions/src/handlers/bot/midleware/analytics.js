@@ -1,4 +1,4 @@
-module.exports = (tracker, bot) => async (ctx, next) => {
+export default (tracker, bot) => async (ctx, next) => {
     const events = []
 
     ctx.track = (type, data = {}) => {

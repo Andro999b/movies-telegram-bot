@@ -1,8 +1,8 @@
 
-const regExprExtractor = require('./regExprExtractor')
-const superagent = require('superagent')
+import regExprExtractor from './regExprExtractor'
+import superagent from 'superagent'
 
-module.exports = regExprExtractor([{
+export default regExprExtractor([{
     expression: /\/[0-9A_Za-z/]+\.mp4/,
     transform: async (matches) => {
         const sibnetUrl = `https://video.sibnet.ru${matches[0]}`

@@ -1,8 +1,8 @@
-const superagent = require('superagent')
-const convertPlayerJSPlaylist = require('./convertPlayerJSPlaylist')
-const stripPlayerJSConfig = require('./stripPlayerJSConfig')
+import superagent from 'superagent'
+import convertPlayerJSPlaylist from './convertPlayerJSPlaylist'
+import stripPlayerJSConfig from './stripPlayerJSConfig'
 
-module.exports = async (url) => {
+export default async (url) => {
     let res
     try {
         res = await superagent.get(url.startsWith('//') ? 'https:' + url : url).disableTLSCerts()

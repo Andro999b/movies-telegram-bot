@@ -1,4 +1,4 @@
-module.exports = function (arr, len) {
+export default function (arr, len) {
     var chunks = [],
         i = 0,
         n = arr.length

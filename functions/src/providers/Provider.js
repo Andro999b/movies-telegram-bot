@@ -1,7 +1,7 @@
-const crawler = require('../utils/crawler')
-const cleanupQuery = require('../utils/cleanupQuery')
-const PROVIDERS_CONFIG= require('../providersConfig')
-const urlencode = require('urlencode')
+import crawler from '../utils/crawler'
+import cleanupQuery from '../utils/cleanupQuery'
+import PROVIDERS_CONFIG from '../providersConfig'
+import urlencode from 'urlencode'
 
 class Provider {
     constructor(name, config) {
@@ -159,4 +159,4 @@ class Provider {
     }
 }
 
-module.exports = Provider
+export default Provider

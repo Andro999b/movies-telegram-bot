@@ -13,7 +13,7 @@ const providers = [
     new (require('./UASerialsProvider'))(),
 ]
 
-module.exports = {
+export default {
     getProviders() {
         return providers.map((provider) => provider.getName())
     },

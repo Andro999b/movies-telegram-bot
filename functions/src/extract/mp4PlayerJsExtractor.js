@@ -1,6 +1,6 @@
-const regExprExtractor = require('./regExprExtractor')
+import regExprExtractor from './regExprExtractor'
 
-module.exports = regExprExtractor([
+export default regExprExtractor([
     /\[1080p\](https?[^,]+\.mp4(?!\.))/,
     /\[720p\](https?[^,]+\.mp4(?!\.))/,
     /\[480p\](https?[^,]+\.mp4(?!\.))/,

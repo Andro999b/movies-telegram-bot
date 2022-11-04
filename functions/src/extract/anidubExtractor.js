@@ -1,8 +1,8 @@
-const superagent = require('superagent')
-const makeResponse = require('../utils/makeResponse')
-const { baseUrl }= require('../providersConfig')['anidub']
+import superagent from 'superagent'
+import makeResponse from '../utils/makeResponse'
+import '../providersConfig'
 
-module.exports = async ({ url }, headers) => {
+export default async ({ url }, headers) => {
     const proxyHeaders = {
         referer: baseUrl,
         'User-Agent': headers['User-Agent']

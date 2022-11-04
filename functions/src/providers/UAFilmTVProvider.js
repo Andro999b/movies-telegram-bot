@@ -1,6 +1,6 @@
-const Provider = require('./CFDataLifeProvider')
-const playerjsembed = require('../utils/playerjsembed')
-const urlencode = require('urlencode')
+import Provider from './CFDataLifeProvider'
+import playerjsembed from '../utils/playerjsembed'
+import urlencode from 'urlencode'
 
 class UAFilmTVProvider extends Provider {
     constructor() {
@@ -41,4 +41,4 @@ class UAFilmTVProvider extends Provider {
     }
 }
 
-module.exports = UAFilmTVProvider
+export default UAFilmTVProvider

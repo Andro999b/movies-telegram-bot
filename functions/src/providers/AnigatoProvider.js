@@ -1,8 +1,8 @@
-const Provider = require('./DataLifeProvider')
-const urlencode = require('urlencode')
-const superagent = require('superagent')
-const $ = require('cheerio').default
-const cheerio = require('cheerio')
+import Provider from './DataLifeProvider'
+import urlencode from 'urlencode'
+import superagent from 'superagent'
+import $ from 'cheerio'
+import cheerio from 'cheerio'
 
 class AnigatoProvider extends Provider {
     constructor() {
@@ -168,4 +168,4 @@ class AnigatoProvider extends Provider {
     }
 }
 
-module.exports = AnigatoProvider
+export default AnigatoProvider

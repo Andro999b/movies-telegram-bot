@@ -1,1 +1,1 @@
-module.exports = require('./dynamodbTracker')
+export default require('./dynamodbTracker')

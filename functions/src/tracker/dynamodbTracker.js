@@ -1,7 +1,7 @@
-const { DateTime } = require('luxon')
-const { dynamodb } = require('../db/dynamodb')
+import { DateTime } from 'luxon'
+import { dynamodb } from '../db/dynamodb'
 
-module.exports = () => {
+export default () => {
     const tableName = process.env.ANALYTIC_TABLE || 'analyticsEvents'
     const timezone = process.env.ANALYTIC_TIMEZONE || 'analyticsEvents'
     const analyticsTTL = 3600 * 24 * (process.env.ANALYTIC_RETENTION || 90)

@@ -1,6 +1,6 @@
-const makeResponse = require('../utils/makeResponse')
-const isOriginAllowed = require('../utils/isOriginAllowed')
-const AWS = require('aws-sdk')
+import makeResponse from '../utils/makeResponse'
+import isOriginAllowed from '../utils/isOriginAllowed'
+import AWS from 'aws-sdk'
 const cloudwatchlogs = new AWS.CloudWatchLogs({ apiVersion: '2014-03-28' })
 
 const LOG_GROUP = process.env.LOG_GROUP
@@ -45,7 +45,7 @@ const log = async (message) => {
 
 }
 
-module.exports.handler = async (event) => {
+export const handler = async (event) => {
     const origin = event.headers.origin
 
     if (!isOriginAllowed(event))

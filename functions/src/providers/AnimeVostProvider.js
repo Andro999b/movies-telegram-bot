@@ -1,8 +1,8 @@
-const Provider = require('./DataLifeProvider')
-const { extractObject, extractStringProperty } = require('../utils/extractScriptVariable')
-const urlencode = require('urlencode')
-const superagent = require('superagent')
-const convertPlayerJSPlaylist = require('../utils/convertPlayerJSPlaylist')
+import Provider from './DataLifeProvider'
+import { extractObject, extractStringProperty } from '../utils/extractScriptVariable'
+import urlencode from 'urlencode'
+import superagent from 'superagent'
+import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
 
 class AnimeVostProvider extends Provider {
     constructor() {
@@ -67,4 +67,4 @@ class AnimeVostProvider extends Provider {
     }
 }
 
-module.exports = AnimeVostProvider
+export default AnimeVostProvider

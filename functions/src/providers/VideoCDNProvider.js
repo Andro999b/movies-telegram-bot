@@ -1,6 +1,6 @@
-const Provider = require('./Provider')
-const superagent = require('superagent')
-const videocdnembed = require('../utils/videocdnembed')
+import Provider from './Provider'
+import superagent from 'superagent'
+import videocdnembed from '../utils/videocdnembed'
 
 class VideoCDNProvider extends Provider {
     constructor() {
@@ -82,4 +82,4 @@ class VideoCDNProvider extends Provider {
     }
 }
 
-module.exports = VideoCDNProvider
+export default VideoCDNProvider

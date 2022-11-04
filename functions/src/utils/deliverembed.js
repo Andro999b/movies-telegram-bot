@@ -1,4 +1,4 @@
-const superagent = require('superagent')
+import superagent from 'superagent'
 
 function getBestQuality(input) {
     return Object.keys(input)
@@ -31,7 +31,7 @@ function convertPlaylist(playlist) {
         .reduce((acc, item) => acc.concat(item), [])
 }
 
-module.exports = async (url, referer) => {
+export default async (url, referer) => {
     let res
     try {
         let request = superagent
