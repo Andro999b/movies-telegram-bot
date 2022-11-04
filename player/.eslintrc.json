@@ -1,69 +1,53 @@
 {
-    "parser": "@typescript-eslint/parser",
-    "env": {
-        "browser": true,
-        "commonjs": false,
-        "es6": true
-    },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended",
-        "plugin:react-hooks/recommended"
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "browser": true,
+    "commonjs": false,
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "react"
+  ],
+  "rules": {
+    "react/prop-types": "off",
+    "quotes": [
+      "warn",
+      "single"
     ],
-    "parserOptions": {
-        "ecmaVersion": 7,
-        "ecmaFeatures": {
-            "experimentalObjectRestSpread": true,
-            "experimentalDecorators": true,
-            "jsx": true
-        },
-        "sourceType": "module"
-    },
-    "plugins": [
-        "@typescript-eslint",
-        "react"
+    "semi": [
+      "warn",
+      "never"
     ],
-    "rules": {
-        "react/prop-types": "off",
-        "indent": [
-            "error",
-            2,
-            {
-                "SwitchCase": 1
-            }
-        ],
-        "quotes": [
-            "warn",
-            "single"
-        ],
-        "semi": [
-            "warn",
-            "never"
-        ],
-        "no-console": [
-            "error",
-            {
-                "allow": [
-                    "warn",
-                    "error"
-                ]
-            }
-        ],
-        "brace-style": "warn",
-        "arrow-parens": "warn",
-        "require-await": "error",
-        "@typescript-eslint/explicit-function-return-type": "warn",
-        "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/no-non-null-assertion": "off"
-    },
-    "globals": {
-        "gtag": "readonly",
-        "process": "readonly"
-    },
-    "settings": {
-        "react": {
-            "version": "detect"
-        }
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "warn",
+          "error"
+        ]
+      }
+    ],
+    "brace-style": "warn",
+    "arrow-parens": "warn",
+    "require-await": "error",
+    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
+  },
+  "globals": {
+    "gtag": "readonly",
+    "process": "readonly"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
     }
+  }
 }

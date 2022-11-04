@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "isolatedModules": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "target": "es2020",
+    "outDir": ".build",
+    "moduleResolution": "node",
+    "lib": [
+      "es2020"
+    ],
+    "rootDir": "./"
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ]
+}
