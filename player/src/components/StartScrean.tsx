@@ -21,7 +21,7 @@ const StartScrean: React.FC<Props> = ({ starting, playlist, onStart }) => {
   const { image } = playlist
 
   return (
-    <div>
+    <>
       <div
         className="player__pause-cover player__background-cover"
         style={{ backgroundImage: image ? `url(${image})` : undefined, cursor: 'pointer' }}
@@ -42,7 +42,7 @@ const StartScrean: React.FC<Props> = ({ starting, playlist, onStart }) => {
       <Share playlist={playlist} />
       <AddHistoryButton playlist={playlist} />
       <TelegramLinks />
-    </div>
+    </>
   )
 }
 

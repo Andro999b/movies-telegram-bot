@@ -99,23 +99,23 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     let hlsDestory: () => void | null
     const currentVideo = video.current!
 
-    const handleCanPlayThrough = async (): Promise<void> => {
-      currentVideo.currentTime = device.seekTo || device.currentTime
+    // const handleCanPlayThrough = async (): Promise<void> => {
+    //   currentVideo.currentTime = device.seekTo || device.currentTime
 
-      if (device.isPlaying) {
-        try {
-          await currentVideo.play()
-        } catch (e) {
-          console.error('Play error:', e)
-          setVideoReady(true)
-          device.setLoading(false)
-          device.pause()
-        }
-      } else {
-        currentVideo.pause()
-      }
-      currentVideo.removeEventListener('canplaythrough', handleCanPlayThrough)
-    }
+    //   if (device.isPlaying) {
+    //     try {
+    //       await currentVideo.play()
+    //     } catch (e) {
+    //       console.error('Play error:', e)
+    //       setVideoReady(true)
+    //       device.setLoading(false)
+    //       device.pause()
+    //     }
+    //   } else {
+    //     currentVideo.pause()
+    //   }
+    //   currentVideo.removeEventListener('canplaythrough', handleCanPlayThrough)
+    // }
     const startVideo = async (): Promise<void> => {
       device.setLoading(true)
 
@@ -127,7 +127,8 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
         url = await createExtractorUrlBuilder(extractor)(url)
       }
 
-      currentVideo.addEventListener('canplaythrough', handleCanPlayThrough)
+      // currentVideo.addEventListener('canplaythrough', handleCanPlayThrough)
+      currentVideo.currentTime = 0
       currentVideo.load()
 
       if (isHls) {
@@ -180,7 +181,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     startVideo()
 
     return () => {
-      currentVideo.removeEventListener('canplaythrough', handleCanPlayThrough)
+      // currentVideo.removeEventListener('canplaythrough', handleCanPlayThrough)
       if (hlsDestory) {
         hlsDestory()
       }
@@ -222,6 +223,26 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
       container.current?.clientHeight
     )
     setVideoReady(true)
+
+    const currentVideo = video.current!
+    const resotreVideo = async (): Promise<void> => {
+      currentVideo.currentTime = device.seekTo || device.currentTime
+
+      if (device.isPlaying) {
+        try {
+          await currentVideo.play()
+          analytics('playback_starts')
+        } catch (e) {
+          console.error('Play error:', e)
+          device.setLoading(false)
+          device.pause()
+          analytics('playback_fails')
+        }
+      } else {
+        currentVideo.pause()
+      }
+    }
+    resotreVideo()
   }
   const handlePlaying = (): void => device.setLoading(false)
   const handleWaiting = (): void => device.setLoading(true)

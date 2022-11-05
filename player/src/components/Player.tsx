@@ -24,7 +24,8 @@ interface HandleActionListenerProps {
   children: React.ReactNode
 }
 
-const HandleActionListener: React.FC<HandleActionListenerProps> = ({ idle, onAction, children }) => {
+// eslint-disable-next-line react/display-name
+const HandleActionListener = React.forwardRef<HTMLDivElement, HandleActionListenerProps>(({ idle, onAction, children }, ref) => {
   const handleClick = (e: MouseEvent): void => {
     if (idle) {
       e.preventDefault()
@@ -34,15 +35,15 @@ const HandleActionListener: React.FC<HandleActionListenerProps> = ({ idle, onAct
   }
 
   if (isTouchDevice()) {
-    return (<div onClickCapture={handleClick} onTouchMoveCapture={onAction}>
+    return (<div ref={ref} onClickCapture={handleClick} onTouchMoveCapture={onAction}>
       {children}
     </div>)
   } else {
-    return (<div onMouseMove={onAction}>
+    return (<div ref={ref} onMouseMove={onAction}>
       {children}
     </div>)
   }
-}
+})
 
 interface Props {
   initialFullScreen: boolean
@@ -171,38 +172,37 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
   const hideUi = error != null ? false : idle
 
   return (
-    <div ref={container}>
-      <HandleActionListener idle={idle} onAction={handleActivity}>
-        <div id="player_root" className={hideUi ? 'idle' : ''}>
-          {error && <Typography className="center" variant="h4">{error}</Typography>}
-          {!error &&
-            <PlayBackZones
-              device={device}
-              onPlayPause={handlePlayPause}
-              onSeek={handleSeek}
-              onSeekEnd={handleSeekEnd} />}
-          {(!error && device.source) && <Video device={device} onEnded={playerStore.fileEnd} />}
-          {!hideUi && <>
-            <PlayerTitle title={playerStore.getPlayerTitle()} />
-            <Share device={device} playlist={device.playlist} />
-            <PlayerFilesList
-              open={playlistOpen}
-              device={device}
-              onFileSelected={handleSelectFile} />
-            <MediaControls
-              fullScreen={fullScreen}
-              device={device}
-              onPlayPause={handlePlayPause}
-              onSeek={handleSeek}
-              onSeekEnd={handleSeekEnd}
-              onNext={playerStore.nextFile}
-              onPrev={playerStore.prevFile}
-              onPlaylistToggle={handleTogglePlayList}
-              onFullScreenToggle={handleToggleFullscreen} />
-          </>}
-        </div>
-      </HandleActionListener>
-    </div>
+
+    <HandleActionListener idle={idle} onAction={handleActivity} ref={container}>
+      <div id="player_root" className={hideUi ? 'idle' : ''}>
+        {error && <Typography className="center" variant="h4">{error}</Typography>}
+        {!error &&
+          <PlayBackZones
+            device={device}
+            onPlayPause={handlePlayPause}
+            onSeek={handleSeek}
+            onSeekEnd={handleSeekEnd} />}
+        {(!error && device.source) && <Video device={device} onEnded={playerStore.fileEnd} />}
+        {!hideUi && <>
+          <PlayerTitle title={playerStore.getPlayerTitle()} />
+          <Share device={device} playlist={device.playlist} />
+          <PlayerFilesList
+            open={playlistOpen}
+            device={device}
+            onFileSelected={handleSelectFile} />
+          <MediaControls
+            fullScreen={fullScreen}
+            device={device}
+            onPlayPause={handlePlayPause}
+            onSeek={handleSeek}
+            onSeekEnd={handleSeekEnd}
+            onNext={playerStore.nextFile}
+            onPrev={playerStore.prevFile}
+            onPlaylistToggle={handleTogglePlayList}
+            onFullScreenToggle={handleToggleFullscreen} />
+        </>}
+      </div>
+    </HandleActionListener>
   )
 }
 
