@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
 import { createExtractorUrlBuilder } from '../utils/extract'
 import { handleSpecialHLSUrls } from '../utils/extract'
@@ -13,8 +20,8 @@ import { Source } from '../types'
 import { Device } from '../store/player-store'
 
 interface Props {
-  device: Device,
-  onEnded: () => void
+  device: Device;
+  onEnded: () => void;
 }
 
 const logError = (errorData: unknown, source: Source | null): void => {
@@ -27,7 +34,8 @@ const logError = (errorData: unknown, source: Source | null): void => {
 }
 
 const Video: React.FC<Props> = ({ device, onEnded }) => {
-  const { audioTrack, quality, seekTo, volume, isMuted, isPlaying, playMode } = device
+  const { audioTrack, quality, seekTo, volume, isMuted, isPlaying, playMode } =
+    device
   const source = device.source!
   const video = useRef<HTMLVideoElement>(null)
 
@@ -49,23 +57,26 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     video.current!.volume = volume
   }, [volume])
 
-  const handleResize = useCallback((width: number | undefined, height: number | undefined): void => {
-    const currentVideo = video.current
-    if (currentVideo && width && height) {
-      const originAspectRatio = currentVideo.videoWidth / currentVideo.videoHeight
-      const containerAspectRatio = width / height
+  const handleResize = useCallback(
+    (width: number | undefined, height: number | undefined): void => {
+      const currentVideo = video.current
+      if (currentVideo && width && height) {
+        const originAspectRatio =
+          currentVideo.videoWidth / currentVideo.videoHeight
+        const containerAspectRatio = width / height
 
-      let scale = 'hor'
-      if (originAspectRatio < containerAspectRatio)
-        scale = 'vert'
+        let scale = 'hor'
+        if (originAspectRatio < containerAspectRatio) scale = 'vert'
 
-      setOrientation(`scale_${scale}`)
-    }
-  }, [])
+        setOrientation(`scale_${scale}`)
+      }
+    },
+    []
+  )
 
   const { ref: container } = useResizeDetector({ onResize: handleResize })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setVideoReady(false)
 
     if (!videoFile) {
@@ -73,11 +84,14 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
       analytics('error_playback')
 
       const currentVideo = video.current
-      logError({
-        code: currentVideo?.error?.code,
-        message: currentVideo?.error?.message,
-        videoSrc: currentVideo?.src
-      }, source)
+      logError(
+        {
+          code: currentVideo?.error?.code,
+          message: currentVideo?.error?.message,
+          videoSrc: currentVideo?.src,
+        },
+        source
+      )
 
       return
     }
@@ -92,7 +106,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
         try {
           await currentVideo.play()
         } catch (e) {
-          // console.error('Play error:', e)
+          console.error('Play error:', e)
           setVideoReady(true)
           device.setLoading(false)
           device.pause()
@@ -103,7 +117,6 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
       currentVideo.removeEventListener('canplaythrough', handleCanPlayThrough)
     }
     const startVideo = async (): Promise<void> => {
-      setVideoReady(true)
       device.setLoading(true)
 
       const { extractor } = videoFile
@@ -115,6 +128,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
       }
 
       currentVideo.addEventListener('canplaythrough', handleCanPlayThrough)
+      currentVideo.load()
 
       if (isHls) {
         startHlsVideo(url)
@@ -128,7 +142,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     const startHlsVideo = async (src: string): Promise<void> => {
       const module = await import(/* webpackChunkName: "hlsjs" */ 'hls.js')
       const Hls = module.default
-      type HlsConfig = typeof Hls.DefaultConfig
+      type HlsConfig = typeof Hls.DefaultConfig;
 
       class Loader extends Hls.DefaultConfig.loader {
         constructor(config: HlsConfig) {
@@ -150,7 +164,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
         startLevel: -1,
         maxBufferLength: 60,
         startPosition: device.seekTo || device.currentTime,
-        loader: Loader
+        loader: Loader,
       })
       hls.on(Hls.Events.ERROR, (_: unknown, data: { fatal: boolean }) => {
         if (data.fatal) {
@@ -174,13 +188,13 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoFile?.url, JSON.stringify(videoFile?.extractor), device, source]) // only care abuot url here
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (videoReady && seekTo != null) {
       video.current!.currentTime = seekTo
     }
   }, [videoReady, seekTo])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (videoReady) {
       if (isPlaying) {
         video.current!.play()
@@ -197,13 +211,16 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
       device.onUpdate({
         duration,
         buffered,
-        currentTime
+        currentTime,
       })
     }
   }
 
   const handleLoadedMetadata = (): void => {
-    handleResize(container.current?.clientWidth, container.current?.clientHeight)
+    handleResize(
+      container.current?.clientWidth,
+      container.current?.clientHeight
+    )
     setVideoReady(true)
   }
   const handlePlaying = (): void => device.setLoading(false)
@@ -220,6 +237,8 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
   return (
     <div className="player__player-screen" ref={container}>
       <video
+        playsInline
+        preload="auto"
         className={orientation}
         ref={video}
         muted={isMuted}

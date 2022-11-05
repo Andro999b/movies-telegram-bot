@@ -105,7 +105,7 @@ const PlayBackZones: React.FC<Props> = ({ device, onPlayPause, onSeek, onSeekEnd
         className="playback-skip backward"
         onClick={handleFastRewind}
       >
-        {paused && <FastRewindIcon className="center shadow-icon" fontSize="inherit" />}
+        {paused && <FastRewindIcon className="center shadow-icon" fontSize="inherit"  />}
       </div>
       <div
         className="playback-skip forward"
