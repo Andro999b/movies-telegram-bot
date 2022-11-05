@@ -27,6 +27,7 @@ export default new LocalizedStrings({
       'repeat': 'Repeat',
       'shuffle': 'Shuffle',
     },
+    videoQuality: 'Video Quality',
     hotkey: 'Hotkey: {0}',
     saveUkraine: 'Save Ukraine'
   },
@@ -56,6 +57,7 @@ export default new LocalizedStrings({
       'repeat': 'Повторювати',
       'shuffle': 'Випадковий',
     },
+    videoQuality: 'Якість відео',
     hotkey: 'Гаряча клавіша: {0}',
     saveUkraine: 'Допомогти ЗСУ'
   }

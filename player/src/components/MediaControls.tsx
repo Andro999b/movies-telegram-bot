@@ -14,7 +14,6 @@ import SoundControl from './SoundControl'
 import { isTouchDevice } from '../utils'
 import { observer } from 'mobx-react-lite'
 import AudioTrackSelector from './AudioTrackSelector'
-import VideoQualitySelector from './VideoQualitySelector'
 import PlaySettingsSelector from './PlaySettingsSelector'
 import MobileSoundControl from './MobileSoundControl'
 import localization from '../localization'
@@ -50,7 +49,6 @@ const MediaControls: React.FC<Props> = ({
 
   const mobile = isTouchDevice()
   const hasAudioTracks = device.audioTracks.length > 1
-  const hasQualities = device.qualities.length > 1
   const disablePrev = playMode == 'shuffle' || currentFileIndex == 0
   const disableNext = currentFileIndex >= files.length - 1 && playMode != 'shuffle'
 
@@ -68,19 +66,19 @@ const MediaControls: React.FC<Props> = ({
           <div className="player-controls__panel-section">
             <Tooltip title={localization.formatString(localization.hotkey, 'PgUp, [')}>
               <span>
-                <IconButton onClick={onPrev} disabled={disablePrev} size="large">
+                <IconButton onClick={onPrev} disabled={disablePrev} size="medium">
                   <PreviousIcon />
                 </IconButton>
               </span>
             </Tooltip>
             <Tooltip title={localization.formatString(localization.hotkey, 'Space')}>
-              <IconButton onClick={onPlayPause} size="large">
+              <IconButton onClick={onPlayPause} size="medium">
                 {!device.isPlaying ? <PlayIcon /> : <PauseIcon />}
               </IconButton>
             </Tooltip>
             <Tooltip title={localization.formatString(localization.hotkey, 'PgDn, ]')}>
               <span>
-                <IconButton onClick={onNext} disabled={disableNext} size="large">
+                <IconButton onClick={onNext} disabled={disableNext} size="medium">
                   <NextIcon />
                 </IconButton>
               </span>
@@ -92,15 +90,14 @@ const MediaControls: React.FC<Props> = ({
           <div className="player-controls__panel-section">
             <AutoPlaySwitch device={device} />
             <PlaySettingsSelector device={device} />
-            {hasQualities && <VideoQualitySelector device={device} />}
             <Tooltip title={localization.formatString(localization.hotkey, 'F, Enter')}>
-              <IconButton onClick={onFullScreenToggle} size="large">
+              <IconButton onClick={onFullScreenToggle} size="medium">
                 {!fullScreen && <FullscreenIcon />}
                 {fullScreen && <FullscreenExitIcon />}
               </IconButton>
             </Tooltip>
             <Tooltip title={localization.formatString(localization.hotkey, 'P')}>
-              <IconButton onClick={onPlaylistToggle} size="large">
+              <IconButton onClick={onPlaylistToggle} size="medium">
                 <ListIcon />
               </IconButton>
             </Tooltip>

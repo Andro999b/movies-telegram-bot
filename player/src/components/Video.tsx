@@ -92,7 +92,9 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
         try {
           await currentVideo.play()
         } catch (e) {
-          console.error('Play error:', e)
+          // console.error('Play error:', e)
+          setVideoReady(true)
+          device.setLoading(false)
           device.pause()
         }
       } else {

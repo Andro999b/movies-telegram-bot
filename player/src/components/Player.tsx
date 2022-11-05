@@ -65,9 +65,6 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
   const handleTogglePlayList = useCallback(() => setPlaylistOpen((prev) => !prev), [])
 
   const handlePlayPause = useCallback((): void => {
-    if (device.isLoading)
-      return
-
     if (device.isPlaying) {
       device.pause()
     } else {

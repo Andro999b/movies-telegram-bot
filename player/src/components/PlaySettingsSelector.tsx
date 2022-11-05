@@ -12,6 +12,7 @@ import localization from '../localization'
 import { toHHMMSS } from '../utils'
 import { watchHistoryStore } from '../store'
 import { Device } from '../store/player-store'
+import analytics from '../utils/analytics'
 
 interface PlayModeList {
   playMode: string,
@@ -37,6 +38,39 @@ const PlayModeList: React.FC<PlayModeList> = ({ playMode, setPlayMode, handleClo
   return (<>
     {items}
   </>)
+}
+
+interface QualitySelectorProps {
+  device: Device,
+  handleClose: () => void
+}
+
+const QualitySelector: React.FC<QualitySelectorProps> = ({ device, handleClose }): React.ReactElement => {
+  const { quality, qualities } = device
+
+  const selectQuality = (quality: number | null): void => {
+    device.setQuality(quality)
+    handleClose()
+
+    analytics('select_quality')
+  }
+
+  return (
+    <>
+      <MenuItem>{localization.videoQuality}</MenuItem>
+      {qualities
+        .map((id) => (
+          <MenuItem key={id} selected={id == quality} onClick={(): void => selectQuality(id)}>
+            {id}
+          </MenuItem>
+        ))
+        .concat([
+          <MenuItem key="auto" selected={quality == null} onClick={(): void => selectQuality(null)}>
+            Auto
+          </MenuItem>
+        ])}
+    </>
+  )
 }
 
 interface Props {
@@ -65,6 +99,8 @@ const PlaySettingsSelector: React.FC<Props> = ({ device }): JSX.Element => {
     fetch()
   }, [device.playlist])
 
+  const hasQualities = device.qualities.length > 1
+
   return (
     <Selector
       renderButton={({ handleOpen }): React.ReactElement => {
@@ -81,6 +117,7 @@ const PlaySettingsSelector: React.FC<Props> = ({ device }): JSX.Element => {
 
         return (
           <MenuList>
+            {hasQualities && <QualitySelector device={device} handleClose={handleClose} />}
             <MenuItem disabled>{localization.playModeLabel}</MenuItem>
             <PlayModeList
               playMode={device.playMode}

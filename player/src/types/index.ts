@@ -24,7 +24,7 @@ export interface AsyncSource {
 
 export interface FileUrl {
     url: string
-    hls: boolean
+    hls?: boolean
     audio?: string
     quality?: number
     extractor?: Extrator
