@@ -30,19 +30,19 @@ class Crawler<Item> {
   constructor(url: string, requestGenerator?: RequestGenerator) {
     this._requestGenerator = requestGenerator ?? ((nextUrl: string): Promise<Response> => {
       if (this._cfbypass) {
-        return this._createCFBypassRequest(nextUrl)
+        return this.createCFBypassRequest(nextUrl)
       } else {
-        return this._createDefaultRequest(nextUrl)
+        return this.createDefaultRequest(nextUrl)
       }
     })
     this._url = url
   }
 
-  async _createCFBypassRequest(nextUrl: string): Promise<Response> {
+  private async createCFBypassRequest(nextUrl: string): Promise<Response> {
     return await invokeCFBypass(nextUrl, 'get', this.headers)
   }
 
-  _createDefaultRequest(nextUrl: string): Promise<Response> {
+  private createDefaultRequest(nextUrl: string): Promise<Response> {
     const targetUrl = nextUrl != this._url ?
       new URL(nextUrl, this._url).toString() :
       nextUrl
@@ -93,7 +93,7 @@ class Crawler<Item> {
     return this
   }
 
-  async _extractData(
+  private async extractData(
     $el: Cheerio<AnyNode>,
     $root: Cheerio<Document>,
     selector: Selector,
@@ -158,7 +158,7 @@ class Crawler<Item> {
         for (const selectorName in this._selectors) {
           const selector = this._selectors[selectorName]
           if (selector !== undefined) {
-            item[selectorName] = await this._extractData($(el), $.root(), selector, currentUrl)
+            item[selectorName] = await this.extractData($(el), $.root(), selector, currentUrl)
           }
         }
 
