@@ -18,7 +18,7 @@ class MongoDBCache<Item> extends Cache<string, Item> {
     this.collection = db.collection(`${COLLECTION_NAME}-${name}`)
   }
 
-  async putToCache(key: string, item: Item): Promise<void> {
+  override async putToCache(key: string, item: Item): Promise<void> {
     const expired = new Date(Date.now() + expirationTime)
     await this.collection.updateOne(
       { _id: key },
@@ -27,7 +27,7 @@ class MongoDBCache<Item> extends Cache<string, Item> {
     )
   }
 
-  async get(key: string): Promise<Item | null> {
+  override  async get(key: string): Promise<Item | null> {
     return (await this.getCacheItem(key))?.result ?? null
   }
 
@@ -43,7 +43,7 @@ class MongoDBCache<Item> extends Cache<string, Item> {
     await this.collection.updateOne({ _id: key }, { $set: { expired } })
   }
 
-  async getOrCompute(
+  override async getOrCompute(
     key: string,
     compute: (key: string) => Promise<Item>,
     isEmpty?: (item: Item) => boolean

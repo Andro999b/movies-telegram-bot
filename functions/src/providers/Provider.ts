@@ -1,55 +1,69 @@
-import crawler from '../utils/crawler'
+import crawler, { RequestGenerator, Selector } from '../utils/crawler'
 import cleanupQuery from '../utils/cleanupQuery'
-import PROVIDERS_CONFIG from '../providersConfig'
+import providersConfig from '../providersConfig'
 import urlencode from 'urlencode'
+import { File, Playlist, ProviderConfig, SearchResult } from '../types'
 
-class Provider {
-  constructor(name, config) {
+interface InfoSelectors {
+  title: Selector<string>
+  image: Selector<string>
+  files: Selector<File[]>
+  trailer?: Selector<string | undefined>
+}
+
+interface SearchSelector {
+  id: Selector<string>
+  name: Selector<string>
+  image: Selector<string>
+}
+
+
+abstract class Provider<Config extends ProviderConfig> {
+  protected readonly config: Config
+  protected readonly name: string
+
+  protected abstract infoScope: string
+  protected abstract infoSelectors: InfoSelectors
+
+  protected abstract searchScope: string
+  protected abstract searchSelector: SearchSelector
+
+  constructor(name: string, config: Config) {
     this.name = name
-    this.config = Object.assign(
-      {
-        ...PROVIDERS_CONFIG[name],
-        timeout: (PROVIDERS_CONFIG[name].timeout || PROVIDERS_CONFIG.timeout || 10) * 1000,
-        infoTimeout: (PROVIDERS_CONFIG[name].infoTimeout || PROVIDERS_CONFIG.infoTimeout || 10) * 1000,
-        scope: '',
-        slectors: {},
-        headers: {
-          'User-Agent': PROVIDERS_CONFIG[name].userAgent || PROVIDERS_CONFIG.userAgent,
-          ...PROVIDERS_CONFIG[name]?.headers
-        },
-        detailsScope: 'body'
-      },
-      config
-    )
+    this.config = {
+      ...config,
+      timeout: (config?.timeout ?? providersConfig?.timeout ?? 10) * 1000,
+      infoTimeout: (config?.infoTimeout ?? providersConfig?.infoTimeout ?? 10) * 1000,
+      headers: {
+        'User-Agent': config?.userAgent ?? providersConfig.userAgent,
+        ...config.headers
+      }
+    }
   }
 
-  async search(query) {
+  async search(query: string): Promise<SearchResult[]> {
     const name = this.getName()
     const {
-      scope,
-      selectors,
       headers,
       timeout,
-      realip,
       cfbypass
     } = this.config
 
     query = this._prepareQuery(query)
 
     let results = await crawler
-      .get(
+      .get<Pick<SearchResult, keyof SearchSelector>>(
         this.getSearchUrl(query),
-        this._crawlerSearchRequestGenerator(query)
+        this.crawlerSearchRequestGenerator(query)
       )
-      .cfbypass(cfbypass)
-      .headers(headers)
-      .realip(realip)
-      .scope(scope)
-      .timeout(timeout)
-      .set(selectors)
-      .gather()
+      .cfbypass(cfbypass ?? false)
+      .headers(headers!)
+      .scope(this.searchScope)
+      .timeout(timeout!)
+      .set(this.searchSelector)
+      .gather() as SearchResult[]
 
-    results = await this._postProcessResult(results)
+    results = await this.postProcessResult(results)
 
     return results
       .filter((item) => item.id)
@@ -59,82 +73,81 @@ class Provider {
       })
   }
 
-  async getInfo(resultsId) {
+  async getInfo(id: string): Promise<Playlist | null> {
     const {
-      detailsScope,
-      detailsSelectors,
       headers,
       infoTimeout,
       cfbypass
     } = this.config
 
-    let details = await crawler
-      .get(
-        this.getInfoUrl(resultsId),
-        this._crawlerInfoRequestGenerator(resultsId)
+    const playlists = await crawler
+      .get<Pick<Playlist, keyof InfoSelectors>>(
+        this.getInfoUrl(id),
+        this.crawlerInfoRequestGenerator(id)
       )
-      .cfbypass(cfbypass)
-      .timeout(infoTimeout)
-      .headers(headers)
-      .scope(detailsScope)
-      .set(detailsSelectors)
-      .gather()
+      .cfbypass(cfbypass ?? false)
+      .timeout(infoTimeout!)
+      .headers(headers!)
+      .scope(this.infoScope)
+      .set(this.infoSelectors)
+      .gather() as Playlist[]
 
-    details = details[0]
-    details = await this._postProcessResultDetails(details, resultsId)
-    details = {
-      ...details,
+    if (playlists.length < 1) return null
+
+    let playlist = playlists[0]
+    playlist = await this.postProcessResultDetails(playlist, id)
+    playlist = {
+      ...playlist,
       provider: this.getName(),
-      id: resultsId
+      id
     }
 
-    return details
+    return playlist
   }
 
-  _prepareQuery(query) {
+  _prepareQuery(query: string): string {
     return cleanupQuery(query)
   }
 
   // eslint-disable-next-line no-unused-vars
-  getSearchUrl(query) {
-    throw new Error('Provider do not implement getSearchUrl()')
-  }
+  abstract getSearchUrl(query: string): string
 
-  getName() {
+  getName(): string {
     const { subtype } = this.config
     return `${this.name}${subtype ? '-' + subtype : ''}`
   }
 
-  async _postProcessResult(results) {
+  postProcessResult(results: SearchResult[]): Promise<SearchResult[]> {
     results.forEach((result) => {
       result.infoUrl = this.getInfoUrl(result.id)
-      if (result.seeds) result.seeds = parseInt(result.seeds)
-      if (result.leechs) result.leechs = parseInt(result.leechs)
     })
-    return results
+    return Promise.resolve(results)
   }
 
-  async _postProcessResultDetails(details) {
-    details.files = details.files || []
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  postProcessResultDetails(playlist: Playlist, id: string): Promise<Playlist> {
+    playlist.files = playlist.files ?? []
 
-    if (details.files.length == 1) {
-      const file = details.files[0]
-      if (!file.name) file.name = details.title
+    if (playlist.files.length == 1) {
+      const file = playlist.files[0]
+      if (!file.name) file.name = playlist.title
     }
 
-    return details
+    return Promise.resolve(playlist)
   }
 
-  _crawlerSearchRequestGenerator(query, page) { } // eslint-disable-line
-
-  _crawlerInfoRequestGenerator(resultsId) { } // eslint-disable-line
-
-  getType() {
-    return 'directMedia'
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected crawlerSearchRequestGenerator(query: string, page?: number): RequestGenerator | undefined {
+    return
   }
 
-  getInfoUrl(resultsId) {
-    const url = urlencode.decode(resultsId)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected crawlerInfoRequestGenerator(resultsId: string): RequestGenerator | undefined {
+    return
+  }
+
+  getInfoUrl(id: string): string {
+    const url = urlencode.decode(id)
 
     if (url.startsWith('http')) {
       if (url.startsWith(this.config.baseUrl)) {
@@ -147,11 +160,12 @@ class Provider {
     return this.config.baseUrl + url
   }
 
-  async getSource(resultsId, sourceId, params) {// eslint-disable-line
-    return {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getSource(resultsId: string, sourceId: string, params: Record<string, string>): Promise<File | null> {
+    return Promise.resolve(null)
   }
 
-  _absoluteUrl(url) {
+  _absoluteUrl(url: string): string {
     const baseUrl = this.config.imagesUrl || this.config.baseUrl
     return url.startsWith('/') ? baseUrl + url : url
   }

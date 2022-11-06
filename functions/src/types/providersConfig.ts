@@ -1,6 +1,6 @@
 export interface ProviderConfig {
   baseUrl: string
-  searchUrl?: string
+  searchUrl: string
   imagesUrl?: string
   userAgent?: string
   cfbypass?: boolean

@@ -8,6 +8,7 @@ export default {
   'providers': {
     'videocdn': {
       'baseUrl': 'https://videocdn.tv/api',
+      'searchUrl': 'https://videocdn.tv/api',
       'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
       'token': 'BuKYUNoUnwQ560ZbZMIaNkFA4eTkIQk7'
     },

@@ -4,6 +4,7 @@
     "isolatedModules": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
+    "noImplicitOverride": true,
     "preserveConstEnums": true,
     "strictNullChecks": true,
     "sourceMap": true,

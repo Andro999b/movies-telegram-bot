@@ -9,7 +9,7 @@ interface InvokeResult {
   text: string
 }
 
-export default (url: string, method = 'get', headers = {}, body = null): Promise<InvokeResult> => new Promise((resolve, reject) => {
+export default (url: string, method = 'get', headers = {}, body: unknown = null): Promise<InvokeResult> => new Promise((resolve, reject) => {
   const params = {
     FunctionName: `arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:cloudflare-bypass-prod-proxy`,
     Payload: JSON.stringify({ url, method, headers, body })

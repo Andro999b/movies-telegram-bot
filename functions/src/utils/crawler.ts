@@ -3,16 +3,16 @@ import superagent from 'superagent'
 import invokeCFBypass from './invokeCFBypass'
 import superagentCharset from 'superagent-charset'
 
-const superagentWithCharset = superagentCharset(superagent)
+export const superagentWithCharset = superagentCharset(superagent)
 interface Response {
   text: string
 }
 
-type RequestGenerator = (url: string) => Promise<Response>
-type Transform = ($el: Cheerio<AnyNode>, $root: Cheerio<Document>, url: string) => Promise<unknown | null>
-type Selector = string | string[] | {
-  selector: string
-  transform: Transform
+export type RequestGenerator = (url: string) => Promise<Response>
+export type Transform<T = unknown> = ($el: Cheerio<AnyNode>, $root: Cheerio<Document>, url: string) => Promise<T> | T
+export type Selector<T = unknown> = string | string[] | {
+  selector?: string
+  transform: Transform<T>
 }
 
 class Crawler<Item> {
@@ -110,7 +110,7 @@ class Crawler<Item> {
       if (!$r) return null
       $el = $r
     } else {
-      $el = $el.find(config.selector)
+      $el = config.selector ? $el.find(config.selector) : $el
       transform = config.transform
     }
 
