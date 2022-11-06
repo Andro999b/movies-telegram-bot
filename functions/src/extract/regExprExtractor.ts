@@ -1,5 +1,5 @@
-import { APIGatewayProxyResult } from 'aws-lambda'
 import superagent from 'superagent'
+import { Extractor } from '.'
 import makeResponse from '../utils/makeResponse'
 
 export type MatchTransformer = (match: RegExpMatchArray) => Promise<string>
@@ -8,7 +8,7 @@ export type Pattern = RegExp | string | {
   transform: MatchTransformer
 }
 
-export default (patterns: Pattern[]) => async (params): Promise<APIGatewayProxyResult> => {
+export default (patterns: Pattern[]): Extractor => async (params) => {
   const { url } = params
   const targetUrl = url.startsWith('//') ? 'https:' + url : url
 

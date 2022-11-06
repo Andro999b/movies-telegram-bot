@@ -1285,6 +1285,11 @@
     "@types/cookiejar" "*"
     "@types/node" "*"
 
+"@types/urlencode@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@types/urlencode/-/urlencode-1.1.2.tgz#60c8a206667e4c96a89b4ae47e8c0a9dadf9034b"
+  integrity sha512-4Gqya3/CmZ280CA6DvBnHmnq/vfgIqXJvzUC2S7a8kxmv/gbmt0uhJbx6m7ypWJvNn9n8DKWj5LD8wFpSxeQuA==
+
 "@types/webidl-conversions@*":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@types/webidl-conversions/-/webidl-conversions-6.1.1.tgz#e33bc8ea812a01f63f90481c666334844b12a09e"
