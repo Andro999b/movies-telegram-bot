@@ -1,30 +1,37 @@
 
 import makeResponse from '../utils/makeResponse'
-import animevostExtractor from './animevostExtractor'
-import kinogoExtractor from './kinogoExtractor'
-import m3u8Extractor from './m3u8Extractor'
-import anigitExtractor from './anigitExtractor'
-import sibnetExtractorHls from './sibnetExtractorHls'
-import sibnetExtractorMp4 from './sibnetExtractorMp4'
-import mp4PlayerJsExtractor from './mp4PlayerJsExtractor'
-import anidubExtractor from './anidubExtractor'
+import AnimevostExtractor from './animevostExtractor'
+import KinogoExtractor from './kinogoExtractor'
+import M3U8Extractor from './m3u8Extractor'
+import AnigitExtractor from './anigitExtractor'
+import SibnetHlsExtractor from './sibnetHlsExtractor'
+import SibnetMp4Extractor from './sibnetMp4Extractor'
+import MP4PlayerJsExtractor from './mp4PlayerJsExtractor'
+import AnidubExtractor from './anidubExtractor'
+import { APIGatewayProxyResult } from 'aws-lambda'
 
-const extractors = {
-  'animevost': animevostExtractor,
-  'kinogo': kinogoExtractor,
-  'tortuga': m3u8Extractor,
-  'ashdi',
-  'anigit': anigitExtractor,
-  'animedia',
-  'sibnethls': sibnetExtractorHls,
-  'sibnetmp4': sibnetExtractorMp4,
-  'stormo',
-  'anidub': anidubExtractor,
-  'mp4': mp4PlayerJsExtractor,
-  'm3u8': m3u8Extractor
+export interface ExtractorParams {
+  type: string
+  url: string
+  [key: string]: string
 }
+export type Extractor = (params: ExtractorParams, headers: Record<string, string>) => Promise<APIGatewayProxyResult>
 
-module.exports = async (parmas, headers) => {
+const extractors: Record<string, Extractor> = {
+  'animevost': AnimevostExtractor,
+  'kinogo': KinogoExtractor,
+  'tortuga': M3U8Extractor,
+  'ashdi': M3U8Extractor,
+  'anigit': AnigitExtractor,
+  'animedia': M3U8Extractor,
+  'sibnethls': SibnetHlsExtractor,
+  'sibnetmp4': SibnetMp4Extractor,
+  'stormo': MP4PlayerJsExtractor,
+  'anidub': AnidubExtractor,
+  'mp4': MP4PlayerJsExtractor,
+  'm3u8': M3U8Extractor
+}
+export default async (parmas: ExtractorParams, headers: Record<string, string>): Promise<APIGatewayProxyResult> => {
   if (!parmas)
     return makeResponse({ message: 'No extractor parmas' }, 404)
 

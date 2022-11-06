@@ -1,10 +1,11 @@
 import superagent from 'superagent'
 import makeResponse from '../utils/makeResponse'
 import providersConfig from '../providersConfig'
+import { Extractor } from '.'
 
 const baseUrl = providersConfig.providers.anidub.baseUrl
 
-export default async ({ url }, headers) => {
+const AnidubExtractor: Extractor = async ({ url }, headers) => {
   const proxyHeaders = {
     referer: baseUrl,
     'User-Agent': headers['User-Agent']
@@ -23,7 +24,7 @@ export default async ({ url }, headers) => {
 
 
   const hslPlaylist = matches[1]
-  let hslUrl = baseUrl + '/player/' + hslPlaylist
+  const hslUrl = baseUrl + '/player/' + hslPlaylist
 
   const hlsRes = await superagent
     .get(hslUrl)
@@ -34,10 +35,12 @@ export default async ({ url }, headers) => {
   return {
     statusCode: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*', // Required for CORS support to work
-      'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
       'Content-Type': 'application/vnd.apple.mpegURL'
     },
     body: hlsRes.body.toString('utf8')
   }
 }
+
+export default AnidubExtractor
