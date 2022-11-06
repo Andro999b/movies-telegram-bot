@@ -1,8 +1,8 @@
-import CrawlerProvider from './CrawlerProvider'
+import CrawlerProvider from './CrawlerProvider.js'
 import urlencode from 'urlencode'
-import invokeCFBypass from '../utils/invokeCFBypass'
-import { ProviderConfig } from '../types'
-import { RequestGenerator } from '../utils/crawler'
+import invokeCFBypass from '../utils/invokeCFBypass.js'
+import { ProviderConfig } from '../types/index.js'
+import { RequestGenerator } from '../utils/crawler.js'
 
 abstract class DataLifeProvider<Config extends ProviderConfig = ProviderConfig> extends CrawlerProvider<Config> {
   protected infoScope = '#dle-content'

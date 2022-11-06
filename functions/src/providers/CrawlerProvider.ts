@@ -1,7 +1,7 @@
-import crawler, { RequestGenerator, Selector } from '../utils/crawler'
+import crawler, { RequestGenerator, Selector } from '../utils/crawler.js'
 import urlencode from 'urlencode'
-import { File, Playlist, ProviderConfig, SearchResult } from '../types'
-import Provider from './Provider'
+import { File, Playlist, ProviderConfig, SearchResult } from '../types/index.js'
+import Provider from './Provider.js'
 
 interface InfoSelectors {
   title: Selector<string>

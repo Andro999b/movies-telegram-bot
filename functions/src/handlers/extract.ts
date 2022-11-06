@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
-import extractors from '../extract'
+import extractors from '../extract/index.js'
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const response = await extractors(

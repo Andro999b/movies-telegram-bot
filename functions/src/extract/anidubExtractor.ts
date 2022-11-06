@@ -1,7 +1,7 @@
 import superagent from 'superagent'
-import makeResponse from '../utils/makeResponse'
-import providersConfig from '../providersConfig'
-import { Extractor } from '.'
+import makeResponse from '../utils/makeResponse.js'
+import providersConfig from '../providersConfig.js'
+import { Extractor } from './index.js'
 
 const baseUrl = providersConfig.providers.anidub.baseUrl
 

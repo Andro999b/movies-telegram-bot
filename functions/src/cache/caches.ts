@@ -1,6 +1,6 @@
-import { File, Playlist, SearchResult } from '../types'
-import Cache from './Cache'
-import mongoDBCache from './mongoDBCache'
+import { File, Playlist, SearchResult } from '../types/index.js'
+import Cache from './Cache.js'
+import mongoDBCache from './mongoDBCache.js'
 
 const caches: Record<string, Cache<string, unknown>> = {}
 export async function getCache<Item, C = Cache<string, Item>>(cacheName: string): Promise<C> {

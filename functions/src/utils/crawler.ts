@@ -1,6 +1,6 @@
 import { AnyNode, Cheerio, Document, load } from 'cheerio'
 import superagent from 'superagent'
-import invokeCFBypass from './invokeCFBypass'
+import invokeCFBypass from './invokeCFBypass.js'
 import superagentCharset from 'superagent-charset'
 
 export const superagentWithCharset = superagentCharset(superagent)
@@ -109,6 +109,10 @@ class Crawler<Item> {
 
     if (selectorConfig.selector !== undefined) {
       selectorQuery = selectorConfig.selector
+    } else if (typeof selectorConfig == 'string') {
+      selectorQuery = selectorConfig
+    } else if (Array.isArray(selectorConfig)) {
+      selectorQuery = selectorConfig
     }
 
     if (typeof selectorQuery === 'string') {

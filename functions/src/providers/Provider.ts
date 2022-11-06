@@ -1,6 +1,6 @@
-import providersConfig from '../providersConfig'
-import { File, Playlist, ProviderConfig, SearchResult } from '../types'
-import cleanupQuery from '../utils/cleanupQuery'
+import providersConfig from '../providersConfig.js'
+import { File, Playlist, ProviderConfig, SearchResult } from '../types/index.js'
+import cleanupQuery from '../utils/cleanupQuery.js'
 
 abstract class Provider<Config extends ProviderConfig = ProviderConfig> {
   protected readonly config: Config

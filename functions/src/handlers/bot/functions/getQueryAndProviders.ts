@@ -1,4 +1,4 @@
-import { QueryAndProviders } from '../types'
+import { QueryAndProviders } from '../types.js'
 
 export const PAGE_SEPARATOR = '$'
 

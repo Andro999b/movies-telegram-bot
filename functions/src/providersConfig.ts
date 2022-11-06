@@ -1,4 +1,4 @@
-import { ProvidersConfig } from './types'
+import { ProvidersConfig } from './types/index.js'
 
 export default {
   'timeout': 5,

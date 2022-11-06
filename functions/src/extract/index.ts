@@ -1,13 +1,13 @@
 
-import makeResponse from '../utils/makeResponse'
-import AnimevostExtractor from './animevostExtractor'
-import KinogoExtractor from './kinogoExtractor'
-import M3U8Extractor from './m3u8Extractor'
-import AnigitExtractor from './anigitExtractor'
-import SibnetHlsExtractor from './sibnetHlsExtractor'
-import SibnetMp4Extractor from './sibnetMp4Extractor'
-import MP4PlayerJsExtractor from './mp4PlayerJsExtractor'
-import AnidubExtractor from './anidubExtractor'
+import makeResponse from '../utils/makeResponse.js'
+import AnimevostExtractor from './animevostExtractor.js'
+import KinogoExtractor from './kinogoExtractor.js'
+import M3U8Extractor from './m3u8Extractor.js'
+import AnigitExtractor from './anigitExtractor.js'
+import SibnetHlsExtractor from './sibnetHlsExtractor.js'
+import SibnetMp4Extractor from './sibnetMp4Extractor.js'
+import MP4PlayerJsExtractor from './mp4PlayerJsExtractor.js'
+import AnidubExtractor from './anidubExtractor.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
 
 export interface ExtractorParams {

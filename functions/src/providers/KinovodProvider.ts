@@ -1,11 +1,11 @@
-import CrawlerProvider from './CrawlerProvider'
-import { extractNumber, extractString } from '../utils/extractScriptVariable'
-import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
+import CrawlerProvider from './CrawlerProvider.js'
+import { extractNumber, extractString } from '../utils/extractScriptVariable.js'
+import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist.js'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
 import $, { AnyNode, Cheerio } from 'cheerio'
-import providersConfig from '../providersConfig'
-import { File } from '../types'
+import providersConfig from '../providersConfig.js'
+import { File } from '../types/index.js'
 import { ProcessingInstruction } from 'domhandler'
 
 class KinovodProvider extends CrawlerProvider {

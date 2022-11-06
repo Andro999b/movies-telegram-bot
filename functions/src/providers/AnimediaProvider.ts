@@ -1,11 +1,11 @@
-import Provider from './CrawlerProvider'
+import Provider from './CrawlerProvider.js'
 import superagent from 'superagent'
 import { AnyNode, Cheerio, load } from 'cheerio'
 import $ from 'cheerio'
 import urlencode from 'urlencode'
-import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
-import { File, SearchResult } from '../types'
-import providersConfig from '../providersConfig'
+import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist.js'
+import { File, SearchResult } from '../types/index.js'
+import providersConfig from '../providersConfig.js'
 
 class AnimediaProvider extends Provider {
   protected searchScope: string

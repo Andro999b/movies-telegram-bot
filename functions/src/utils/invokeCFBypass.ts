@@ -1,4 +1,5 @@
-import { Lambda, config } from 'aws-sdk'
+import AWS from 'aws-sdk'
+const { Lambda, config } = AWS
 const lambda = new Lambda()
 
 const ACCOUNT_ID = process.env.ACCOUNT_ID

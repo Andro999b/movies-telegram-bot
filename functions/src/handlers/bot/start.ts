@@ -1,7 +1,7 @@
-import doSearch from './functions/doSearch'
-import { base64UrlDecode } from '../../utils/base64'
+import doSearch from './functions/doSearch.js'
+import { base64UrlDecode } from '../../utils/base64.js'
 import { Telegraf } from 'telegraf'
-import { BotContext } from './types'
+import { BotContext } from './types.js'
 
 export default (bot: Telegraf<BotContext>, providers: string[]): void => {
 

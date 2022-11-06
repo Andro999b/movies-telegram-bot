@@ -1,6 +1,6 @@
 import superagent from 'superagent'
 import { load } from 'cheerio'
-import providersConfig from '../../providersConfig'
+import providersConfig from '../../providersConfig.js'
 
 export default async (searchQuery: string): Promise<string[]> => { // eslint-disable-line
   try {

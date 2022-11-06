@@ -1,5 +1,5 @@
 import superagent from 'superagent'
-import { Extractor } from '.'
+import { Extractor } from './index.js'
 
 const SibnetHlsExtractor: Extractor = async (params) => {
   const { url } = params

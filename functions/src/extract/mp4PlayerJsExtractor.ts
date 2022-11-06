@@ -1,4 +1,4 @@
-import regExprExtractor from './regExprExtractor'
+import regExprExtractor from './regExprExtractor.js'
 
 export default regExprExtractor([
   /\[1080p\](https?[^,]+\.mp4(?!\.))/,

@@ -1,8 +1,8 @@
 import superagent from 'superagent'
-import makeResponse from '../utils/makeResponse'
-import { extractStringSingleQuote } from '../utils/extractScriptVariable'
-import providersConfig from '../providersConfig'
-import { Extractor } from '.'
+import makeResponse from '../utils/makeResponse.js'
+import { extractStringSingleQuote } from '../utils/extractScriptVariable.js'
+import providersConfig from '../providersConfig.js'
+import { Extractor } from './index.js'
 
 const anigatoConfig = providersConfig.providers.anigato
 const kodikSign = anigatoConfig['kodikSign'] as Record<string, string>

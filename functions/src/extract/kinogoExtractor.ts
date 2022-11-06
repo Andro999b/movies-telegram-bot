@@ -1,8 +1,8 @@
 import superagent from 'superagent'
-import makeResponse from '../utils/makeResponse'
-import providersConfig from '../providersConfig'
-import KinogoProvider from '../providers/KinogoProvider'
-import { Extractor } from '.'
+import makeResponse from '../utils/makeResponse.js'
+import providersConfig from '../providersConfig.js'
+import KinogoProvider from '../providers/KinogoProvider.js'
+import { Extractor } from './index.js'
 
 const baseUrl = providersConfig.providers.kinogo.baseUrl
 

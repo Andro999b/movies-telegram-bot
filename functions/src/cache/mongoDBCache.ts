@@ -1,5 +1,5 @@
-import Cache from './Cache'
-import connectToDatabase from '../db/mongo'
+import Cache from './Cache.js'
+import connectToDatabase from '../db/mongo.js'
 import { Collection, Db, Document } from 'mongodb'
 
 const COLLECTION_NAME = process.env.CACHE_TABLE

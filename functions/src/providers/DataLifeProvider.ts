@@ -1,7 +1,7 @@
-import CrawlerProvider from './CrawlerProvider'
+import CrawlerProvider from './CrawlerProvider.js'
 import urlencode from 'urlencode'
-import { ProviderConfig } from '../types'
-import { RequestGenerator, superagentWithCharset } from '../utils/crawler'
+import { ProviderConfig } from '../types/index.js'
+import { RequestGenerator, superagentWithCharset } from '../utils/crawler.js'
 
 abstract class DataLifeProvider<Config extends ProviderConfig = ProviderConfig> extends CrawlerProvider<Config> {
   protected infoScope = '#dle-content'

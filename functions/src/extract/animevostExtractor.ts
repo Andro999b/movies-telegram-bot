@@ -1,4 +1,4 @@
-import regExprExtractor from './regExprExtractor'
+import regExprExtractor from './regExprExtractor.js'
 
 export default regExprExtractor([
   /\[HD[^\]]*\](https?[^\s"]+)/,

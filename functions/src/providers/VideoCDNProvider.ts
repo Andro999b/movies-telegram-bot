@@ -1,11 +1,12 @@
-import Provider from './Provider'
+import Provider from './Provider.js'
 import superagent from 'superagent'
-import videocdnembed from '../utils/videocdnembed'
-import providersConfig from '../providersConfig'
-import { File, Playlist, ProviderConfig, SearchResult } from '../types'
+import videocdnembed from '../utils/videocdnembed.js'
+import providersConfig from '../providersConfig.js'
+import { File, Playlist, ProviderConfig, SearchResult } from '../types/index.js'
 
 interface VideoCDNProviderConfig extends ProviderConfig {
   types: string[]
+  token: string
 }
 
 interface VideoCDNItem {

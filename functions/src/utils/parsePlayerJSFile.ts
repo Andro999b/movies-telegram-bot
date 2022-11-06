@@ -1,4 +1,4 @@
-import { UrlAndQuality, UrlAndQualityAndAudio } from '../types'
+import { UrlAndQuality, UrlAndQualityAndAudio } from '../types/index.js'
 
 export default (input: string): UrlAndQualityAndAudio[] => {
   const seen = new Set()

@@ -1,5 +1,5 @@
-import crawler from '../crawler'
-import providersConfig from '../../providersConfig'
+import crawler from '../crawler.js'
+import providersConfig from '../../providersConfig.js'
 
 export default async (searchQuery: string): Promise<string[]> => {
   try {

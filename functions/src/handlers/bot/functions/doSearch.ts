@@ -1,12 +1,12 @@
-import extractSearchEngineQuery from '../../../utils/extractSearchEngineQuery'
-import { searchOne } from '../../../providers'
-import getQueryAndProviders, { PAGE_SEPARATOR } from './getQueryAndProviders'
+import extractSearchEngineQuery from '../../../utils/extractSearchEngineQuery.js'
+import { searchOne } from '../../../providers/index.js'
+import getQueryAndProviders, { PAGE_SEPARATOR } from './getQueryAndProviders.js'
 import { Markup } from 'telegraf'
-import suggesters, { Suggester } from '../../../utils/suggesters'
+import suggesters, { Suggester } from '../../../utils/suggesters/index.js'
 import I18n from 'telegraf-i18n'
-import { SearchResult } from '../../../types'
+import { SearchResult } from '../../../types/index.js'
 import { InlineKeyboardButton, InlineKeyboardMarkup } from 'telegraf/typings/core/types/typegram'
-import { BotContext } from '../types'
+import { BotContext } from '../types.js'
 
 const BOT_TYPE = process.env.BOT_TYPE! as 'ua' | 'films' | 'anime'
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3

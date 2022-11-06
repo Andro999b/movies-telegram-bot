@@ -1,9 +1,9 @@
-import Provider from './DataLifeProvider'
+import Provider from './DataLifeProvider.js'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
 import $, { AnyNode, Cheerio } from 'cheerio'
-import providersConfig from '../providersConfig'
-import { File, FileUrl } from '../types'
+import providersConfig from '../providersConfig.js'
+import { File, FileUrl } from '../types/index.js'
 import { ProcessingInstruction } from 'domhandler'
 
 const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
@@ -23,10 +23,10 @@ const extractors: Record<string, ExtratorConfig | null> = {
     type: 'sibnetmp4'
   },
   'secvideo1': {
-    type: 'mp4local'
+    type: 'mp4'
   },
   'csst.online': {
-    type: 'mp4local'
+    type: 'mp4'
   },
   'veoh.com': null,
   'tortuga.wtf': {
@@ -79,7 +79,8 @@ class AnitubeUAProvider extends Provider {
   }
 
   private async filesFromPlaylistAjax($el: Cheerio<AnyNode>): Promise<File[]> {
-    // https://anitube.in.ua/1866-legenda-pro-korru-2.html
+    // https://anitube.in.ua/1866-legenda-pro-korru-2.htm
+    // https://anitube.in.ua/4110-chainsaw-man.html
 
     const newsId = $el.attr('data-news_id')
     const res = await superagent

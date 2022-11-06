@@ -1,9 +1,9 @@
-import Provider from './CFDataLifeProvider'
-import playerjsembed from '../utils/playerjsembed'
-import providersConfig from '../providersConfig'
+import Provider from './CFDataLifeProvider.js'
+import playerjsembed from '../utils/playerjsembed.js'
+import providersConfig from '../providersConfig.js'
 import urlencode from 'urlencode'
 import { AnyNode, Cheerio } from 'cheerio'
-import { File } from '../types'
+import { File } from '../types/index.js'
 
 class UAFilmTVProvider extends Provider {
   protected searchScope = '.movie-item'
