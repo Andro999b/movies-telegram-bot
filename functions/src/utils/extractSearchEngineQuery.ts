@@ -1,6 +1,6 @@
 import superagent from 'superagent'
 import { extractStringProperty } from './extractScriptVariable'
-const HTTPS_PATTERN = /http?s:\/\/[^\s]+/
+export const HTTPS_PATTERN = /http?s:\/\/[^\s]+/
 
 const extractFromKinopoisk = async (link: string): Promise<string | null> => {
   if (link.startsWith('https://www.kinopoisk.ru')) {
@@ -45,7 +45,7 @@ const extractFromGoogleShorts = async (link: string): Promise<string | null> => 
 
 const removeLink = (link: string): string => link.replace(HTTPS_PATTERN, '')
 
-module.exports = async (searchQuery: string): Promise<string> => {
+export default async (searchQuery: string): Promise<string> => {
   const [link] = searchQuery.match(HTTPS_PATTERN) ?? []
   if (!link) return searchQuery
 
@@ -60,4 +60,3 @@ module.exports = async (searchQuery: string): Promise<string> => {
 
   return removeLink(searchQuery)
 }
-module.exports.HTTPS_PATTERN = HTTPS_PATTERN

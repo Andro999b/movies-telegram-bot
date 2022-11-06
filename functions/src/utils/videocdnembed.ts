@@ -33,7 +33,7 @@ function _extractTranslations(
 
   return Object
     .values(filesByKey)
-    .map((file, id) => ({ ...file, id: id.toString() }))
+    .map((file, id) => ({ ...file, id }))
 }
 
 export default async (url: string, timeout = 20): Promise<File[]> => {

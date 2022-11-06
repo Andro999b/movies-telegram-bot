@@ -33,7 +33,7 @@ const regexExtractor = (patterns: Array<Pattern | RegExp | string>): ExtractFun 
       if (matches == null || matches.length < 1)
         continue
 
-      return await transform(matches)
+      return transform(matches)
     }
 
     throw Error('Cant extract media from url')

@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import { AnalyticEvent, AnalyticFieldType, AnalyticsHandler } from '.'
 import dynamodb from '../db/dynamodb'
 
-export default (): AnalyticsHandler => {
+export const tracker = (): AnalyticsHandler => {
   const tableName = process.env.ANALYTIC_TABLE || 'analyticsEvents'
   const timezone = process.env.ANALYTIC_TIMEZONE || 'analyticsEvents'
   const analyticsTTL = 3600 * 24 * parseInt(process.env.ANALYTIC_RETENTION ?? '90')

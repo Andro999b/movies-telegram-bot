@@ -3,7 +3,7 @@ export * from './dynamodbTracker'
 export type AnalyticFieldType = string | number | null | undefined | (string | number)[]
 
 export interface AnalyticEvent {
-  uid: number
+  uid?: number
   time: number
   resultsCount?: number
   bot?: string

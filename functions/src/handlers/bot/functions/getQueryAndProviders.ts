@@ -1,6 +1,8 @@
+import { QueryAndProviders } from '../types'
+
 export const PAGE_SEPARATOR = '$'
 
-export default (query, avaliableProviders) => {
+export default (query: string, avaliableProviders: string[]): QueryAndProviders => {
   let page = 1
 
   if (query.startsWith('#')) {

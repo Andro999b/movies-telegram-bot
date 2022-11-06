@@ -14,7 +14,7 @@ export interface Playlist {
   errorDetail?: string
 }
 export interface File {
-  id: string | null
+  id: string | number | null
   name: string | null
   path?: string
   asyncSource?: string | AsyncSource | null
@@ -26,12 +26,15 @@ export interface AsyncSource {
   params: Record<string, unknown>
 }
 
-export interface FileUrl extends UrlAndQualityAndAudio {
+export interface FileUrl {
+  url: string,
+  quality?: number
+  audio?: string
   hls?: boolean
   extractor?: Extrator
 }
 
 export interface Extrator {
   type: string
-  params: Record<string, unknown>
+  params?: Record<string, unknown>
 }

@@ -1,10 +1,12 @@
-import Provider from './Provider'
+import CrawlerProvider from './CrawlerProvider'
 import urlencode from 'urlencode'
 import invokeCFBypass from '../utils/invokeCFBypass'
 import { ProviderConfig } from '../types'
 import { RequestGenerator } from '../utils/crawler'
 
-abstract class DataLifeProvider<Config extends ProviderConfig = ProviderConfig> extends Provider<Config> {
+abstract class DataLifeProvider<Config extends ProviderConfig = ProviderConfig> extends CrawlerProvider<Config> {
+  protected infoScope = '#dle-content'
+
   override getSearchUrl(): string {
     return ''
   }

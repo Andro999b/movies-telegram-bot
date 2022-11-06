@@ -50,7 +50,7 @@ export const extractJSStringProperty = (script: string, varName: string): string
   return null
 }
 
-export const extractObject = (script: string, varName: string): string | null => {
+export const extractObject = (script: string, varName: string): Record<string, unknown> | null => {
   const parts = script.match(new RegExp(`${varName} = ({[^}]+})`))
 
   if (parts && parts.length > 1) {

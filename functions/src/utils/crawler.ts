@@ -10,10 +10,11 @@ interface Response {
 
 export type RequestGenerator = (url: string) => Promise<Response>
 export type Transform<T = unknown> = ($el: Cheerio<AnyNode>, $root: Cheerio<Document>, url: string) => Promise<T> | T
-export type Selector<T = unknown> = string | string[] | {
-  selector?: string
+export interface SelectorConfig<T = unknown> {
+  selector?: string | string[]
   transform: Transform<T>
 }
+export type Selector<T = unknown> = string | string[] | SelectorConfig<T>
 
 class Crawler<Item> {
   private _requestGenerator: RequestGenerator
@@ -22,7 +23,7 @@ class Crawler<Item> {
   private _timeoutMs: number
   private _headers: Record<string, string>
   private _scope: string
-  private _selectors: Record<keyof Item, Selector>
+  private _selectors: { [key in keyof Item]?: Selector }
   private _pagenatorSelector: string
   private _limit: number
 
@@ -72,7 +73,7 @@ class Crawler<Item> {
     return this
   }
 
-  set(selectors: Record<keyof Item, Selector>): Crawler<Item> {
+  set(selectors: { [key in keyof Item]?: Selector }): Crawler<Item> {
     this._selectors = selectors
     return this
   }
@@ -95,23 +96,31 @@ class Crawler<Item> {
   async _extractData(
     $el: Cheerio<AnyNode>,
     $root: Cheerio<Document>,
-    config: Selector, url: string
+    selector: Selector,
+    url: string
   ): Promise<unknown> {
     let transform: Transform = ($el: Cheerio<Document>) => Promise.resolve($el.first().text().trim())
+    let selectorQuery: string | string[] | null = null
 
-    if (typeof config === 'string') {
-      $el = $el.find(config)
-    } else if (Array.isArray(config)) {
+    const selectorConfig = selector as SelectorConfig
+    if (selectorConfig.transform !== undefined) {
+      transform = selectorConfig.transform
+    }
+
+    if (selectorConfig.selector !== undefined) {
+      selectorQuery = selectorConfig.selector
+    }
+
+    if (typeof selectorQuery === 'string') {
+      $el = $el.find(selectorQuery)
+    } else if (Array.isArray(selectorQuery)) {
       let $r
-      for (const s of config) {
+      for (const s of selectorQuery) {
         $r = $el.find(s)
         if ($r.length) break
       }
       if (!$r) return null
       $el = $r
-    } else {
-      $el = config.selector ? $el.find(config.selector) : $el
-      transform = config.transform
     }
 
     if ($el.length) {
@@ -148,7 +157,9 @@ class Crawler<Item> {
 
         for (const selectorName in this._selectors) {
           const selector = this._selectors[selectorName]
-          item[selectorName] = await this._extractData($(el), $.root(), selector, currentUrl)
+          if (selector !== undefined) {
+            item[selectorName] = await this._extractData($(el), $.root(), selector, currentUrl)
+          }
         }
 
         results.push(item as Item)

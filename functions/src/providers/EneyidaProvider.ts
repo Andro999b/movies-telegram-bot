@@ -30,22 +30,24 @@ class EneyidaProvider extends Provider {
     },
     image: {
       selector: 'a.short_img img',
-      transform: ($el: Cheerio<AnyNode>): string => this._absoluteUrl($el.attr('data-src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('data-src') ?? '')
     }
   }
 
-  protected infoScope = 'article.full'
+  protected override infoScope = 'article.full'
   protected infoSelectors = {
     title: '#full_header-title h1',
     image: {
       selector: '.full_content-poster.img_box img',
-      transform: ($el: Cheerio<AnyNode>): string => this._absoluteUrl($el.attr('src')!)
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
     },
     files: {
       selector: '.video_box iframe',
       transform: async ($el: Cheerio<AnyNode>): Promise<File[]> => {
-        const files = await playerjsembeded($el.attr('src')!)
-        files.forEach((file, index) => file.id = index.toString())
+        const src = $el.attr('src')
+        if (!src) return []
+        const files = await playerjsembeded(src)
+        files.forEach((file, index) => file.id = index)
         return files
       }
     },

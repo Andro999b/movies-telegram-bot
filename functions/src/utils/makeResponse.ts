@@ -1,6 +1,6 @@
 import { APIGatewayProxyResult } from 'aws-lambda'
 
-export default (body: unknown, status = 200, headers?: Record<string, string>): APIGatewayProxyResult => ({
+export default (body: unknown, status = 200, headers?: Record<string, string | undefined>): APIGatewayProxyResult => ({
   statusCode: status,
   headers: {
     'Content-Type': 'application/json',

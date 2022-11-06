@@ -56,7 +56,7 @@ class MongoDBCache<Item> extends Cache<string, Item> {
         try {
           item = await compute(key)
 
-          if (!isEmpty || !isEmpty(item)) { // if results unavaliable taking from cache
+          if (item != null && (isEmpty === undefined || !isEmpty(item))) { // if results unavaliable taking from cache
             await this.putToCache(key, item)
           } else {
             item = cacheItem.result
