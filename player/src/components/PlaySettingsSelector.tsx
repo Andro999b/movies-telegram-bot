@@ -57,7 +57,7 @@ const QualitySelector: React.FC<QualitySelectorProps> = ({ device, handleClose }
 
   return (
     <>
-      <MenuItem>{localization.videoQuality}</MenuItem>
+      <MenuItem disabled>{localization.videoQuality}</MenuItem>
       {qualities
         .map((id) => (
           <MenuItem key={id} selected={id == quality} onClick={(): void => selectQuality(id)}>

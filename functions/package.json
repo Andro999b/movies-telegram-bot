@@ -34,6 +34,7 @@
     "cheerio": "^1.0.0-rc.12",
     "crypto-js": "^4.1.1",
     "debug": "^4.3.4",
+    "domhandler": "^5.0.3",
     "json5": "^2.2.1",
     "lambda-request-handler": "^0.5.1-alpha1",
     "luxon": "^3.0.1",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.108",
+    "@types/luxon": "^3.1.0",
     "@types/node": "^18.11.9",
     "@types/superagent": "^4.1.15",
     "@typescript-eslint/eslint-plugin": "^5.42.0",

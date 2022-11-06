@@ -9,6 +9,7 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
+    "useDefineForClassFields": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "moduleResolution": "Node",
