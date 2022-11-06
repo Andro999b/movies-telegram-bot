@@ -26,8 +26,8 @@ class Crawler<Item> {
   private _pagenatorSelector: string
   private _limit: number
 
-  constructor(url: string, requestGenerator: RequestGenerator | null) {
-    this._requestGenerator = requestGenerator || ((nextUrl: string): Promise<Response> => {
+  constructor(url: string, requestGenerator?: RequestGenerator) {
+    this._requestGenerator = requestGenerator ?? ((nextUrl: string): Promise<Response> => {
       if (this._cfbypass) {
         return this._createCFBypassRequest(nextUrl)
       } else {
@@ -172,7 +172,7 @@ class Crawler<Item> {
 
 export default {
   Crawler,
-  get<Item>(url: string, requestGenerator: RequestGenerator): Crawler<Item> {
+  get<Item>(url: string, requestGenerator?: RequestGenerator): Crawler<Item> {
     return new Crawler<Item>(url, requestGenerator)
   }
 }

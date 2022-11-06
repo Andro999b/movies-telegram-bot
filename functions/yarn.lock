@@ -1240,6 +1240,11 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.186.tgz#862e5514dd7bd66ada6c70ee5fce844b06c8ee97"
   integrity sha512-eHcVlLXP0c2FlMPm56ITode2AgLMSa6aJ05JTTbYbI+7EMkCEE5qk2E41d5g2lCVTqRe0GnnRFurmlCsDODrPw==
 
+"@types/luxon@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-3.1.0.tgz#b9842d233a06b267fe4117f1c224f20b8a149825"
+  integrity sha512-gCd/HcCgjqSxfMrgtqxCgYk/22NBQfypwFUG7ZAyG/4pqs51WLTcUzVp1hqTbieDYeHS3WoVEh2Yv/2l+7B0Vg==
+
 "@types/minimatch@*":
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-5.1.2.tgz#07508b45797cb81ec3f273011b054cd0755eddca"
