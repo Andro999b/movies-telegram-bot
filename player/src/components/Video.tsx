@@ -18,6 +18,7 @@ import analytics from '../utils/analytics'
 import { toJS } from 'mobx'
 import { Source } from '../types'
 import { Device } from '../store/player-store'
+import { isIosSafary } from '../utils'
 
 interface Props {
   device: Device;
@@ -99,23 +100,6 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     let hlsDestory: () => void | null
     const currentVideo = video.current!
 
-    // const handleCanPlayThrough = async (): Promise<void> => {
-    //   currentVideo.currentTime = device.seekTo || device.currentTime
-
-    //   if (device.isPlaying) {
-    //     try {
-    //       await currentVideo.play()
-    //     } catch (e) {
-    //       console.error('Play error:', e)
-    //       setVideoReady(true)
-    //       device.setLoading(false)
-    //       device.pause()
-    //     }
-    //   } else {
-    //     currentVideo.pause()
-    //   }
-    //   currentVideo.removeEventListener('canplaythrough', handleCanPlayThrough)
-    // }
     const startVideo = async (): Promise<void> => {
       device.setLoading(true)
 
@@ -127,11 +111,10 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
         url = await createExtractorUrlBuilder(extractor)(url)
       }
 
-      // currentVideo.addEventListener('canplaythrough', handleCanPlayThrough)
       currentVideo.currentTime = 0
       currentVideo.load()
 
-      if (isHls) {
+      if (!isIosSafary() && isHls) {
         startHlsVideo(url)
       } else {
         startNativeVideo(url)
@@ -181,7 +164,6 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     startVideo()
 
     return () => {
-      // currentVideo.removeEventListener('canplaythrough', handleCanPlayThrough)
       if (hlsDestory) {
         hlsDestory()
       }
