@@ -1,5 +1,5 @@
 import { Middleware } from 'telegraf'
-import { AnalyticEvent, AnalyticsHandler } from '../../../tracker/index.js'
+import { AnalyticEvent, AnalyticsHandler } from '../../tracker/index.js'
 import { AnalyticContext } from '../types.js'
 
 export default (tracker: AnalyticsHandler, bot: string): Middleware<AnalyticContext> => async (ctx, next) => {

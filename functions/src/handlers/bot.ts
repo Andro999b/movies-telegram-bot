@@ -1,13 +1,14 @@
-import analytics from './bot/midleware/analytics.js'
+import * as url from 'url'
+import analytics from '../bot/midleware/analytics.js'
 import { tracker } from '../tracker/index.js'
 import path from 'path'
 import { Telegraf } from 'telegraf'
 import TelegrafI18n from 'telegraf-i18n'
 import makeHandler, { APIGatewayEventHandler } from 'lambda-request-handler'
 import debugFactory from 'debug'
-import startAugmentation from './bot/start.js'
-import searchAugmentation from './bot/search.js'
-import { BotContext } from './bot/types.js'
+import startAugmentation from '../bot/start.js'
+import searchAugmentation from '../bot/search.js'
+import { BotContext } from '../bot/types.js'
 
 const debug = debugFactory('bot')
 
@@ -17,7 +18,7 @@ const PROVIDERS = process.env.PROVIDERS!.split(',')
 const i18n = new TelegrafI18n({
   defaultLanguage: 'uk',
   allowMissing: false, // Default true
-  directory: path.resolve(__dirname, '..', 'localization', BOT_TYPE)
+  directory: path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), '..', 'localization', BOT_TYPE)
 })
 
 const bot = new Telegraf(process.env.TOKEN!, { telegram: { webhookReply: false } })
