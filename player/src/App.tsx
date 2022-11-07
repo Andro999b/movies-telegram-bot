@@ -2,6 +2,7 @@ import './styles.scss'
 import React, { Component } from 'react'
 
 import { HashRouter, Route, Switch } from 'react-router-dom'
+import * as Sentry from '@sentry/react'
 
 import Notification from './components/Notification'
 import PlaylistView from './views/PlaylistView'
@@ -14,6 +15,7 @@ import theme from './theme'
 class App extends Component {
 
   componentDidCatch(error: Error): void {
+    Sentry.captureException(error)
     logger.error(error.message, {
       title: document.title,
       url: location.href,

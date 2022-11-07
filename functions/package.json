@@ -2,18 +2,13 @@
   "name": "movies-telegram-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "lint": "eslint --fix **/*.js",
+    "start": "env-cmd sls offline --stage=dev --aws-profile serverless",
+    "lint": "eslint --fix **/*.[jt]s",
     "build": "npm run lint && sls package --stage=prod --aws-profile serverless",
     "release": "npm run lint && sls deploy --stage=prod --aws-profile serverless",
     "release:dev": "npm run lint && sls deploy --stage=dev --aws-profile serverless",
-    "debug:info": "env-cmd node debug/debugInfo",
-    "debug:search": "env-cmd node debug/debugSearch",
-    "debug:source": "env-cmd node debug/debugSource",
-    "debug:extract": "env-cmd node debug/debugExtractor",
-    "debug:cfbypass": "env-cmd node debug/debugCFBypass",
-    "debug:iframe": "env-cmd node debug/debugIframeExtractor",
     "invoke:bot": "env-cmd sls invoke --function bot --stage=prod --aws-profile serverless --debug * --path debug/events/botEvent.json",
     "invoke:local:bot": "env-cmd sls invoke local --function bot --stage=prod --aws-profile serverless --debug * --path debug/events/botEvent.json",
     "invoke:info": "env-cmd sls invoke --function info --stage=prod --aws-profile serverless --debug * --path debug/events/info.json",
@@ -32,6 +27,7 @@
     "cheerio": "^1.0.0-rc.12",
     "crypto-js": "^4.1.1",
     "debug": "^4.3.4",
+    "domhandler": "^5.0.3",
     "json5": "^2.2.1",
     "lambda-request-handler": "^0.5.1-alpha1",
     "luxon": "^3.0.1",
@@ -44,9 +40,21 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.108",
+    "@types/crypto-js": "^4.1.1",
+    "@types/debug": "^4.1.7",
+    "@types/luxon": "^3.1.0",
+    "@types/node": "^18.11.9",
+    "@types/superagent": "^4.1.15",
+    "@types/urlencode": "^1.1.2",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
     "env-cmd": "^10.1.0",
     "eslint": "^8.20.0",
     "serverless": "^3.22.0",
-    "serverless-content-encoding": "^1.1.0"
+    "serverless-content-encoding": "^1.1.0",
+    "serverless-offline": "^11.2.3",
+    "serverless-plugin-typescript": "^2.1.4",
+    "typescript": "^4.8.4"
   }
 }

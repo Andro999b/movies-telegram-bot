@@ -1,4 +1,5 @@
 import { observable, action, makeObservable } from 'mobx'
+import * as Sentry from '@sentry/react'
 
 import analytics from '../utils/analytics'
 import logger from '../utils/logger'
@@ -68,6 +69,7 @@ class PlaylistStore {
         this.loading = false
       }))
       .catch(action((e) => {
+        Sentry.captureEvent(e)
         if (e.name != 'AbortError') {
           this.error = e.message
           this.loading = false
