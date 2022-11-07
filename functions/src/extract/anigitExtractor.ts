@@ -5,6 +5,7 @@ import providersConfig from '../providersConfig.js'
 import { Extractor } from './index.js'
 
 const anigatoConfig = providersConfig.providers.anigato
+const userAgent = anigatoConfig.userAgent ?? providersConfig.userAgent
 const kodikSign = anigatoConfig['kodikSign'] as Record<string, string>
 
 interface KodikLinks {
@@ -43,7 +44,7 @@ const AnigitExxtractor: Extractor = async ({ url, ttype, tid, thash, season }) =
 
     const res = await superagent.get(url)
       .set({
-        'User-Agent': anigatoConfig.userAgent,
+        'User-Agent': anigatoConfig.userAgent ?? providersConfig.userAgent,
         'Referer': referer,
       })
       .timeout(10000)
@@ -70,7 +71,7 @@ const AnigitExxtractor: Extractor = async ({ url, ttype, tid, thash, season }) =
     .post(linksApi)
     .type('form')
     .set({
-      'User-Agent': anigatoConfig.userAgent,
+      'User-Agent': userAgent,
       'Referer': url
     })
     .send(videoInfoParams)

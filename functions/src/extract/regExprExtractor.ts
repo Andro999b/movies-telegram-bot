@@ -1,6 +1,6 @@
 import superagent from 'superagent'
 import { Extractor } from './index.js'
-import makeResponse from '../utils/makeResponse'
+import makeResponse from '../utils/makeResponse.js'
 
 export type MatchTransformer = (match: RegExpMatchArray) => Promise<string>
 export type Pattern = RegExp | string | {

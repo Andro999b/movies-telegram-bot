@@ -90,21 +90,45 @@ class AnitubeUAProvider extends Provider {
       .disableTLSCerts()
 
     const files: File[] = []
-
     const $playlist = $(res.body.response)
+
+    const audios = $playlist.find('.playlists-lists .playlists-items:nth-child(0) li')
+      .toArray()
+      .map((el) => {
+        const $el = $(el)
+
+        return {
+          audio: $el.text(),
+          prefix: $el.attr('data-id')!
+        }
+      })
+
+    let id = 0
+    let lastAudioId: string | null = null
+
     $playlist.find('.playlists-videos .playlists-items li')
       .toArray()
       .forEach((el) => {
         const $el = $(el)
-        const [id] = $el.attr('data-id')!.split('_')
+        const audioId = $el.attr('data-id')!
         const url = $el.attr('data-file')!
+        let audio = null
+
+        if (audioId) {
+          audio = audios.find(({ prefix }) => audioId.startsWith(prefix))?.audio ?? null
+        }
 
         const extractorName = Object.keys(extractors).find((extr) => url.indexOf(extr) != -1)
 
         if (!extractorName)
           return
 
-        this.addFile(files, parseInt(id), null, url, extractors[extractorName])
+        this.addFile(files, id, audio, url, extractors[extractorName])
+
+        if (lastAudioId !== audioId) {
+          id++
+          lastAudioId = audioId
+        }
       })
 
     return files
@@ -150,7 +174,7 @@ class AnitubeUAProvider extends Provider {
   }
 
   addFile(files: File[], index: number, audio: string | null, url: string, extractor: ExtratorConfig | null): void {
-    const file = files[index] || {
+    const file = files[index] ?? {
       id: index,
       name: `Episode ${index + 1}`,
       urls: []

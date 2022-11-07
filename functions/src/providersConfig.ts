@@ -11,6 +11,7 @@ export default {
       'searchUrl': 'https://videocdn.tv/api',
       'types': ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
       'token': 'BuKYUNoUnwQ560ZbZMIaNkFA4eTkIQk7'
+      // 'token': 'birzMxRwbHzYZSaRGe0ApcXgMbcNersl'// reserv
     },
     'anidub': {
       'baseUrl': 'https://anime.anidub.life',
