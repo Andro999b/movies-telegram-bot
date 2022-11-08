@@ -3,7 +3,7 @@ import connectToDatabase from '../db/mongo.js'
 import { Collection, Db, Document } from 'mongodb'
 
 const COLLECTION_NAME = process.env.CACHE_TABLE
-const expirationTime = parseInt(process.env.CACHE_TTL ?? '3600') * 1000
+const expirationTime = parseInt(process.env.CACHE_TTL) * 1000
 
 interface CacheItem<Item> extends Document {
   expired: Date

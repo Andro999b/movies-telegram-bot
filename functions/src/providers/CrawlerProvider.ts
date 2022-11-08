@@ -3,19 +3,18 @@ import urlencode from 'urlencode'
 import { File, Playlist, ProviderConfig, SearchResult } from '../types/index.js'
 import Provider from './Provider.js'
 
-interface InfoSelectors {
+export interface InfoSelectors {
   title: Selector<string>
   image: Selector<string>
   files: Selector<File[]>
   trailer?: Selector<string | undefined>
 }
 
-interface SearchSelector {
+export interface SearchSelector {
   id: Selector<string>
   name: Selector<string>
   image?: Selector<string>
 }
-
 
 abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> extends Provider<Config> {
   protected abstract searchScope: string

@@ -4,9 +4,9 @@ import { AnalyticEvent, AnalyticFieldType, AnalyticsHandler } from './index.js'
 import dynamodb from '../db/dynamodb.js'
 
 export const tracker = (): AnalyticsHandler => {
-  const tableName = process.env.ANALYTIC_TABLE || 'analyticsEvents'
-  const timezone = process.env.ANALYTIC_TIMEZONE || 'analyticsEvents'
-  const analyticsTTL = 3600 * 24 * parseInt(process.env.ANALYTIC_RETENTION ?? '90')
+  const tableName = process.env.ANALYTIC_TABLE
+  const timezone = process.env.ANALYTIC_TIMEZONE
+  const analyticsTTL = 3600 * 24 * parseInt(process.env.ANALYTIC_RETENTION)
 
   const typeMapping: Record<string, string> = {
     uid: 'N',
