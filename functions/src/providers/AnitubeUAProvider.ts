@@ -103,12 +103,11 @@ class AnitubeUAProvider extends Provider {
         }
       })
 
-    let id = 0
-    let lastAudioId: string | null = null
+    const audioEpCounter: Record<string, number> = {}
 
     $playlist.find('.playlists-videos .playlists-items li')
       .toArray()
-      .forEach((el) => {
+      .forEach((el, id) => {
         const $el = $(el)
         const audioId = $el.attr('data-id')!
         const url = $el.attr('data-file')!
@@ -116,6 +115,12 @@ class AnitubeUAProvider extends Provider {
 
         if (audioId) {
           audio = audios.find(({ prefix }) => audioId.startsWith(prefix))?.audio ?? null
+
+          if (audioEpCounter[audioId] !== undefined) {
+            id = ++audioEpCounter[audioId]
+          } else {
+            id = audioEpCounter[audioId] = 0
+          }
         }
 
         const extractorName = Object.keys(extractors).find((extr) => url.indexOf(extr) != -1)
@@ -124,11 +129,6 @@ class AnitubeUAProvider extends Provider {
           return
 
         this.addFile(files, id, audio, url, extractors[extractorName])
-
-        if (lastAudioId !== audioId) {
-          id++
-          lastAudioId = audioId
-        }
       })
 
     return files

@@ -85,6 +85,10 @@ const WatchHistoryView: React.FC = () => {
     loadHistory()
   }, [loadHistory])
 
+  useEffect(() => {
+    document.title = localization.watchHistory
+  }, [])
+
   return (
     <div className="screan-content">
       {history == null ?
