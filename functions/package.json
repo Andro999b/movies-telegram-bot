@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "env-cmd sls offline --stage=dev --aws-profile serverless",
+    "start": "env-cmd sls offline --stage=dev --aws-profile serverless --debug *",
     "lint": "eslint --fix **/*.[jt]s",
     "build": "npm run lint && sls package --stage=prod --aws-profile serverless",
     "release": "npm run lint && sls deploy --stage=prod --aws-profile serverless",

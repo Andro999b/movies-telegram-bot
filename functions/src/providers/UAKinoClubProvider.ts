@@ -5,6 +5,7 @@ import urlencode from 'urlencode'
 import { InfoSelectors, SearchSelector } from './CrawlerProvider.js'
 import { File, FileUrl } from '../types/index.js'
 import invokeCFBypass from '../utils/invokeCFBypass.js'
+import { extractIntFromSting } from '../utils/extractNumber.js'
 
 class UAKinoClubProvider extends Provider {
   protected searchScope = '.movie-item'
@@ -88,25 +89,23 @@ class UAKinoClubProvider extends Provider {
         }
       })
 
-    const audioEpCounter: Record<string, number> = {}
-    const fileById: Record<string, File> = {}
+    const fileById: Record<number, File> = {}
 
     $playlist.find('.playlists-videos .playlists-items li')
       .toArray()
       .forEach((el, id) => {
         const $el = $(el)
-        const audioId = $el.attr('data-id')!
+        const audioId = $el.attr('data-id')
+        const episodeId = extractIntFromSting($el.text())
         const url = $el.attr('data-file')!
         let audio = null
 
         if (audioId) {
           audio = audios.find(({ prefix }) => audioId.startsWith(prefix))?.audio ?? null
+        }
 
-          if (audioEpCounter[audioId] !== undefined) {
-            id = ++audioEpCounter[audioId]
-          } else {
-            id = audioEpCounter[audioId] = 0
-          }
+        if (episodeId) {
+          id = episodeId - 1
         }
 
         const file = fileById[id] ?? {

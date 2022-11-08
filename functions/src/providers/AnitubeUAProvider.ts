@@ -5,6 +5,7 @@ import $, { AnyNode, Cheerio } from 'cheerio'
 import providersConfig from '../providersConfig.js'
 import { ExtractorTypes, File, FileUrl } from '../types/index.js'
 import { ProcessingInstruction } from 'domhandler'
+import { extractIntFromSting } from '../utils/extractNumber.js'
 
 const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
 const srcRegExp = /src="([^"]+)"/
@@ -23,10 +24,10 @@ const extractors: Record<string, ExtratorConfig | null> = {
     type: 'sibnetmp4'
   },
   'secvideo1': {
-    type: 'mp4'
+    type: 'mp4local'
   },
   'csst.online': {
-    type: 'mp4'
+    type: 'mp4local'
   },
   'veoh.com': null,
   'tortuga.wtf': {
@@ -105,24 +106,21 @@ class AnitubeUAProvider extends Provider {
         }
       })
 
-    const audioEpCounter: Record<string, number> = {}
-
     $playlist.find('.playlists-videos .playlists-items li')
       .toArray()
       .forEach((el, id) => {
         const $el = $(el)
-        const audioId = $el.attr('data-id')!
+        const audioId = $el.attr('data-id')
+        const episodeId = extractIntFromSting($el.text())
         const url = $el.attr('data-file')!
         let audio = null
 
         if (audioId) {
           audio = audios.find(({ prefix }) => audioId.startsWith(prefix))?.audio ?? null
+        }
 
-          if (audioEpCounter[audioId] !== undefined) {
-            id = ++audioEpCounter[audioId]
-          } else {
-            id = audioEpCounter[audioId] = 0
-          }
+        if (episodeId) {
+          id = episodeId - 1
         }
 
         const extractorName = Object.keys(extractors).find((extr) => url.indexOf(extr) != -1)

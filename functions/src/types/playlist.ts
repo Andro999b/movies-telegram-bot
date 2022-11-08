@@ -52,4 +52,6 @@ export type ExtractorTypes =
   'stormo' |
   'anidub' |
   'mp4' |
-  'm3u8'
+  'm3u8' |
+  'mp4local' |
+  'm3u8local'
