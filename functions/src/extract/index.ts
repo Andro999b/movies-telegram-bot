@@ -12,7 +12,7 @@ import { APIGatewayProxyResult } from 'aws-lambda'
 import { ExtractorTypes } from '../types/index.js'
 
 export interface ExtractorParams {
-  type: string
+  type: ExtractorTypes
   url: string
   [key: string]: string
 }
