@@ -9,6 +9,7 @@ import VideoCDNProvider from './VideoCDNProvider.js'
 import AnitubeUAProvider from './AnitubeUAProvider.js'
 import EneyidaProvider from './EneyidaProvider.js'
 import UAFilmTVProvider from './UAFilmTVProvider.js'
+import UAKinoClubProvider from './UAKinoClubProvider.js'
 import UASerialsProvider from './UASerialsProvider.js'
 import Provider from './Provider.js'
 import { File, Playlist, SearchResult } from '../types/index.js'
@@ -25,6 +26,7 @@ const providers: Provider[] = [
   new AnitubeUAProvider(),
   new EneyidaProvider(),
   new UAFilmTVProvider(),
+  new UAKinoClubProvider(),
   new UASerialsProvider(),
 ]
 

@@ -22,6 +22,7 @@ export type ProvidersNames =
   'eneyida' |
   'uafilmtv' |
   'uaserials' |
+  'uakinoclub' |
   'seasonvar' |
   'kinovod'
 

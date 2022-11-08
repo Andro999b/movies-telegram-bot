@@ -13,7 +13,7 @@ const getSequenceToken = (): Promise<SequenceToken | undefined> => {
   return new Promise((resolve, reject) => {
     cloudwatchlogs.describeLogStreams(
       {
-        logGroupName: LOG_GROUP!,
+        logGroupName: LOG_GROUP,
         logStreamNamePrefix: LOG_STREAM
       },
       (err, data) => {
@@ -35,7 +35,7 @@ const log = async (message: string | null): Promise<void> => {
           message,
           timestamp: Date.now()
         }],
-        logGroupName: LOG_GROUP!,
+        logGroupName: LOG_GROUP,
         logStreamName: LOG_STREAM,
         sequenceToken
       },

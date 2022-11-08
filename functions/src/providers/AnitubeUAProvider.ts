@@ -3,14 +3,14 @@ import urlencode from 'urlencode'
 import superagent from 'superagent'
 import $, { AnyNode, Cheerio } from 'cheerio'
 import providersConfig from '../providersConfig.js'
-import { File, FileUrl } from '../types/index.js'
+import { ExtractorTypes, File, FileUrl } from '../types/index.js'
 import { ProcessingInstruction } from 'domhandler'
 
 const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
 const srcRegExp = /src="([^"]+)"/
 
 interface ExtratorConfig {
-  type: string
+  type: ExtractorTypes
   hls?: boolean
 }
 
@@ -58,10 +58,12 @@ class AnitubeUAProvider extends Provider {
     files: {
       selector: ['#VideoConstructor_v3_x_Player', '.playlists-ajax'],
       transform: ($el: Cheerio<AnyNode>): Promise<File[]> | File[] => {
-        if ($el.attr('id') == 'VideoConstructor_v3_x_Player') {
+        if ($el.is('#VideoConstructor_v3_x_Player')) {
           return this.filesFromVideoContructor($el)
-        } else {
+        } else if ($el.is('.playlists-ajax')) {
           return this.filesFromPlaylistAjax($el)
+        } else {
+          return []
         }
       }
     },

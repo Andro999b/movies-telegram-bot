@@ -8,9 +8,9 @@ import { SearchResult } from '../../types/index.js'
 import { InlineKeyboardButton, InlineKeyboardMarkup } from 'telegraf/typings/core/types/typegram'
 import { BotContext } from '../types.js'
 
-const BOT_TYPE = process.env.BOT_TYPE! as 'ua' | 'films' | 'anime'
+const BOT_TYPE = process.env.BOT_TYPE
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3
-const STAGE = process.env.STAGE || 'prod'
+const STAGE = process.env.STAGE
 const MAX_QUERY_LENGTH = 63
 const MAX_QUERY_LENTH_WITH_PROVIDER = 50
 const PLAYER_URL = process.env.PLAYER_URL

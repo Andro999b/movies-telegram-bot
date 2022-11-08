@@ -12,8 +12,8 @@ import { BotContext } from '../bot/types.js'
 
 const debug = debugFactory('bot')
 
-const BOT_TYPE = process.env.BOT_TYPE!
-const PROVIDERS = process.env.PROVIDERS!.split(',')
+const BOT_TYPE = process.env.BOT_TYPE
+const PROVIDERS = process.env.PROVIDERS.split(',')
 
 const i18n = new TelegrafI18n({
   defaultLanguage: 'uk',
@@ -21,7 +21,7 @@ const i18n = new TelegrafI18n({
   directory: path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), '..', 'localization', BOT_TYPE)
 })
 
-const bot = new Telegraf(process.env.TOKEN!, { telegram: { webhookReply: false } })
+const bot = new Telegraf(process.env.TOKEN, { telegram: { webhookReply: false } })
 
 bot.use(i18n.middleware())
 bot.use(analytics(tracker(), BOT_TYPE))

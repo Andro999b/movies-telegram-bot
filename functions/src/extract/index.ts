@@ -9,6 +9,7 @@ import SibnetMp4Extractor from './sibnetMp4Extractor.js'
 import MP4PlayerJsExtractor from './mp4PlayerJsExtractor.js'
 import AnidubExtractor from './anidubExtractor.js'
 import { APIGatewayProxyResult } from 'aws-lambda'
+import { ExtractorTypes } from '../types/index.js'
 
 export interface ExtractorParams {
   type: string
@@ -17,7 +18,7 @@ export interface ExtractorParams {
 }
 export type Extractor = (params: ExtractorParams, headers: Record<string, string>) => Promise<APIGatewayProxyResult>
 
-const extractors: Record<string, Extractor> = {
+const extractors: Record<ExtractorTypes, Extractor> = {
   'animevost': AnimevostExtractor,
   'kinogo': KinogoExtractor,
   'tortuga': M3U8Extractor,

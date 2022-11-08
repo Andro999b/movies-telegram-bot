@@ -13,6 +13,7 @@ export interface Playlist {
   files: File[]
   errorDetail?: string
 }
+
 export interface File {
   id: string | number | null
   name: string | null
@@ -31,10 +32,24 @@ export interface FileUrl {
   quality?: number
   audio?: string
   hls?: boolean
-  extractor?: Extrator
+  extractor?: Extractor
 }
 
-export interface Extrator {
-  type: string
+export interface Extractor {
+  type: ExtractorTypes
   params?: Record<string, unknown>
 }
+
+export type ExtractorTypes =
+  'animevost' |
+  'kinogo' |
+  'tortuga' |
+  'ashdi' |
+  'anigit' |
+  'animedia' |
+  'sibnethls' |
+  'sibnetmp4' |
+  'stormo' |
+  'anidub' |
+  'mp4' |
+  'm3u8'
