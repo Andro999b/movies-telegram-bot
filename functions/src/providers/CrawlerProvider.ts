@@ -23,10 +23,6 @@ abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> e
   protected abstract infoScope: string
   protected abstract infoSelectors: InfoSelectors
 
-  constructor(name: string, config: Config) {
-    super(name, config)
-  }
-
   override async search(query: string): Promise<SearchResult[]> {
     const name = this.getName()
     const {

@@ -18,8 +18,6 @@ const config: ProvidersConfig = {
       searchUrl: 'https://anime.anidub.life/index.php',
     },
     animedia: {
-      // baseUrl: 'https://m46.animedia.pro',
-      // searchUrl: 'https://m46.animedia.pro/ajax/search_result_search_page_2/P0'
       baseUrl: 'https://online.animedia.tv',
       searchUrl: 'https://online.animedia.tv/ajax/search_result_search_page_2/P0'
     },

@@ -1,12 +1,12 @@
 import providersConfig from '../providersConfig.js'
-import { File, Playlist, ProviderConfig, SearchResult } from '../types/index.js'
+import { File, Playlist, ProviderConfig, ProvidersNames, SearchResult } from '../types/index.js'
 import cleanupQuery from '../utils/cleanupQuery.js'
 
 abstract class Provider<Config extends ProviderConfig = ProviderConfig> {
   protected readonly config: Config
   protected readonly name: string
 
-  constructor(name: string, config: Config) {
+  constructor(name: ProvidersNames, config: Config) {
     this.name = name
     this.config = {
       ...config,

@@ -6,6 +6,7 @@ import { InfoSelectors, SearchSelector } from './CrawlerProvider.js'
 import { File, FileUrl } from '../types/index.js'
 import invokeCFBypass from '../utils/invokeCFBypass.js'
 import { extractIntFromSting } from '../utils/extractNumber.js'
+import playerjsembed from '../utils/playerjsembed.js'
 
 class UAKinoClubProvider extends Provider {
   protected searchScope = '.movie-item'
@@ -54,20 +55,12 @@ class UAKinoClubProvider extends Provider {
     super('uakinoclub', providerConfig.providers.uakinoclub)
   }
 
-  private extractPageV1($el: Cheerio<AnyNode>): File[] {
+  private extractPageV1($el: Cheerio<AnyNode>): Promise<File[]> | File[] {
     const url = $el.attr('src')
 
     if (!url) return []
 
-    return [{
-      id: 0,
-      name: null,
-      urls: [{
-        url: url,
-        extractor: { type: 'ashdi' },
-        hls: true
-      }]
-    }]
+    return playerjsembed(url)
   }
 
   private async extractPageV2($el: Cheerio<AnyNode>): Promise<File[]> {

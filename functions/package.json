@@ -50,6 +50,7 @@
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
     "env-cmd": "^10.1.0",
+    "esbuild": "^0.15.13",
     "eslint": "^8.20.0",
     "serverless": "^3.22.0",
     "serverless-content-encoding": "^1.1.0",

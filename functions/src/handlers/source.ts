@@ -2,7 +2,7 @@ import { getCachedSource } from '../cache/caches.js'
 import { getSource } from '../providers/index.js'
 import makeResponse from '../utils/makeResponse.js'
 import isOriginAllowed from '../utils/isOriginAllowed.js'
-import { File } from '../types/index.js'
+import { File, ProvidersNames } from '../types/index.js'
 import { APIGatewayProxyHandler } from 'aws-lambda'
 
 export const handler: APIGatewayProxyHandler = async (event, context) => {
@@ -15,7 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 
   if (event.pathParameters) {
     const { provider, resultId, sourceId } = event.pathParameters as {
-      provider: string
+      provider: ProvidersNames
       resultId: string
       sourceId: string
     }

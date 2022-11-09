@@ -3,7 +3,7 @@ import { getInfo } from '../providers/index.js'
 import makeResponse from '../utils/makeResponse.js'
 import isOriginAllowed from '../utils/isOriginAllowed.js'
 import { APIGatewayProxyHandler } from 'aws-lambda'
-import { Playlist } from '../types/index.js'
+import { Playlist, ProvidersNames } from '../types/index.js'
 
 export const handler: APIGatewayProxyHandler = async (event, context) => {
   if (!isOriginAllowed(event))
@@ -15,7 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 
   if (event.pathParameters) {
     const { provider, resultId } = event.pathParameters as {
-      provider: string
+      provider: ProvidersNames
       resultId: string
     }
     const nocache = event.queryStringParameters?.nocache

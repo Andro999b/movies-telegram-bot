@@ -18,7 +18,7 @@ import analytics from '../utils/analytics'
 import { toJS } from 'mobx'
 import { Source } from '../types'
 import { Device } from '../store/player-store'
-import { isIosSafary } from '../utils'
+import { isNativeHSLUserAgent } from '../utils'
 
 interface Props {
   device: Device;
@@ -114,7 +114,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
       currentVideo.currentTime = 0
       currentVideo.load()
 
-      if (!isIosSafary() && isHls) {
+      if (!isNativeHSLUserAgent() && isHls) {
         startHlsVideo(url)
       } else {
         startNativeVideo(url)

@@ -188,8 +188,8 @@ class LocalStoreHistoryStorage implements HistoryStorage {
   all = (): HistoryItem[] => {
     const results: HistoryItem[] = []
 
-    store.each((val: HistoryItem, key: string) => {
-      if (key.startsWith('history:')) {
+    store.each((key: string, val: HistoryItem | undefined) => {
+      if (key.startsWith('history:') && val) {
         results.push(val)
       }
     })
@@ -282,7 +282,8 @@ class WatchHistoryStore {
   _remoteHistory = new RemoteHistoryStorage()
 
   _composedHistory = new ComposedHistoryStorage(
-    'indexedDB' in window ? new LocalHistoryStorage() : new LocalStoreHistoryStorage(),
+    // 'indexedDB' in window ? new LocalHistoryStorage() : new LocalStoreHistoryStorage(),
+    new LocalStoreHistoryStorage(),
     this._remoteHistory
   )
 

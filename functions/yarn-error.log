@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js add -D @nvandamme/typescript-transformer-append-js-extension
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js add --dev serverless-esbuild esbuild01~
 
 PATH: 
   C:\Users\Andrii\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Andrii\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Users\Andrii\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Amazon\AWSCLIV2;C:\Users\Andrii\AppData\Local\Microsoft\WindowsApps;C:\Users\Andrii\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Andrii\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@nvandamme%2ftypescript-transformer-append-js-extension: Not found
+  Error: https://registry.yarnpkg.com/esbuild01~: Not found
       at Request.params.callback [as _callback] (C:\Users\Andrii\AppData\Roaming\nvm\v16.17.1\node_modules\yarn\lib\cli.js:66145:18)
       at Request.self.callback (C:\Users\Andrii\AppData\Roaming\nvm\v16.17.1\node_modules\yarn\lib\cli.js:140890:22)
       at Request.emit (node:events:513:28)
@@ -33,7 +33,7 @@ npm manifest:
     "description": "",
     "type": "module",
     "scripts": {
-      "start": "sls offline --stage=dev --aws-profile serverless",
+      "start": "env-cmd sls offline --stage=dev --aws-profile serverless --debug *",
       "lint": "eslint --fix **/*.[jt]s",
       "build": "npm run lint && sls package --stage=prod --aws-profile serverless",
       "release": "npm run lint && sls deploy --stage=prod --aws-profile serverless",

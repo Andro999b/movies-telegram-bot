@@ -12,34 +12,34 @@ import UAFilmTVProvider from './UAFilmTVProvider.js'
 import UAKinoClubProvider from './UAKinoClubProvider.js'
 import UASerialsProvider from './UASerialsProvider.js'
 import Provider from './Provider.js'
-import { File, Playlist, SearchResult } from '../types/index.js'
+import { File, Playlist, ProvidersNames, SearchResult } from '../types/index.js'
 
-const providers: Provider[] = [
-  new SeasonvarProvider(),
-  new KinogoProvider(),
-  new KinovodProvider(),
-  new AnimeVostProvider(),
-  new AnimediaProvider(),
-  new AnidubProvider(),
-  new AnigatoProvider(),
-  new VideoCDNProvider(),
-  new AnitubeUAProvider(),
-  new EneyidaProvider(),
-  new UAFilmTVProvider(),
-  new UAKinoClubProvider(),
-  new UASerialsProvider(),
-]
+const providers: Record<ProvidersNames, Provider> = {
+  seasonvar: new SeasonvarProvider(),
+  kinogo: new KinogoProvider(),
+  kinovod: new KinovodProvider(),
+  animevost: new AnimeVostProvider(),
+  animedia: new AnimediaProvider(),
+  anidub: new AnidubProvider(),
+  anigato: new AnigatoProvider(),
+  videocdn: new VideoCDNProvider(),
+  anitubeua: new AnitubeUAProvider(),
+  eneyida: new EneyidaProvider(),
+  uafilmtv: new UAFilmTVProvider(),
+  uakinoclub: new UAKinoClubProvider(),
+  uaserials: new UASerialsProvider()
+}
 
 
 export const getProviders = (): string[] => {
-  return providers.map((provider) => provider.getName())
+  return Object.keys(providers)
 }
 
-export const getProvider = (name: string): Provider | undefined => {
-  return providers.find((provider) => provider.getName() == name)
+export const getProvider = (name: ProvidersNames): Provider | undefined => {
+  return providers[name]
 }
 
-export const search = async (providers: string[], query: string): Promise<SearchResult[]> => {
+export const search = async (providers: ProvidersNames[], query: string): Promise<SearchResult[]> => {
   if (!query || !providers || !providers.length) {
     return []
   }
@@ -57,7 +57,7 @@ export const search = async (providers: string[], query: string): Promise<Search
   return results.reduce((acc, result) => acc.concat(result), [])
 }
 
-export const searchOne = async (providerName: string, query: string): Promise<SearchResult[]> => {
+export const searchOne = async (providerName: ProvidersNames, query: string): Promise<SearchResult[]> => {
   if (!query) {
     return []
   }
@@ -72,12 +72,12 @@ export const searchOne = async (providerName: string, query: string): Promise<Se
   return []
 }
 
-export const getInfo = async (providerName: string, id: string): Promise<Playlist | null> => {
+export const getInfo = async (providerName: ProvidersNames, id: string): Promise<Playlist | null> => {
   const provider = getProvider(providerName)
   return await provider?.getInfo(id) ?? null
 }
 export const getSource = async (
-  providerName: string,
+  providerName: ProvidersNames,
   resultId: string,
   sourceId: string,
   params?: Record<string, string>
