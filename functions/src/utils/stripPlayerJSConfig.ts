@@ -6,7 +6,7 @@ export default (script: string): PlayerJSConfig | null => {
   if (parts) {
     let config: unknown
 
-    eval(`config = ${parts[1]}`)
+    // eval(`config = ${parts[1]}`)
     return config as PlayerJSConfig
   }
 

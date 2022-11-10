@@ -1,6 +1,9 @@
 org: andro999b
-console: true
 service: analytics-functions
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
 
 custom:
   cahceTable: cache-prod-info
@@ -13,13 +16,6 @@ provider:
   versionFunctions: false
 
 functions:
-  ga:
-    handler: handlers/ga.handler
-    environment:
-      CLIENT_EMAIL: ${ssm:bot_ga_client_email}
-      PRIVATE_KEY: ${ssm:bot_ga_private_key}
-      VIEW_ID: ${ssm:bot_ga_view_id}
-
   ga4:
     handler: handlers/ga4.handler
     environment:

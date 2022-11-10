@@ -1,6 +1,7 @@
-const { COLLECTION_NAME, connectToDatabase } = require('./db/mongo')
+import { Document } from 'mongodb';
+import { COLLECTION_NAME, connectToDatabase } from './db/mongo.js';
 
-async function runAggregation(pipline) {
+const runAggregation = async (pipline: Document[]) => {
     const client = await connectToDatabase()
     const aggCursor = client.collection(COLLECTION_NAME).aggregate(pipline)
     const docs = []
@@ -12,7 +13,7 @@ async function runAggregation(pipline) {
     return docs
 }
 
-async function getTopWatchedProviders() {
+const getTopWatchedProviders = async () => {
     const result = await runAggregation([
         {
             '$group': {
@@ -32,7 +33,7 @@ async function getTopWatchedProviders() {
     return { key: 'providersHits', result }
 }
 
-async function getTopCachedProviders() {
+const getTopCachedProviders = async () => {
     const result = await runAggregation([
         {
             '$group': {
@@ -52,7 +53,7 @@ async function getTopCachedProviders() {
     return { key: 'providers', result }
 }
 
-async function getTopWatches() {
+const getTopWatches = async () => {
     const client = await connectToDatabase()
     const result = await client.collection(COLLECTION_NAME)
         .find(
@@ -68,7 +69,7 @@ async function getTopWatches() {
     return { key: 'hits', result }
 }
 
-async function getRecientWatches() {
+const getRecientWatches = async () => {
     const client = await connectToDatabase()
     const result = await client.collection(COLLECTION_NAME)
         .find(
@@ -84,11 +85,11 @@ async function getRecientWatches() {
     return { key: 'recient', result }
 }
 
-module.exports.handler = async () => {
+export const handler = async () => {
     const results = await Promise.all([
-        getTopCachedProviders(), 
-        getTopWatchedProviders(), 
-        getTopWatches(), 
+        getTopCachedProviders(),
+        getTopWatchedProviders(),
+        getTopWatches(),
         getRecientWatches()
     ])
     return results.reduce((acc, { key, result }) => ({ ...acc, [key]: result }), {})

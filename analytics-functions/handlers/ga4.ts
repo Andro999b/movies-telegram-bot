@@ -1,4 +1,9 @@
-const { google } = require('googleapis')
+import { google, analyticsdata_v1beta } from 'googleapis'
+
+interface Input {
+    from: string
+    to: string
+}
 
 const scopes = 'https://www.googleapis.com/auth/analytics.readonly'
 
@@ -13,21 +18,21 @@ const auth = new google.auth.GoogleAuth({
     scopes
 })
 
-const reportToGAv3Response = (key, { rows }) => ({
+const reportToGAv3Response = (key: string, { rows }: analyticsdata_v1beta.Schema$RunReportResponse) => ({
     key,
     result: rows
         ?.map(({ dimensionValues, metricValues }) => {
-            let result = []
+            let result: string[] = []
 
             if (dimensionValues) {
-                result = result.concat(dimensionValues.map(({ value }) => value))
+                result = result.concat(dimensionValues.map(({ value }) => value!))
             }
 
-            return result.concat(metricValues.map(({ value }) => value))
+            return result.concat(metricValues!.map(({ value }) => value!))
         }) ?? []
 })
 
-module.exports.handler = async ({ from, to }) => {
+export const handler = async ({ from, to }: Input) => {
     const startDate = from || 'today'
     const endDate = to || 'today'
 
@@ -76,11 +81,11 @@ module.exports.handler = async ({ from, to }) => {
     })
 
     const results = [
-        reportToGAv3Response('events', res.data.reports[0]),
-        reportToGAv3Response('users', res.data.reports[1]),
-        reportToGAv3Response('new_users', res.data.reports[2]),
-        reportToGAv3Response('devices', res.data.reports[3]),
-        reportToGAv3Response('sessions', res.data.reports[4])
+        reportToGAv3Response('events', res.data.reports![0]),
+        reportToGAv3Response('users', res.data.reports![1]),
+        reportToGAv3Response('new_users', res.data.reports![2]),
+        reportToGAv3Response('devices', res.data.reports![3]),
+        reportToGAv3Response('sessions', res.data.reports![4])
     ]
 
     res = await google.analyticsdata({ version: 'v1beta', auth }).properties.batchRunReports({
@@ -101,8 +106,8 @@ module.exports.handler = async ({ from, to }) => {
         }
     })
 
-    results.push(reportToGAv3Response('countries', res.data.reports[0]))
-    results.push(reportToGAv3Response('labels', res.data.reports[1]))
+    results.push(reportToGAv3Response('countries', res.data.reports![0]))
+    results.push(reportToGAv3Response('labels', res.data.reports![1]))
 
     return {
         segment,
