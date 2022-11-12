@@ -28,7 +28,7 @@ provider:
     ANALYTIC_RETENTION: 90
     ANALYTIC_TIMEZONE: 'Europe/Kiev'
     STAGE: ${opt:stage}
-    CACHE_TTL: 300
+    CACHE_TTL: 86400
     PLAYER_URL: ${self:custom.playerUrl}
     ALLOWED_DOMAINS: 'localhost:3000,localhost:4000,movie-player.surge.sh,movies-player.firebaseapp.com,movies-player.web.app'
     ACCOUNT_ID: ${aws:accountId}

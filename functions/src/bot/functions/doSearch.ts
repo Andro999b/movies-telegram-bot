@@ -4,7 +4,7 @@ import getQueryAndProviders, { PAGE_SEPARATOR } from './getQueryAndProviders.js'
 import { Markup } from 'telegraf'
 import suggesters, { Suggester } from '../../utils/suggesters/index.js'
 import I18n from 'telegraf-i18n'
-import { SearchResult } from '../../types/index.js'
+import { ProvidersNames, SearchResult } from '../../types/index.js'
 import { InlineKeyboardButton, InlineKeyboardMarkup } from 'telegraf/typings/core/types/typegram'
 import { BotContext } from '../types.js'
 
@@ -56,7 +56,7 @@ const getNoResults = async (ctx: BotContext, providers: string[], query: string)
     return ctx.reply(i18n.t('no_results', { query }))
   }
 
-  const suggestions = await suggeter(query)
+  const suggestions = await suggeter(query, ctx.from?.language_code)
 
   track('no_results', { query, providers, suggestions })
 
@@ -93,7 +93,7 @@ const getNoResults = async (ctx: BotContext, providers: string[], query: string)
   )
 }
 
-const doTextSearch = async (ctx: BotContext, providers: string[], query: string, page: number): Promise<unknown> => {
+const doTextSearch = async (ctx: BotContext, providers: ProvidersNames[], query: string, page: number): Promise<unknown> => {
   const { i18n, track } = ctx
 
   let providersResults = await Promise.all(providers.map((providerName) =>
@@ -151,7 +151,7 @@ const doTextSearch = async (ctx: BotContext, providers: string[], query: string,
   }
 }
 
-const doSearch = async (ctx: BotContext, defaultProviders: string[], text: string | undefined): Promise<unknown> => {
+const doSearch = async (ctx: BotContext, defaultProviders: ProvidersNames[], text: string | undefined): Promise<unknown> => {
   const { i18n, track } = ctx
 
   if (!text) return

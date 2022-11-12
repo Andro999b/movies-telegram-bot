@@ -70,7 +70,7 @@ export default (playlist: PlayerJSPlaylist, linksExtractor = getBestPlayerJSQual
     if (playlist.startsWith('[{')) {
       return convertFolder(null, JSON.parse(playlist), linksExtractor)
     } else {
-      return [{ urls: linksExtractor(playlist), id: null, name: null }]
+      return [{ urls: linksExtractor(playlist), id: 0, name: null }]
     }
   } else {
     return convertFolder(null, playlist, linksExtractor)

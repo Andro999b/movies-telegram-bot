@@ -1,8 +1,9 @@
+import { ProvidersNames } from '../../types/providersConfig.js'
 import { QueryAndProviders } from '../types.js'
 
 export const PAGE_SEPARATOR = '$'
 
-export default (query: string, avaliableProviders: string[]): QueryAndProviders => {
+export default (query: string, avaliableProviders: ProvidersNames[]): QueryAndProviders => {
   let page = 1
 
   if (query.startsWith('#')) {
@@ -19,8 +20,8 @@ export default (query: string, avaliableProviders: string[]): QueryAndProviders 
 
       const q = query.substring(sepIndex + 1)
 
-      if (avaliableProviders.indexOf(provider) != -1) {
-        return { query: q.trim(), providers: [provider], page }
+      if (avaliableProviders.indexOf(provider as ProvidersNames) != -1) {
+        return { query: q.trim(), providers: [provider as ProvidersNames], page }
       }
     }
   }

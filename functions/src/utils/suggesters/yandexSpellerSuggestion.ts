@@ -12,9 +12,15 @@ interface CorrectionWord {
   word: string
 }
 
-export default async (searchQuery: string): Promise<string[]> => { // eslint-disable-line
+export default async (searchQuery: string, lang: string): Promise<string[]> => { // eslint-disable-line
   try {
-    const searchUrl = `https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}`
+    if ('ru' == lang) {
+      lang = 'uk,ru'
+    } else {
+      lang = 'uk'
+    }
+
+    const searchUrl = `https://speller.yandex.net/services/spellservice.json/checkText?text=${encodeURIComponent(searchQuery)}&lang=${lang}`
     const res = await superagent.get(searchUrl)
 
     const corrections: Correction[] = JSON.parse(res.text)

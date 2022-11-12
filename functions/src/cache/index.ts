@@ -23,7 +23,7 @@ export const getCachedInfo = async (
   return cache.getOrCompute(
     `${provider}:${resultId}`,
     compute,
-    (result) => !result.files || result.files.length == 0
+    (result) => !result?.files || result.files.length == 0
   )
 }
 export const getCachedSource = async (

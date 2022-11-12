@@ -1,12 +1,12 @@
 import { PlayerJSConfig } from '../types/index.js'
+import JSON5 from 'json5'
 
 export default (script: string): PlayerJSConfig | null => {
   const parts = script.match(/new Playerjs\(([^)]+)\);/)
 
   if (parts) {
-    let config: unknown
+    const config = JSON5.parse(parts[1])
 
-    // eval(`config = ${parts[1]}`)
     return config as PlayerJSConfig
   }
 

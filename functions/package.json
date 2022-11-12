@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sentry/serverless": "^7.19.0",
     "aws-sdk": "^2.1185.0",
     "cheerio": "^1.0.0-rc.12",
     "crypto-js": "^4.1.1",

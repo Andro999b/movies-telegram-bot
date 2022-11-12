@@ -12,6 +12,7 @@ import { Typography } from '@mui/material'
 import AlternativeLinksError from '../components/AlternativeLinksError'
 import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 import { playlistStore, watchHistoryStore, playerStore } from '../store'
+import { useLocation } from 'react-router-dom'
 
 interface ParsedLocation {
   provider: string
@@ -33,13 +34,11 @@ const parseLocation = (location: Location): ParsedLocation => {
   return { provider, id, query, fileIndex, time }
 }
 
-interface Props {
-  location: Location
-}
-
-const PlaylistView: React.FC<Props> = ({ location }) => {
+const PlaylistView: React.FC = () => {
   const [started, setStarted] = useState(false)
   const [starting, setStarting] = useState(false)
+
+  const location = useLocation()
 
   const { loading, trailerUrl, playlist, error } = playlistStore
   const params = useMemo(() => parseLocation(location), [location])

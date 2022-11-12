@@ -30,7 +30,7 @@ class UAKinoClubProvider extends Provider {
     files: {
       selector: ['.players-section .playlists-ajax', '.players-section iframe'],
       transform: ($el: Cheerio<AnyNode>): Promise<File[]> | File[] => {
-        if ($el.is('.players-section iframe')) {
+        if ($el.is('iframe')) {
           return this.extractPageV1($el)
         } else if ($el.is('.playlists-ajax')) {
           return this.extractPageV2($el)

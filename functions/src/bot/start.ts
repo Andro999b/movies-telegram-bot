@@ -3,17 +3,11 @@ import { base64UrlDecode } from '../utils/base64.js'
 import { Telegraf } from 'telegraf'
 import { BotContext } from './types.js'
 
-export default (bot: Telegraf<BotContext>, providers: string[]): void => {
+export default (bot: Telegraf<BotContext>): void => {
 
   const renderHello = (ctx: BotContext): Promise<unknown> => {
     return ctx.replyWithHTML(
-      ctx.i18n.t(
-        'start',
-        {
-          sample: providers[0],
-          providers: providers.map((it) => ` - ${it}`).join('\n')
-        }
-      )
+      ctx.i18n.t('start')
     )
   }
 

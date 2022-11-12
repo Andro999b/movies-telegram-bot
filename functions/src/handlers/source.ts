@@ -1,11 +1,12 @@
-import { getCachedSource } from '../cache/caches.js'
+import { getCachedSource } from '../cache/index.js'
 import { getSource } from '../providers/index.js'
 import makeResponse from '../utils/makeResponse.js'
 import isOriginAllowed from '../utils/isOriginAllowed.js'
 import { File, ProvidersNames } from '../types/index.js'
 import { APIGatewayProxyHandler } from 'aws-lambda'
+import Sentry from '@sentry/serverless'
 
-export const handler: APIGatewayProxyHandler = async (event, context) => {
+export const handler: APIGatewayProxyHandler = Sentry.AWSLambda.wrapHandler(async (event, context) => {
   if (!isOriginAllowed(event))
     return makeResponse('forbiden', 403)
 
@@ -34,4 +35,4 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
   return makeResponse(result, 200, {
     'Access-Control-Allow-Origin': event.headers.origin
   })
-}
+})

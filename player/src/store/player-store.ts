@@ -4,7 +4,7 @@ import store from '../utils/storage'
 import logger from '../utils/logger'
 import localization from '../localization'
 import { watchHistoryStore } from '.'
-import { AudioTrack, Playlist, Source } from '../types'
+import { AudioTrack, Playlist, File, Source } from '../types'
 import { PlayMode } from '../types/PlayMode'
 
 const END_FILE_TIME_OFFSET = 60
@@ -136,7 +136,7 @@ export class Device {
 
     this.currentFileIndex = fileIndex
 
-    const file = files[this.currentFileIndex]
+    const file: File = files[this.currentFileIndex]
 
     if (file.asyncSource) {
       this.setLoading(true)
@@ -160,11 +160,16 @@ export class Device {
 
       // @ts-ignore
       const res = await fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
-      const source = await res.json()
+      const source = await res.json() as File
 
       try {
         if (fileIndex == this.currentFileIndex) {
-          Object.assign(file, source)
+          Object.keys(source).forEach((key: keyof File) => {
+            if (source[key]) {
+              // @ts-ignore
+              file[key] = source[key]
+            }
+          })
           file.asyncSource = null
           await this.setSource(file as Source)
         }

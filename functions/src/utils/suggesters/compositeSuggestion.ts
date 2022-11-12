@@ -1,9 +1,9 @@
 import { Suggester } from './index.js'
 
 export default (suggesters: Suggester[]): Suggester => {
-  return async (searchQuery: string) => {
+  return async (searchQuery: string, lang: string) => {
     const results = await Promise.all(
-      suggesters.map((suggester) => suggester(searchQuery))
+      suggesters.map((suggester) => suggester(searchQuery, lang))
     )
 
     return Array.from(
