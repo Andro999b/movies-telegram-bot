@@ -178,7 +178,8 @@ class LocalStoreHistoryStorage implements HistoryStorage {
   }
 
   update = (key: string, data: Partial<HistoryItem>): void => {
-    store.set(this._toInternalKey(key), { key, ...store.get(key), ...data })
+    const internalKey = this._toInternalKey(key)
+    store.set(this._toInternalKey(key), { key, ...store.get(internalKey), ...data })
   }
 
   delete = (key: string): void => {
