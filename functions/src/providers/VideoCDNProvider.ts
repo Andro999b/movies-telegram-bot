@@ -7,6 +7,7 @@ import { File, Playlist, ProviderConfig, SearchResult } from '../types/index.js'
 interface VideoCDNProviderConfig extends ProviderConfig {
   types: string[]
   token: string
+  iframe: string
 }
 
 interface VideoCDNItem {
@@ -82,10 +83,11 @@ class VideoCDNProvider extends Provider<VideoCDNProviderConfig> {
 
     let files: File[] = []
     try {
-      files = (await videocdnembed(url.replace('5167.videocdn.pw', 'videocdn.so'), infoTimeout))
+      // files = (await videocdnembed(url.replace(iframe, 'videocdn.tv'), infoTimeout))
+      files = (await videocdnembed(url, infoTimeout))
         .map((file, id) => ({ ...file, id: id }))
     } catch (e) {
-      console.error('Failt to get files', e)
+      console.error('Fail to get files', e)
     }
 
     const kinopoiskPoster = `https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`
