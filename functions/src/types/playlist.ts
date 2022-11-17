@@ -8,6 +8,7 @@ export interface Playlist {
   provider: string
   title: string
   image: string
+  defaultAudio?: string
   trailer?: string
   query?: string
   files: File[]

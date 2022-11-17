@@ -4,17 +4,24 @@ import invokeCFBypass from './invokeCFBypass.js'
 import superagentCharset from 'superagent-charset'
 
 export const superagentWithCharset = superagentCharset(superagent)
+
 interface Response {
   text: string
 }
 
-export type RequestGenerator = (url: string) => Promise<Response>
-export type Transform<T = unknown> = ($el: Cheerio<AnyNode>, $root: Cheerio<Document>, url: string) => Promise<T> | T
-export interface SelectorConfig<T = unknown> {
-  selector?: string | string[]
-  transform: Transform<T>
+export interface CrawlerContext<Item> {
+  root: Cheerio<Document>
+  currentUrl: string
+  item: Item
 }
-export type Selector<T = unknown> = string | string[] | SelectorConfig<T>
+
+export type RequestGenerator = (url: string) => Promise<Response>
+export type Transform<Field = unknown, Item = unknown> = ($el: Cheerio<AnyNode>, context: CrawlerContext<Item>) => Promise<Field> | Field
+export interface SelectorConfig<Field = unknown, Item = unknown> {
+  selector?: string | string[]
+  transform: Transform<Field, Item>
+}
+export type Selector<Field = unknown, Item = unknown> = string | string[] | SelectorConfig<Field, Item>
 
 class Crawler<Item> {
   private _requestGenerator: RequestGenerator
@@ -95,9 +102,8 @@ class Crawler<Item> {
 
   private async extractData(
     $el: Cheerio<AnyNode>,
-    $root: Cheerio<Document>,
     selector: Selector,
-    url: string
+    context: CrawlerContext<Item>
   ): Promise<unknown> {
     let transform: Transform = ($el: Cheerio<Document>) => Promise.resolve($el.first().text().trim())
     let selectorQuery: string | string[] | null = null
@@ -128,7 +134,7 @@ class Crawler<Item> {
     }
 
     if ($el.length) {
-      return await transform($el, $root, url)
+      return await transform($el, context)
     } else {
       return null
     }
@@ -162,7 +168,11 @@ class Crawler<Item> {
         for (const selectorName in this._selectors) {
           const selector = this._selectors[selectorName]
           if (selector !== undefined) {
-            item[selectorName] = await this.extractData($(el), $.root(), selector, currentUrl)
+            item[selectorName] = await this.extractData($(el), selector, {
+              root: $.root(),
+              currentUrl,
+              item: item as Item
+            })
           }
         }
 

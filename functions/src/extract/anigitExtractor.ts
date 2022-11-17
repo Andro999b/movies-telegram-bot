@@ -35,11 +35,14 @@ const AnigitExxtractor: Extractor = async ({ url, ttype, tid, thash, season }) =
       .map((key) => `${key}=${kodikSign[key]}`)
       .join('&')
 
-    if (ttype == 'serial') {
+    if (ttype == 'season') {
       type = 'seria'
-      url = `https://kodik.biz/serial/${tid}/${thash}/720p?${signParams}&season=${season}&episode=${url}`
+      url = `https://kodik.info/season/${tid}/${thash}/720p?${signParams}&episode=${url}`
+    } else if (ttype == 'serial') {
+      type = 'seria'
+      url = `https://kodik.info/serial/${tid}/${thash}/720p?${signParams}&season=${season}&episode=${url}`
     } else {
-      url = `https://kodik.biz/video/${tid}/${thash}/720p?${signParams}`
+      url = `https://kodik.info/video/${tid}/${thash}/720p?${signParams}`
     }
 
     const res = await superagent.get(url)

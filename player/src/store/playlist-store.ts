@@ -69,7 +69,7 @@ class PlaylistStore {
         this.loading = false
       }))
       .catch(action((e) => {
-        Sentry.captureEvent(e)
+        Sentry.captureException(e)
         if (e.name != 'AbortError') {
           this.error = e.message
           this.loading = false

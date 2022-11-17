@@ -54,7 +54,8 @@ export class Device {
   }
 
   @action.bound async setSource(source: Source): Promise<void> {
-    const storedTrack = await watchHistoryStore.audioTrack(this.playlist)
+    const selectedAudioTrack =
+      await watchHistoryStore.audioTrack(this.playlist) ?? this.playlist.defaultAudio
 
     this.currentTime = source.currentTime || 0
     this.seekTo = null
@@ -79,8 +80,8 @@ export class Device {
         .map((it) => ({ id: it, name: it })) as AudioTrack[]
 
       if (this.audioTracks.length > 0) {
-        if (storedTrack) {
-          const audioTrack = this.audioTracks.find(({ id }) => id == storedTrack)
+        if (selectedAudioTrack) {
+          const audioTrack = this.audioTracks.find(({ id }) => id == selectedAudioTrack)
           if (audioTrack) {
             this.audioTrack = audioTrack.id
           } else {

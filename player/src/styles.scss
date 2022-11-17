@@ -1,24 +1,11 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-html {
-  min-height: 100%;
-}
-
 .MuiButtonBase-root a {
   text-decoration: none;
 }
 
-
-.screan-content {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+a,
+a:visited,
+a:active {
+  color: #fff;
 }
 
 .center {
@@ -203,14 +190,21 @@ html {
   user-select: none;
 }
 
-.player__background-cover {
-  background: no-repeat center center fixed;
-  background-size: contain;
+.player__start {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  font-size: 72px;
+}
+
+.player__start-cover {
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.5);
 }
 
 .player__pause-cover {
@@ -266,18 +260,9 @@ html {
   position: relative;
 }
 
-.watch-history__tile-aspect-ratio {
-  padding-top: 144%;
-}
-
 .watch-history__tile-image {
-  background-size: 100%;
-  background-repeat: no-repeat;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
+  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.5);
 }
 
 .watch-history__tile-title {

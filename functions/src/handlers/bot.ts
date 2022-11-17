@@ -4,13 +4,12 @@ import { tracker } from '../tracker/index.js'
 import path from 'path'
 import { Telegraf } from 'telegraf'
 import TelegrafI18n from 'telegraf-i18n'
-import makeHandler, { APIGatewayEvent } from 'lambda-request-handler'
+import makeHandler, { APIGatewayEventHandler } from 'lambda-request-handler'
 import debugFactory from 'debug'
 import startAugmentation from '../bot/start.js'
 import searchAugmentation from '../bot/search.js'
 import { BotContext } from '../bot/types.js'
 import { ProvidersNames } from '../types/providersConfig.js'
-import Sentry from '@sentry/serverless'
 
 const debug = debugFactory('bot')
 
@@ -37,7 +36,7 @@ bot.catch((err) => {
 
 const botHanler = makeHandler(bot.webhookCallback(process.env.BOT_HOOK_PATH ?? '/bot'))
 
-export const handler = Sentry.AWSLambda.wrapHandler((event: APIGatewayEvent, context) => {
+export const handler: APIGatewayEventHandler = (event, context) => {
   debug(JSON.stringify(event))
   return botHanler(event, context)
-})
+}

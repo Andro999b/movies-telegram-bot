@@ -4,16 +4,16 @@ import { File, Playlist, ProviderConfig, SearchResult } from '../types/index.js'
 import Provider from './Provider.js'
 
 export interface InfoSelectors {
-  title: Selector<string>
-  image: Selector<string>
-  files: Selector<File[]>
-  trailer?: Selector<string | undefined>
+  title: Selector<string, Playlist>
+  image: Selector<string, Playlist>
+  files: Selector<File[], Playlist>
+  trailer?: Selector<string | undefined, Playlist>
 }
 
 export interface SearchSelector {
-  id: Selector<string>
-  name: Selector<string>
-  image?: Selector<string>
+  id: Selector<string, SearchResult>
+  name: Selector<string, SearchResult>
+  image?: Selector<string, SearchResult>
 }
 
 abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> extends Provider<Config> {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html translate="no">
+<html translate="no" lang="uk">
 
 <head>
   <title>Player</title>
@@ -25,16 +25,26 @@
   <meta name="msapplication-TileImage" content="/images/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
   <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
     html {
+      min-height: 100%;
       background: #000;
       color: #fff;
     }
 
-    a,
-    a:visited,
-    a:active {
-      color: #fff;
+    .screan-content {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
+
 
     .loader {
       font-size: 32px;
@@ -75,6 +85,26 @@
         transform: rotate(360deg);
       }
     }
+
+    .animated-bg {
+      background: linear-gradient(-45deg, #536976, #292E49);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+    }
+
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
   </style>
 
   <!-- Google tag (gtag.js) -->
@@ -89,8 +119,10 @@
 
 <body>
   <div id="app">
-    <div class="loader">
-      <div class="lds-dual-ring"></div>
+    <div class="screan-content animated-bg">
+      <div class="loader">
+        <div class="lds-dual-ring"></div>
+      </div>
     </div>
   </div>
   <script>

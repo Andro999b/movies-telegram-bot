@@ -28,7 +28,7 @@ const Tile: React.FC<TileProps> = ({ item, onDelete }) => {
     <Grid item xs={6} sm={4} lg={2}>
       <div className="watch-history__tile">
         <Link to={`/watch?provider=${provider}&id=${id}&query=${encodeURIComponent(title)}`}>
-          <div className="watch-history__tile-image" style={{ backgroundImage: `url(${image})` }} />
+          <img className="watch-history__tile-image" src={image} />
           <div className="watch-history__tile-title">
             <div className="watch-history__tile-title-text">
               <Typography>
@@ -48,7 +48,6 @@ const Tile: React.FC<TileProps> = ({ item, onDelete }) => {
             </div>
           </div>
         </Link>
-        <div className="watch-history__tile-aspect-ratio"></div>
       </div>
     </Grid>
   )
@@ -90,17 +89,17 @@ const WatchHistoryView: React.FC = () => {
   }, [])
 
   return (
-    <div className="screan-content">
-      {history == null ?
-        <DualCirclesLoader /> :
-        <>
-          <div className="watch-history__content">
-            <div className="watch-history__title">
-              <Typography variant="h4">
-                {localization.watchHistory}
-              </Typography>
-              <SyncButton insync={insync} onConnect={connect} onDisconnect={disconnect} />
-            </div>
+    <div className="screan-content animated-bg">
+      <div className="watch-history__content">
+        <div className="watch-history__title">
+          <Typography variant="h4">
+            {localization.watchHistory}
+          </Typography>
+          <SyncButton insync={insync} onConnect={connect} onDisconnect={disconnect} />
+        </div>
+        {history == null ?
+          <DualCirclesLoader /> :
+          <>
             {history.length == 0 && <NoHistory />}
             {history.length > 0 &&
               <Grid container spacing={1} className="watch-history__tiles">
@@ -110,8 +109,8 @@ const WatchHistoryView: React.FC = () => {
                   onDelete={onDelete} />
                 )}
               </Grid>}
-          </div>
-        </>}
+          </>}
+      </div>
     </div>
   )
 }

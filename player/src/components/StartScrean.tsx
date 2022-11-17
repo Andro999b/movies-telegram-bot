@@ -3,13 +3,11 @@ import React from 'react'
 import { PlayCircleFilled as PlayIcon } from '@mui/icons-material'
 
 import Share from './Share'
-import HistoryNavButton from './HistoryNavButton'
-import TelegramLinks from './TelegramLinks'
-import AddHistoryButton from './AddHistoryButton'
 import analytics from '../utils/analytics'
 import localization from '../localization'
 import { CircularProgress } from '@mui/material'
 import { Playlist } from '../types'
+import AddHistoryButton from './AddHistoryButton.js'
 
 interface Props {
   starting: boolean
@@ -23,10 +21,10 @@ const StartScrean: React.FC<Props> = ({ starting, playlist, onStart }) => {
   return (
     <>
       <div
-        className="player__pause-cover player__background-cover"
-        style={{ backgroundImage: image ? `url(${image})` : undefined, cursor: 'pointer' }}
+        className="player__start"
         onClick={onStart}
       >
+        <img className="player__start-cover" src={image} />
         {starting && <div className="loader-indicator center"><CircularProgress /></div>}
         {!starting && <PlayIcon className="center shadow-icon" fontSize="inherit" />}
       </div>
@@ -38,10 +36,8 @@ const StartScrean: React.FC<Props> = ({ starting, playlist, onStart }) => {
       >
         {localization.saveUkraine}
       </a>
-      <HistoryNavButton />
       <Share playlist={playlist} />
       <AddHistoryButton playlist={playlist} />
-      <TelegramLinks />
     </>
   )
 }

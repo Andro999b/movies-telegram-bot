@@ -13,6 +13,8 @@ import AlternativeLinksError from '../components/AlternativeLinksError'
 import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 import { playlistStore, watchHistoryStore, playerStore } from '../store'
 import { useLocation } from 'react-router-dom'
+import TelegramLinks from '../components/TelegramLinks.js'
+import Trailer from '../components/Trailer.js'
 
 interface ParsedLocation {
   provider: string
@@ -63,7 +65,14 @@ const PlaylistView: React.FC = () => {
 
     watchHistoryStore.watching(playlist!)
   }
+
   addGlobalKey(['Space', 'Enter'], handleStart)
+
+  if (started) {
+    return <div className="screan-content">
+      <Player initialFullScreen={isTouchDevice()} />
+    </div>
+  }
 
   const renderContent = (): React.ReactNode => {
     if (loading) {
@@ -71,38 +80,28 @@ const PlaylistView: React.FC = () => {
     } else if (error) {
       return (
         <>
-          <HistoryNavButton />
           {params.query ?
             <AlternativeLinksError provider={params.provider} query={params.query} message={error} /> :
             <Typography className="center shadow-border" variant="h4">{error}</Typography>}
         </>
       )
     } else if (trailerUrl) {
-      return (
-        <>
-          <HistoryNavButton />
-          <iframe frameBorder="0" height="100%" width="100%" src={trailerUrl} />
-        </>
-      )
+      return (<Trailer trailerUrl={trailerUrl} />)
     } else {
-      if (!started) {
-        return (
-          <StartScrean
-            starting={starting}
-            playlist={playlist}
-            onStart={handleStart} />
-        )
-      } else {
-        return (
-          <Player initialFullScreen={isTouchDevice()} />
-        )
-      }
+      return (
+        <StartScrean
+          starting={starting}
+          playlist={playlist}
+          onStart={handleStart} />
+      )
     }
   }
 
   return (
-    <div className="screan-content">
+    <div className="screan-content animated-bg">
+      <HistoryNavButton />
       {renderContent()}
+      <TelegramLinks />
     </div>
   )
 }

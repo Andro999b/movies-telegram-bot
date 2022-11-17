@@ -13,7 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sentry/serverless": "^7.19.0",
     "@types/set-cookie-parser": "^2.4.2",
     "aws-sdk": "^2.1185.0",
     "cheerio": "^1.0.0-rc.12",

@@ -3,7 +3,8 @@ import urlencode from 'urlencode'
 import superagent from 'superagent'
 import $, { AnyNode, Cheerio, Element, load } from 'cheerio'
 import providersConfig from '../providersConfig.js'
-import { File, FileUrl } from '../types/index.js'
+import { File, FileUrl, Playlist } from '../types/index.js'
+import { CrawlerContext } from '../utils/crawler.js'
 
 class AnigatoProvider extends Provider {
   protected searchScope = '.sres-wrap'
@@ -25,13 +26,17 @@ class AnigatoProvider extends Provider {
     },
     files: {
       selector: '#kodik-player iframe',
-      transform: async ($el: Cheerio<AnyNode>): Promise<File[]> => {
+      transform: async ($el: Cheerio<AnyNode>, context: CrawlerContext<Playlist>): Promise<File[]> => {
         let iframeSrc = $el.attr('src')
           ?.replace('kodik.info', 'kodik.biz')
           ?.replace('kodik.cc', 'kodik.biz')
           ?.replace('aniqit.com', 'kodik.biz')
 
         if (!iframeSrc) return []
+
+        if (!iframeSrc.endsWith('?only_season=true')) {
+          iframeSrc = iframeSrc + '?only_season=true'
+        }
 
         iframeSrc = iframeSrc.startsWith('//') ? 'https:' + iframeSrc : iframeSrc
         const res = await superagent
@@ -40,17 +45,16 @@ class AnigatoProvider extends Provider {
           .timeout(this.config.timeout!)
 
         const $iframe = load(res.text)
-        const $seasons = $iframe('.series-options')
-          .first()
-          .children()
-          .toArray()
 
         const $translations = $iframe('.serial-translations-box, .movie-translations-box')
           .find('option')
-          .toArray()
+
+        if ($translations.length > 0) {
+          context.item.defaultAudio = $translations.filter(':selected').text()
+        }
 
         let files: File[]
-        if ($seasons.length == 0) {
+        if (iframeSrc.includes('video')) {
           if ($translations.length == 0) {
             files = [{
               id: 0,
@@ -65,7 +69,7 @@ class AnigatoProvider extends Provider {
             files = [{
               id: 0,
               name: null,
-              urls: $translations.map((t) => {
+              urls: $translations.toArray().map((t) => {
                 const $t = $(t)
                 return {
                   url: '',
@@ -79,39 +83,19 @@ class AnigatoProvider extends Provider {
               })
             }]
           }
-        } else if ($seasons.length == 1) {
-          const $season = $($seasons[0])
-          const seasonNum = this.getSeassonNum($season)
-          files = $season
-            .find('option')
+        } else {
+          const $episodes = $iframe('.serial-series-box > select > option')
+
+          files = $episodes
             .toArray()
             .map((el, id) => {
-              const $el: Cheerio<AnyNode> = $(el)
+              const $ep: Cheerio<AnyNode> = $(el)
               return {
                 id,
-                name: $el.text(),
-                urls: this.getSeasonEpisodeUrls($el, seasonNum, $translations, iframeSrc!)
+                name: $ep.text(),
+                urls: this.getSeasonEpisodeUrls($ep, $translations.toArray(), iframeSrc!)
               }
             })
-        } else {
-          files = $seasons
-            .map((el) => {
-              const $season = $(el)
-              const seasonNum = this.getSeassonNum($season)
-              return $season
-                .find('option')
-                .toArray()
-                .map((el) => {
-                  const $el = $(el)
-                  return {
-                    name: $el.text(),
-                    path: `Season ${seasonNum}`,
-                    urls: this.getSeasonEpisodeUrls($el, seasonNum, $translations, iframeSrc!)
-                  }
-                })
-            })
-            .reduce((acc, items) => acc.concat(items), [])
-            .map((items, id) => ({ id, ...items }))
         }
 
         return files.filter((f) => f.urls!.length > 0)
@@ -133,19 +117,18 @@ class AnigatoProvider extends Provider {
 
   private getSeasonEpisodeUrls(
     $el: Cheerio<AnyNode>,
-    season: string,
-    $translations: Element[],
+    translations: Element[],
     iframeSrc: string
   ): FileUrl[] {
-    if ($translations.length == 0) {
+    if (translations.length == 0) {
       const [, ttype, tid, thash] = new URL(iframeSrc).pathname.split('/')
       return [{
         url: '' + $el.val(),
         hls: true,
-        extractor: { type: 'anigit', params: { season, ttype, tid, thash } }
+        extractor: { type: 'anigit', params: { ttype, tid, thash } }
       }]
     } else {
-      return $translations.map((t) => {
+      return translations.map((t) => {
         const $t = $(t)
 
         return {
@@ -155,17 +138,12 @@ class AnigatoProvider extends Provider {
           extractor: {
             type: 'anigit',
             params: {
-              season,
               ...this.getTranslationParams($t)
             }
           }
         }
       })
     }
-  }
-
-  private getSeassonNum($season: Cheerio<AnyNode>): string {
-    return $season.attr('class')!.substring('season-'.length)
   }
 }
 

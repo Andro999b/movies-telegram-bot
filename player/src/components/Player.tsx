@@ -172,7 +172,6 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
   const hideUi = error != null ? false : idle
 
   return (
-
     <HandleActionListener idle={idle} onAction={handleActivity} ref={container}>
       <div id="player_root" className={hideUi ? 'idle' : ''}>
         {error && <Typography className="center" variant="h4">{error}</Typography>}
