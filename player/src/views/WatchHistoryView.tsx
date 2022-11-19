@@ -89,7 +89,7 @@ const WatchHistoryView: React.FC = () => {
   }, [])
 
   return (
-    <div className="screan-content animated-bg">
+    <div className="screan-content gradient-bg">
       <div className="watch-history__content">
         <div className="watch-history__title">
           <Typography variant="h4">

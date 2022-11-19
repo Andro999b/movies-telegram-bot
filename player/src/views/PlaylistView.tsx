@@ -98,7 +98,7 @@ const PlaylistView: React.FC = () => {
   }
 
   return (
-    <div className="screan-content animated-bg">
+    <div className="screan-content gradient-bg">
       <HistoryNavButton />
       {renderContent()}
       <TelegramLinks />

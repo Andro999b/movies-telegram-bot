@@ -96,6 +96,7 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
         fscreen.exitFullscreen()
       } else {
         fscreen.requestFullscreen(container.current)
+        setPlaylistOpen(false)
       }
     }
   }, [fullScreen])
@@ -168,8 +169,7 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
     }
   }, [])
 
-  // always show ui in case of error
-  const hideUi = error != null ? false : idle
+  const hideUi = error == null && idle && !playlistOpen
 
   return (
     <HandleActionListener idle={idle} onAction={handleActivity} ref={container}>
