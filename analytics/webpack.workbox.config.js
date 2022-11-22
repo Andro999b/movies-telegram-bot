@@ -1,6 +1,6 @@
 import { GenerateSW } from 'workbox-webpack-plugin'
 import WebpackPwaManifest from 'webpack-pwa-manifest'
-import webpackConfig from './webpack.config'
+import webpackConfig from './webpack.config.js'
 import { merge } from 'webpack-merge'
 import path from 'path'
 
