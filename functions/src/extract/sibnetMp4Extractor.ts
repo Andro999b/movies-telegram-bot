@@ -1,5 +1,5 @@
 
-import regExprExtractor from './regExprExtractor.js'
+import regExprExtractor from './regExprExtractor'
 import superagent from 'superagent'
 
 export default regExprExtractor([{

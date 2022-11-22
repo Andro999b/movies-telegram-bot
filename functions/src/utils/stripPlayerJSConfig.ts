@@ -1,4 +1,4 @@
-import { PlayerJSConfig } from '../types/index.js'
+import { PlayerJSConfig } from '../types/index'
 import JSON5 from 'json5'
 
 export default (script: string): PlayerJSConfig | null => {

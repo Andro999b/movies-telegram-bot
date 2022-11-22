@@ -1,8 +1,8 @@
-import Provider from './DataLifeProvider.js'
+import Provider from './DataLifeProvider'
 import $, { AnyNode, Cheerio } from 'cheerio'
 import urlencode from 'urlencode'
-import providersConfig from '../providersConfig.js'
-import { File } from '../types/index.js'
+import providersConfig from '../providersConfig'
+import { File } from '../types/index'
 
 class AnidubProvider extends Provider {
   protected searchScope = '.th-item'

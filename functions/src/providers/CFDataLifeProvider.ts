@@ -1,8 +1,8 @@
-import CrawlerProvider from './CrawlerProvider.js'
+import CrawlerProvider from './CrawlerProvider'
 import urlencode from 'urlencode'
-import invokeCFBypass from '../utils/invokeCFBypass.js'
-import { ProviderConfig } from '../types/index.js'
-import { RequestGenerator } from '../utils/crawler.js'
+import invokeCFBypass from '../utils/invokeCFBypass'
+import { ProviderConfig } from '../types/index'
+import { RequestGenerator } from '../utils/crawler'
 
 export type SearchMethod = 'get' | 'post'
 

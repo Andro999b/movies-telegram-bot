@@ -1,11 +1,11 @@
-import Provider from './DataLifeProvider.js'
-import { extractObject, extractStringProperty } from '../utils/extractScriptVariable.js'
+import Provider from './DataLifeProvider'
+import { extractObject, extractStringProperty } from '../utils/extractScriptVariable'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
-import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist.js'
+import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
 import { AnyNode, Cheerio } from 'cheerio'
-import { File } from '../types/index.js'
-import providersConfig from '../providersConfig.js'
+import { File } from '../types/index'
+import providersConfig from '../providersConfig'
 import { ProcessingInstruction } from 'domhandler'
 
 class AnimeVostProvider extends Provider {

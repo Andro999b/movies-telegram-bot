@@ -1,6 +1,6 @@
 import { AnyNode, Cheerio, Document, load } from 'cheerio'
 import superagent from 'superagent'
-import invokeCFBypass from './invokeCFBypass.js'
+import invokeCFBypass from './invokeCFBypass'
 import superagentCharset from 'superagent-charset'
 
 export const superagentWithCharset = superagentCharset(superagent)

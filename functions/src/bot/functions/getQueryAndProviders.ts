@@ -1,5 +1,5 @@
-import { ProvidersNames } from '../../types/providersConfig.js'
-import { QueryAndProviders } from '../types.js'
+import { ProvidersNames } from '../../types/providersConfig'
+import { QueryAndProviders } from '../types'
 
 export const PAGE_SEPARATOR = '$'
 

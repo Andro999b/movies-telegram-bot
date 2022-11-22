@@ -1,15 +1,15 @@
 import * as url from 'url'
-import analytics from '../bot/midleware/analytics.js'
-import { tracker } from '../tracker/index.js'
+import analytics from '../bot/midleware/analytics'
+import { tracker } from '../tracker/index'
 import path from 'path'
 import { Telegraf } from 'telegraf'
 import TelegrafI18n from 'telegraf-i18n'
 import makeHandler, { APIGatewayEventHandler } from 'lambda-request-handler'
 import debugFactory from 'debug'
-import startAugmentation from '../bot/start.js'
-import searchAugmentation from '../bot/search.js'
-import { BotContext } from '../bot/types.js'
-import { ProvidersNames } from '../types/providersConfig.js'
+import startAugmentation from '../bot/start'
+import searchAugmentation from '../bot/search'
+import { BotContext } from '../bot/types'
+import { ProvidersNames } from '../types/providersConfig'
 
 const debug = debugFactory('bot')
 

@@ -1,9 +1,9 @@
-import { getCachedInfo } from '../cache/index.js'
-import { getInfo } from '../providers/index.js'
-import makeResponse from '../utils/makeResponse.js'
-import isOriginAllowed from '../utils/isOriginAllowed.js'
+import { getCachedInfo } from '../cache/index'
+import { getInfo } from '../providers/index'
+import makeResponse from '../utils/makeResponse'
+import isOriginAllowed from '../utils/isOriginAllowed'
 import { APIGatewayProxyHandler } from 'aws-lambda'
-import { Playlist, ProvidersNames } from '../types/index.js'
+import { Playlist, ProvidersNames } from '../types/index'
 
 export const handler: APIGatewayProxyHandler = async (event, context) => {
   if (!isOriginAllowed(event))

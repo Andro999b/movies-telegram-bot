@@ -1,7 +1,7 @@
 import { Context } from 'telegraf'
 import I18n from 'telegraf-i18n'
-import { AnalyticFieldType } from '../tracker/index.js'
-import { ProvidersNames } from '../types/providersConfig.js'
+import { AnalyticFieldType } from '../tracker/index'
+import { ProvidersNames } from '../types/providersConfig'
 
 export interface AnalyticContext extends Context {
   track: (type: string, data?: Record<string, AnalyticFieldType>) => void

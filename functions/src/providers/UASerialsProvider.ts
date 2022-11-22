@@ -1,9 +1,9 @@
-import Provider from './CFDataLifeProvider.js'
+import Provider from './CFDataLifeProvider'
 import CryptoJS from 'crypto-js'
 import urlencode from 'urlencode'
 import { AnyNode, Cheerio } from 'cheerio'
-import providersConfig from '../providersConfig.js'
-import { File, ProviderConfig } from '../types/index.js'
+import providersConfig from '../providersConfig'
+import { File, ProviderConfig } from '../types/index'
 
 interface UASerialsProviderConfig extends ProviderConfig {
   password: string

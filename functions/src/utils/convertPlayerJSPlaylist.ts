@@ -1,5 +1,5 @@
-import { File, PlayerJSItem, PlayerJSPlaylist, UrlAndQualityAndAudio } from '../types/index.js'
-import getBestPlayerJSQuality from './parsePlayerJSFile.js'
+import { File, PlayerJSItem, PlayerJSPlaylist, UrlAndQualityAndAudio } from '../types/index'
+import getBestPlayerJSQuality from './parsePlayerJSFile'
 
 export type LinksExtractor = (file: string) => UrlAndQualityAndAudio[]
 

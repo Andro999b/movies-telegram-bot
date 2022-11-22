@@ -1,6 +1,6 @@
 import { APIGatewayProxyHandler } from 'aws-lambda'
-import extractors from '../extract/index.js'
-import { ExtractorTypes } from '../types/playlist.js'
+import extractors from '../extract/index'
+import { ExtractorTypes } from '../types/playlist'
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   const response = await extractors(

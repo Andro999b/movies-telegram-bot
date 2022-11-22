@@ -1,11 +1,11 @@
-import Provider from './CFDataLifeProvider.js'
+import Provider from './CFDataLifeProvider'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
-import videocdnembed from '../utils/videocdnembed.js'
-import { extractStringProperty } from '../utils/extractScriptVariable.js'
+import videocdnembed from '../utils/videocdnembed'
+import { extractStringProperty } from '../utils/extractScriptVariable'
 import { AnyNode, Cheerio } from 'cheerio'
-import providersConfig from '../providersConfig.js'
-import { File, FileUrl } from '../types/index.js'
+import providersConfig from '../providersConfig'
+import { File, FileUrl } from '../types/index'
 
 interface IframeV1ParseResult {
   iframeHost: string

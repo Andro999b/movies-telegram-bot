@@ -1,4 +1,4 @@
-export * from './dynamodbTracker.js'
+export * from './dynamodbTracker'
 
 export type AnalyticFieldType = string | number | null | undefined | (string | number)[]
 

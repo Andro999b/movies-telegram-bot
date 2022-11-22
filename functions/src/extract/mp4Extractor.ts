@@ -1,4 +1,4 @@
-import regExprExtractor from './regExprExtractor.js'
+import regExprExtractor from './regExprExtractor'
 
 export default regExprExtractor(
   [

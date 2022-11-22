@@ -1,9 +1,9 @@
-import Provider from './CFDataLifeProvider.js'
-import playerjsembeded from '../utils/playerjsembed.js'
-import providersConfig from '../providersConfig.js'
+import Provider from './CFDataLifeProvider'
+import playerjsembeded from '../utils/playerjsembed'
+import providersConfig from '../providersConfig'
 import urlencode from 'urlencode'
 import { AnyNode, Cheerio } from 'cheerio'
-import { File } from '../types/index.js'
+import { File } from '../types/index'
 
 class EneyidaProvider extends Provider {
 

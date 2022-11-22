@@ -1,7 +1,7 @@
 import superagent from 'superagent'
-import { File } from '../types/index.js'
-import convertPlayerJSPlaylist from './convertPlayerJSPlaylist.js'
-import stripPlayerJSConfig from './stripPlayerJSConfig.js'
+import { File } from '../types/index'
+import convertPlayerJSPlaylist from './convertPlayerJSPlaylist'
+import stripPlayerJSConfig from './stripPlayerJSConfig'
 
 export default async (url: string): Promise<File[]> => {
   let res

@@ -1,7 +1,7 @@
 import { PutItemInputAttributeMap } from 'aws-sdk/clients/dynamodb'
 import { DateTime } from 'luxon'
-import { AnalyticEvent, AnalyticFieldType, AnalyticsHandler } from './index.js'
-import dynamodb from '../db/dynamodb.js'
+import { AnalyticEvent, AnalyticFieldType, AnalyticsHandler } from './index'
+import dynamodb from '../db/dynamodb'
 
 export const tracker = (): AnalyticsHandler => {
   const tableName = process.env.ANALYTIC_TABLE

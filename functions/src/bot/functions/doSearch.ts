@@ -1,12 +1,12 @@
-import extractSearchEngineQuery from '../../utils/extractSearchEngineQuery.js'
-import { searchOne } from '../../providers/index.js'
-import getQueryAndProviders, { PAGE_SEPARATOR } from './getQueryAndProviders.js'
+import extractSearchEngineQuery from '../../utils/extractSearchEngineQuery'
+import { searchOne } from '../../providers/index'
+import getQueryAndProviders, { PAGE_SEPARATOR } from './getQueryAndProviders'
 import { Markup } from 'telegraf'
-import suggesters, { Suggester } from '../../utils/suggesters/index.js'
+import suggesters, { Suggester } from '../../utils/suggesters/index'
 import I18n from 'telegraf-i18n'
-import { ProvidersNames, SearchResult } from '../../types/index.js'
+import { ProvidersNames, SearchResult } from '../../types/index'
 import { InlineKeyboardButton, InlineKeyboardMarkup } from 'telegraf/typings/core/types/typegram'
-import { BotContext } from '../types.js'
+import { BotContext } from '../types'
 
 const BOT_TYPE = process.env.BOT_TYPE
 const MAX_UNFOLD_RESULTS = process.env.MAX_UNFOLD_RESULTS || 3

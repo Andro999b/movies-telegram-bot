@@ -1,7 +1,7 @@
-import cleanupQuery from '../cleanupQuery.js'
-import compositeSuggestion from './compositeSuggestion.js'
-import kinobazaSuggestions from './kinobazaSuggestions.js'
-import yandexSpellerSuggestion from './yandexSpellerSuggestion.js'
+import cleanupQuery from '../cleanupQuery'
+import compositeSuggestion from './compositeSuggestion'
+import kinobazaSuggestions from './kinobazaSuggestions'
+import yandexSpellerSuggestion from './yandexSpellerSuggestion'
 
 export type Suggester = (searchQuery: string, lang?: string) => Promise<string[]>
 

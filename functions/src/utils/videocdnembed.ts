@@ -1,8 +1,8 @@
 import superagent from 'superagent'
 import { load } from 'cheerio'
 import { ProcessingInstruction } from 'domhandler'
-import convertPlayerJSPlaylist from './convertPlayerJSPlaylist.js'
-import { File, PlayerJSPlaylist } from '../types/index.js'
+import convertPlayerJSPlaylist from './convertPlayerJSPlaylist'
+import { File, PlayerJSPlaylist } from '../types/index'
 
 function _extractTranslations(
   translations: Record<string, string>,

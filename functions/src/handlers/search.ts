@@ -1,7 +1,7 @@
-import { search } from '../providers/index.js'
-import makeResponse from '../utils/makeResponse.js'
-import isOriginAllowed from '../utils/isOriginAllowed.js'
-import { ProvidersNames, SearchResult } from '../types/index.js'
+import { search } from '../providers/index'
+import makeResponse from '../utils/makeResponse'
+import isOriginAllowed from '../utils/isOriginAllowed'
+import { ProvidersNames, SearchResult } from '../types/index'
 import { APIGatewayProxyHandler } from 'aws-lambda'
 
 export const handler: APIGatewayProxyHandler = async (event) => {

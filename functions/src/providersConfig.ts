@@ -1,4 +1,4 @@
-import { ProvidersConfig } from './types/index.js'
+import { ProvidersConfig } from './types/index'
 
 const config: ProvidersConfig = {
   timeout: 5,

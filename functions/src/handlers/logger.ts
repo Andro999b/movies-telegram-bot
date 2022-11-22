@@ -1,5 +1,5 @@
-import makeResponse from '../utils/makeResponse.js'
-import isOriginAllowed from '../utils/isOriginAllowed.js'
+import makeResponse from '../utils/makeResponse'
+import isOriginAllowed from '../utils/isOriginAllowed'
 import AWS from 'aws-sdk'
 import { APIGatewayProxyHandler } from 'aws-lambda'
 import { SequenceToken } from 'aws-sdk/clients/cloudwatchlogs'

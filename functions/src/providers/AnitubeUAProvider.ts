@@ -1,11 +1,11 @@
-import Provider from './DataLifeProvider.js'
+import Provider from './DataLifeProvider'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
 import $, { AnyNode, Cheerio } from 'cheerio'
-import providersConfig from '../providersConfig.js'
-import { ExtractorTypes, File, FileUrl } from '../types/index.js'
+import providersConfig from '../providersConfig'
+import { ExtractorTypes, File, FileUrl } from '../types/index'
 import { ProcessingInstruction } from 'domhandler'
-import { extractIntFromSting } from '../utils/extractNumber.js'
+import { extractIntFromSting } from '../utils/extractNumber'
 
 const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
 const srcRegExp = /src="([^"]+)"/

@@ -1,4 +1,4 @@
-import { Suggester } from './index.js'
+import { Suggester } from './index'
 
 export default (suggesters: Suggester[]): Suggester => {
   return async (searchQuery: string, lang: string) => {

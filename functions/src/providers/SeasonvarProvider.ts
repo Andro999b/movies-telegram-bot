@@ -1,12 +1,12 @@
-import Provider from './CrawlerProvider.js'
+import Provider from './CrawlerProvider'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
-import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist.js'
-import { base64encode, base64decode } from '../utils/base64.js'
-import { File, ProviderConfig, SearchResult, UrlAndQuality } from '../types/index.js'
+import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
+import { base64encode, base64decode } from '../utils/base64'
+import { File, ProviderConfig, SearchResult, UrlAndQuality } from '../types/index'
 import { AnyNode, Cheerio } from 'cheerio'
 import { ProcessingInstruction } from 'domhandler'
-import providersConfig from '../providersConfig.js'
+import providersConfig from '../providersConfig'
 
 interface SeasonvarProviderConfig extends ProviderConfig {
   encryptKey: string

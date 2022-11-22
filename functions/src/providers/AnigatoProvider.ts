@@ -1,10 +1,10 @@
-import Provider from './DataLifeProvider.js'
+import Provider from './DataLifeProvider'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
 import $, { AnyNode, Cheerio, Element, load } from 'cheerio'
-import providersConfig from '../providersConfig.js'
-import { File, FileUrl, Playlist } from '../types/index.js'
-import { CrawlerContext } from '../utils/crawler.js'
+import providersConfig from '../providersConfig'
+import { File, FileUrl, Playlist } from '../types/index'
+import { CrawlerContext } from '../utils/crawler'
 
 class AnigatoProvider extends Provider {
   protected searchScope = '.sres-wrap'
