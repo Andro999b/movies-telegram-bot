@@ -4,6 +4,7 @@
     "**/node_modules/*"
   ],
   "compilerOptions": {
+    "allowJs": true,
     "strict": true,
     "isolatedModules": true,
     "outDir": "./dist/",
@@ -14,6 +15,11 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "moduleResolution": "Node",
+    "lib": [
+      "WebWorker",
+      "ES2020",
+      "DOM"
+    ],
     "module": "ES2020",
     "target": "ES6",
     "jsx": "react",

@@ -1,14 +1,15 @@
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import React from 'react'
-import { makeStyles, Grid, Toolbar, Box, Typography, Container, Button, Link } from '@material-ui/core'
+import { Grid, Toolbar, Box, Typography, Container, Button, Link } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import dashboard from '../store/storageDashboard'
 import ReloadButton from '../components/ReloadButton'
 import InvalidateDialog from '../components/InvalidateDialog'
 import ValuesTableVis from '../components/ValuesTableVis'
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import ErrorAwareContainer from '../components/ErrorAwareContainer'
-import BarChartVis from '../components/BarChartVis'
+import BarChartVis from '../components/BarChartVis.tsx'
 import { DATE_FORMAT } from '../constants'
 import { getWatchUrl } from '../utils'
 
@@ -69,9 +70,7 @@ export default observer(() => {
                 </Box>
                 <Button
                     variant="contained"
-                    color="default"
-                    onClick={() => showInvalidateDialog(!invalidateDialog)}
-                >
+                    onClick={() => showInvalidateDialog(!invalidateDialog)}>
                     Invalidate
                 </Button>
             </Toolbar>
@@ -130,5 +129,5 @@ export default observer(() => {
                 onClose={() => showInvalidateDialog(false)}
             />
         </div>
-    )
+    );
 })

@@ -1,17 +1,18 @@
 import { observer } from 'mobx-react-lite'
 
 import React from 'react'
-import { Grid, Toolbar, Typography, makeStyles, Box } from '@material-ui/core'
+import { Grid, Toolbar, Typography, Box } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import ErrorAwareContainer from '../components/ErrorAwareContainer'
 import ValuesTableVis from '../components/ValuesTableVis'
 import PieChartVis from '../components/PieChartVis'
 import AreaChartVis from '../components/AreaChartVis'
-import BarChartVis from '../components/BarChartVis'
+import BarChartVis from '../components/BarChartVis.tsx'
 import DateSelector from '../components/DateSelector'
 import ReloadButton from '../components/ReloadButton'
 import dashboard from '../store/gaDashboard'
-import periodStore from '../store/periodStore' 
+import periodStore from '../store/periodStore'
 import { formChartToPieData } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
@@ -76,7 +77,7 @@ export default observer(() => {
                             </Grid>
                             <Grid item sm={3} xs={12} className={classes.item}>
                                 <LoadingPlaceholder loading={store.loading}>
-                                    <PieChartVis data={store.countries} sequenceColors/>
+                                    <PieChartVis data={store.countries} sequenceColors />
                                 </LoadingPlaceholder>
                             </Grid>
                         </Grid>

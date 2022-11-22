@@ -67,7 +67,7 @@ class UASerialsProvider extends Provider<UASerialsProviderConfig> {
             urls: [{
               url: playerTab.url,
               hls: true,
-              extractor: { type: 'tortuga' }
+              extractor: { type: 'm3u8local' }
             }]
           }]
         } else {
@@ -78,7 +78,7 @@ class UASerialsProvider extends Provider<UASerialsProviderConfig> {
               name: e.title,
               path: title,
               urls: e.sounds.map((s) => ({
-                extractor: { type: 'tortuga' },
+                extractor: { type: 'm3u8local' },
                 hls: true,
                 url: s.url,
                 audio: s.title

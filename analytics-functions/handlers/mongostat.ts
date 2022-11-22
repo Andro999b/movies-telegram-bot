@@ -1,5 +1,5 @@
 import { Document } from 'mongodb';
-import { COLLECTION_NAME, connectToDatabase } from './db/mongo.js';
+import { COLLECTION_NAME, connectToDatabase } from './db/mongo';
 
 const runAggregation = async (pipline: Document[]) => {
     const client = await connectToDatabase()

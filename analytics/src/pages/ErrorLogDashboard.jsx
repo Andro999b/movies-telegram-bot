@@ -1,12 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
-import {
-    Typography,
-    Toolbar,
-    makeStyles,
-    Box,
-    Container
-} from '@material-ui/core'
+import { Typography, Toolbar, Box, Container } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import DateSelector from '../components/DateSelector'
 import dashboard from '../store/errorsLogDashboard'
 import ReloadButton from '../components/ReloadButton'

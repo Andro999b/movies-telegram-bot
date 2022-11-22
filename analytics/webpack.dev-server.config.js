@@ -1,12 +1,11 @@
-const webpackConfig = require('./webpack.config')
-const { merge } = require('webpack-merge')
+import webpackConfig from './webpack.config.js'
+import { merge } from 'webpack-merge'
 
-module.exports = merge(webpackConfig, {
-    mode: 'development',
-    devtool: 'cheap-module-eval-source-map',
-    watch: true,
-    devServer: {
-        port: 3000,
-        host: '0.0.0.0'
-    }
+export default merge(webpackConfig, {
+  mode: 'development',
+  devtool: 'cheap-module-source-map',
+  devServer: {
+    port: 3000,
+    host: '0.0.0.0'
+  }
 })

@@ -24,35 +24,41 @@ class AnidubProvider extends Provider {
       transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('data-src') ?? '')
     },
     files: {
-      selector: '.video-box .series-tab span',
-      transform: ($el: Cheerio<AnyNode>): File[] => $el
-        .toArray()
-        .map((el, id) => {
-          const url = $el.attr('data') ?? ''
-          if (url.indexOf('sibnet') != -1) {
-            return {
-              id,
-              name: $(el).text(),
-              urls: [{
-                url,
-                extractor: { type: 'sibnetmp4' }
-              }]
-            }
-          } else if (url.startsWith('/player')) {
-            return {
-              id,
-              name: $(el).text(),
-              urls: [{
-                url,
-                hls: true,
-                extractor: { type: 'anidub' }
-              }]
-            }
-          }
+      selector: '.video-box .tabs-box',
+      transform: ($el: Cheerio<AnyNode>): File[] => {
+        const files: File[] = []
+        //.series-tab span
 
-          return null
+        $el.each((_, node) => {
+          $(node)
+            .find('.series-tab span')
+            .each((id, el) => {
+              if (!files[id]) {
+                files[id] = {
+                  id,
+                  name: $(el).text(),
+                  urls: []
+                }
+              }
+
+              const url = $(el).attr('data') ?? ''
+              if (url.indexOf('sibnet') != -1) {
+                files[id].urls?.push({
+                  url,
+                  extractor: { type: 'sibnetmp4' }
+                })
+              } else if (url.startsWith('/player')) {
+                files[id].urls?.push({
+                  url,
+                  hls: true,
+                  extractor: { type: 'anidub' }
+                })
+              }
+            })
         })
-        .filter((f) => f) as File[]
+
+        return files
+      }
     },
     trailer: {
       selector: '.video-box .series-tab span',
