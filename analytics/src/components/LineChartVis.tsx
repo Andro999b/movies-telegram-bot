@@ -21,6 +21,7 @@ const LineChartVis: React.FC<Props> = ({ data, lines, legend }) => {
           key={line}
           type="monotone"
           dataKey={(obj): number => obj[line] ?? 0}
+          name={line}
           strokeWidth={2}
           stroke={getColor(line)} />
         )}

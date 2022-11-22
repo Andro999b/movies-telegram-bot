@@ -2,7 +2,6 @@ import React from 'react'
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts'
 import { getColor } from '../utils'
 import { COLORS } from '../constants'
-import { grey } from '@mui/material/colors'
 import { PieData } from '../types'
 
 interface Props {
@@ -24,9 +23,7 @@ const PieChatVis: React.FC<Props> = ({
           )}
         </Pie>
         {legend && <Legend formatter={(value, _, index): string => `${value} (${data[index!].value})`} />}
-        <Tooltip
-          itemStyle={{ color: '#fff' }}
-          contentStyle={{ background: grey[700], border: 0, borderRadius: 5 }} />
+        <Tooltip />
       </PieChart>
     </ResponsiveContainer>
   )

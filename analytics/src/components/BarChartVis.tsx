@@ -10,12 +10,12 @@ import {
 } from 'recharts'
 import { COLORS } from '../constants'
 import { grey } from '@mui/material/colors'
-import { ChartData, Unique } from '../types'
+import { ChartData, Counting, Unique } from '../types'
 
 interface Props {
-  data: ChartData<Unique>
-  lines: string[]
-  legend?: string
+  data: ChartData<Counting | Unique>
+  lines?: string[]
+  legend?: boolean
   layout?: 'horizontal' | 'vertical'
 }
 
@@ -29,10 +29,7 @@ const BarChartVis: React.FC<Props> = ({ data, lines, legend, layout = 'horizonta
       <BarChart data={data} layout={layout}>
         {layout == 'vertical' ? <XAxis type="number" /> : <XAxis dataKey="seg" type="category" hide />}
         {layout == 'vertical' ? <YAxis dataKey="seg" type="category" hide /> : <YAxis type="number" />}
-        <Tooltip
-          cursor={false}
-          itemStyle={{ color: '#fff' }}
-          contentStyle={{ background: grey[700], border: 0, borderRadius: 5 }} />
+        <Tooltip cursor={false} />
         {legend && <Legend />}
         {lines.map((line, index) => <Bar
           key={line}

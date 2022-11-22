@@ -1,21 +1,42 @@
-import { observable } from 'mobx'
+import { makeAutoObservable, observable } from 'mobx'
 import { invokeGA } from '../database/lambda'
 import { segmentBucketReducer, bucketReducer, bucketInitState, sortCountingData } from '../utils'
 import { GA_DATE_FORMAT } from '../constants'
 import moment from 'moment'
 import periodStore from './periodStore'
+import { Bucket, ChartData, Counting, GAKeys, PieData, Seg, Unique } from '../types'
 
-const hoursSegFormatter = (hour) => hour + ':00'
-const dateSegFormatter = (date) => date.substring(0, 4) + '-' + date.substring(4, 6) + '-' + date.substring(6, 8)
+const hoursSegFormatter = (hour: string): string => hour + ':00'
+const dateSegFormatter = (date: string): string =>
+  date.substring(0, 4) + '-' + date.substring(4, 6) + '-' + date.substring(6, 8)
 
-const reformatBucketSegments = (bucket, formatter) =>
+const reformatBucketSegments = (bucket: Bucket<Counting | Unique>, formatter: (seg: Seg) => string): void =>
   bucket.chartData.forEach((item) => item.seg = formatter(item.seg))
 
-const parseResult = (segment, { new_users, users, countries, sessions, devices, events, labels }) => {
+export interface Label {
+  name: string
+  value: string
+}
+
+interface ParseResult {
+  labels: Label[]
+  usersBucket: Bucket<Counting>
+  eventsCountBucket: Bucket<Counting>
+  countriesCountBucket: Bucket<PieData>
+  eventsBucket: Bucket<Counting>
+  sessionsBucket: Bucket<Counting>
+  deviceCountBucket: Bucket<PieData>
+  totalEvents: number
+}
+
+const parseResult = (
+  segment: string,
+  { new_users, users, countries, sessions, devices, events, labels }: Record<GAKeys, string[]>
+): ParseResult => {
   const segFormatter = segment == 'date' ? dateSegFormatter : hoursSegFormatter
 
   //users chart
-  let usersBucket = bucketInitState()
+  let usersBucket = bucketInitState<Counting>()
   usersBucket = users.reduce(
     segmentBucketReducer(
       (row) => row[0],
@@ -101,7 +122,7 @@ const parseResult = (segment, { new_users, users, countries, sessions, devices, 
 
 const today = moment()
 const todayFormated = moment().format(GA_DATE_FORMAT)
-const getGARange = (period) => {
+const getGARange = (period: string): string[] => {
   switch (period) {
     case 'last7days': return [
       today.clone().subtract(7, 'day').format(GA_DATE_FORMAT),
@@ -132,74 +153,38 @@ const getGARange = (period) => {
 }
 
 
-const cache = {}
+const cache: Record<string, ParseResult> = {}
 
-export default observable({
-  error: null,
-  loading: true,
-  usersChart: [],
-  countries: [],
-  sessionsChart: [],
-  eventsChart: [],
-  eventsData: [],
-  eventsLines: [],
-  events: [],
-  devicePie: [],
-  totalEvents: 0,
-  totalSessions: 0,
-  totalUsers: 0,
-  labels: [],
+class GADashboardStore {
+  error: string | null = null
+  loading = true
+  usersChart: ChartData<Counting> = []
+  countries: PieData[] = []
+  sessionsChart: ChartData<Counting> = []
+  eventsChart: ChartData<Counting> = []
+  eventsData: ChartData<Counting> = []
+  eventsLines: string[] = []
+  events: string[] = []
+  devicePie: ChartData<PieData> = []
+  totalEvents = 0
+  totalSessions = 0
+  totalUsers = 0
+  labels: Label[] = []
 
-  load(period) {
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  load(period: string): void {
     periodStore.setPeriod(period)
     this.reload()
-  },
+  }
 
-  reload(force) {
+  reload(force = false): void {
     const period = periodStore.gaPeriod
 
-    const updateCharts = ({
-      labels,
-      usersBucket,
-      countriesCountBucket,
-      eventsCountBucket,
-      eventsBucket,
-      sessionsBucket,
-      deviceCountBucket,
-      totalEvents
-    }) => {
-      if (periodStore.gaPeriod != period) return
-
-      const countries = countriesCountBucket.chartData
-        .sort((a, b) => b.value - a.value)
-
-
-      if (countries.length > 5) {
-        const others = countries.slice(5)
-          .reduce((acc, { value }) => acc + value, 0)
-
-        this.countries = countries.slice(0, 5)
-          .concat({ key: 'Other', value: others })
-      } else {
-        this.countries = countries
-      }
-
-      const sortedEventsCounts = sortCountingData(eventsCountBucket.chartData)
-      this.labels = labels
-      this.usersChart = usersBucket.chartData
-      this.sessionsChart = sessionsBucket.chartData
-      this.totalSessions = sessionsBucket.chartData.reduce((acc, { sessions }) => acc + sessions, 0)
-      this.eventsChart = eventsBucket.chartData
-      this.eventsData = sortCountingData(eventsCountBucket.chartData)
-      this.events = sortedEventsCounts.map(({ seg }) => seg)
-      this.totalEvents = totalEvents
-      this.devicePie = deviceCountBucket.chartData
-      this.totalUsers = deviceCountBucket.chartData.reduce((acc, { value }) => acc + value, 0)
-    }
-
-
     if (!force && cache[period]) {
-      updateCharts(cache[period])
+      this.updateCharts(period, cache[period])
       return
     }
 
@@ -214,14 +199,56 @@ export default observable({
         return parseResult(
           segment,
           results.reduce(
-            (acc, { key, result }) => ({ ...acc, [key]: result || [] }), {}
+            (acc, { key, result }) => ({ ...acc, [key]: result || [] }),
+            {} as Record<GAKeys, string[]>
           )
         )
       })
       .then((data) => {
         cache[period] = data
-        updateCharts(data)
+        this.updateCharts(period, data)
       })
       .catch((error) => this.error = error.message)
   }
-})
+
+  private updateCharts(period: string, {
+    labels,
+    usersBucket,
+    countriesCountBucket,
+    eventsCountBucket,
+    eventsBucket,
+    sessionsBucket,
+    deviceCountBucket,
+    totalEvents
+  }: ParseResult): void {
+    if (periodStore.gaPeriod != period) return
+
+    const countries = countriesCountBucket.chartData
+      .sort((a, b) => b.value - a.value)
+
+
+    if (countries.length > 5) {
+      const others = countries.slice(5)
+        .reduce((acc, { value }) => acc + value, 0)
+
+      this.countries = countries.slice(0, 5)
+        .concat({ key: 'Other', value: others })
+    } else {
+      this.countries = countries
+    }
+
+    const sortedEventsCounts = sortCountingData(eventsCountBucket.chartData)
+    this.labels = labels
+    this.usersChart = usersBucket.chartData
+    this.sessionsChart = sessionsBucket.chartData
+    this.totalSessions = sessionsBucket.chartData.reduce((acc, { sessions }) => acc + sessions, 0)
+    this.eventsChart = eventsBucket.chartData
+    this.eventsData = sortCountingData(eventsCountBucket.chartData)
+    this.events = sortedEventsCounts.map(({ seg }) => seg)
+    this.totalEvents = totalEvents
+    this.devicePie = deviceCountBucket.chartData
+    this.totalUsers = deviceCountBucket.chartData.reduce((acc, { value }) => acc + value, 0)
+  }
+}
+
+export default new GADashboardStore()

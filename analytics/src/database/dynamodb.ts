@@ -4,7 +4,7 @@ import { AttributeValue, DynamoDB, QueryCommandInput } from '@aws-sdk/client-dyn
 import { getCredentialProvider } from './userpool'
 import { Credentials, Provider } from '@aws-sdk/types'
 
-export const getDocClient = async (credentials?: Credentials | Provider<Credentials>): Promise<DynamoDB> => {
+export const getDocClient = (credentials?: Credentials | Provider<Credentials>): DynamoDB => {
   return new DynamoDB({
     apiVersion: '2012-08-10',
     region: REGION,

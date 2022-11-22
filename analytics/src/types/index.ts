@@ -54,3 +54,44 @@ export interface BotEventPropValue {
   name: keyof BotEvent
   value: string | undefined
 }
+
+export interface MongoStats {
+  providers: MongoStatsCount[]
+  providersHits: MongoStatsCount[]
+  hits: MongoStatsHits[]
+  recient: MongoStatsRecient[]
+}
+
+export interface MongoStatsCount {
+  _id: string
+  count: number
+}
+
+export interface MongoStatsPlaylistResult {
+  _id: string
+  result: MongoStatsPlaylist
+}
+
+
+export interface MongoStatsHits extends MongoStatsPlaylistResult {
+  hit: number
+}
+
+export interface MongoStatsRecient extends MongoStatsPlaylistResult {
+  lastModifiedDate: string
+}
+
+export interface MongoStatsPlaylist {
+  title: string
+  provider: string
+}
+
+export type GAKeys = 'events' | 'users' | 'new_users' | 'devices' | 'sessions' | 'countries' | 'labels'
+
+export interface GAStatistic {
+  segment: string
+  results: {
+    key: GAKeys
+    result: string[]
+  }[]
+}

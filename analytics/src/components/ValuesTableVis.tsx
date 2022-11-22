@@ -34,8 +34,8 @@ interface Props<T = Row> {
   data: ReadonlyArray<T>
   showTotal?: boolean
   title: string
-  renderName?: (row: T) => JSX.Element,
-  renderValue?: (row: T) => JSX.Element,
+  renderName?: (row: T) => JSX.Element | string,
+  renderValue?: (row: T) => JSX.Element | string,
   showRows?: number
 }
 

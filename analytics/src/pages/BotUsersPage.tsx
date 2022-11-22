@@ -9,7 +9,6 @@ import LoadingPlaceholder from '../components/LoadingPlaceholder'
 import ErrorAwareContainer from '../components/ErrorAwareContainer'
 import PieChartVis from '../components/PieChartVis'
 import ReloadButton from '../components/ReloadButton'
-import { Store } from '@mui/icons-material'
 
 const useStyles = makeStyles((theme) => ({
   sectionTitle: {

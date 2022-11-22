@@ -23,18 +23,33 @@ import { ResultField } from '@aws-sdk/client-cloudwatch-logs'
 
 const rowsPerPageOptions = [25, 50, 100]
 
-const useRowStyles = makeStyles(() => ({
-  timestamp: {
+const useStyles = makeStyles(() => ({
+  row: {
+    display: 'flex',
+    width: '100%'
+  },
+  tbody: {
+    display: 'flex',
+    overflow: 'hidden',
+    width: '100%',
+    flexDirection: 'column'
+  },
+  timestampCell: {
     display: 'inline-block',
     width: 120,
-    height: 48
+  },
+  messageCell: {
+    flexGrow: 1,
+    width: 0 //i hate this fucking  css 
   },
   message: {
-    wordWrap: 'normal'
+    display: 'inline-block',
+    wordWrap: 'break-word',
+    width: '100%'
   },
   messageClose: {
-    height: 48,
     overflow: 'hidden',
+    height: 48
   },
   messageOpen: {
     whiteSpace: 'break-spaces'
@@ -54,7 +69,7 @@ interface RowProps {
 }
 
 const Row: React.FC<RowProps> = ({ timestamp, message, log }) => {
-  const classes = useRowStyles()
+  const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const [formatedMessage, setFormatedMessage] = React.useState<JSX.Element | string | null>(null)
 
@@ -78,13 +93,13 @@ const Row: React.FC<RowProps> = ({ timestamp, message, log }) => {
   }
 
   return (
-    <TableRow>
-      <TableCell className={classes.top}>
-        <Typography className={classes.timestamp}>
+    <TableRow className={classes.row}>
+      <TableCell className={classes.timestampCell}>
+        <Typography>
           <b>{timestamp}</b>
         </Typography>
       </TableCell>
-      <TableCell>
+      <TableCell className={classes.messageCell}>
         <Typography variant='caption'>{log}</Typography>
         <Typography className={clsx({
           [classes.message]: true,
@@ -108,6 +123,8 @@ interface Props {
 }
 
 const LogsTable: React.FC<Props> = ({ rows }) => {
+  const classes = useStyles()
+
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(100)
 
@@ -126,14 +143,14 @@ const LogsTable: React.FC<Props> = ({ rows }) => {
     <Paper>
       <TableContainer>
         <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Time</TableCell>
-              <TableCell>Message</TableCell>
+          <TableHead className={classes.tbody}>
+            <TableRow className={classes.row}>
+              <TableCell className={classes.timestampCell}>Time</TableCell>
+              <TableCell className={classes.messageCell}>Message</TableCell>
               <TableCell />
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody className={classes.tbody}>
             {rows.slice(fromIndex, toIndex)
               .map(([timestamp, message, log, ptr]) => (
                 <Row

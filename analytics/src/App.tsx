@@ -8,9 +8,9 @@ import makeStyles from '@mui/styles/makeStyles'
 import BotDashboardPage from './pages/BotDashboardPage'
 import BotEventsPage from './pages/BotEventsPage'
 import BotUsersPage from './pages/BotUsersPage'
-// import GADashboard from './pages/GADashboard'
-// import StorageDashboard from './pages/StorageDashboard'
-// import ErrorLogDashboard from './pages/ErrorLogDashboard'
+import GADashboard from './pages/GADashboard'
+import StorageDashboard from './pages/StorageDashboard'
+import ErrorLogDashboard from './pages/ErrorLogDashboard'
 import theme from './theme'
 
 
@@ -33,7 +33,8 @@ const useStyles = makeStyles({
   },
   content: {
     flexGrow: 1,
-    height: '100%'
+    height: '100%',
+    overflowX: 'hidden'
   }
 })
 
@@ -55,15 +56,15 @@ const Main = withLogin(() => {
           <Route path="/users/:uid">
             <BotUsersPage />
           </Route>
-          {/* <Route path="/ga">
-              <GADashboard />
-            </Route>
-            <Route path="/storage">
-              <StorageDashboard />
-            </Route>
-            <Route path="/errors">
-              <ErrorLogDashboard />
-            </Route> */}
+          <Route path="/errors">
+            <ErrorLogDashboard />
+          </Route>
+          <Route path="/storage">
+            <StorageDashboard />
+          </Route>
+          <Route path="/ga">
+            <GADashboard />
+          </Route>
         </Switch>
       </main>
     </Router>

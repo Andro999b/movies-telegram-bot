@@ -15,7 +15,6 @@ interface BotUserStore {
   load: (uid: string) => void
 }
 
-
 export default (): BotUserStore => ({
   error: null,
   loading: true,
