@@ -6,5 +6,6 @@ jspm_packages
 .serverless
 
 .build
+.esbuild
 
 debug.ts
