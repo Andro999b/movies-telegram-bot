@@ -1,9 +1,9 @@
 service: movies-telegram-bot
 
 plugins:
-  - serverless-content-encoding
-  - serverless-plugin-typescript
+  - serverless-esbuild
   - serverless-offline
+  - serverless-content-encoding
 
 custom:
   cacheTable: cache-${opt:stage}
@@ -141,11 +141,12 @@ functions:
     environment:
       LOG_GROUP: web-${opt:stage}
 
-package:
-  excludeDevDependencies: true
-  patterns:
-    - 'node_modules/**'
-    - 'src/**'
+# package:
+  # individually: true
+  # excludeDevDependencies: true
+  # patterns:
+  #   - 'node_modules/**'
+  #   - 'src/**'
 
 resources:
   Resources:

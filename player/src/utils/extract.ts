@@ -52,7 +52,7 @@ const mp4localExtract = (): ExtractFun => regexExtractor([
   /(https?[^,]+_240p\.mp4(?!\.))/
 ])
 
-const mp3u8localExtract = (): ExtractFun => regexExtractor([
+const m3u8localExtract = (): ExtractFun => regexExtractor([
   /(https?.+\.m3u8)/,
 ])
 
@@ -62,7 +62,7 @@ export function createExtractorUrlBuilder(extractor: Extrator, additionalParams?
 
   switch (type) {
     case 'mp4local': return mp4localExtract()
-    case 'mp3u8local': return mp3u8localExtract()
+    case 'm3u8local': return m3u8localExtract()
   }
 
   // @ts-ignore

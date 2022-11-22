@@ -43,7 +43,7 @@ class UAKinoClubProvider extends Provider {
       selector: 'div#overroll',
       transform: ($el: Cheerio<AnyNode>): string | undefined => {
         const src = $el.toArray()
-          .map((el) => $(el).attr('src'))
+          .map((el) => $(el).attr('data-src'))
           .find((src) => src?.search('youtube') != 1)
 
         return src

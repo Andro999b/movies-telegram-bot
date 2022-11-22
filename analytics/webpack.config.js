@@ -1,38 +1,40 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const path = require('path')
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import ESLintPlugin from 'eslint-webpack-plugin'
+import path from 'path'
 
-module.exports = {
-    entry: path.join(__dirname, 'src', 'index'),
-    output: {
-        filename: '[name].bundle.js',
-        path: path.join(__dirname, 'dist')
-    },
-    module: {
-        rules: [
-            {
-                test: /\.worker\.js$/,
-                use: ['worker-loader']
-            },
-            {
-                test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
-                use: ['babel-loader']
-            }
-        ]
-    },
-    resolve: {
-        extensions: ['*', '.js', '.jsx']
-    },
-    optimization: {
-        splitChunks: {
-            chunks: 'all'
-        }
-    },
-    plugins: [
-        new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: path.join(__dirname, 'src', 'index.html'),
-            favicon: path.join(__dirname, 'src', 'favicon.ico')
-        })
+export default {
+  entry: path.resolve('src/index.ts'),
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve('./dist')
+  },
+  module: {
+    rules: [
+      {
+        test: /\.worker\.ts$/,
+        use: ['worker-loader']
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        loader: 'ts-loader'
+      }
     ]
+  },
+  resolve: {
+    extensions: ['*', '.ts', '.js', '.tsx']
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
+  plugins: [
+    new ESLintPlugin(),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: path.resolve('./src/index.html'),
+      favicon: path.resolve('./src/favicon.ico')
+    })
+  ]
 }
