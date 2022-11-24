@@ -39,9 +39,10 @@ export interface BotEvent {
   firstname?: string
   lastname?: string
   query?: string
-  title?: string
   language_code?: string
   startPayload?: string
+  providers?: string
+  resultsCount?: string
 }
 
 export interface BotEventWithFilter extends BotEvent {

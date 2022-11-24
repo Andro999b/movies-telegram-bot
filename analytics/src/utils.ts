@@ -130,10 +130,6 @@ export const getEventInputProp = (event: BotEvent): BotEventPropValue | undefine
       propName = 'query'
       break
     }
-    case 'lib': {
-      propName = 'title'
-      break
-    }
     case 'start': {
       propName = 'startPayload'
       break
@@ -261,6 +257,7 @@ export const toBotEvent = (item: Record<string, AttributeValue>): BotEvent => ({
   lastname: item['lastname']?.S,
   language_code: item['language_code']?.S,
   startPayload: item['startPayload']?.S,
-  title: item['title']?.S,
-  query: item['query']?.S
+  query: item['query']?.S,
+  providers: item['providers']?.S,
+  resultsCount: item['resultsCount']?.N
 })
