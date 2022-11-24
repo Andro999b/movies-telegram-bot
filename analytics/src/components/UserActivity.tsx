@@ -82,6 +82,8 @@ const UserActivity: React.FC<Props> = ({ item }) => {
           {Object
             .keys(item)
             .filter((key) => !filterProperties.includes(key))
+            // @ts-ignore 
+            .filter((key) => item[key])
             .map((key) => (
               <Grid item sm={12} md={6} key={key}>
                 <Typography className={classes.prop}>

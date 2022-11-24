@@ -126,6 +126,8 @@ const Row: React.FC<RowProps> = ({ data }) => {
               {Object
                 .keys(data)
                 .filter((key) => !filterProperties.includes(key))
+                // @ts-ignore 
+                .filter((key) => data[key])
                 .map((key) => (
                   <Grid item sm={12} md={6} key={key}>
                     <Typography className={classes.prop}>
