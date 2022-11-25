@@ -43,6 +43,7 @@ export interface BotEvent {
   startPayload?: string
   providers?: string
   resultsCount?: string
+  suggestions?: string
 }
 
 export interface BotEventWithFilter extends BotEvent {

@@ -259,5 +259,6 @@ export const toBotEvent = (item: Record<string, AttributeValue>): BotEvent => ({
   startPayload: item['startPayload']?.S,
   query: item['query']?.S,
   providers: item['providers']?.S,
-  resultsCount: item['resultsCount']?.N
+  resultsCount: item['resultsCount']?.N,
+  suggestions: item['suggestions']?.S
 })
