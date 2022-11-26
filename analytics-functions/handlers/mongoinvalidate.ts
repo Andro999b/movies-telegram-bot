@@ -11,6 +11,7 @@ export const handler = async ({ provider, resultId }: Input) => {
     const client = await connectToDatabase()
 
     const collection = client.collection(COLLECTION_NAME)
+    console.log("resultId", resultId, !resultId)
     if (!resultId) {
         await collection.deleteMany({ 'result.provider': provider })
         return { status: 'OK' }

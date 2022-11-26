@@ -1,4 +1,3 @@
-import * as url from 'url'
 import analytics from '../bot/midleware/analytics'
 import { tracker } from '../tracker/index'
 import path from 'path'
@@ -19,7 +18,7 @@ const PROVIDERS = process.env.PROVIDERS.split(',') as ProvidersNames[]
 const i18n = new TelegrafI18n({
   defaultLanguage: 'uk',
   allowMissing: false, // Default true
-  directory: path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), '..', 'localization', BOT_TYPE)
+  directory: path.resolve(__dirname, '..', '..', 'localization', BOT_TYPE)
 })
 
 const bot = new Telegraf(process.env.TOKEN, { telegram: { webhookReply: false } })

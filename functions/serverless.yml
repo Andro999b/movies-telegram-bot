@@ -141,12 +141,10 @@ functions:
     environment:
       LOG_GROUP: web-${opt:stage}
 
-# package:
-  # individually: true
-  # excludeDevDependencies: true
-  # patterns:
-  #   - 'node_modules/**'
-  #   - 'src/**'
+package:
+  excludeDevDependencies: true
+  patterns:
+    - 'localization/**'
 
 resources:
   Resources:
