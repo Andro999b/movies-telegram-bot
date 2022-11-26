@@ -44,7 +44,7 @@ provider:
           Action:
             - logs:PutLogEvents
             - logs:DescribeLogStreams
-          Resource: "arn:aws:logs:${self:provider.region}:*:log-group:web-${opt:stage }:log-stream:*"
+          Resource: "arn:aws:logs:${self:provider.region}:*:log-group:web-${opt:stage}:log-stream:*"
         - Effect: Allow
           Action:
             - lambda:InvokeFunction

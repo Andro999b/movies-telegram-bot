@@ -12,7 +12,7 @@ interface CorrectionWord {
   word: string
 }
 
-export default async (searchQuery: string, lang: string): Promise<string[]> => { // eslint-disable-line
+export default async (searchQuery: string, lang?: string): Promise<string[]> => { // eslint-disable-line
   try {
     if ('ru' == lang) {
       lang = 'uk,ru'

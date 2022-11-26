@@ -2,8 +2,9 @@ import doSearch from './functions/doSearch'
 import { base64UrlDecode } from '../utils/base64'
 import { Telegraf } from 'telegraf'
 import { BotContext } from './types'
+import { ProvidersNames } from '../types'
 
-export default (bot: Telegraf<BotContext>): void => {
+export default (bot: Telegraf<BotContext>, providers: ProvidersNames[]): void => {
 
   const renderHello = (ctx: BotContext): Promise<unknown> => {
     return ctx.replyWithHTML(

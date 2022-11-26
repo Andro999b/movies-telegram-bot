@@ -27,7 +27,7 @@ const bot = new Telegraf(process.env.TOKEN, { telegram: { webhookReply: false } 
 bot.use(i18n.middleware())
 bot.use(analytics(tracker(), BOT_TYPE))
 
-startAugmentation(bot as Telegraf<BotContext>)
+startAugmentation(bot as Telegraf<BotContext>, PROVIDERS)
 searchAugmentation(bot as Telegraf<BotContext>, PROVIDERS)
 
 bot.catch((err) => {
