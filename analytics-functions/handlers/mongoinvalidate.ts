@@ -11,9 +11,11 @@ export const handler = async ({ provider, resultId }: Input) => {
     const client = await connectToDatabase()
 
     const collection = client.collection(COLLECTION_NAME)
-    if (resultId) {
-        return collection.deleteOne({ _id: `${provider}:${resultId}` }).then(() => ({ status: 'OK' }))
+    if (!resultId) {
+        await collection.deleteMany({ 'result.provider': provider })
+        return { status: 'OK' }
     } else {
-        return collection.deleteMany({ 'result.provider': provider }).then(() => ({ status: 'OK' }))
+        await collection.deleteOne({ _id: `${provider}:${resultId}` })
+        return { status: 'OK' }
     }
 }

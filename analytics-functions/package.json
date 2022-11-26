@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "scripts": {
     "start": "sls offline --stage=dev --aws-profile serverless --debug *",
     "release": "sls deploy --aws-profile=serverless"
