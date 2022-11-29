@@ -179,10 +179,13 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
 
   useLayoutEffect(() => {
     if (videoReady) {
-      if (isPlaying) {
-        video.current!.play()
-      } else {
-        video.current!.pause()
+      const currentVideo = video.current!
+      if (currentVideo.paused == isPlaying) {
+        if (isPlaying) {
+          currentVideo.play()
+        } else {
+          currentVideo.pause()
+        }
       }
     }
   }, [videoReady, isPlaying])
@@ -210,7 +213,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     const resotreVideo = async (): Promise<void> => {
       currentVideo.currentTime = device.seekTo || device.currentTime
 
-      if (device.isPlaying) {
+      if (isPlaying) {
         try {
           await currentVideo.play()
           analytics('playback_starts')
@@ -237,6 +240,17 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     }
   }
 
+  const onPlayPause = (): void => {
+    const currentVideo = video.current!
+    if (currentVideo.paused == isPlaying) {
+      if (currentVideo.paused) {
+        device.pause()
+      } else {
+        device.play()
+      }
+    }
+  }
+
   return (
     <div className="player__player-screen" ref={container}>
       <video
@@ -253,6 +267,8 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
         onPlaying={handlePlaying}
         onWaiting={handleWaiting}
         onError={tryNextVideo}
+        onPlay={onPlayPause}
+        onPause={onPlayPause}
       />
     </div>
   )

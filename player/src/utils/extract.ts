@@ -36,7 +36,7 @@ const regexExtractor = (patterns: Array<Pattern | RegExp | string>): ExtractFun 
       return transform(matches)
     }
 
-    throw Error('Cant extract media from url')
+    throw Error(`Cant extract media from url: ${url}`)
   }
 
 const mp4localExtract = (): ExtractFun => regexExtractor([

@@ -40,6 +40,7 @@ export class Device {
     makeObservable(this)
 
     this.volume = store.get('volume', 1)
+    this.quality = store.get('quality')
     this.playMode = store.get('playMode', 'normal')
     this.autoPlay = store.get('autoPlay', true)
   }
@@ -63,7 +64,6 @@ export class Device {
     this.buffered = null
     this.audioTrack = null
     this.audioTracks = []
-    this.quality = null
     this.source = source
 
     if (source.urls) {
