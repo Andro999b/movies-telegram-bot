@@ -20,6 +20,8 @@ import { Source } from '../types'
 import { Device } from '../store/player-store'
 import { isNativeHSLUserAgent } from '../utils'
 
+import Hls from 'hls.js'
+
 interface Props {
   device: Device;
   onEnded: () => void;
@@ -123,9 +125,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     const startNativeVideo = (src: string): void => {
       currentVideo.src = src
     }
-    const startHlsVideo = async (src: string): Promise<void> => {
-      const module = await import(/* webpackChunkName: "hlsjs" */ 'hls.js')
-      const Hls = module.default
+    const startHlsVideo = (src: string): void => {
       type HlsConfig = typeof Hls.DefaultConfig;
 
       class Loader extends Hls.DefaultConfig.loader {

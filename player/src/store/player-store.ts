@@ -16,7 +16,7 @@ interface OnUpdateParams {
 }
 
 export class Device {
-  @observable playlist: Playlist
+  @observable playlist!: Playlist
   @observable currentFileIndex = 0
   @observable currentTime = 0
   @observable duration = 0
@@ -34,7 +34,7 @@ export class Device {
   @observable quality: number | null = null
   @observable qualities: number[] = []
   @observable seekTo: number | null = null
-  @observable source: Source | null
+  @observable source: Source | null = null
 
   constructor() {
     makeObservable(this)
@@ -159,13 +159,13 @@ export class Device {
 
       if (!sourceParams) sourceParams = `?${sourceParams}`
 
-      // @ts-ignore
       const res = await fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
       const source = await res.json() as File
 
       try {
         if (fileIndex == this.currentFileIndex) {
-          Object.keys(source).forEach((key: keyof File) => {
+          Object.keys(source).forEach((key: string) => {
+            // @ts-ignore
             if (source[key]) {
               // @ts-ignore
               file[key] = source[key]
@@ -249,7 +249,7 @@ export class Device {
 }
 
 class PlayerStore {
-  @observable device: Device
+  @observable device!: Device
 
   constructor() {
     makeObservable(this)
