@@ -15,7 +15,8 @@ export default defineConfig({
   build: {
     outDir: '../dist',
     sourcemap: true,
-    emptyOutDir: true
+    emptyOutDir: true,
+    target: 'es6'
   },
   publicDir: '../public',
   define: {

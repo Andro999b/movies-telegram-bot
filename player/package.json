@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "vite serve",
+    "start": "vite serve --host",
     "build": "rm -rf dist/* && vite build",
     "webpack:start": "webpack-dev-server --config webpack.dev-server.config.js",
     "webpack:build": "rm -rf dist/* && webpack --mode production --config webpack.prod.config.js",

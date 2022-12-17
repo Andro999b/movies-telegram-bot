@@ -5,7 +5,7 @@
   ],
   "compilerOptions": {
     "outDir": "./dist/",
-    "target": "ESNext",
+    "target": "ES5",
     "experimentalDecorators": true,
     "useDefineForClassFields": true,
     "lib": [
