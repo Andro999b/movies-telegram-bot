@@ -44,7 +44,7 @@ class UASerialsProvider extends Provider<UASerialsProviderConfig> {
       selector: 'player-control',
       transform: ($el: Cheerio<AnyNode>): File[] => {
         const { password } = this.config
-        const dataString = $el.attr('data-tag')
+        const dataString = $el.attr('data-tag1')
 
         if (!dataString) return []
 
