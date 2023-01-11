@@ -1,6 +1,8 @@
 import { APIGatewayProxyEvent } from 'aws-lambda'
 
-const ALLOWED_DOMAINS = process.env.ALLOWED_DOMAINS.split(',')
+const ALLOWED_DOMAINS = process.env.ALLOWED_DOMAINS
+  .split(',')
+  .filter((p) => p)
 
 export default (event: APIGatewayProxyEvent): boolean => {
   if(ALLOWED_DOMAINS.length == 0)

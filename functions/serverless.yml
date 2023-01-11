@@ -30,7 +30,8 @@ provider:
     STAGE: ${opt:stage}
     CACHE_TTL: 3600
     PLAYER_URL: ${self:custom.playerUrl}
-    ALLOWED_DOMAINS: 'localhost:3000,localhost:4000,movie-player.surge.sh,movies-player.firebaseapp.com,movies-player.web.app'
+    ALLOWED_DOMAINS: ''
+    # ALLOWED_DOMAINS: 'localhost:3000,localhost:4000,movie-player.surge.sh,movies-player.firebaseapp.com,movies-player.web.app'
     ACCOUNT_ID: ${aws:accountId}
     REGION: ${self:provider.region}
   iam:

@@ -119,7 +119,7 @@ class UAKinoClubProvider extends Provider {
         file.urls!.push(fileUrl)
       })
 
-    return files
+    return files.filter((f) => f)
   }
 }
 
