@@ -233,6 +233,7 @@ export class Device {
   @action.bound setQuality(quality: number | null): void {
     this.quality = quality
     store.set('quality', quality)
+    this.setError(null)
   }
 
   @action.bound setPlayMode(playMode: PlayMode): void {

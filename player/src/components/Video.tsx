@@ -49,7 +49,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
     const { urls } = source
     return urls
       .filter((it) => !audioTrack || it.audio == audioTrack)
-      .filter((it) => !quality || it.quality == quality)
+      .filter((it) => !quality || it.quality <= quality)
   }, [source, audioTrack, quality])
   useEffect(() => setFileIndex(0), [source, audioTrack, quality])
   const tryNextVideo = (): void => setFileIndex((i) => i + 1)
