@@ -1,5 +1,5 @@
 import { observable, action, makeObservable } from 'mobx'
-import { getAuth, signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider } from 'firebase/auth'
+import { getAuth, signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
 import { initializeApp } from 'firebase/app'
 import { getDatabase, ref, child, get, set, query, update, remove, DatabaseReference } from 'firebase/database'
 import store from '../utils/storage'
@@ -9,8 +9,12 @@ import { Playlist } from '../types'
 const app = initializeApp({
   apiKey: 'AIzaSyCoQdUA6jN3cWx_yopHDVsC2aIW9Bor2P4',
   authDomain: 'movies-player.firebaseapp.com',
+  databaseURL: 'https://movies-player.firebaseio.com',
   projectId: 'movies-player',
-  databaseURL: 'https://movies-player.firebaseio.com/'
+  storageBucket: 'movies-player.appspot.com',
+  messagingSenderId: '973277432113',
+  appId: '1:973277432113:web:f0f140b4cdc3bbbcd84810',
+  measurementId: 'G-X6J8VB5M0W'
 })
 
 const auth = getAuth()
@@ -133,7 +137,7 @@ class RemoteHistoryStorage implements HistoryStorage {
     return key.replace(/[#.]/g, '_')
   }
 }
-// Going to left this here in case if i wanted to reverer this
+// Going to left this here in case if i wanted to revert this
 // class DexieHistoryDatabase extends Dexie {
 
 //   history!: Dexie.Table<HistoryItem, string> // number = type of the primkey
@@ -319,12 +323,12 @@ class WatchHistoryStore {
   }
 
   @action.bound connect(): void {
-    signInWithPopup(auth, provider)
-      .then(this._composedHistory.reset)
-      .then(this.loadHistory)
-      .catch((error) => {
-        console.error('Fail login', error)
-      })
+    signInWithRedirect(auth, provider)
+      // .then(this._composedHistory.reset)
+      // .then(this.loadHistory)
+      // .catch((error) => {
+      //   console.error('Fail login', error)
+      // })
   }
 
   @action.bound disconnect(): void {
