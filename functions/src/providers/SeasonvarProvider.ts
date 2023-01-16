@@ -94,8 +94,6 @@ class SeasonvarProvider extends Provider<SeasonvarProviderConfig> {
       }))
   }
 
-
-
   private async extractSeasonFiles(serialId: string, seasonId: string, secureMark: string): Promise<File[]> {
     try {
       const res = await superagent
