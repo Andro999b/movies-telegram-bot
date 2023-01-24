@@ -16,8 +16,8 @@ const config: ProvidersConfig = {
       token: 'birzMxRwbHzYZSaRGe0ApcXgMbcNersl'// reserv
     },
     anidub: {
-      baseUrl: 'https://anime.anidub.life',
-      searchUrl: 'https://anime.anidub.life/index.php',
+      baseUrl: 'https://anidubonline.com/',
+      searchUrl: 'https://anidubonline.com/index.php',
     },
     animedia: {
       baseUrl: 'https://online.animedia.tv',

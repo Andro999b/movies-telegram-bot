@@ -1,5 +1,5 @@
 import superagent from 'superagent'
-import cheerio from 'cheerio'
+import { load } from 'cheerio'
 import providersConfig from '../../providersConfig'
 
 export default async (searchQuery: string): Promise<string[]> => { // eslint-disable-line
@@ -12,7 +12,7 @@ export default async (searchQuery: string): Promise<string[]> => { // eslint-dis
         'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3'
       })
 
-    const $page = cheerio.load(res.text)
+    const $page = load(res.text)
     const s2 = $page('.misspell__message a').first().text()
 
     return [s2].filter((it) => it)

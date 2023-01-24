@@ -25,7 +25,7 @@ const Tile: React.FC<TileProps> = ({ item, onDelete }) => {
   const { image, provider, id, title } = item
 
   return (
-    <Grid item xs={6} sm={4} lg={2}>
+    <Grid item xs={6} sm={3} lg={2}>
       <div className="watch-history__tile">
         <Link to={`/watch?provider=${provider}&id=${id}&query=${encodeURIComponent(title)}`}>
           <img className="watch-history__tile-image" src={image} />

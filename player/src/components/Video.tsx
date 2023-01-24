@@ -51,10 +51,14 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
       .filter((it) => !audioTrack || it.audio == audioTrack)
       .filter((it) => !quality || it.quality <= quality)
   }, [source, audioTrack, quality])
-  useEffect(() => setFileIndex(0), [source, audioTrack, quality])
+
+  useEffect(() => setFileIndex(0), [videoFiles])
+
   const tryNextVideo = (): void => setFileIndex((i) => i + 1)
 
   const videoFile = videoFiles[fileIndex]
+
+
 
   useEffect(() => {
     video.current!.volume = volume

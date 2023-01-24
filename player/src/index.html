@@ -99,12 +99,12 @@
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-T3C67380C6');
-    window.onerror = function (errMsg, url, line, column, error) {
-      var result = !column ? '' : 'column: ' + column;
-      document.write("Error= " + errMsg + " url= " + url + " line= " + line + " " + result);
-      var suppressErrorAlert = true;
-      return suppressErrorAlert;
-    };
+    // window.onerror = function (errMsg, url, line, column, error) {
+    //   var result = !column ? '' : 'column: ' + column;
+    //   document.write("Error= " + errMsg + " url= " + url + " line= " + line + " " + result);
+    //   var suppressErrorAlert = true;
+    //   return suppressErrorAlert;
+    // };
   </script>
 </head>
 
@@ -120,4 +120,5 @@
     window.API_BASE_URL = 'https://4km8nxaf60.execute-api.eu-north-1.amazonaws.com/prod/api'
   </script>
   <script type="module" src="./index.ts"></script>
+
 </html>
