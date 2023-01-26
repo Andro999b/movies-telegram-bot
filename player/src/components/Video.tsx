@@ -114,7 +114,12 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
       const isHls = videoFile.hls || url.endsWith('m3u8')
 
       if (extractor) {
-        url = await createExtractorUrlBuilder(extractor)(url)
+        try {
+          url = await createExtractorUrlBuilder(extractor)(url)
+        } catch (e) {
+          logError(e, source)
+          tryNextVideo()
+        }
       }
 
       currentVideo.currentTime = 0
