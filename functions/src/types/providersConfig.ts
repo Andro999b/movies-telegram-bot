@@ -24,7 +24,8 @@ export type ProvidersNames =
   'uaserials' |
   'uakinoclub' |
   'seasonvar' |
-  'kinovod'
+  'kinovod' |
+  'gidonline'
 
 export interface ProvidersConfig {
   userAgent: string

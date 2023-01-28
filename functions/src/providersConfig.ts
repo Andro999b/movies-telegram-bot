@@ -83,6 +83,10 @@ const config: ProvidersConfig = {
       encryptKey: 'ololo',
       baseUrl: 'http://seasonvar.ru',
       searchUrl: 'http://seasonvar.ru/autocomplete.php'
+    },
+    gidonline: {
+      baseUrl: 'https://gidonline.io',
+      searchUrl: 'https://gidonline.io'
     }
   }
 }
