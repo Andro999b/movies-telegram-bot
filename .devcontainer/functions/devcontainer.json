@@ -5,7 +5,7 @@
 		"ghcr.io/devcontainers/features/aws-cli:1": {},
 		"ghcr.io/devcontainers-contrib/features/serverless:2": {}
 	},
-	"workspaceFolder": "/functions",
+	"workspaceFolder": "functions",
 	"forwardPorts": [
 		4000
 	],
