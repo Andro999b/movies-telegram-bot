@@ -10,9 +10,7 @@ export interface Playlist {
   image: string
   defaultAudio?: string
   trailer?: string
-  query?: string
   files: File[]
-  errorDetail?: string
 }
 
 export interface File {
