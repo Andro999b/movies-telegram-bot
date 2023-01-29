@@ -2,11 +2,11 @@ import Provider from './CrawlerProvider'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
 import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
-import { base64encode, base64decode } from '../utils/base64'
 import { File, ProviderConfig, SearchResult, UrlAndQuality } from '../types/index'
 import { AnyNode, Cheerio } from 'cheerio'
 import { ProcessingInstruction } from 'domhandler'
 import providersConfig from '../providersConfig'
+import decodePlayerJSPlaylist from '../utils/decodePlayerJSPlaylist'
 
 interface SeasonvarProviderConfig extends ProviderConfig {
   encryptKey: string
@@ -134,18 +134,8 @@ class SeasonvarProvider extends Provider<SeasonvarProviderConfig> {
   private decryptFilePath(x: string): UrlAndQuality[] {
     const { encryptKey } = this.config
 
-    let a = x.substring(2)
-
-    a = a.replace('//' + base64encode(encryptKey), '')
-
-    try {
-      a = base64decode(a)
-    } catch (e) {
-      a = ''
-    }
-
     return [{
-      url: a,
+      url: decodePlayerJSPlaylist(x, [encryptKey], '//') ?? '',
       quality: 0
     }]
   }

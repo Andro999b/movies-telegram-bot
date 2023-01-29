@@ -10,10 +10,10 @@ const config: ProvidersConfig = {
       baseUrl: 'https://videocdn.tv/api',
       searchUrl: 'https://videocdn.tv/api',
       types: ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
-      // iframe: '5167.videocdn.pw',
-      // token: 'BuKYUNoUnwQ560ZbZMIaNkFA4eTkIQk7',
-      iframe: '83.annacdn.cc',
-      token: 'birzMxRwbHzYZSaRGe0ApcXgMbcNersl'// reserv
+      // iframe: '83.annacdn.cc',
+      // token: 'birzMxRwbHzYZSaRGe0ApcXgMbcNersl'// reserv      
+      iframe: '89.annacdn.cc',
+      token: 'wwwKfKgQ9PrIR6jX3ZILT6W10ymHsMt9'
     },
     anidub: {
       baseUrl: 'https://anidubonline.com/',

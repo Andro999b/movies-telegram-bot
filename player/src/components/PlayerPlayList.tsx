@@ -118,11 +118,11 @@ const Row: React.FC<RowProps & RowActions> = ({
     <div style={style}>
       <ListItem
         style={{ cursor: 'pointer' }}
-        selected={selected}
         disablePadding
         secondaryAction={isFile && <Download file={fileOrNode} playlist={playlist} />}
       >
         <ListItemButton
+          selected={selected}
           onClick={(): void => isFile ? handleFileSelect(fileOrNode) : handleFolderSelect(fileOrNode)}
         >
           <ListItemText

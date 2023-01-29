@@ -10,8 +10,8 @@
     "preserveConstEnums": true,
     "strictNullChecks": true,
     "sourceMap": true,
-    "module": "ES2020",
-    "target": "es2020",
+    "module": "CommonJS",
+    "target": "ES2017",
     "outDir": ".build",
     "moduleResolution": "Node",
     "lib": [
