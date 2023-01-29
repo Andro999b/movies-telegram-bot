@@ -2,7 +2,10 @@ import CrawlerProvider from './CrawlerProvider'
 import providersConfig from '../providersConfig'
 import { AnyNode, Cheerio } from 'cheerio'
 import urlencode from 'urlencode'
+import superagent from 'superagent'
 import { File } from '../types'
+
+const BLOCK_COUNTIRES_REGEXP = /&block=[a-z,]+/
 
 class GidOnlineProvider extends CrawlerProvider {
     protected searchScope = '.mainlink'
@@ -31,7 +34,25 @@ class GidOnlineProvider extends CrawlerProvider {
             transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
         },
         files: {
-            transform: (): File[] => []
+            sellector: 'iframe#cdn-player',
+            transform: ($el: Cheerio<AnyNode>): File[] => {
+                let iframeSrc = $el.attr('src')
+
+                if (!iframeSrc)
+                    return []
+
+                iframeSrc = iframeSrc.replace(BLOCK_COUNTIRES_REGEXP, '')
+
+                const res = superagent
+                    .get(iframeSrc)
+                    .set(this.config.headers!)
+                    .timeout(5000)
+                    .disableTLSCerts()
+                
+                console.log(res)
+
+                return []
+            }
         }
     }
 
