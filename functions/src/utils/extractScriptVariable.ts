@@ -21,7 +21,17 @@ export const extractStringSingleQuote = (script: string, varName: string): strin
 }
 
 export const extractStringProperty = (script: string, varName: string): string | null => {
-  const parts = script.match(new RegExp(`"${varName}":"([^"]+)"`))
+  const parts = script.match(new RegExp(`"${varName}":\\s"([^"]+)"`))
+
+  if (parts && parts.length > 1) {
+    return parts[1]
+  }
+
+  return null
+}
+
+export const extractStringSingleQuoteProperty = (script: string, varName: string): string | null => {
+  const parts = script.match(new RegExp(`'${varName}':\\s*'([^']+)'`))
 
   if (parts && parts.length > 1) {
     return parts[1]
@@ -41,7 +51,7 @@ export const extractArrayProperty = (script: string, varName: string): string | 
 }
 
 export const extractJSStringProperty = (script: string, varName: string): string | null => {
-  const parts = script.match(new RegExp(`${varName}:\\s+"([^"]+)"`))
+  const parts = script.match(new RegExp(`${varName}:\\s*"([^"]+)"`))
 
   if (parts && parts.length > 1) {
     return parts[1]

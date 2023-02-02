@@ -86,7 +86,14 @@ const config: ProvidersConfig = {
     },
     gidonline: {
       baseUrl: 'https://gidonline.io',
-      searchUrl: 'https://gidonline.io'
+      searchUrl: 'https://gidonline.io',
+      decodeKeys: [
+        '@#!@@@##$$@@',
+        '$$$####!!!!!!!',
+        '@!^^!@#@@$$$$$',
+        '^^#@@!!@#!$',
+        '^^^^^^##@'
+      ]
     }
   }
 }

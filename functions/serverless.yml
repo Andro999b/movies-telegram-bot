@@ -2,8 +2,8 @@ service: movies-telegram-bot
 
 plugins:
   - serverless-esbuild
-  - serverless-offline
   - serverless-content-encoding
+  - serverless-offline
 
 custom:
   cacheTable: cache-${opt:stage}
@@ -15,6 +15,12 @@ custom:
   serverless-offline:
     httpPort: 4000
     host: 0.0.0.0
+  esbuild:
+    watch:
+      pattern: ['src/**/*.ts'] # match only typescript files in src directory
+      ignore: ['temp/**/*']
+    sourcemap: linked
+    keepNames: true
 
 provider:
   name: aws

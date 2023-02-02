@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "env-cmd sls offline --stage=dev --aws-profile serverless --debug *",
+    "start": "sls offline --stage=dev --aws-profile serverless",
+    "debug:win": "SET SLS_DEBUG=* && node --inspect node_modules\\serverless\\bin\\serverless offline start --stage=dev --aws-profile serverless",
     "lint": "eslint --fix **/*.[jt]s",
     "build": "npm run lint && sls package --stage=prod --aws-profile serverless",
     "release": "npm run lint && sls deploy --stage=prod --aws-profile serverless",
@@ -40,7 +41,6 @@
     "@types/urlencode": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
-    "env-cmd": "^10.1.0",
     "esbuild": "^0.15.14",
     "eslint": "^8.20.0",
     "serverless": "^3.22.0",
