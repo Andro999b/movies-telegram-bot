@@ -106,7 +106,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'uakinoclub,uaserials,uafilmtv,videocdn,kinogo,kinovod'
+      PROVIDERS: 'uakinoclub,uaserials,uafilmtv,gidonline,kinogo,kinovod'
       BOT_TYPE: 'films'
       TOKEN: ${ssm:bot_ru_TOKEN_prod}
 
