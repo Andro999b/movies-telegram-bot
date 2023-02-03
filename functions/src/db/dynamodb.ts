@@ -1,4 +1,3 @@
-import AWS from 'aws-sdk'
-const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' })
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 
-export default dynamodb
+export default new DynamoDBClient({ region: process.env.REGION })
