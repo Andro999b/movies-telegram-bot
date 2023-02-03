@@ -302,14 +302,14 @@ a:active {
 .player__picture-in-picture {
   position: absolute;
   z-index: 3;
-  top: 56px;
+  bottom: 76px;
   right: 5px;
 }
 
 .add-history-btn {
   position: absolute;
   z-index: 3;
-  bottom: 76px;
+  top: 56px;
   right: 5px;
 }
 
