@@ -6,6 +6,7 @@ import localization from '../localization'
 import { watchHistoryStore } from '.'
 import { AudioTrack, Playlist, File, Source } from '../types'
 import { PlayMode } from '../types/PlayMode'
+import sourceLoaders from '../utils/source'
 
 const END_FILE_TIME_OFFSET = 60
 
@@ -153,14 +154,21 @@ export class Device {
         params = file.asyncSource.params
       }
 
-      sourceParams = Object.keys(params)
-        .map((key) => `${key}=${params[key]}`)
-        .join('&')
+      let source: Partial<File>
+      const localSourceLoader = sourceLoaders[this.playlist.provider]
+      if (localSourceLoader) {
+        source = await localSourceLoader(sourceId, params)
+      } else {
+        sourceParams = Object.keys(params)
+          .map((key) => `${key}=${params[key]}`)
+          .join('&')
 
-      if (!sourceParams) sourceParams = `?${sourceParams}`
+        if (!sourceParams) sourceParams = `?${sourceParams}`
 
-      const res = await fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
-      const source = await res.json() as File
+        const res = await fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
+        source = await res.json() as File
+        source = await res.json() as File
+      }
 
       try {
         if (fileIndex == this.currentFileIndex) {
