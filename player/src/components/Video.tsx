@@ -37,7 +37,7 @@ const logError = (errorData: unknown, source: Source | null): void => {
 }
 
 const Video: React.FC<Props> = ({ device, onEnded }) => {
-  const { audioTrack, quality, seekTo, volume, isMuted, isPlaying, playMode } =
+  const { audioTrack, quality, seekTo, volume, isMuted, isPlaying, playMode, pip } =
     device
   const source = device.source!
   const video = useRef<HTMLVideoElement>(null)
@@ -58,11 +58,31 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
 
   const videoFile = videoFiles[fileIndex]
 
-
-
   useEffect(() => {
     video.current!.volume = volume
   }, [volume])
+
+  useEffect(() => {
+    const togglePip = async (): Promise<void> => {
+      const currentVideo = video.current
+      if ('pictureInPictureEnabled' in document && currentVideo) {
+        if (pip) {
+          await currentVideo.requestPictureInPicture()
+          device.setPip(true)
+          const onLeavePictureInPicture = (): void => {
+            device.setPip(false)
+            currentVideo.removeEventListener('leavepictureinpicture', onLeavePictureInPicture)
+          }
+          currentVideo.addEventListener('leavepictureinpicture', onLeavePictureInPicture)
+        } else {
+          if (document.pictureInPictureElement == currentVideo) {
+            await document.exitPictureInPicture()
+          }
+        }
+      }
+    }
+    togglePip()
+  }, [device, pip, video])
 
   const handleResize = useCallback(
     (width: number | undefined, height: number | undefined): void => {

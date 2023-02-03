@@ -1,5 +1,5 @@
 import { observable, action, makeObservable } from 'mobx'
-import { getAuth, signInWithPopup, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
+import { getAuth, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithRedirect } from 'firebase/auth'
 import { initializeApp } from 'firebase/app'
 import { getDatabase, ref, child, get, set, query, update, remove, DatabaseReference } from 'firebase/database'
 import store from '../utils/storage'
@@ -324,11 +324,11 @@ class WatchHistoryStore {
 
   @action.bound connect(): void {
     signInWithRedirect(auth, provider)
-      // .then(this._composedHistory.reset)
-      // .then(this.loadHistory)
-      // .catch((error) => {
-      //   console.error('Fail login', error)
-      // })
+    // .then(this._composedHistory.reset)
+    // .then(this.loadHistory)
+    // .catch((error) => {
+    //   console.error('Fail login', error)
+    // })
   }
 
   @action.bound disconnect(): void {

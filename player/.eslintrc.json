@@ -39,7 +39,15 @@
     "require-await": "error",
     "@typescript-eslint/explicit-function-return-type": "warn",
     "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/no-non-null-assertion": "off"
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          "@mui/*/*/*"
+        ]
+      }
+    ]
   },
   "globals": {
     "gtag": "readonly",

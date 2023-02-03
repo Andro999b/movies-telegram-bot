@@ -10,11 +10,12 @@ import PlayBackZones from './PlayBackZones'
 import Share from './Share'
 import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 
-import { Typography } from '@mui/material'
 import { observer } from 'mobx-react-lite'
 
 import { isTouchDevice } from '../utils'
 import { playerStore } from '../store'
+import Typography from '@mui/material/Typography'
+import PictureInPicture from './PictureInPicture'
 
 const IDLE_TIMEOUT = 10000
 
@@ -185,6 +186,7 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
         {!hideUi && <>
           <PlayerTitle title={playerStore.getPlayerTitle()} />
           <Share device={device} playlist={device.playlist} />
+          <PictureInPicture device={device} />
           <PlayerFilesList
             open={playlistOpen}
             device={device}

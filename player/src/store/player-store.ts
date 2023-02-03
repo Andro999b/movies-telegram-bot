@@ -36,6 +36,7 @@ export class Device {
   @observable qualities: number[] = []
   @observable seekTo: number | null = null
   @observable source: Source | null = null
+  @observable pip = false
 
   constructor() {
     makeObservable(this)
@@ -254,6 +255,10 @@ export class Device {
       const seekTo = this.currentTime + sec
       this.seek(Math.min(Math.max(seekTo, 0), this.duration))
     }
+  }
+
+  @action.bound setPip(pip: boolean): void {
+    this.pip = pip
   }
 }
 
