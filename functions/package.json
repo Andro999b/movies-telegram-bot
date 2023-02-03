@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "sls offline --stage=dev --aws-profile serverless",
-    "debug:win": "SET SLS_DEBUG=* && node --inspect node_modules\\serverless\\bin\\serverless offline start --stage=dev --aws-profile serverless",
+    "start": "SET AWS_PROFILE=serverless&&sls offline --stage=dev --aws-profile serverless",
+    "debug:win": "SET SLS_DEBUG=*&&SET AWS_PROFILE=serverless&&node --inspect node_modules\\serverless\\bin\\serverless offline start --stage=dev --aws-profile serverless",
     "lint": "eslint --fix **/*.[jt]s",
     "build": "npm run lint && sls package --stage=prod --aws-profile serverless",
     "release": "npm run lint && sls deploy --stage=prod --aws-profile serverless",
@@ -13,8 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.264.0",
+    "@aws-sdk/client-lambda": "^3.264.0",
     "@types/set-cookie-parser": "^2.4.2",
-    "aws-sdk": "^2.1185.0",
     "cheerio": "^1.0.0-rc.12",
     "crypto-js": "^4.1.1",
     "debug": "^4.3.4",
