@@ -46,7 +46,7 @@ class EneyidaProvider extends Provider {
       transform: async ($el: Cheerio<AnyNode>): Promise<File[]> => {
         const src = $el.attr('src')
         if (!src) return []
-        const files = await playerjsembeded(src)
+        const files = await playerjsembeded(src, true)
         files.forEach((file, index) => file.id = index)
         return files
       }

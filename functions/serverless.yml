@@ -37,6 +37,7 @@ provider:
     STAGE: ${opt:stage}
     CACHE_TTL: 3600
     PLAYER_URL: ${self:custom.playerUrl}
+    PROXY_URL: ${ssm:proxy_url}
     ALLOWED_DOMAINS: ''
     # ALLOWED_DOMAINS: 'localhost:3000,localhost:4000,movie-player.surge.sh,movies-player.firebaseapp.com,movies-player.web.app'
     ACCOUNT_ID: ${aws:accountId}
@@ -106,7 +107,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'uakinoclub,uaserials,uafilmtv,gidonline,kinogo,kinovod'
+      PROVIDERS: 'uakinoclub,uaserials,uafilmtv,kinogo,kinovod'
       BOT_TYPE: 'films'
       TOKEN: ${ssm:bot_ru_TOKEN_prod}
 
@@ -133,7 +134,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'uakinoclub,uaserials,uafilmtv,anitubeua'
+      PROVIDERS: 'uafilmtv,uakinoclub,eneyida,uaserials,anitubeua'
       BOT_HOOK_PATH: '/bot/ua'
       BOT_TYPE: 'ua'
       LOCALIZATION_TYPE: 'localization'

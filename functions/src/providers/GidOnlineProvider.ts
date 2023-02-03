@@ -82,16 +82,8 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
 
         const seasonsEpisodes = extractObject(res.text, 'seasons_episodes') as SeasonEpisodes
 
-        const file = extractStringSingleQuoteProperty(res.text, 'file')
-        const decodedFile = decodePlayerJSPlaylist(file!, this.config.decodeKeys)
-
-        if (decodedFile == null) {
-          debug('GidOnline - Cant find file varaible')
-          return []
-        }
-
         if (seasonsEpisodes == null) {
-          return this.extractMoveiFiles(translations, decodedFile)
+          return this.extractMoveiFiles(translations)
         }
 
         translations[0].token = this.extractEmbedId(iframeSrc)
@@ -152,7 +144,15 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
   }
 
   private getIframeUrl(token: string, type: string): string {
-    return `https://voidboost.net/${type}/${token}/iframe?&h=gidonline.io&&df=1&vstop=7&vsleft=44&partner=gidonline`
+    let basePath
+
+    if (type == 'embed') {
+      basePath = `https://voidboost.net/embed/${token}`
+    } else {
+      basePath = `https://voidboost.net/${type}/${token}/iframe`
+    }
+
+    return `${basePath}?&h=gidonline.io&&df=1&vstop=7&vsleft=44&partner=gidonline`
   }
 
   private async loadTranslationEpisodes(translation: Translation): Promise<SeasonEpisodes> {
@@ -167,28 +167,25 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
     return extractObject(res.text, 'seasons_episodes') as SeasonEpisodes
   }
 
-  private extractMoveiFiles(translations: Translation[], decodedFile: string): File[] {
-    const files: File[] = [
-      {
-        ...convertPlayerJSPlaylist(decodedFile)[0],
-        name: translations[0].name
-      }
-    ]
+  private extractMoveiFiles(translations: Translation[]): File[] {
+    // const files: File[] = [
+    //   {
+    //     ...convertPlayerJSPlaylist(decodedFile)[0],
+    //     name: translations[0].name
+    //   }
+    // ]
 
-    translations.slice(1).forEach((translation, index) => {
-      files.push({
-        name: translation.name,
-        id: index + 1,
-        asyncSource: {
-          sourceId: translation.token,
-          params: {
-            type: 'movie'
-          }
+    return translations.map((translation, index) => ({
+      name: translation.name,
+      id: index + 1,
+      asyncSource: {
+        sourceId: translation.token,
+        params: {
+          type: 'movie'
         }
-      })
+      }
     })
-
-    return files
+    )
   }
 
   private extractEmbedId(iframeSrc: string): string {

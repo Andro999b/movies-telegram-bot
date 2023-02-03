@@ -1,6 +1,7 @@
 import superagent from 'superagent'
 import { Extractor } from './index'
 import makeResponse from '../utils/makeResponse'
+import { tunnelHttpsAgent } from '../utils/tunnelAgent'
 
 export type MatchTransformer = (match: RegExpMatchArray) => Promise<string>
 export type Pattern = RegExp | string | {
@@ -8,12 +9,15 @@ export type Pattern = RegExp | string | {
   transform: MatchTransformer
 }
 
-export default (patterns: Pattern[]): Extractor => async (params) => {
+export default (patterns: Pattern[], proxy = false): Extractor => async (params) => {
   const { url } = params
   const targetUrl = url.startsWith('//') ? 'https:' + url : url
 
-  const siteRes = await superagent
-    .get(targetUrl)
+  const req = proxy ?
+    superagent.get(targetUrl).agent(tunnelHttpsAgent) :
+    superagent.get(targetUrl)
+
+  const siteRes = await req
     .timeout(5000)
     .disableTLSCerts()
 

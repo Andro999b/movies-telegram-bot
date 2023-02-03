@@ -16,6 +16,7 @@ declare namespace NodeJS {
     PROVIDERS: string
     TOKEN: string
     LOG_GROUP: string
+    PROXY_URL: string
   }
 }
 

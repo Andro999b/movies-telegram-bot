@@ -23,4 +23,7 @@
     "node_modules",
     "**/node_modules/*"
   ],
+  "ts-node": {
+    "experimentalResolver": true
+  }
 }

@@ -21,7 +21,7 @@ export const extractStringSingleQuote = (script: string, varName: string): strin
 }
 
 export const extractStringProperty = (script: string, varName: string): string | null => {
-  const parts = script.match(new RegExp(`"${varName}":\\s"([^"]+)"`))
+  const parts = script.match(new RegExp(`"${varName}":\\s*"([^"]+)"`))
 
   if (parts && parts.length > 1) {
     return parts[1]
