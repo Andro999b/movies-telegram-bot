@@ -1,12 +1,10 @@
 import CrawlerProvider from './CrawlerProvider'
 import providersConfig from '../providersConfig'
 import $, { AnyNode, Cheerio, load } from 'cheerio'
-import { extractObject, extractStringSingleQuoteProperty } from '../utils/extractScriptVariable'
+import { extractObject } from '../utils/extractScriptVariable'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
 import { File, ProviderConfig } from '../types'
-import decodePlayerJSPlaylist from '../utils/decodePlayerJSPlaylist'
-import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
 import debugFactory from 'debug'
 
 const debug = debugFactory('bot')
@@ -121,26 +119,6 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
     const { searchUrl } = this.config
 
     return `${searchUrl}?s=${encodeURIComponent(query)}`
-  }
-
-  override async getSource(
-    resultsId: string,
-    sourceId: string,
-    params?: Record<string, string> | undefined
-  ): Promise<File | null> {
-    const { type, s, e } = params!
-    const iframeUrl = this.getIframeUrl(sourceId, type) + `&s=${s}&e=${e}`
-
-    const res = await superagent
-      .get(iframeUrl)
-      .set(this.config.headers!)
-      .timeout(5000)
-      .disableTLSCerts()
-
-    const file = extractStringSingleQuoteProperty(res.text, 'file')
-    const decodedFile = decodePlayerJSPlaylist(file!, this.config.decodeKeys)
-
-    return convertPlayerJSPlaylist(decodedFile!)[0]
   }
 
   private getIframeUrl(token: string, type: string): string {
