@@ -168,7 +168,6 @@ export class Device {
 
         const res = await fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
         source = await res.json() as File
-        source = await res.json() as File
       }
 
       try {
