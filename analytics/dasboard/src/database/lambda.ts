@@ -34,6 +34,6 @@ export const invokeMongoInvalidate = async (provider: string, resultId: string):
   const lambda = await getLambda()
   await lambda.invoke({
     FunctionName: `arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:analytics-functions-dev-ga4`,
-    Payload: textEncoder.encode((JSON.stringify({ provider, resultId })))
+    Payload: textEncoder.encode(JSON.stringify({ provider, resultId }))
   })
 }

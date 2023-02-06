@@ -3,6 +3,7 @@ import { load } from 'cheerio'
 import { ProcessingInstruction } from 'domhandler'
 import convertPlayerJSPlaylist from './convertPlayerJSPlaylist'
 import { File, PlayerJSPlaylist } from '../types/index'
+import providersConfig from '../providersConfig'
 
 function _extractTranslations(
   translations: Record<string, string>,
@@ -39,6 +40,7 @@ function _extractTranslations(
 export default async (url: string, timeout = 20): Promise<File[]> => {
   const res = await superagent
     .get(url.startsWith('//') ? 'https:' + url : url)
+    .set('User-Agent', providersConfig.userAgent)
     .timeout(timeout * 1000)
 
   const $ = load(res.text)

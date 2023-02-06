@@ -38,10 +38,10 @@ class MongoDBCache<Item> extends Cache<string, Item> {
     )).value
   }
 
-  private async extendExpire(key: string): Promise<void> {
-    const expired = new Date(Date.now() + expirationTime)
-    await this.collection.updateOne({ _id: key }, { $set: { expired } })
-  }
+  // private async extendExpire(key: string): Promise<void> {
+  //   const expired = new Date(Date.now() + expirationTime)
+  //   await this.collection.updateOne({ _id: key }, { $set: { expired } })
+  // }
 
   override async getOrCompute(
     key: string,
@@ -60,11 +60,11 @@ class MongoDBCache<Item> extends Cache<string, Item> {
             await this.putToCache(key, item)
           } else {
             item = cacheItem.result
-            await this.extendExpire(key)
+            // await this.extendExpire(key)
           }
         } catch (e) {  // if get resource failed exted cahce expiration time 
           item = cacheItem.result
-          await this.extendExpire(key)
+          // await this.extendExpire(key)
         }
       } else {
         item = cacheItem.result

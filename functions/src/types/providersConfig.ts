@@ -12,8 +12,8 @@ export interface ProviderConfig {
 }
 
 export type ProvidersNames =
-  'anidub' |
   'animedia' |
+  // 'animego' |
   'anigato' |
   'anitubeua' |
   'animevost' |

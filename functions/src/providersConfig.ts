@@ -4,7 +4,7 @@ const config: ProvidersConfig = {
   timeout: 5,
   infoTimeout: 20,
   pageSize: 10,
-  userAgent: 'Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0',
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
   providers: {
     videocdn: {
       baseUrl: 'https://videocdn.tv/api',
@@ -14,10 +14,6 @@ const config: ProvidersConfig = {
       // token: 'birzMxRwbHzYZSaRGe0ApcXgMbcNersl'// reserv      
       iframe: '89.annacdn.cc',
       token: 'wwwKfKgQ9PrIR6jX3ZILT6W10ymHsMt9'
-    },
-    anidub: {
-      baseUrl: 'https://anidubonline.com/',
-      searchUrl: 'https://anidubonline.com/index.php',
     },
     animedia: {
       baseUrl: 'https://online.animedia.tv',

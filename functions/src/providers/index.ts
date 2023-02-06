@@ -3,7 +3,6 @@ import KinogoProvider from './KinogoProvider'
 import KinovodProvider from './KinovodProvider'
 import AnimeVostProvider from './AnimeVostProvider'
 import AnimediaProvider from './AnimediaProvider'
-import AnidubProvider from './AnidubProvider'
 import AnigatoProvider from './AnigatoProvider'
 import VideoCDNProvider from './VideoCDNProvider'
 import AnitubeUAProvider from './AnitubeUAProvider'
@@ -21,7 +20,6 @@ const providers: Record<ProvidersNames, Provider> = {
   kinovod: new KinovodProvider(),
   animevost: new AnimeVostProvider(),
   animedia: new AnimediaProvider(),
-  anidub: new AnidubProvider(),
   anigato: new AnigatoProvider(),
   videocdn: new VideoCDNProvider(),
   anitubeua: new AnitubeUAProvider(),
