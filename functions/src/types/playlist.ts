@@ -49,7 +49,6 @@ export type ExtractorTypes =
   'sibnethls' |
   'sibnetmp4' |
   'stormo' |
-  'anidub' |
   'mp4' |
   'm3u8' |
   'mp4local' |

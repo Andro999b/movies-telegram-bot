@@ -2,6 +2,7 @@ import superagent from 'superagent'
 import { Extractor } from './index'
 import makeResponse from '../utils/makeResponse'
 import { tunnelHttpsAgent } from '../utils/tunnelAgent'
+import providersConfig from '../providersConfig'
 
 export type MatchTransformer = (match: RegExpMatchArray) => Promise<string>
 export type Pattern = RegExp | string | {
@@ -18,6 +19,7 @@ export default (patterns: Pattern[], proxy = false): Extractor => async (params)
     superagent.get(targetUrl)
 
   const siteRes = await req
+    .set('User-Agent', providersConfig.userAgent)
     .timeout(5000)
     .disableTLSCerts()
 

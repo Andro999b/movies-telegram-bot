@@ -24,10 +24,10 @@ const extractors: Record<string, ExtratorConfig | null> = {
     type: 'sibnetmp4'
   },
   'secvideo1': {
-    type: 'mp4proxy'
+    type: 'mp4local'
   },
   'csst.online': {
-    type: 'mp4proxy'
+    type: 'mp4local'
   },
   'veoh.com': null,
   'tortuga.wtf': {

@@ -7,7 +7,6 @@ import anigitExtractor from './anigitExtractor'
 import sibnetHlsExtractor from './sibnetHlsExtractor'
 import sibnetMp4Extractor from './sibnetMp4Extractor'
 import mp4PExtractor, { mp4proxy } from './mp4Extractor'
-import anidubExtractor from './anidubExtractor'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { ExtractorTypes } from '../types/index'
 
@@ -28,7 +27,6 @@ const extractors: Record<ExtractorTypes, Extractor> = {
   sibnethls: sibnetHlsExtractor,
   sibnetmp4: sibnetMp4Extractor,
   stormo: mp4PExtractor,
-  anidub: anidubExtractor,
   mp4: mp4PExtractor,
   m3u8: m3u8Extractor,
   mp4local: mp4PExtractor,
