@@ -53,7 +53,10 @@ class AnimegoProvider extends CrawlerProvider {
             return {
               id: index,
               name: 'Episode ' + $el.text(),
-              asyncSource: $el.data('id') as string
+              asyncSource: {
+                sourceId: $el.data('id') as string,
+                params: 
+              }
             }
           })
       }
@@ -79,11 +82,8 @@ class AnimegoProvider extends CrawlerProvider {
   override async getSource(resultsId: string, sourceId: string): Promise<Partial<File> | null> {
     const { timeout, baseUrl, headers } = this.config
 
-    const parts = resultsId.split('-')
-    const playerId = parts[parts.length - 1]
-
     const res = await superagent
-      .get(`${baseUrl}/anime/series?episode=${sourceId}&id=${playerId}`)
+      .get(`${baseUrl}/anime/series?episode=${sourceId}&id=${sourceId}`)
       .set(headers!)
       .set('X-Requested-With', 'XMLHttpRequest')
       .timeout(timeout!)
