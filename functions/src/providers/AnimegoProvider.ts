@@ -55,7 +55,7 @@ class AnimegoProvider extends CrawlerProvider {
               name: 'Episode ' + $el.text(),
               asyncSource: {
                 sourceId: $el.data('id') as string,
-                params: { ep: index + 1}
+                params: { ep: index + 1 }
               }
             }
           })
@@ -115,7 +115,8 @@ class AnimegoProvider extends CrawlerProvider {
         return {
           url: player,
           audio: translations[dubbing],
-          extractor: this.getExtractor(player)
+          extractor: this.getExtractor(player),
+          hls: true
         }
       })
       .filter(({ extractor }) => extractor)
