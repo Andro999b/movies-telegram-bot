@@ -53,7 +53,10 @@ class AnimegoProvider extends CrawlerProvider {
             return {
               id: index,
               name: 'Episode ' + $el.text(),
-              asyncSource: $el.data('id') as string
+              asyncSource: {
+                sourceId: $el.data('id') as string,
+                params: { ep: index + 1}
+              }
             }
           })
       }
@@ -76,11 +79,11 @@ class AnimegoProvider extends CrawlerProvider {
     return `${baseUrl}/anime/${id}`
   }
 
-  override async getSource(resultsId: string, sourceId: string): Promise<Partial<File> | null> {
+  override async getSource(resultsId: string, sourceId: string, params: Record<string, string>): Promise<Partial<File> | null> {
     const { timeout, baseUrl, headers } = this.config
 
     const res = await superagent
-      .get(`${baseUrl}/anime/series?episode=${sourceId}&id=${sourceId}`)
+      .get(`${baseUrl}/anime/series?episode=${params.ep}&id=${sourceId}`)
       .set(headers!)
       .set('X-Requested-With', 'XMLHttpRequest')
       .timeout(timeout!)
