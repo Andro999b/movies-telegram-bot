@@ -146,13 +146,18 @@ export class Device {
       this.source = null
 
       const { provider, id } = this.playlist
-      let sourceId: string, params: Record<string, unknown> = {}, sourceParams: string
+      let sourceId: string, params: Record<string, unknown> = {}, sourceParams = ''
 
-      if (typeof file.asyncSource === 'string') {
+      if (typeof file.asyncSource === 'string' || typeof file.asyncSource === 'number') {
         sourceId = file.asyncSource
       } else {
         sourceId = file.asyncSource.sourceId
         params = file.asyncSource.params
+
+        sourceParams = Object.keys(params)
+          .map((key) => `${key}=${params[key]}`)
+          .join('&')
+        sourceParams = `?${sourceParams}`
       }
 
       let source: Partial<File>
@@ -160,12 +165,6 @@ export class Device {
       if (localSourceLoader) {
         source = await localSourceLoader(sourceId, params)
       } else {
-        sourceParams = Object.keys(params)
-          .map((key) => `${key}=${params[key]}`)
-          .join('&')
-
-        if (!sourceParams) sourceParams = `?${sourceParams}`
-
         const res = await fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
         source = await res.json() as File
       }

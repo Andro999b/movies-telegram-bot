@@ -53,10 +53,7 @@ class AnimegoProvider extends CrawlerProvider {
             return {
               id: index,
               name: 'Episode ' + $el.text(),
-              asyncSource: {
-                sourceId: $el.data('id') as string,
-                params: 
-              }
+              asyncSource: $el.data('id') as string
             }
           })
       }
