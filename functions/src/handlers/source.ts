@@ -11,7 +11,7 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
 
   context.callbackWaitsForEmptyEventLoop = false
 
-  let result: File | null = null
+  let result: Partial<File> | null = null
 
   if (event.pathParameters) {
     const { provider, resultId, sourceId } = event.pathParameters as {
@@ -20,15 +20,26 @@ export const handler: APIGatewayProxyHandler = async (event, context) => {
       sourceId: string
     }
 
-    result = await getCachedSource(
-      provider, resultId, sourceId,
-      () => getSource(
+    const nocache = event.queryStringParameters?.nocache
+
+    if (nocache === 'true') {
+      result = await getSource(
         provider,
         resultId,
         sourceId,
         event.queryStringParameters as Record<string, string>
       )
-    )
+    } else {
+      result = await getCachedSource(
+        provider, resultId, sourceId,
+        () => getSource(
+          provider,
+          resultId,
+          sourceId,
+          event.queryStringParameters as Record<string, string>
+        )
+      )
+    }
   }
 
   return makeResponse(result, 200, {

@@ -13,11 +13,13 @@ import UASerialsProvider from './UASerialsProvider'
 import Provider from './Provider'
 import { File, Playlist, ProvidersNames, SearchResult } from '../types/index'
 import GidOnlineProvider from './GidOnlineProvider'
+import AnimegoProvider from './AnimegoProvider'
 
 const providers: Record<ProvidersNames, Provider> = {
   seasonvar: new SeasonvarProvider(),
   kinogo: new KinogoProvider(),
   kinovod: new KinovodProvider(),
+  animego: new AnimegoProvider(),
   animevost: new AnimeVostProvider(),
   animedia: new AnimediaProvider(),
   anigato: new AnigatoProvider(),
@@ -81,7 +83,7 @@ export const getSource = async (
   resultId: string,
   sourceId: string,
   params?: Record<string, string>
-): Promise<File | null> => {
+): Promise<Partial<File> | null> => {
   const provider = getProvider(providerName)
   return await provider?.getSource(resultId, sourceId, params) ?? null
 }

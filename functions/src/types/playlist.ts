@@ -46,6 +46,8 @@ export type ExtractorTypes =
   'ashdi' |
   'anigit' |
   'animedia' |
+  'aniboom' |
+  'animego_kodik' |
   'sibnethls' |
   'sibnetmp4' |
   'stormo' |

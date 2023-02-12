@@ -9,21 +9,22 @@ interface Response {
   text: string
 }
 
-export interface CrawlerContext<Item> {
+export interface CrawlerContext<Item, AdditionalParams> {
   root: Cheerio<Document>
   currentUrl: string
   item: Item
+  additionalParams?: AdditionalParams
 }
 
 export type RequestGenerator = (url: string) => Promise<Response>
-export type Transform<Field = unknown, Item = unknown> = ($el: Cheerio<AnyNode>, context: CrawlerContext<Item>) => Promise<Field> | Field
-export interface SelectorConfig<Field = unknown, Item = unknown> {
+export type Transform<Field = unknown, Item = unknown, AdditionalParams = unknown> = ($el: Cheerio<AnyNode>, context: CrawlerContext<Item, AdditionalParams>) => Promise<Field> | Field
+export interface SelectorConfig<Field = unknown, Item = unknown, AdditionalParams = unknown> {
   selector?: string | string[]
-  transform: Transform<Field, Item>
+  transform: Transform<Field, Item, AdditionalParams>
 }
-export type Selector<Field = unknown, Item = unknown> = string | string[] | SelectorConfig<Field, Item>
+export type Selector<Field = unknown, Item = unknown, AdditionalParams = unknown> = string | string[] | SelectorConfig<Field, Item, AdditionalParams>
 
-class Crawler<Item> {
+class Crawler<Item, AdditionalParams = null> {
   private _requestGenerator: RequestGenerator
   private _url: string
   private _cfbypass = false
@@ -65,37 +66,37 @@ class Crawler<Item> {
       .set(this._headers ?? {})
   }
 
-  cfbypass(bypass: boolean): Crawler<Item> {
+  cfbypass(bypass: boolean): Crawler<Item, AdditionalParams> {
     this._cfbypass = bypass
     return this
   }
 
-  headers(headers: Record<string, string>): Crawler<Item> {
+  headers(headers: Record<string, string>): Crawler<Item, AdditionalParams> {
     this._headers = headers
     return this
   }
 
-  scope(scope: string): Crawler<Item> {
+  scope(scope: string): Crawler<Item, AdditionalParams> {
     this._scope = scope
     return this
   }
 
-  set(selectors: { [key in keyof Item]?: Selector }): Crawler<Item> {
+  set(selectors: { [key in keyof Item]?: Selector }): Crawler<Item, AdditionalParams> {
     this._selectors = selectors
     return this
   }
 
-  paginate(pagenatorSelector: string): Crawler<Item> {
+  paginate(pagenatorSelector: string): Crawler<Item, AdditionalParams> {
     this._pagenatorSelector = pagenatorSelector
     return this
   }
 
-  limit(limit: number): Crawler<Item> {
+  limit(limit: number): Crawler<Item, AdditionalParams> {
     this._limit = limit
     return this
   }
 
-  timeout(ms: number): Crawler<Item> {
+  timeout(ms: number): Crawler<Item, AdditionalParams> {
     this._timeoutMs = ms
     return this
   }
@@ -103,7 +104,7 @@ class Crawler<Item> {
   private async extractData(
     $el: Cheerio<AnyNode>,
     selector: Selector,
-    context: CrawlerContext<Item>
+    context: CrawlerContext<Item, AdditionalParams>
   ): Promise<unknown> {
     let transform: Transform = ($el: Cheerio<Document>) => Promise.resolve($el.first().text().trim())
     let selectorQuery: string | string[] | null = null
@@ -140,7 +141,7 @@ class Crawler<Item> {
     }
   }
 
-  gather(): Promise<Item[]> {
+  gather(additionalParams?: AdditionalParams): Promise<Item[]> {
     if (!this._scope) {
       throw Error('No scope selected')
     }
@@ -171,7 +172,8 @@ class Crawler<Item> {
             item[selectorName] = await this.extractData($(el), selector, {
               root: $.root(),
               currentUrl,
-              item: item as Item
+              item: item as Item,
+              additionalParams
             })
           }
         }
@@ -197,7 +199,7 @@ class Crawler<Item> {
 
 export default {
   Crawler,
-  get<Item>(url: string, requestGenerator?: RequestGenerator): Crawler<Item> {
-    return new Crawler<Item>(url, requestGenerator)
+  get<Item, AdditionalParams = null>(url: string, requestGenerator?: RequestGenerator): Crawler<Item, AdditionalParams> {
+    return new Crawler<Item, AdditionalParams>(url, requestGenerator)
   }
 }

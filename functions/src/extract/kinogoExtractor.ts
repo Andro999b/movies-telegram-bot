@@ -6,7 +6,7 @@ import { Extractor } from './index'
 
 const baseUrl = providersConfig.providers.kinogo.baseUrl
 
-const KinogoExtractor: Extractor = async ({ url, file }) => {
+const kinogoExtractor: Extractor = async ({ url, file }) => {
   const timeout = 5000
   const { iframeHost, csrfToken, playlistPath } = await KinogoProvider
     .parseIframeV1(url, baseUrl, timeout)
@@ -38,4 +38,4 @@ const KinogoExtractor: Extractor = async ({ url, file }) => {
   })
 }
 
-export default KinogoExtractor
+export default kinogoExtractor

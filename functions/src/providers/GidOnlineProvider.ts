@@ -2,12 +2,9 @@ import CrawlerProvider from './CrawlerProvider'
 import providersConfig from '../providersConfig'
 import $, { AnyNode, Cheerio, load } from 'cheerio'
 import { extractObject } from '../utils/extractScriptVariable'
-import urlencode from 'urlencode'
 import superagent from 'superagent'
 import { File, ProviderConfig } from '../types'
-import debugFactory from 'debug'
-
-const debug = debugFactory('bot')
+import { lastPathPart } from '../utils/url'
 
 const BLOCK_COUNTIRES_REGEXP = /&block=[a-z,]+/
 const EMBED_ID_REGEXP = /embed\/(\d+)/
@@ -29,7 +26,7 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
   protected searchScope = '.mainlink'
   protected searchSelector = {
     id: {
-      transform: ($el: Cheerio<AnyNode>): string => urlencode($el.attr('href') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => lastPathPart($el.attr('href'))
     },
     image: {
       selector: 'img',
@@ -98,7 +95,7 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
                   await this.loadTranslationEpisodes(translation)
                 )
               } catch (e) {
-                debug(`Error to load translation files: ${translation.name}(${translation.token})`, e)
+                this.debug(`Error to load translation files: ${translation.name}(${translation.token})`, e)
                 return []
               }
             })
@@ -146,13 +143,6 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
   }
 
   private extractMoveiFiles(translations: Translation[]): File[] {
-    // const files: File[] = [
-    //   {
-    //     ...convertPlayerJSPlaylist(decodedFile)[0],
-    //     name: translations[0].name
-    //   }
-    // ]
-
     return translations.map((translation, index) => ({
       name: translation.name,
       id: index + 1,
@@ -218,6 +208,15 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
         }
       }))
     })
+  }
+
+  override getInfoUrl(id: string): string {
+    if (id.startsWith('http')) {
+      return super.getInfoUrl(id)
+    }
+
+    const { baseUrl } = this.config
+    return `${baseUrl}/film/${id}`
   }
 }
 

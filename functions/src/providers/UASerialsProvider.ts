@@ -1,9 +1,9 @@
 import Provider from './CFDataLifeProvider'
 import CryptoJS from 'crypto-js'
-import urlencode from 'urlencode'
 import { AnyNode, Cheerio } from 'cheerio'
 import providersConfig from '../providersConfig'
 import { File, ProviderConfig } from '../types/index'
+import { lastPathPartNoExt } from '../utils/url'
 
 interface UASerialsProviderConfig extends ProviderConfig {
   password: string
@@ -26,7 +26,7 @@ class UASerialsProvider extends Provider<UASerialsProviderConfig> {
   protected searchSelector = {
     id: {
       selector: '.short-img',
-      transform: ($el: Cheerio<AnyNode>): string => urlencode($el.attr('href') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => lastPathPartNoExt($el.attr('href'))
     },
     name: '.th-title',
     image: {
@@ -92,6 +92,15 @@ class UASerialsProvider extends Provider<UASerialsProviderConfig> {
 
   constructor() {
     super('uaserials', providersConfig.providers.uaserials as UASerialsProviderConfig)
+  }
+
+  override getInfoUrl(id: string): string {
+    if (id.startsWith('http')) {
+      return super.getInfoUrl(id)
+    }
+
+    const { baseUrl } = this.config
+    return `${baseUrl}/${id}.html`
   }
 }
 

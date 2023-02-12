@@ -61,7 +61,7 @@ class AnimeVostProvider extends Provider {
     super('animevost', providersConfig.providers.animevost)
   }
 
-  override async getSource(resultsId: string, sourceId: string): Promise<File | null> {
+  override async getSource(resultsId: string, sourceId: string): Promise<Partial<File> | null> {
     const siteRes = await superagent
       .get(`${this.config.playerUrl}?play=${decodeURIComponent(sourceId)}&old=1`)
       .timeout(5000)

@@ -18,7 +18,7 @@ custom:
   esbuild:
     watch:
       pattern: ['src/**/*.ts'] # match only typescript files in src directory
-      ignore: ['temp/**/*']
+      ignore: ['.serverless/**/*', '.build', 'node_modules']
     sourcemap: linked
     keepNames: true
 
@@ -28,7 +28,7 @@ provider:
   region: eu-north-1
   versionFunctions: false
   environment:
-    # DEBUG: '*'
+    DEBUG: '*'
     ANALYTIC_TABLE: ${self:custom.analyticsTable}
     CACHE_TABLE: ${self:custom.cacheTable}
     MONGODB_URI: ${self:custom.mongoUrl}
@@ -107,7 +107,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'uakinoclub,uaserials,uafilmtv,gidonline,kinogo,kinovod'
+      PROVIDERS: 'uakinoclub,uafilmtv,eneyida,gidonline,kinogo,kinovod'
       BOT_TYPE: 'films'
       TOKEN: ${ssm:bot_ru_TOKEN_prod}
 
@@ -120,7 +120,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'anitubeua,anigato,animevost,animedia'
+      PROVIDERS: 'anitubeua,animego,anigato,animevost,animedia'
       BOT_HOOK_PATH: '/bot/anime'
       BOT_TYPE: 'anime'
       TOKEN: ${ssm:bot_anime_TOKEN_prod}

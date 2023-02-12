@@ -9,6 +9,8 @@ import sibnetMp4Extractor from './sibnetMp4Extractor'
 import mp4PExtractor, { mp4proxy } from './mp4Extractor'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { ExtractorTypes } from '../types/index'
+import animegoKodikExtractor from './animegoKodik'
+import aniboomExtractor from './aniboomExtractor'
 
 export interface ExtractorParams {
   type: ExtractorTypes
@@ -24,6 +26,8 @@ const extractors: Record<ExtractorTypes, Extractor> = {
   ashdi: m3u8Extractor,
   anigit: anigitExtractor,
   animedia: m3u8Extractor,
+  animego_kodik: animegoKodikExtractor,
+  aniboom: aniboomExtractor,
   sibnethls: sibnetHlsExtractor,
   sibnetmp4: sibnetMp4Extractor,
   stormo: mp4PExtractor,

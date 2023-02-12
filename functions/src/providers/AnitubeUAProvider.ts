@@ -1,11 +1,11 @@
 import Provider from './DataLifeProvider'
-import urlencode from 'urlencode'
 import superagent from 'superagent'
 import $, { AnyNode, Cheerio } from 'cheerio'
 import providersConfig from '../providersConfig'
 import { ExtractorTypes, File, FileUrl } from '../types/index'
 import { ProcessingInstruction } from 'domhandler'
 import { extractIntFromSting } from '../utils/extractNumber'
+import { lastPathPartNoExt } from '../utils/url'
 
 const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
 const srcRegExp = /src="([^"]+)"/
@@ -20,9 +20,9 @@ const extractors: Record<string, ExtratorConfig | null> = {
     type: 'ashdi',
     hls: true
   },
-  'sibnet': {
-    type: 'sibnetmp4'
-  },
+  // 'sibnet': {
+  //   type: 'sibnetmp4'
+  // },
   'secvideo1': {
     type: 'mp4local'
   },
@@ -41,7 +41,7 @@ class AnitubeUAProvider extends Provider {
   protected searchSelector = {
     id: {
       selector: '.story_c > h2 > a',
-      transform: ($el: Cheerio<AnyNode>): string => urlencode($el.attr('href') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => lastPathPartNoExt($el.attr('href'))
     },
     name: '.story_c > h2 > a',
     image: {
@@ -191,6 +191,15 @@ class AnitubeUAProvider extends Provider {
       }
     }
     file.urls!.push(fileUrl)
+  }
+
+  override getInfoUrl(id: string): string {
+    if (id.startsWith('http')) {
+      return super.getInfoUrl(id)
+    }
+
+    const { baseUrl } = this.config
+    return `${baseUrl}/${id}.html`
   }
 }
 

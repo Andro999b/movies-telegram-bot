@@ -1,11 +1,11 @@
 import Provider from './CFDataLifeProvider'
-import urlencode from 'urlencode'
 import superagent from 'superagent'
 import videocdnembed from '../utils/videocdnembed'
 import { extractStringProperty } from '../utils/extractScriptVariable'
 import { AnyNode, Cheerio } from 'cheerio'
 import providersConfig from '../providersConfig'
 import { File, FileUrl } from '../types/index'
+import { lastPathPartNoExt } from '../utils/url'
 
 interface IframeV1ParseResult {
   iframeHost: string
@@ -24,7 +24,7 @@ class KinogoProvider extends Provider {
   protected searchSelector = {
     id: {
       selector: '.zagolovki>a:nth-last-child(1)',
-      transform: ($el: Cheerio<AnyNode>): string => urlencode($el.attr('href') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => lastPathPartNoExt($el.attr('href')).split('.')[0]
     },
     name: '.zagolovki>a:nth-last-child(1)',
     image: {
@@ -157,6 +157,15 @@ class KinogoProvider extends Provider {
 
   static getFileUrlV1(iframeHost: string, filePath: string): string {
     return `https://${iframeHost}/playlist/${filePath.substring(1)}.txt`
+  }
+
+  override getInfoUrl(id: string): string {
+    if (id.startsWith('http')) {
+      return super.getInfoUrl(id)
+    }
+
+    const { baseUrl } = this.config
+    return `${baseUrl}/${id}.html`
   }
 }
 

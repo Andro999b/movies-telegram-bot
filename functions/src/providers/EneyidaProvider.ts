@@ -1,9 +1,9 @@
 import Provider from './CFDataLifeProvider'
 import playerjsembeded from '../utils/playerjsembed'
 import providersConfig from '../providersConfig'
-import urlencode from 'urlencode'
 import { AnyNode, Cheerio } from 'cheerio'
 import { File } from '../types/index'
+import { lastPathPartNoExt } from '../utils/url'
 
 class EneyidaProvider extends Provider {
 
@@ -15,7 +15,7 @@ class EneyidaProvider extends Provider {
   protected searchSelector = {
     id: {
       selector: 'a.short_title',
-      transform: ($el: Cheerio<AnyNode>): string => urlencode($el.attr('href') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => lastPathPartNoExt($el.attr('href'))
     },
     name: {
       transform: ($el: Cheerio<AnyNode>): string => {
@@ -55,6 +55,15 @@ class EneyidaProvider extends Provider {
       selector: '#trailer_place iframe',
       transform: ($el: Cheerio<AnyNode>): string | undefined => $el.attr('src')
     }
+  }
+
+  override getInfoUrl(id: string): string {
+    if (id.startsWith('http')) {
+      return super.getInfoUrl(id)
+    }
+
+    const { baseUrl } = this.config
+    return `${baseUrl}/${id}.html`
   }
 }
 

@@ -4,16 +4,20 @@ import { File, Playlist, ProviderConfig, SearchResult } from '../types/index'
 import Provider from './Provider'
 
 export interface InfoSelectors {
-  title: Selector<string, Playlist>
-  image: Selector<string, Playlist>
-  files: Selector<File[], Playlist>
-  trailer?: Selector<string | undefined, Playlist>
+  title: Selector<string, Playlist, InfoParams>
+  image: Selector<string, Playlist, InfoParams>
+  files: Selector<File[], Playlist, InfoParams>
+  trailer?: Selector<string | undefined, Playlist, InfoParams>
 }
 
 export interface SearchSelector {
   id: Selector<string, SearchResult>
   name: Selector<string, SearchResult>
   image?: Selector<string, SearchResult>
+}
+
+export interface InfoParams {
+  id: string
 }
 
 abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> extends Provider<Config> {
@@ -63,7 +67,7 @@ abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> e
     } = this.config
 
     const playlists = await crawler
-      .get<Playlist>(
+      .get<Playlist, InfoParams>(
         this.getInfoUrl(id),
         this.crawlerInfoRequestGenerator(id)
       )
@@ -72,7 +76,7 @@ abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> e
       .headers(headers!)
       .scope(this.infoScope)
       .set(this.infoSelectors)
-      .gather()
+      .gather({ id })
 
     if (playlists.length < 1) return null
 

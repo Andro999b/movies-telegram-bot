@@ -1,16 +1,16 @@
 import Provider from './CFDataLifeProvider'
 import playerjsembed from '../utils/playerjsembed'
 import providersConfig from '../providersConfig'
-import urlencode from 'urlencode'
 import { AnyNode, Cheerio } from 'cheerio'
 import { File } from '../types/index'
+import { lastPathPartNoExt } from '../utils/url'
 
 class UAFilmTVProvider extends Provider {
   protected searchScope = '.movie-item'
   protected searchSelector = {
     id: {
       selector: 'a.movie-title',
-      transform: ($el: Cheerio<AnyNode>): string => urlencode($el.attr('href') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => lastPathPartNoExt($el.attr('href'))
     },
     name: 'a.movie-title',
     image: {
@@ -38,6 +38,15 @@ class UAFilmTVProvider extends Provider {
 
   constructor() {
     super('uafilmtv', providersConfig.providers.uafilmtv)
+  }
+
+  override getInfoUrl(id: string): string {
+    if (id.startsWith('http')) {
+      return super.getInfoUrl(id)
+    }
+
+    const { baseUrl } = this.config
+    return `${baseUrl}/${id}.html`
   }
 }
 

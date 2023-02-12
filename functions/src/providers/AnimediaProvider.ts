@@ -2,10 +2,10 @@ import Provider from './CrawlerProvider'
 import superagent from 'superagent'
 import { AnyNode, Cheerio, load } from 'cheerio'
 import $ from 'cheerio'
-import urlencode from 'urlencode'
 import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
 import { File, SearchResult } from '../types/index'
 import providersConfig from '../providersConfig'
+import { lastPathPart } from '../utils/url'
 
 class AnimediaProvider extends Provider {
   protected searchScope: string
@@ -86,7 +86,7 @@ class AnimediaProvider extends Provider {
 
         return {
           provider: this.name,
-          id: urlencode($title.attr('href') ?? ''),
+          id: lastPathPart($title.attr('href') ?? ''),
           name: $title.text(),
           image: src
         }
@@ -95,6 +95,15 @@ class AnimediaProvider extends Provider {
 
   override getSearchUrl(): string {
     throw new Error('Method not implemented.')
+  }
+
+  override getInfoUrl(id: string): string {
+    if (id.startsWith('http')) {
+      return super.getInfoUrl(id)
+    }
+
+    const { baseUrl } = this.config
+    return `${baseUrl}/anime/${id}`
   }
 }
 

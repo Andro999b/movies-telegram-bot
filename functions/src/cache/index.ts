@@ -30,9 +30,9 @@ export const getCachedSource = async (
   provider: string,
   resultId: string,
   sourceId: string,
-  compute: () => Promise<File | null>
-): Promise<File | null> => {
-  const cache = await getCache<File>('source')
+  compute: () => Promise<Partial<File> | null>
+): Promise<Partial<File> | null> => {
+  const cache = await getCache<Partial<File>>('source')
   return cache.getOrCompute(
     `${provider}:${resultId}:${sourceId}`,
     compute

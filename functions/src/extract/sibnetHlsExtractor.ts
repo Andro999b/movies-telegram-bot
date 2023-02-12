@@ -1,7 +1,7 @@
 import superagent from 'superagent'
 import { Extractor } from './index'
 
-const SibnetHlsExtractor: Extractor = async (params) => {
+const sibnetHlsExtractor: Extractor = async (params) => {
   const { url } = params
 
   let res = await superagent
@@ -31,4 +31,4 @@ const SibnetHlsExtractor: Extractor = async (params) => {
   }
 }
 
-export default SibnetHlsExtractor
+export default sibnetHlsExtractor

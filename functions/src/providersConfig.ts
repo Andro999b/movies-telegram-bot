@@ -34,6 +34,18 @@ const config: ProvidersConfig = {
         ref_sign: '751d0cd2bc5db44f9d47f30cc5ac3eace8dac460ad9b16399ef5c938b0c9d290'
       }
     },
+    animego: {
+      searchUrl: 'https://animego.org/search/anime',
+      baseUrl: 'https://animego.org',
+      kodikSign: {
+        d: 'animego.org',
+        d_sign: '6d44aaa5cb9782cd4b3817129bfe9644c54504ad6c16a0e2adf239cde4dc416d',
+        pd: 'kodik.info',
+        pd_sign: '09ffe86e9e452eec302620225d9848eb722efd800e15bf707195241d9b7e4b2b',
+        ref: 'https%3A%2F%2Fanimego.org%2F',
+        ref_sign: '8adfdc4c8d7d47d4cc38577496ab4afd6b9540e5f2a7709895b2655c752842e3',
+      }
+    },
     anitubeua: {
       timeout: 10,
       imagesUrl: 'https://anitube.in.ua',
