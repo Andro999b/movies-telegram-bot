@@ -84,11 +84,15 @@ class AnimediaProvider extends Provider {
         const index = src.indexOf('?')
         src = src.substring(0, index)
 
+        const infoUrl = $title.attr('href')
+        const id = lastPathPart(infoUrl ?? '')
+
         return {
           provider: this.name,
-          id: lastPathPart($title.attr('href') ?? ''),
+          id,
           name: $title.text(),
-          image: src
+          image: src,
+          infoUrl
         }
       })
   }
