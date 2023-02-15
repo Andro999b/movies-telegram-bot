@@ -102,7 +102,7 @@ class AnimediaProvider extends Provider {
   }
 
   override getInfoUrl(id: string): string {
-    if (id.startsWith('http')) {
+    if (id.startsWith('/')) {
       return super.getInfoUrl(id)
     }
 
