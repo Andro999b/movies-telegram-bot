@@ -48,35 +48,33 @@ class MongoDBCache<Item> extends Cache<string, Item> {
     compute: (key: string) => Promise<Item>,
     isEmpty?: (item: Item) => boolean
   ): Promise<Item> {
-    let item: Item
     const cacheItem = await this.getCacheItem(key)
 
-    if (cacheItem) {
-      if (cacheItem.expired.getTime() < Date.now()) {
-        try {
-          item = await compute(key)
-
-          if (item != null && (isEmpty === undefined || !isEmpty(item))) { // if results unavaliable taking from cache
-            await this.putToCache(key, item)
-          } else {
-            item = cacheItem.result
-            // await this.extendExpire(key)
-          }
-        } catch (e) {  // if get resource failed exted cahce expiration time 
-          item = cacheItem.result
-          // await this.extendExpire(key)
-        }
-      } else {
-        item = cacheItem.result
-      }
-    } else {
-      item = await compute(key)
-      if (!isEmpty || !isEmpty(item)) {
+    if (!cacheItem) {
+      const item = await compute(key)
+      if (isEmpty === undefined || !isEmpty(item)) {
         await this.putToCache(key, item)
       }
+
+      return item
     }
 
-    return item
+    if (cacheItem.expired.getTime() > Date.now()) {
+      return cacheItem.result
+    }
+
+    try {
+      const item = await compute(key)
+
+      if (isEmpty === undefined || !isEmpty(item)) { // if results unavaliable taking from cache
+        await this.putToCache(key, item)
+        return item
+      }
+
+      return cacheItem.result
+    } catch (e) {  // if get resource failed exted cahce expiration time 
+      return cacheItem.result
+    }
   }
 }
 
