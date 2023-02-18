@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "sls offline --verbose --stage=dev --aws-profile serverless",
-    "debug:win": "SET SLS_DEBUG=*&&SET AWS_PROFILE=serverless&&node --inspect node_modules\\serverless\\bin\\serverless offline --verbose --stage=dev --aws-profile serverless",
+    "debug:win": "SET SLS_DEBUG=*&&node --inspect node_modules\\serverless\\bin\\serverless offline --verbose --stage=dev --aws-profile serverless",
     "lint": "eslint --fix **/*.[jt]s",
     "build": "npm run lint && sls package --stage=prod --aws-profile serverless",
     "release": "npm run lint && sls deploy --stage=prod --aws-profile serverless",

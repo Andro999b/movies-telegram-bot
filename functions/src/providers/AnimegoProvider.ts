@@ -1,7 +1,7 @@
 import CrawlerProvider, { InfoSelectors } from './CrawlerProvider'
 import providersConfig from '../providersConfig'
 import { AnyNode } from 'domhandler'
-import { Cheerio } from 'cheerio'
+import { Cheerio, CheerioAPI } from 'cheerio'
 import { Extractor, File, FileUrl } from '../types'
 import superagent from 'superagent'
 import { load } from 'cheerio'
@@ -45,7 +45,7 @@ class AnimegoProvider extends CrawlerProvider {
 
         const $ = load(res.body.content)
 
-        return $('.video-player-bar-series-list .video-player-bar-series-item')
+        const series = $('.video-player-bar-series-list .video-player-bar-series-item')
           .toArray()
           .map((el, index) => {
             const $el = $(el)
@@ -59,6 +59,19 @@ class AnimegoProvider extends CrawlerProvider {
               }
             }
           })
+
+        if (series.length > 0) {
+          return series
+        }
+
+        const $tabs = $('.video-player-toggle')
+        const urls = this.getFileUrls($, $tabs)
+
+        return [{
+          id: 0,
+          name: null,
+          urls
+        }]
       }
     }
   }
@@ -90,6 +103,12 @@ class AnimegoProvider extends CrawlerProvider {
 
     const $ = load(res.body.content)
     const $tabs = $('.video-player-toggle')
+    const urls = this.getFileUrls($, $tabs)
+
+    return { urls }
+  }
+
+  private getFileUrls($: CheerioAPI, $tabs: Cheerio<AnyNode>): FileUrl[] {
     const translations = $tabs.eq(0)
       .find('.video-player-toggle-item')
       .toArray()
@@ -104,7 +123,7 @@ class AnimegoProvider extends CrawlerProvider {
         return acc
       }, {})
 
-    const urls: FileUrl[] = $tabs.eq(1)
+    return $tabs.eq(1)
       .find('.video-player-toggle-item')
       .toArray()
       .map<FileUrl>((el) => {
@@ -120,8 +139,6 @@ class AnimegoProvider extends CrawlerProvider {
         }
       })
       .filter(({ extractor }) => extractor)
-
-    return { urls }
   }
 
   private getExtractor(url: string): Extractor | undefined {
