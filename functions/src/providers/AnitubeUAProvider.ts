@@ -13,6 +13,7 @@ const srcRegExp = /src="([^"]+)"/
 interface ExtratorConfig {
   type: ExtractorTypes
   hls?: boolean
+  transform?: (url: string) => string
 }
 
 const extractors: Record<string, ExtratorConfig | null> = {
@@ -27,7 +28,8 @@ const extractors: Record<string, ExtratorConfig | null> = {
     type: 'mp4local'
   },
   'csst.online': {
-    type: 'mp4local'
+    type: 'mp4local',
+    transform: (url) => url.replace('csst.online', 'secvideo1.online')
   },
   'veoh.com': null,
   'tortuga.wtf': {
@@ -188,6 +190,10 @@ class AnitubeUAProvider extends Provider {
       fileUrl.extractor = { type: extractor.type }
       if (extractor.hls) {
         fileUrl.hls = true
+      }
+
+      if (extractor.transform) {
+        fileUrl.url = extractor.transform(fileUrl.url)
       }
     }
     file.urls!.push(fileUrl)

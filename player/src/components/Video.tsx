@@ -54,7 +54,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
 
   useEffect(() => setFileIndex(0), [videoFiles])
 
-  const tryNextVideo = (): void => setFileIndex((i) => i + 1)
+  const tryNextVideo = (): void => setFileIndex(fileIndex + 1)
 
   const videoFile = videoFiles[fileIndex]
 
@@ -139,6 +139,7 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
         } catch (e) {
           logError(e, source)
           tryNextVideo()
+          return
         }
       }
 
