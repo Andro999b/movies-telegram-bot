@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useImperativeHandle,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -36,7 +37,11 @@ const logError = (errorData: unknown, source: Source | null): void => {
   })
 }
 
-const Video: React.FC<Props> = ({ device, onEnded }) => {
+export interface VideoApi {
+  takeScreanShot: () => string
+}
+
+const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
   const { audioTrack, quality, seekTo, volume, isMuted, isPlaying, playMode, pip } =
     device
   const source = device.source!
@@ -45,6 +50,24 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
   const [orientation, setOrientation] = useState('scale_hor')
   const [videoReady, setVideoReady] = useState(false)
   const [fileIndex, setFileIndex] = useState(0)
+
+  useImperativeHandle(ref, () => ({
+    takeScreanShot(): string {
+      const currentVideo = video.current!
+
+      const canvas = document.createElement('canvas')
+      canvas.width = currentVideo.videoWidth
+      canvas.height = currentVideo.videoHeight
+      canvas.getContext('2d').drawImage(currentVideo, 0, 0)
+
+      return canvas.toDataURL('image/jpeg')
+    },
+  }), [])
+
+  useEffect(() => {
+    video.current!.volume = volume
+  }, [volume])
+
   const videoFiles = useMemo(() => {
     const { urls } = source
     return urls
@@ -53,14 +76,6 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
   }, [source, audioTrack, quality])
 
   useEffect(() => setFileIndex(0), [videoFiles])
-
-  const tryNextVideo = (): void => setFileIndex(fileIndex + 1)
-
-  const videoFile = videoFiles[fileIndex]
-
-  useEffect(() => {
-    video.current!.volume = volume
-  }, [volume])
 
   useEffect(() => {
     const togglePip = async (): Promise<void> => {
@@ -102,6 +117,10 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
   )
 
   const { ref: container } = useResizeDetector({ onResize: handleResize })
+
+  const tryNextVideo = (): void => setFileIndex(fileIndex + 1)
+
+  const videoFile = videoFiles[fileIndex]
 
   useLayoutEffect(() => {
     setVideoReady(false)
@@ -152,9 +171,11 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
         startNativeVideo(url)
       }
     }
+
     const startNativeVideo = (src: string): void => {
       currentVideo.src = src
     }
+
     const startHlsVideo = (src: string): void => {
       type HlsConfig = typeof Hls.DefaultConfig;
 
@@ -302,6 +323,6 @@ const Video: React.FC<Props> = ({ device, onEnded }) => {
       />
     </div>
   )
-}
+})
 
 export default observer(Video)

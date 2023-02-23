@@ -12,7 +12,7 @@ const regexExtractor = (patterns: Array<Pattern | RegExp | string>): ExtractFun 
   async (url: string): Promise<string> => {
     const targetUrl = url.startsWith('//') ? 'https:' + url : url
 
-    const res = await fetch(`https://corsproxy.movies-player.workers.dev/?${targetUrl}`)
+    const res = await fetch(targetUrl)
     const content = await res.text()
 
     for (const pattern of patterns) {

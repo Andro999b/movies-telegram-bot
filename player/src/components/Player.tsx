@@ -5,14 +5,14 @@ import fscreen from 'fscreen'
 import MediaControls from './MediaControls'
 import PlayerFilesList from './PlayerPlayList'
 import PlayerTitle from './PlayerTitle'
-import Video from './Video'
+import Video, { VideoApi } from './Video'
 import PlayBackZones from './PlayBackZones'
 import Share from './Share'
 import { addGlobalKey, removeGlobalKey } from '../utils/globalKeys'
 
 import { observer } from 'mobx-react-lite'
 
-import { isTouchDevice } from '../utils'
+import { download, isTouchDevice, toHHMMSS } from '../utils'
 import { playerStore } from '../store'
 import Typography from '@mui/material/Typography'
 import PictureInPicture from './PictureInPicture'
@@ -60,6 +60,7 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
   const [idle, setIdle] = useState(false)
   const [fullScreen, setFullScreen] = useState(false)
   const container = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<VideoApi>(null)
 
   const { device } = playerStore
   const { error } = device
@@ -87,8 +88,9 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
   // const handleIdle = (idle) => setIdle(idle)
   const handleSelectFile = (fileIndex: number): void => {
     playerStore.switchFile(fileIndex)
-    if (isTouchDevice())
+    if (isTouchDevice()) {
       setPlaylistOpen(false)
+    }
   }
 
   const handleToggleFullscreen = useCallback(() => {
@@ -156,16 +158,30 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
     }
   }, [initialFullScreen])
 
+  const takeScreanShot = useCallback(() => {
+    if (videoRef.current) {
+      device.pause()
+      const image = videoRef.current.takeScreanShot()
+      download(image, `${document.title}-${toHHMMSS(device.currentTime).replaceAll(':', '-')}`)
+    }
+  }, [device])
+
+  useEffect(() => {
+    addGlobalKey(['KeyT'], () => takeScreanShot())
+  }, [takeScreanShot])
+
   useEffect(() => {
     addGlobalKey(['PageUp', 'BracketLeft'], () => playerStore.prevFile())
     addGlobalKey(['PageDown', 'BracketRight'], () => playerStore.nextFile())
+
 
     return () => {
       removeGlobalKey([
         'Space', 'Enter',
         'KeyF', 'KeyM', 'KeyP',
         'PageUp', 'PageDown',
-        'BracketLeft', 'BracketRight'
+        'BracketLeft', 'BracketRight',
+        'KeyT'
       ])
     }
   }, [])
@@ -182,7 +198,7 @@ const Player: React.FC<Props> = ({ initialFullScreen }) => {
             onPlayPause={handlePlayPause}
             onSeek={handleSeek}
             onSeekEnd={handleSeekEnd} />}
-        {(!error && device.source) && <Video device={device} onEnded={playerStore.fileEnd} />}
+        {(!error && device.source) && <Video device={device} onEnded={playerStore.fileEnd} ref={videoRef} />}
         {!hideUi && <>
           <PlayerTitle title={playerStore.getPlayerTitle()} />
           <Share device={device} playlist={device.playlist} />
