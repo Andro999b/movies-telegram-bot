@@ -9,7 +9,7 @@ interface Props {
 }
 
 const PictureInPicture: FC<Props> = ({ device }) => {
-  if (!('pictureInPictureEnabled' in document)) {
+  if (!('pictureInPictureEnabled' in document) && document.pictureInPictureEnabled) {
     return null
   }
 
