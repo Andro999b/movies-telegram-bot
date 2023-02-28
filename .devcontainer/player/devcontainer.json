@@ -2,6 +2,9 @@
 	"name": "Movies Player",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}/player/",
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/firebase-cli:2": {}
+	},
 	"forwardPorts": [
 		3000
 	],
