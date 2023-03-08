@@ -56,9 +56,13 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
       const currentVideo = video.current!
 
       const canvas = document.createElement('canvas')
-      canvas.width = currentVideo.videoWidth
-      canvas.height = currentVideo.videoHeight
-      canvas.getContext('2d').drawImage(currentVideo, 0, 0)
+      canvas.width = currentVideo.clientWidth
+      canvas.height = currentVideo.clientHeight
+      canvas.getContext('2d').drawImage(
+        currentVideo,
+        0, 0, currentVideo.videoWidth, currentVideo.videoHeight,
+        0, 0, currentVideo.clientWidth, currentVideo.clientHeight
+      )
 
       return canvas.toDataURL('image/jpeg')
     },
@@ -103,8 +107,7 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
     (width: number | undefined, height: number | undefined): void => {
       const currentVideo = video.current
       if (currentVideo && width && height) {
-        const originAspectRatio =
-          currentVideo.videoWidth / currentVideo.videoHeight
+        const originAspectRatio = currentVideo.videoWidth / currentVideo.videoHeight
         const containerAspectRatio = width / height
 
         let scale = 'hor'
@@ -214,7 +217,7 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
 
     startVideo()
 
-    return () => {
+    return (): void => {
       if (hlsDestory) {
         hlsDestory()
       }

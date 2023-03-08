@@ -77,16 +77,6 @@ class KinovodProvider extends CrawlerProvider {
         return convertPlayerJSPlaylist(playerJsPlaylist)
           .map((item, id) => ({ ...item, id }))
       }
-    },
-    trailer: {
-      selector: 'iframe.embed-responsive-item',
-      transform: ($el: Cheerio<AnyNode>): string | undefined => {
-        const src = $el.toArray()
-          .map((el) => $(el).attr('src'))
-          .find((src) => src?.search('youtube') != 1)
-
-        return src
-      }
     }
   }
 
