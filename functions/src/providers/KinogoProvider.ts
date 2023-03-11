@@ -51,10 +51,6 @@ class KinogoProvider extends Provider {
 
         return this.extractV1(iframeSrc)
       }
-    },
-    trailer: {
-      selector: 'video>source',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
     }
   }
 

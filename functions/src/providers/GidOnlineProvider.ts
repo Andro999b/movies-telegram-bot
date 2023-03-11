@@ -3,8 +3,9 @@ import providersConfig from '../providersConfig'
 import $, { AnyNode, Cheerio, load } from 'cheerio'
 import { extractObject } from '../utils/extractScriptVariable'
 import superagent from 'superagent'
-import { File, ProviderConfig } from '../types'
+import { File, ProviderConfig, SearchResult } from '../types'
 import { lastPathPart } from '../utils/url'
+import crawler, { superagentWithCharset } from '../utils/crawler'
 
 const BLOCK_COUNTIRES_REGEXP = /&block=[a-z,]+/
 const EMBED_ID_REGEXP = /embed\/(\d+)/
@@ -112,12 +113,6 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
     super('gidonline', providersConfig.providers.gidonline as GidOnlineProviderConfig)
   }
 
-  getSearchUrl(query: string): string {
-    const { searchUrl } = this.config
-
-    return `${searchUrl}?s=${encodeURIComponent(query)}`
-  }
-
   private getIframeUrl(token: string, type: string): string {
     let basePath
 
@@ -218,6 +213,64 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
     const { baseUrl } = this.config
     return `${baseUrl}/film/${id}`
   }
+
+  override async search(query: string): Promise<SearchResult[]> {
+    const name = this.getName()
+    const {
+      headers,
+      timeout,
+    } = this.config
+
+    query = this.prepareQuery(query)
+
+    this.getSearchUrl(query)
+
+    const res = await superagentWithCharset
+      .get(this.getSearchUrl(query))
+      .buffer(true)
+      .charset()
+      .timeout(timeout!)
+      .disableTLSCerts()
+      .set(headers!)
+
+    let results: SearchResult[] = []
+    const scrapper = new crawler.Scrapper<SearchResult>()
+
+
+    if(res.redirects.length == 0) {
+      await scrapper
+        .scope(this.searchScope)
+        .set(this.searchSelector)
+        .scrap(res.text, results)
+    } else {
+      await scrapper
+        .scope(this.infoScope)
+        .set({
+          name: this.infoSelectors.title,
+          image: this.infoSelectors.image,
+          id: {
+            transform: () => lastPathPart(res.redirects[res.redirects.length - 1])
+          }
+        })
+        .scrap(res.text, results)
+    }
+
+    results = await this.postProcessResult(results)
+
+    return results
+      .filter((item) => item.id)
+      .map((item) => {
+        item.provider = name
+        return item
+      })
+  }
+
+  getSearchUrl(query: string): string {
+    const { searchUrl } = this.config
+
+    return `${searchUrl}?s=${encodeURIComponent(query)}`
+  }
+
 }
 
 export default GidOnlineProvider

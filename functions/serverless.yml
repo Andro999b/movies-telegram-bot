@@ -28,7 +28,7 @@ provider:
   region: eu-north-1
   versionFunctions: false
   environment:
-    DEBUG: '*'
+    # DEBUG: '*'
     ANALYTIC_TABLE: ${self:custom.analyticsTable}
     CACHE_TABLE: ${self:custom.cacheTable}
     MONGODB_URI: ${self:custom.mongoUrl}

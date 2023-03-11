@@ -11,7 +11,7 @@ interface Response {
 
 export interface CrawlerContext<Item, AdditionalParams> {
   root: Cheerio<Document>
-  currentUrl: string
+  currentUrl?: string
   item: Item
   additionalParams?: AdditionalParams
 }
@@ -24,80 +24,29 @@ export interface SelectorConfig<Field = unknown, Item = unknown, AdditionalParam
 }
 export type Selector<Field = unknown, Item = unknown, AdditionalParams = unknown> = string | string[] | SelectorConfig<Field, Item, AdditionalParams>
 
-class Crawler<Item, AdditionalParams = null> {
-  private _requestGenerator: RequestGenerator
-  private _url: string
-  private _cfbypass = false
-  private _timeoutMs: number
-  private _headers: Record<string, string>
-  private _scope: string
-  private _selectors: { [key in keyof Item]?: Selector }
-  private _pagenatorSelector: string
-  private _limit: number
+class Scrapper<Item, AdditionalParams = null> {
+  protected _scope: string
+  protected _selectors: { [key in keyof Item]?: Selector }
+  protected _pagenatorSelector: string
+  protected _limit: number
 
-  constructor(url: string, requestGenerator?: RequestGenerator) {
-    this._requestGenerator = requestGenerator ?? ((nextUrl: string): Promise<Response> => {
-      if (this._cfbypass) {
-        return this.createCFBypassRequest(nextUrl)
-      } else {
-        return this.createDefaultRequest(nextUrl)
-      }
-    })
-    this._url = url
-  }
-
-  private async createCFBypassRequest(nextUrl: string): Promise<Response> {
-    return await invokeCFBypass(nextUrl, 'get', this.headers)
-  }
-
-  private createDefaultRequest(nextUrl: string): Promise<Response> {
-    const targetUrl = nextUrl != this._url ?
-      new URL(nextUrl, this._url).toString() :
-      nextUrl
-
-    const request = superagentWithCharset
-      .get(targetUrl)
-
-    return request
-      .buffer(true)
-      .charset()
-      .timeout(this._timeoutMs)
-      .disableTLSCerts()
-      .set(this._headers ?? {})
-  }
-
-  cfbypass(bypass: boolean): Crawler<Item, AdditionalParams> {
-    this._cfbypass = bypass
-    return this
-  }
-
-  headers(headers: Record<string, string>): Crawler<Item, AdditionalParams> {
-    this._headers = headers
-    return this
-  }
-
-  scope(scope: string): Crawler<Item, AdditionalParams> {
+  scope(scope: string): this {
     this._scope = scope
     return this
   }
 
-  set(selectors: { [key in keyof Item]?: Selector }): Crawler<Item, AdditionalParams> {
+  set(selectors: { [key in keyof Item]?: Selector }): this {
     this._selectors = selectors
     return this
   }
 
-  paginate(pagenatorSelector: string): Crawler<Item, AdditionalParams> {
+  paginate(pagenatorSelector: string): this{
     this._pagenatorSelector = pagenatorSelector
     return this
   }
 
-  limit(limit: number): Crawler<Item, AdditionalParams> {
+  limit(limit: number): this {
     this._limit = limit
-    return this
-  }
-
-  timeout(ms: number): Crawler<Item, AdditionalParams> {
-    this._timeoutMs = ms
     return this
   }
 
@@ -141,6 +90,104 @@ class Crawler<Item, AdditionalParams = null> {
     }
   }
 
+  async scrap(text: string, results: Item[] = [], additionalParams?: AdditionalParams, currentUrl?: string): Promise<{
+    results: Item[]
+    nextUrl: string | undefined,
+    limitReached: boolean
+  }> {
+    const $ = load(text, { xmlMode: false })
+
+    const nextUrl =
+      this._pagenatorSelector &&
+      $(this._pagenatorSelector).attr('href')
+
+    let limitReached = false
+
+    for (const el of $(this._scope)) {
+      const item: Record<string, unknown> = {}
+
+      for (const selectorName in this._selectors) {
+        const selector = this._selectors[selectorName]
+        if (selector !== undefined) {
+          item[selectorName] = await this.extractData($(el), selector, {
+            root: $.root(),
+            currentUrl,
+            item: item as Item,
+            additionalParams
+          })
+        }
+      }
+
+      results.push(item as Item)
+
+      if (this._limit && results.length >= this._limit) {
+        limitReached = true
+        break
+      }
+    }
+
+    return {
+      results,
+      nextUrl,
+      limitReached
+    }
+  }
+}
+
+class Crawler<Item, AdditionalParams = null> extends Scrapper<Item, AdditionalParams> {
+  private _requestGenerator: RequestGenerator
+  private _url: string
+  private _cfbypass = false
+  private _timeoutMs: number
+  private _headers: Record<string, string>
+
+  constructor(url: string, requestGenerator?: RequestGenerator) {
+    super()
+    this._requestGenerator = requestGenerator ?? ((nextUrl: string): Promise<Response> => {
+      if (this._cfbypass) {
+        return this.createCFBypassRequest(nextUrl)
+      } else {
+        return this.createDefaultRequest(nextUrl)
+      }
+    })
+    this._url = url
+  }
+
+  private async createCFBypassRequest(nextUrl: string): Promise<Response> {
+    return await invokeCFBypass(nextUrl, 'get', this.headers)
+  }
+
+  private createDefaultRequest(nextUrl: string): Promise<Response> {
+    const targetUrl = nextUrl != this._url ?
+      new URL(nextUrl, this._url).toString() :
+      nextUrl
+
+    const request = superagentWithCharset
+      .get(targetUrl)
+
+    return request
+      .buffer(true)
+      .charset()
+      .timeout(this._timeoutMs)
+      .disableTLSCerts()
+      .set(this._headers ?? {})
+  }
+
+  cfbypass(bypass: boolean): this {
+    this._cfbypass = bypass
+    return this
+  }
+
+  headers(headers: Record<string, string>): this {
+    this._headers = headers
+    return this
+  }
+
+  timeout(ms: number): this {
+    this._timeoutMs = ms
+    return this
+  }
+
   gather(additionalParams?: AdditionalParams): Promise<Item[]> {
     if (!this._scope) {
       throw Error('No scope selected')
@@ -150,44 +197,15 @@ class Crawler<Item, AdditionalParams = null> {
       throw Error('No selectors set')
     }
 
-    const results: Item[] = []
+    const allResults: Item[] = []
 
     const step = async (currentUrl: string): Promise<Item[]> => {
       const res = await this._requestGenerator(currentUrl)
 
-      const $ = load(res.text, { xmlMode: false })
-
-      const nextUrl =
-        this._pagenatorSelector &&
-        $(this._pagenatorSelector).attr('href')
-
-      let limitReached = false
-
-      for (const el of $(this._scope)) {
-        const item: Record<string, unknown> = {}
-
-        for (const selectorName in this._selectors) {
-          const selector = this._selectors[selectorName]
-          if (selector !== undefined) {
-            item[selectorName] = await this.extractData($(el), selector, {
-              root: $.root(),
-              currentUrl,
-              item: item as Item,
-              additionalParams
-            })
-          }
-        }
-
-        results.push(item as Item)
-
-        if (this._limit && results.length >= this._limit) {
-          limitReached = true
-          break
-        }
-      }
+      const { nextUrl, limitReached } = await this.scrap(res.text, allResults, additionalParams, currentUrl)
 
       if (!nextUrl || limitReached) {
-        return results
+        return allResults
       }
 
       return step(nextUrl)
@@ -199,6 +217,7 @@ class Crawler<Item, AdditionalParams = null> {
 
 export default {
   Crawler,
+  Scrapper,
   get<Item, AdditionalParams = null>(url: string, requestGenerator?: RequestGenerator): Crawler<Item, AdditionalParams> {
     return new Crawler<Item, AdditionalParams>(url, requestGenerator)
   }
