@@ -79,19 +79,18 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
         const seasonsEpisodes = extractObject(res.text, 'seasons_episodes') as SeasonEpisodes
 
         if (seasonsEpisodes == null) {
-          return this.extractMoveiFiles(translations)
+          return this.extractMoviesFiles(translations)
         }
 
         translations[0].token = this.extractEmbedId(iframeSrc)
 
-        const files = this.createTranslationFiles(0, translations[0], seasonsEpisodes, 'embed')
+        const files = this.createTranslationFiles(translations[0], seasonsEpisodes, 'embed')
 
         const translationFiles = await Promise.all(
           translations.slice(1)
             .map(async (translation, index) => {
               try {
                 return this.createTranslationFiles(
-                  index + 1,
                   translation,
                   await this.loadTranslationEpisodes(translation)
                 )
@@ -104,7 +103,10 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
 
         translationFiles.forEach((tf) => tf.forEach((f) => files.push(f)))
 
-        return files
+        return files.map((file, index) => {
+          file.id = index + 1
+          return file
+        })
       }
     }
   }
@@ -137,7 +139,7 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
     return extractObject(res.text, 'seasons_episodes') as SeasonEpisodes
   }
 
-  private extractMoveiFiles(translations: Translation[]): File[] {
+  private extractMoviesFiles(translations: Translation[]): File[] {
     return translations.map((translation, index) => ({
       name: translation.name,
       id: index + 1,
@@ -160,7 +162,6 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
   }
 
   private createTranslationFiles(
-    idOffset: number,
     translation: Translation,
     seasonEpisodes: SeasonEpisodes,
     type: 'serail' | 'embed' = 'serail'
@@ -171,10 +172,10 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
       const season = seasons[0]
       const episodes = seasonEpisodes[seasons[0]]
 
-      return episodes.map((ep, index) => ({
+      return episodes.map((ep) => ({
         name: 'Episode ' + ep,
         path: translation.name,
-        id: index + idOffset,
+        id: 0,
         asyncSource: {
           sourceId: translation.token,
           params: {
@@ -186,13 +187,13 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
       }))
     }
 
-    return seasons.flatMap((season, seasonIndex) => {
+    return seasons.flatMap((season) => {
       const episodes = seasonEpisodes[seasons[0]]
 
-      return episodes.map((ep, index) => ({
+      return episodes.map((ep) => ({
         name: 'Episode ' + ep,
         path: translation.name + '/' + 'Season ' + season,
-        id: index + idOffset + seasonIndex,
+        id: 0,
         asyncSource: {
           sourceId: translation.token,
           params: {
