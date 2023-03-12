@@ -164,7 +164,7 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
   private createTranslationFiles(
     translation: Translation,
     seasonEpisodes: SeasonEpisodes,
-    type: 'serail' | 'embed' = 'serail'
+    type: 'serial' | 'embed' = 'serial'
   ): File[] {
     const seasons = Object.keys(seasonEpisodes)
 
