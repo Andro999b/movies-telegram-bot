@@ -107,6 +107,8 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
     (width: number | undefined, height: number | undefined): void => {
       const currentVideo = video.current
       if (currentVideo && width && height) {
+        console.log(currentVideo.videoWidth, currentVideo.videoHeight, width, height)
+
         const originAspectRatio = currentVideo.videoWidth / currentVideo.videoHeight
         const containerAspectRatio = width / height
 
@@ -116,7 +118,7 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
         setOrientation(`scale_${scale}`)
       }
     },
-    []
+    [video]
   )
 
   const { ref: container } = useResizeDetector({ onResize: handleResize })
