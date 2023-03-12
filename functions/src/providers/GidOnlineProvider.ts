@@ -88,7 +88,7 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
 
         const translationFiles = await Promise.all(
           translations.slice(1)
-            .map(async (translation, index) => {
+            .map(async (translation) => {
               try {
                 return this.createTranslationFiles(
                   translation,
