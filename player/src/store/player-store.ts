@@ -145,31 +145,31 @@ export class Device {
       this.setLoading(true)
       this.source = null
 
-      const { provider, id } = this.playlist
-      let sourceId: string, params: Record<string, unknown> = {}, sourceParams = ''
-
-      if (typeof file.asyncSource === 'string' || typeof file.asyncSource === 'number') {
-        sourceId = file.asyncSource
-      } else {
-        sourceId = file.asyncSource.sourceId
-        params = file.asyncSource.params
-
-        sourceParams = Object.keys(params)
-          .map((key) => `${key}=${params[key]}`)
-          .join('&')
-        sourceParams = `?${sourceParams}`
-      }
-
-      let source: Partial<File>
-      const localSourceLoader = sourceLoaders[this.playlist.provider]
-      if (localSourceLoader) {
-        source = await localSourceLoader(sourceId, params)
-      } else {
-        const res = await fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
-        source = await res.json() as File
-      }
-
       try {
+        const { provider, id } = this.playlist
+        let sourceId: string, params: Record<string, unknown> = {}, sourceParams = ''
+  
+        if (typeof file.asyncSource === 'string' || typeof file.asyncSource === 'number') {
+          sourceId = file.asyncSource
+        } else {
+          sourceId = file.asyncSource.sourceId
+          params = file.asyncSource.params
+  
+          sourceParams = Object.keys(params)
+            .map((key) => `${key}=${params[key]}`)
+            .join('&')
+          sourceParams = `?${sourceParams}`
+        }
+        
+        let source: Partial<File>
+        const localSourceLoader = sourceLoaders[this.playlist.provider]
+        if (localSourceLoader) {
+          source = await localSourceLoader(sourceId, params)
+        } else {
+          const res = await fetch(`${window.API_BASE_URL}/trackers/${provider}/items/${encodeURIComponent(id)}/source/${sourceId}${sourceParams}`)
+          source = await res.json() as File
+        }
+
         if (fileIndex == this.currentFileIndex) {
           Object.keys(source).forEach((key: string) => {
             // @ts-ignore
