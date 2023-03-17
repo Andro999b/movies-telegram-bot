@@ -37,11 +37,17 @@ function _extractTranslations(
     .map((file, id) => ({ ...file, id }))
 }
 
-export default async (url: string, timeout = 20): Promise<File[]> => {
-  const res = await superagent
+export default async (url: string, timeout = 20, referer?: string): Promise<File[]> => {
+  let client = superagent
     .get(url.startsWith('//') ? 'https:' + url : url)
     .set('User-Agent', providersConfig.userAgent)
     .timeout(timeout * 1000)
+
+  if(referer) {
+    client = client.set('Referer', referer)
+  }
+    
+  const res = await client
 
   const $ = load(res.text)
 

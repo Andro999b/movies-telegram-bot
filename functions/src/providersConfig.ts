@@ -7,13 +7,15 @@ const config: ProvidersConfig = {
   userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
   providers: {
     videocdn: {
+      pageSize: 20,
       baseUrl: 'https://videocdn.tv/api',
       searchUrl: 'https://videocdn.tv/api',
+      referer: 'https://videocdn.tv/',
       types: ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
-      // iframe: '83.annacdn.cc',
-      // token: 'birzMxRwbHzYZSaRGe0ApcXgMbcNersl'// reserv      
-      iframe: '89.annacdn.cc',
-      token: 'wwwKfKgQ9PrIR6jX3ZILT6W10ymHsMt9'
+      iframe: '83.annacdn.cc',
+      token: 'birzMxRwbHzYZSaRGe0ApcXgMbcNersl'// reserv      
+      // iframe: '89.annacdn.cc',
+      // token: 'wwwKfKgQ9PrIR6jX3ZILT6W10ymHsMt9'
     },
     animedia: {
       baseUrl: 'https://online.animedia.tv',
