@@ -14,7 +14,9 @@ interface VideoCDNProviderConfig extends ProviderConfig {
 interface VideoCDNItem {
   id: number
   ru_title: string
-  kinopoisk_id: number
+  imdb_id: string
+  kinopoisk_id: string
+  worldart_id: string
   orig_title: string
   type: string
   year: string
@@ -74,23 +76,35 @@ class VideoCDNProvider extends Provider<VideoCDNProviderConfig> {
     return results
       .map(({ items, type }) => items.map((item: VideoCDNItem) => ({ ...item, type })))
       .flatMap((it: VideoCDNItemWithType) => it)
-      .map(({ id, ru_title, kinopoisk_id, orig_title, type, year }) => {
+      .map(({ ru_title,  imdb_id,  worldart_id, kinopoisk_id, orig_title, year }) => {
         year = year ? year.split('-')[0] : ''
+
+        let id = ''
+        if(imdb_id) {
+          id = 'imdb_id-' + imdb_id
+        } else if(worldart_id) {
+          id = 'worldart_id-' + worldart_id
+        } else if(kinopoisk_id) {
+          id = 'kinopoisk_id-' + kinopoisk_id
+        }
+
         return {
           provider: this.name,
-          id: `${type}_${id}`,
+          id,
           name: `${ru_title} (${year || orig_title})`,
           image: `https://corsproxy.movies-player.workers.dev/?${encodeURIComponent(`https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`)}`
         }
       })
+      .filter(({ id }) => id)
+
   }
 
   override async getInfo(typeAndId: string): Promise<Playlist | null> {
-    const [type, id] = typeAndId.split('_')
+    const [type, id] = typeAndId.split('-')
 
     const { baseUrl, token, infoTimeout, referer } = this.config
 
-    const res = await superagent.get(`${baseUrl}/${type}?api_token=${token}&id=${id}`)
+    const res = await superagent.get(`${baseUrl}/short/?api_token=${token}&${type}=${id}`)
       .timeout(infoTimeout!)
       .buffer(true)
 
@@ -99,7 +113,7 @@ class VideoCDNProvider extends Provider<VideoCDNProviderConfig> {
     if (data.length == 0)
       return null
 
-    const { ru_title, iframe_src, kinopoisk_id } = data[0]
+    const { title, iframe_src, kp_id } = data[0]
     const url = iframe_src.startsWith('//') ? 'https:' + iframe_src : iframe_src
 
     let files: File[] = []
@@ -110,17 +124,17 @@ class VideoCDNProvider extends Provider<VideoCDNProviderConfig> {
       console.error('Fail to get files', e)
     }
 
-    const kinopoiskPoster = `https://st.kp.yandex.net/images/film_big/${kinopoisk_id}.jpg`
+    const kinopoiskPoster = `https://st.kp.yandex.net/images/film_big/${kp_id}.jpg`
 
 
     if (files.length == 1) {
-      files[0].name = ru_title
+      files[0].name = title
     }
 
     return {
       id: typeAndId,
       provider: this.name,
-      title: ru_title,
+      title: title,
       files,
       image: `https://corsproxy.movies-player.workers.dev/?${encodeURIComponent(kinopoiskPoster)}`
     }
