@@ -8,7 +8,7 @@ import { Playlist } from '../types'
 
 const app = initializeApp({
   apiKey: 'AIzaSyCoQdUA6jN3cWx_yopHDVsC2aIW9Bor2P4',
-  authDomain: 'movies-player.firebaseapp.com',
+  authDomain: 'movies-player.web.app',
   databaseURL: 'https://movies-player.firebaseio.com',
   projectId: 'movies-player',
   storageBucket: 'movies-player.appspot.com',
