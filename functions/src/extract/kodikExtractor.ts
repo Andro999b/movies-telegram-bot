@@ -35,9 +35,13 @@ export interface KodikParams {
 }
 
 function decodeSrc(src: string): string {
-  src = src.replace(/[a-zA-Z]/g, (e: string) => 
-    String.fromCharCode((e <= 'Z' ? 90 : 122) >= (e = e.charCodeAt(0) + 13) ? e : e - 26)
-  )
+  src = src.replace(/[a-zA-Z]/g, (e: string): string => {
+    const a = e <= 'Z' ? 90 : 122
+    const b = e.charCodeAt(0) + 13
+    const c = b - 26
+    return String.fromCharCode(a >= b ? b : c)
+  })
+
   return base64decode(src)
 }
 
