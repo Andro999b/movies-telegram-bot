@@ -3,6 +3,7 @@ import makeResponse from '../utils/makeResponse'
 import { extractStringSingleQuote } from '../utils/extractScriptVariable'
 import providersConfig from '../providersConfig'
 import { APIGatewayProxyResult } from 'aws-lambda'
+import { base64decode } from '../utils/base64'
 
 const linksApi = 'https://kodik.info/gvi'
 const userAgent = providersConfig.userAgent
@@ -31,6 +32,13 @@ export interface KodikParams {
   ttype?: string
   thash?: string
   season?: string
+}
+
+function decodeSrc(src: string): string {
+  src = src.replace(/[a-zA-Z]/g, (e: string) => 
+    String.fromCharCode((e <= 'Z' ? 90 : 122) >= (e = e.charCodeAt(0) + 13) ? e : e - 26)
+  )
+  return base64decode(src)
 }
 
 const kodikExtractor = async ({ url, referer, kodikSign, ttype, tid, thash, season }: KodikParams): Promise<APIGatewayProxyResult> => {
@@ -90,7 +98,7 @@ const kodikExtractor = async ({ url, referer, kodikSign, ttype, tid, thash, seas
   const videoInfo = JSON.parse(videoInfoRes.text)
   const links = videoInfo.links
 
-  let redirectUrl = linkExtractor(links, true)
+  let redirectUrl = decodeSrc(linkExtractor(links, true))
 
   if (redirectUrl.startsWith('//')) {
     redirectUrl = 'https:' + redirectUrl
