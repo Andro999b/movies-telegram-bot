@@ -12,10 +12,21 @@ interface KodikLinks {
   [key: string]: { src: string }[]
 }
 
+function decodeSrc(src: string): string {
+  src = src.replace(/[a-zA-Z]/g, (e: string): string => {
+    const a = e <= 'Z' ? 90 : 122
+    const b = e.charCodeAt(0) + 13
+    const c = b - 26
+    return String.fromCharCode(a >= b ? b : c)
+  })
+
+  return base64decode(src)
+}
+
 function linkExtractor(links: KodikLinks, hls: boolean): string {
   const bestQuality = Object.keys(links).pop()!
   let redirectUrl = links[bestQuality][0].src
-  redirectUrl = Buffer.from(redirectUrl.split('').reverse().join(''), 'base64').toString()
+  redirectUrl = decodeSrc(redirectUrl)
 
   if (!hls) {
     redirectUrl = redirectUrl.replace(':hls:manifest.m3u8', '')
@@ -34,16 +45,7 @@ export interface KodikParams {
   season?: string
 }
 
-function decodeSrc(src: string): string {
-  src = src.replace(/[a-zA-Z]/g, (e: string): string => {
-    const a = e <= 'Z' ? 90 : 122
-    const b = e.charCodeAt(0) + 13
-    const c = b - 26
-    return String.fromCharCode(a >= b ? b : c)
-  })
 
-  return base64decode(src)
-}
 
 const kodikExtractor = async ({ url, referer, kodikSign, ttype, tid, thash, season }: KodikParams): Promise<APIGatewayProxyResult> => {
   let id, hash, type = 'video'
@@ -102,7 +104,7 @@ const kodikExtractor = async ({ url, referer, kodikSign, ttype, tid, thash, seas
   const videoInfo = JSON.parse(videoInfoRes.text)
   const links = videoInfo.links
 
-  let redirectUrl = decodeSrc(linkExtractor(links, true))
+  let redirectUrl = linkExtractor(links, true)
 
   if (redirectUrl.startsWith('//')) {
     redirectUrl = 'https:' + redirectUrl
