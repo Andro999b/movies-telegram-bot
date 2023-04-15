@@ -8,6 +8,45 @@ import providersConfig from '../providersConfig'
 import { File } from '../types/index'
 import { ProcessingInstruction } from 'domhandler'
 
+function decodeChar(d: string, e: number, f: number): number {
+  const g = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('')
+  const h = g.slice(0, e)
+  const i = g.slice(0, f)
+  let j = d.split('')
+    .reverse()
+    .reduce((a, b, c) => {
+      if (h.indexOf(b) !== -1) 
+        return a += h.indexOf(b) * (Math.pow(e, c))
+      return
+    }, 0) || 0
+  let k = ''
+  while (j > 0) {
+    k = i[j % f] + k; j = (j - (j % f)) / f
+  }
+  return +k || 0
+}
+
+function decoder(h: string, n: string, t: number, e: number): string {
+  let r = ''
+
+  for (let i = 0, len = h.length; i < len; i++) {
+    let s = ''
+
+    while (h[i] !== n[e]) {
+      s += h[i]; i++
+    }
+
+    for (let j = 0; j < n.length; j++)
+      s = s.replace(new RegExp(n[j], 'g'), j.toString())
+
+    r += String.fromCharCode(decodeChar(s, e, 10) - t)
+  }
+
+  return decodeURIComponent(r)
+}
+
+const USER_DATA_REG_EXP = /\("(\w+)",\d+,"(\w+)",(\d+),(\d+),\d+\)/
+
 class KinovodProvider extends CrawlerProvider {
   protected searchScope = '.items>.item'
   protected searchSelector = {
@@ -47,20 +86,29 @@ class KinovodProvider extends CrawlerProvider {
         const identifier = extractString(targetScript, 'IDENTIFIER')
 
         let res
-        let url = `${this.config.baseUrl}/user_data?page=movie&movie_id=${movieId}&cuid=${playerCuid}&device=DESKTOP&_=${Date.now()}`
+        let url = `${this.config.baseUrl}/user_data.js?page=movie&movie_id=${movieId}&cuid=${playerCuid}&device=DESKTOP&_=${Date.now()}`
 
         try {
           res = await superagent
             .get(url)
+            .buffer(true)
             .timeout(this.config.timeout!)
         } catch (e) {
           console.error(e)
           return []
         }
 
-        const resJson = JSON.parse(res.text)
-        const vodHash = resJson.vod_hash
-        const vodTime = resJson.vod_time
+        const matches = res.text.match(USER_DATA_REG_EXP) || []
+
+        const code = decoder(
+          matches[1],
+          matches[2],
+          +matches[3],
+          +matches[4]
+        )
+
+        const vodHash = extractString(code, 'marx13_vod_hash')
+        const vodTime = extractString(code, 'marx13_vod_time')
 
         url = `${this.config.baseUrl}/vod/${movieId}?identifier=${identifier}&player_type=new&file_type=hls&st=${vodHash}&e=${vodTime}&_=${Date.now()}`
 
