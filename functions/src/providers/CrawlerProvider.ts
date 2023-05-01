@@ -10,7 +10,7 @@ export interface InfoSelectors {
   trailer?: Selector<string | undefined, Playlist, InfoParams>
 }
 
-export interface SearchSelector {
+export interface SearchSelectors {
   id: Selector<string, SearchResult>
   name: Selector<string, SearchResult>
   image?: Selector<string, SearchResult>
@@ -22,7 +22,7 @@ export interface InfoParams {
 
 abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> extends Provider<Config> {
   protected abstract searchScope: string
-  protected abstract searchSelector: SearchSelector
+  protected abstract searchSelector: SearchSelectors
 
   protected abstract infoScope: string
   protected abstract infoSelectors: InfoSelectors

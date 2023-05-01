@@ -2,7 +2,7 @@ import Provider from './CFDataLifeProvider'
 import providerConfig from '../providersConfig'
 import $, { AnyNode, Cheerio } from 'cheerio'
 import urlencode from 'urlencode'
-import { InfoSelectors, SearchSelector } from './CrawlerProvider'
+import { InfoSelectors, SearchSelectors } from './CrawlerProvider'
 import { File, FileUrl } from '../types/index'
 import invokeCFBypass from '../utils/invokeCFBypass'
 import { extractIntFromSting } from '../utils/extractNumber'
@@ -10,7 +10,7 @@ import playerjsembed from '../utils/playerjsembed'
 
 class UAKinoClubProvider extends Provider {
   protected searchScope = '.movie-item'
-  protected searchSelector: SearchSelector = {
+  protected searchSelector: SearchSelectors = {
     name: '.movie-title',
     id: {
       selector: '.movie-title',

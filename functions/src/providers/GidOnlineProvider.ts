@@ -5,7 +5,9 @@ import { extractObject } from '../utils/extractScriptVariable'
 import superagent from 'superagent'
 import { File, ProviderConfig, SearchResult } from '../types'
 import { lastPathPart } from '../utils/url'
-import crawler, { superagentWithCharset } from '../utils/crawler'
+import crawler, { CrawlerContext, superagentWithCharset } from '../utils/crawler'
+import { InfoSelectors } from './CrawlerProvider'
+import { SearchSelectors } from './CrawlerProvider'
 
 const BLOCK_COUNTIRES_REGEXP = /&block=[a-z,]+/
 const EMBED_ID_REGEXP = /embed\/(\d+)/
@@ -25,7 +27,7 @@ interface SeasonEpisodes {
 
 class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
   protected searchScope = '.mainlink'
-  protected searchSelector = {
+  protected searchSelector: SearchSelectors = {
     id: {
       transform: ($el: Cheerio<AnyNode>): string => lastPathPart($el.attr('href'))
     },
@@ -43,7 +45,7 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
     }
   }
   protected infoScope = '#main'
-  protected infoSelectors = {
+  protected infoSelectors: InfoSelectors = {
     title: '#single > .t-row > .r-1 > .rl-2',
     image: {
       selector: '#single > img.t-img',
@@ -76,32 +78,35 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
             }
           })
 
+
         const seasonsEpisodes = extractObject(res.text, 'seasons_episodes') as SeasonEpisodes
 
+        let files: File[]
+
         if (seasonsEpisodes == null) {
-          return this.extractMoviesFiles(translations)
+          files = this.extractMoviesFiles(translations, this.extractEmbedId(iframeSrc))
+        } else {
+          translations[0].token = this.extractEmbedId(iframeSrc)
+          files = this.createTranslationFiles(translations[0], seasonsEpisodes, 'embed')
+
+          const translationFiles = await Promise.all(
+            translations.slice(1)
+              .map(async (translation) => {
+                try {
+                  return this.createTranslationFiles(
+                    translation,
+                    await this.loadTranslationEpisodes(translation)
+                  )
+                } catch (e) {
+                  this.debug(`Error to load translation files: ${translation.name}(${translation.token})`, e)
+                  return []
+                }
+              })
+          )
+          translationFiles.forEach((tf) => tf.forEach((f) => files.push(f)))
         }
 
-        translations[0].token = this.extractEmbedId(iframeSrc)
 
-        const files = this.createTranslationFiles(translations[0], seasonsEpisodes, 'embed')
-
-        const translationFiles = await Promise.all(
-          translations.slice(1)
-            .map(async (translation) => {
-              try {
-                return this.createTranslationFiles(
-                  translation,
-                  await this.loadTranslationEpisodes(translation)
-                )
-              } catch (e) {
-                this.debug(`Error to load translation files: ${translation.name}(${translation.token})`, e)
-                return []
-              }
-            })
-        )
-
-        translationFiles.forEach((tf) => tf.forEach((f) => files.push(f)))
 
         return files.map((file, index) => {
           file.id = index + 1
@@ -139,18 +144,28 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
     return extractObject(res.text, 'seasons_episodes') as SeasonEpisodes
   }
 
-  private extractMoviesFiles(translations: Translation[]): File[] {
-    return translations.map((translation, index) => ({
+  private extractMoviesFiles(translations: Translation[], defaultSourceId: string): File[] {
+    const files: File[] = [{
+      name: translations[0].name,
+      id: 0,
+      asyncSource: {
+        sourceId: defaultSourceId,
+        params: {
+          type: 'embed'
+        }
+      }
+    }]
+
+    return files.concat(translations.slice(1).map((translation) => ({
       name: translation.name,
-      id: index + 1,
+      id: 0,
       asyncSource: {
         sourceId: translation.token,
         params: {
           type: 'movie'
         }
       }
-    })
-    )
+    })))
   }
 
   private extractEmbedId(iframeSrc: string): string {
@@ -238,7 +253,7 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
     const scrapper = new crawler.Scrapper<SearchResult>()
 
 
-    if(res.redirects.length == 0) {
+    if (res.redirects.length == 0) {
       await scrapper
         .scope(this.searchScope)
         .set(this.searchSelector)
