@@ -4,7 +4,7 @@ import makeResponse from '../utils/makeResponse'
 import { tunnelHttpsAgent } from '../utils/tunnelAgent'
 import providersConfig from '../providersConfig'
 
-export type MatchTransformer = (match: RegExpMatchArray) => Promise<string>
+export type MatchTransformer = (match: RegExpMatchArray) => Promise<string> | string
 export type Pattern = RegExp | string | {
   expression: RegExp
   transform: MatchTransformer

@@ -11,6 +11,8 @@ import { APIGatewayProxyResult } from 'aws-lambda'
 import { ExtractorTypes } from '../types/index'
 import animegoKodikExtractor from './animegoKodik'
 import aniboomExtractor from './aniboomExtractor'
+import webmExtractor from './webmExtractor'
+import mp4uploadExtractor from './mp4uploadExtractor'
 
 export interface ExtractorParams {
   type: ExtractorTypes
@@ -36,7 +38,9 @@ const extractors: Record<ExtractorTypes, Extractor> = {
   mp4local: mp4PExtractor,
   m3u8local: m3u8Extractor,
   mp4proxy: mp4proxy,
-  m3u8proxy: m3u8proxy
+  m3u8proxy: m3u8proxy,
+  webm: webmExtractor,
+  mp4upload: mp4uploadExtractor
 }
 export default async (parmas: ExtractorParams, headers: Record<string, string>): Promise<APIGatewayProxyResult> => {
   if (!parmas)

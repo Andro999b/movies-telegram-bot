@@ -56,4 +56,6 @@ export type ExtractorTypes =
   'mp4local' |
   'm3u8local' |
   'mp4proxy' |
-  'm3u8proxy'
+  'm3u8proxy' |
+  'webm' |
+  'mp4upload'

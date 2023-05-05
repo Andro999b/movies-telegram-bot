@@ -25,11 +25,15 @@ const extractors: Record<string, ExtratorConfig | null> = {
   //   type: 'sibnetmp4'
   // },
   'secvideo1': {
-    type: 'mp4local'
+    type: 'mp4local',
+    transform: (url) => 'https://corsproxy.movies-player.workers.dev?' + url
   },
   'csst.online': {
     type: 'mp4local',
-    transform: (url) => url.replace('csst.online', 'secvideo1.online')
+    transform: (url) => 'https://corsproxy.movies-player.workers.dev?' + url.replace('csst.online', 'secvideo1.online')
+  },
+  'moonanime.art': {
+    type: 'webm'
   },
   'veoh.com': null,
   'tortuga.wtf': {

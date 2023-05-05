@@ -5,7 +5,7 @@ import { extractObject } from '../utils/extractScriptVariable'
 import superagent from 'superagent'
 import { File, ProviderConfig, SearchResult } from '../types'
 import { lastPathPart } from '../utils/url'
-import crawler, { CrawlerContext, superagentWithCharset } from '../utils/crawler'
+import crawler, { superagentWithCharset } from '../utils/crawler'
 import { InfoSelectors } from './CrawlerProvider'
 import { SearchSelectors } from './CrawlerProvider'
 
