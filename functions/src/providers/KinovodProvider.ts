@@ -1,4 +1,4 @@
-import CrawlerProvider from './CrawlerProvider'
+import CrawlerProvider, { SearchSelectors } from './CrawlerProvider'
 import { extractNumber, extractString } from '../utils/extractScriptVariable'
 import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
 import urlencode from 'urlencode'
@@ -49,12 +49,20 @@ const USER_DATA_REG_EXP = /\("(\w+)",\d+,"(\w+)",(\d+),(\d+),\d+\)/
 
 class KinovodProvider extends CrawlerProvider {
   protected searchScope = '.items>.item'
-  protected searchSelector = {
+  protected searchSelector: SearchSelectors = {
     id: {
       selector: '>a',
       transform: ($el: Cheerio<AnyNode>): string => urlencode($el.attr('href') ?? '')
     },
-    name: '>.info>.title>a',
+    name: {
+      selector: '>.info',
+      transform: ($el: Cheerio<AnyNode>): string => {
+        const name = $el.find('>.title>a').text()
+        const [year] = $el.find('>.desc').text().split(',')
+        
+        return `${name} (${year})`
+      }
+    },
     image: {
       selector: '>a>img',
       transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')

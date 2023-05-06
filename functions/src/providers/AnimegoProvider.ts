@@ -1,4 +1,4 @@
-import CrawlerProvider, { InfoSelectors } from './CrawlerProvider'
+import CrawlerProvider, { InfoSelectors, SearchSelectors } from './CrawlerProvider'
 import providersConfig from '../providersConfig'
 import { AnyNode } from 'domhandler'
 import { Cheerio, CheerioAPI } from 'cheerio'
@@ -11,7 +11,7 @@ const NEW_LINE_REGEXP = /\n/g
 
 class AnimegoProvider extends CrawlerProvider {
   protected searchScope = '.animes-grid-item'
-  protected searchSelector = {
+  protected searchSelector: SearchSelectors = {
     id: {
       selector: '.animes-grid-item-body .h5 a',
       transform: ($el: Cheerio<AnyNode>): string => lastPathPart($el.attr('href'))
@@ -20,7 +20,15 @@ class AnimegoProvider extends CrawlerProvider {
       selector: '.animes-grid-item-picture .anime-grid-lazy',
       transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('data-original') ?? '')
     },
-    name: '.animes-grid-item-body .h5 a'
+    name: {
+      selector: '.animes-grid-item-body',
+      transform: ($el: Cheerio<AnyNode>): string => {
+        const title = $el.find('.card-title').text()
+        const year = $el.find('.anime-year').text()
+
+        return `${title} (${year})`
+      }
+    }
   }
   protected infoScope = '#content'
   protected infoSelectors: InfoSelectors = {

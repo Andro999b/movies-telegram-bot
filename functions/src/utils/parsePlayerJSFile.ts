@@ -42,7 +42,7 @@ export default (input: string): UrlAndQualityAndAudio[] => {
             quality
           }
 
-          const groups = res.groups ?? {} as { ursl: string, audio: string }
+          const groups = res.groups ?? {} as { url: string, audio: string }
 
           return {
             url: groups?.url,

@@ -12,7 +12,7 @@ interface KodikLinks {
   [key: string]: { src: string }[]
 }
 
-function decodeSrc(src: string): string {
+export function decodeSrc(src: string): string {
   src = src.replace(/[a-zA-Z]/g, (e: string): string => {
     const a = e <= 'Z' ? 90 : 122
     const b = e.charCodeAt(0) + 13

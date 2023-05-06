@@ -3,7 +3,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitOverride": true,

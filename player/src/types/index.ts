@@ -33,7 +33,7 @@ export interface FileUrl {
 
 export interface Extrator {
   type: string
-
+  params: Record<string, string>
 }
 
 export interface Source {

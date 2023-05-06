@@ -6,6 +6,7 @@ import { ExtractorTypes, File, FileUrl } from '../types/index'
 import { ProcessingInstruction } from 'domhandler'
 import { extractIntFromSting } from '../utils/extractNumber'
 import { lastPathPartNoExt } from '../utils/url'
+import { SearchSelectors } from './CrawlerProvider'
 
 const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
 const srcRegExp = /src="([^"]+)"/
@@ -44,12 +45,20 @@ const extractors: Record<string, ExtratorConfig | null> = {
 
 class AnitubeUAProvider extends Provider {
   protected searchScope = '.story'
-  protected searchSelector = {
+  protected searchSelector: SearchSelectors = {
     id: {
       selector: '.story_c > h2 > a',
       transform: ($el: Cheerio<AnyNode>): string => lastPathPartNoExt($el.attr('href'))
     },
-    name: '.story_c > h2 > a',
+    name: {
+      selector: '.story_c',
+      transform: ($el: Cheerio<AnyNode>): string => {
+        const name = $el.find('> h2 > a').text()
+        const year = $el.find('.story_infa a').first().text()
+        
+        return `${name} (${year})`
+      }
+    },
     image: {
       selector: '.story_post > img',
       transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')

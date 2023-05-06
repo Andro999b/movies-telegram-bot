@@ -80,7 +80,7 @@ export const getAlternativeUrl = (provider: string, query: string): string => {
   return `https://t.me/${bot}?start=${encodeURIComponent(base64UrlEncode(query))}`
 }
 
-export const isNativeHSLUserAgent = (): boolean => {
+export const isNativeHLSUserAgent = (): boolean => {
   // webkit based browsers
 
   if (/iP(ad|hone|od).+Version\/[\d\\.]+.*Safari/i.test(navigator.userAgent))

@@ -19,7 +19,7 @@ import analytics from '../utils/analytics'
 import { toJS } from 'mobx'
 import { Source } from '../types'
 import { Device } from '../store/player-store'
-import { isNativeHSLUserAgent } from '../utils'
+import { isNativeHLSUserAgent as isNativeHLSUserAgent } from '../utils'
 
 import Hls from 'hls.js'
 
@@ -42,7 +42,7 @@ export interface VideoApi {
 }
 
 const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
-  const { audioTrack, quality, seekTo, volume, isMuted, isPlaying, playMode, pip } =
+  const { audioTrack, quality, seekTo, volume, isMuted, isPlaying, pip } =
     device
   const source = device.source!
   const video = useRef<HTMLVideoElement>(null)
@@ -145,7 +145,7 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
       return
     }
 
-    let hlsDestory: () => void | null
+    let destroyCallback: () => void | null
     const currentVideo = video.current!
 
     const startVideo = async (): Promise<void> => {
@@ -168,7 +168,7 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
       currentVideo.currentTime = 0
       currentVideo.load()
 
-      if (!isNativeHSLUserAgent() && isHls) {
+      if (!isNativeHLSUserAgent() && isHls) {
         startHlsVideo(url)
       } else {
         startNativeVideo(url)
@@ -212,14 +212,14 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
       })
       hls.attachMedia(currentVideo)
       hls.loadSource(src)
-      hlsDestory = hls.destroy.bind(hls)
+      destroyCallback = hls.destroy.bind(hls)
     }
 
     startVideo()
 
     return (): void => {
-      if (hlsDestory) {
-        hlsDestory()
+      if (destroyCallback) {
+        destroyCallback()
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -285,14 +285,6 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
   }
   const handlePlaying = (): void => device.setLoading(false)
   const handleWaiting = (): void => device.setLoading(true)
-  const handleEnded = (): void => {
-    if (playMode == 'repeat') {
-      video.current!.currentTime = 0
-      video.current!.play()
-    } else {
-      onEnded()
-    }
-  }
 
   const onPlayPause = (): void => {
     const currentVideo = video.current!
@@ -313,7 +305,7 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
         className={orientation}
         ref={video}
         muted={isMuted}
-        onEnded={handleEnded}
+        onEnded={onEnded}
         onDurationChange={handleUpdate}
         onProgress={handleUpdate}
         onTimeUpdate={handleUpdate}

@@ -301,12 +301,12 @@ class PlayerStore {
   }
 
   @action.bound fileEnd(): void {
-    const { playlist, autoPlay } = this.device
+    const { playlist, autoPlay, playMode, currentFileIndex } = this.device
 
-
-
-    if (!autoPlay) {
+    if (!autoPlay || (playMode == 'normal' && currentFileIndex == playlist.files.length - 1)) {
       this.device.pause()
+    } else if(playMode == 'repeat') {
+      this.device.play(0)
     } else if (playlist.files.length > 1) {
       this.switchFileOrShuffle(this.device.currentFileIndex + 1)
     }
