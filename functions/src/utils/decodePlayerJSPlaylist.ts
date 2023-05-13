@@ -11,6 +11,7 @@ export default (file: string, keys: string[], keyPrefix = '//_//'): string | nul
   try {
     return base64decode(a)
   } catch (e) {
+    console.error('fail decode playerjs playlist', a, e)
     return null
   }
 }

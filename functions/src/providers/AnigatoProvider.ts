@@ -5,6 +5,7 @@ import $, { AnyNode, Cheerio, Element, load } from 'cheerio'
 import providersConfig from '../providersConfig'
 import { File, FileUrl, Playlist } from '../types/index'
 import { CrawlerContext } from '../utils/crawler'
+import { InfoParams } from './CrawlerProvider'
 
 class AnigatoProvider extends Provider {
   protected searchScope = '.sres-wrap'
@@ -26,7 +27,7 @@ class AnigatoProvider extends Provider {
     },
     files: {
       selector: '#kodik-player iframe',
-      transform: async ($el: Cheerio<AnyNode>, context: CrawlerContext<Playlist>): Promise<File[]> => {
+      transform: async ($el: Cheerio<AnyNode>, context: CrawlerContext<Playlist, InfoParams>): Promise<File[]> => {
         let iframeSrc = $el.attr('src')
           ?.replace('kodik.info', 'kodik.biz')
           ?.replace('kodik.cc', 'kodik.biz')

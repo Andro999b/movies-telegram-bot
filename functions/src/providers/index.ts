@@ -14,6 +14,7 @@ import Provider from './Provider'
 import { File, Playlist, ProvidersNames, SearchResult } from '../types/index'
 import GidOnlineProvider from './GidOnlineProvider'
 import AnimegoProvider from './AnimegoProvider'
+import RezkaProvider from './RezkaProvider'
 
 const providers: Record<ProvidersNames, Provider> = {
   seasonvar: new SeasonvarProvider(),
@@ -29,7 +30,8 @@ const providers: Record<ProvidersNames, Provider> = {
   uafilmtv: new UAFilmTVProvider(),
   uakinoclub: new UAKinoClubProvider(),
   uaserials: new UASerialsProvider(),
-  gidonline: new GidOnlineProvider()
+  gidonline: new GidOnlineProvider(),
+  rezka: new RezkaProvider()
 }
 
 

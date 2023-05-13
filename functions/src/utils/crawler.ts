@@ -2,6 +2,7 @@ import { AnyNode, Cheerio, Document, load } from 'cheerio'
 import superagent from 'superagent'
 import invokeCFBypass from './invokeCFBypass'
 import superagentCharset from 'superagent-charset'
+import { tunnelHttpsAgent } from './tunnelAgent'
 
 export const superagentWithCharset = superagentCharset(superagent)
 
@@ -9,7 +10,7 @@ interface Response {
   text: string
 }
 
-export interface CrawlerContext<Item, AdditionalParams> {
+export interface CrawlerContext<Item, AdditionalParams = null> {
   root: Cheerio<Document>
   currentUrl?: string
   item: Item
@@ -29,6 +30,7 @@ class Scrapper<Item, AdditionalParams = null> {
   protected _selectors: { [key in keyof Item]?: Selector }
   protected _pagenatorSelector: string
   protected _limit: number
+  protected _useProxy: boolean
 
   scope(scope: string): this {
     this._scope = scope
@@ -47,6 +49,11 @@ class Scrapper<Item, AdditionalParams = null> {
 
   limit(limit: number): this {
     this._limit = limit
+    return this
+  }
+
+  useProxy(useProxy: boolean): this {
+    this._useProxy = useProxy
     return this
   }
 
@@ -164,6 +171,10 @@ class Crawler<Item, AdditionalParams = null> extends Scrapper<Item, AdditionalPa
 
     const request = superagentWithCharset
       .get(targetUrl)
+
+    if(this._useProxy) {
+      request.agent(tunnelHttpsAgent)
+    }
 
     return request
       .buffer(true)

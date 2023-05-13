@@ -7,6 +7,7 @@ export interface ProviderConfig {
   timeout?: number,
   infoTimeout?: number,
   pageSize?: number,
+  useProxy?: boolean,
   headers?: Record<string, string>
   [key: string]: unknown
 }
@@ -25,7 +26,8 @@ export type ProvidersNames =
   'uakinoclub' |
   'seasonvar' |
   'kinovod' |
-  'gidonline'
+  'gidonline' |
+  'rezka'
 
 export interface ProvidersConfig {
   userAgent: string

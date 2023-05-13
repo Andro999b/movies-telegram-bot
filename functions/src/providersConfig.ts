@@ -104,6 +104,18 @@ const config: ProvidersConfig = {
         '^^#@@!!@#!$',
         '^^^^^^##@'
       ]
+    },
+    rezka: {
+      baseUrl: 'https://rezka.ag',
+      searchUrl: 'https://rezka.ag/search/?do=search&subaction=search',
+      decodeKeys: [
+        '$$!!@$$@^!@#$$@',
+        '####^!!##!@@',
+        '$$#!!@#!@##',
+        '@@@@@!##!^^^',
+        '^^^!@##!!##'
+      ],
+      useProxy: true
     }
   }
 }

@@ -32,7 +32,8 @@ abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> e
     const {
       headers,
       timeout,
-      cfbypass
+      cfbypass,
+      useProxy
     } = this.config
 
     query = this.prepareQuery(query)
@@ -42,6 +43,7 @@ abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> e
         this.getSearchUrl(query),
         this.crawlerSearchRequestGenerator(query)
       )
+      .useProxy(useProxy ?? false)
       .cfbypass(cfbypass ?? false)
       .headers(headers!)
       .scope(this.searchScope)
@@ -63,7 +65,8 @@ abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> e
     const {
       headers,
       infoTimeout,
-      cfbypass
+      cfbypass,
+      useProxy
     } = this.config
 
     const playlists = await crawler
@@ -71,6 +74,7 @@ abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> e
         this.getInfoUrl(id),
         this.crawlerInfoRequestGenerator(id)
       )
+      .useProxy(useProxy ?? false)
       .cfbypass(cfbypass ?? false)
       .timeout(infoTimeout!)
       .headers(headers!)
