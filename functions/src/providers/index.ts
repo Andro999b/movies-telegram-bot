@@ -53,7 +53,7 @@ export const search = async (providers: ProvidersNames[], query: string): Promis
       const provider = getProvider(providerName)
       return await provider?.search(query) ?? []
     } catch (e) {
-      console.error(`Provider ${providerName} failed.`, e)
+      console.error(`Provider search ${providerName} failed with query ${query}.`, e)
       return []
     }
   }))
@@ -70,7 +70,7 @@ export const searchOne = async (providerName: ProvidersNames, query: string): Pr
     const provider = getProvider(providerName)
     return await provider?.search(query) ?? []
   } catch (e) {
-    console.error(`Provider ${providerName} failed.`, e)
+    console.error(`Provider search ${providerName} failed with query ${query}.`, e)
   }
 
   return []
@@ -78,7 +78,12 @@ export const searchOne = async (providerName: ProvidersNames, query: string): Pr
 
 export const getInfo = async (providerName: ProvidersNames, id: string): Promise<Playlist | null> => {
   const provider = getProvider(providerName)
-  return await provider?.getInfo(id) ?? null
+  try {
+    return await provider?.getInfo(id) ?? null
+  } catch (error) {
+    console.error(`Provider info ${providerName} fails with id ${id}`, error)
+    return null
+  }
 }
 export const getSource = async (
   providerName: ProvidersNames,
@@ -87,5 +92,10 @@ export const getSource = async (
   params?: Record<string, string>
 ): Promise<Partial<File> | null> => {
   const provider = getProvider(providerName)
-  return await provider?.getSource(resultId, sourceId, params) ?? null
+  try {
+    return await provider?.getSource(resultId, sourceId, params) ?? null
+  } catch (error) {
+    console.error(`Provider source ${providerName} fails.`, { resultId, sourceId, params, error })
+    return null
+  }
 }

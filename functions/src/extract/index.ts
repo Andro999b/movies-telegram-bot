@@ -52,5 +52,10 @@ export default async (parmas: ExtractorParams, headers: Record<string, string>):
   if (!extractor)
     return makeResponse({ message: 'No extractor found' }, 404)
 
-  return await extractor(parmas, headers)
+  try {
+    return await extractor(parmas, headers)
+  } catch (error) {
+    console.error(`Extractor ${type} fail`, { parmas, error })
+    return makeResponse({ message: 'fail to extract data' }, 500)
+  }
 }
