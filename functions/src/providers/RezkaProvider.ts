@@ -97,9 +97,8 @@ class RezkaProvider extends Provider<RezkaProviderConfig> {
               translatorId
             })
           ),
-          name: season
-            ? `Season ${season}/Episode ${episode}`
-            : `Episode ${episode}`,
+          path: season && `Season ${season}`,
+          name: `Episode ${episode}`,
         }
       })
   }

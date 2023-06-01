@@ -99,6 +99,7 @@ class AnitubeUAProvider extends Provider {
   private async filesFromPlaylistAjax($el: Cheerio<AnyNode>): Promise<File[]> {
     // https://anitube.in.ua/1866-legenda-pro-korru-2.htm
     // https://anitube.in.ua/4110-chainsaw-man.html
+    // https://anitube.in.ua/4304-suzume-no-tojimari.html
 
     const newsId = $el.attr('data-news_id')
     const res = await superagent
@@ -110,7 +111,7 @@ class AnitubeUAProvider extends Provider {
     const files: File[] = []
     const $playlist = $(res.body.response)
 
-    const audios = $playlist.find('.playlists-lists .playlists-items:nth-child(0) li')
+    const audios = $playlist.find('.playlists-lists .playlists-items:first-child li')
       .toArray()
       .map((el) => {
         const $el = $(el)
@@ -120,22 +121,24 @@ class AnitubeUAProvider extends Provider {
           prefix: $el.attr('data-id')!
         }
       })
-
+    
     $playlist.find('.playlists-videos .playlists-items li')
       .toArray()
       .forEach((el, id) => {
         const $el = $(el)
-        const audioId = $el.attr('data-id')
+        const audioId = $el.attr('data-id')?.split('_').slice(0, 2).join('_')
         const episodeId = extractIntFromSting($el.text())
         const url = $el.attr('data-file')!
         let audio = null
 
         if (audioId) {
-          audio = audios.find(({ prefix }) => audioId.startsWith(prefix))?.audio ?? null
+          audio = audios.find(({ prefix }) => audioId == prefix)?.audio ?? null
         }
 
         if (episodeId) {
           id = episodeId - 1
+        } else {
+          id = 0
         }
 
         const extractorName = Object.keys(extractors).find((extr) => url.indexOf(extr) != -1)
