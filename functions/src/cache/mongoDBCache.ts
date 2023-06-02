@@ -10,6 +10,8 @@ interface CacheItem<Item> extends Document {
   result: Item
 }
 
+const defaultIsEmpty = (item: unknown): boolean => item != null
+
 class MongoDBCache<Item> extends Cache<string, Item> {
   private collection: Collection<CacheItem<Item>>
 
@@ -50,9 +52,14 @@ class MongoDBCache<Item> extends Cache<string, Item> {
   ): Promise<Item> {
     const cacheItem = await this.getCacheItem(key)
 
+    if(!isEmpty) {
+      isEmpty = defaultIsEmpty
+    }
+
     if (!cacheItem) {
       const item = await compute(key)
-      if (isEmpty === undefined || !isEmpty(item)) {
+
+      if (!isEmpty(item)) {
         await this.putToCache(key, item)
       }
 
@@ -66,7 +73,7 @@ class MongoDBCache<Item> extends Cache<string, Item> {
     try {
       const item = await compute(key)
 
-      if (isEmpty === undefined || !isEmpty(item)) { // if results unavaliable taking from cache
+      if (!isEmpty(item)) { // if results unavaliable taking from cache
         await this.putToCache(key, item)
         return item
       }
