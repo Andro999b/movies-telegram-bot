@@ -1,4 +1,7 @@
-export interface UrlAndQuality { url: string, quality: number }
+export interface UrlAndQuality { 
+  url: string, 
+  quality: number 
+}
 export interface UrlAndQualityAndAudio extends UrlAndQuality {
   audio?: string
 }
@@ -14,11 +17,17 @@ export interface Playlist {
 }
 
 export interface File {
+  subtitle?: Subtitle[]
   id: string | number | null
   name: string | null
   path?: string
   asyncSource?: string | AsyncSource | null
   urls?: FileUrl[]
+}
+
+export interface Subtitle {
+  language: string,
+  url: string
 }
 
 export interface AsyncSource {

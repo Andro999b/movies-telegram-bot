@@ -5,9 +5,11 @@ export interface PlayerJSItem {
   comment?: string
   folder?: PlayerJSItem[]
   playlist?: PlayerJSItem[]
+  subtitle?: string
 }
 
 export type PlayerJSPlaylist = string | PlayerJSItem[]
 export interface PlayerJSConfig {
   file: PlayerJSPlaylist
+  subtitle?: string
 }

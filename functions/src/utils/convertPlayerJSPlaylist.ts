@@ -1,7 +1,30 @@
-import { File, PlayerJSItem, PlayerJSPlaylist, UrlAndQualityAndAudio } from '../types/index'
+import { File, PlayerJSItem, PlayerJSPlaylist, Subtitle, UrlAndQualityAndAudio } from '../types/index'
 import getBestPlayerJSQuality from './parsePlayerJSFile'
 
 export type LinksExtractor = (file: string) => UrlAndQualityAndAudio[]
+
+const SUBTITLE_REGEXP = /\[(.+)\](.+)/
+
+export const parseSubTitleString = (subtitle: string): Subtitle[] => {
+  //@ts-ignore
+  return subtitle
+    .split(',')
+    .map((s) => {
+      const res = s.match(SUBTITLE_REGEXP)
+
+      if(!res) {
+        return null
+      }
+
+      const [, language, url] = res
+
+      return {
+        language,
+        url
+      }
+    })
+    .filter((it) => it)
+}
 
 export default (playlist: PlayerJSPlaylist, linksExtractor = getBestPlayerJSQuality): File[] => {
   const idsCache: Record<string, File> = {}
@@ -30,6 +53,10 @@ export default (playlist: PlayerJSPlaylist, linksExtractor = getBestPlayerJSQual
           }
 
           item.name = it.title || `Episode ${++counter}`
+
+          if(it.subtitle) {
+            item.subtitle = parseSubTitleString(it.subtitle)
+          }
 
           if (prefix) {
             item.path = prefix

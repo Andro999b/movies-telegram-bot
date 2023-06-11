@@ -1,6 +1,6 @@
 import superagent from 'superagent'
 import { File } from '../types/index'
-import convertPlayerJSPlaylist from './convertPlayerJSPlaylist'
+import convertPlayerJSPlaylist, { parseSubTitleString } from './convertPlayerJSPlaylist'
 import stripPlayerJSConfig from './stripPlayerJSConfig'
 import { tunnelHttpsAgent } from './tunnelAgent'
 import debugFactory from 'debug'
@@ -25,8 +25,14 @@ export default async (url: string, proxy = false): Promise<File[]> => {
   const config = stripPlayerJSConfig(res.text)
 
   if (config) {
-    const { file } = config
-    return convertPlayerJSPlaylist(file)
+    const { file, subtitle } = config
+    const files = convertPlayerJSPlaylist(file)
+
+    if(files.length == 1 && subtitle) {
+      files[0].subtitle = parseSubTitleString(subtitle)
+    }
+
+    return files
   }
 
   return []
