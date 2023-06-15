@@ -1,4 +1,5 @@
 import { File, PlayerJSItem, PlayerJSPlaylist, Subtitle, UrlAndQualityAndAudio } from '../types/index'
+import decodeV0PlayerJSPlaylist from './decodeV0PlayerJSPlaylist'
 import getBestPlayerJSQuality from './parsePlayerJSFile'
 
 export type LinksExtractor = (file: string) => UrlAndQualityAndAudio[]
@@ -77,22 +78,10 @@ export default (playlist: PlayerJSPlaylist, linksExtractor = getBestPlayerJSQual
       .flatMap((it) => it)
   }
 
-  function decode0(input: string): string {
-    if (input.indexOf('.') == -1) {
-      input = input.substring(1)
-      let s2 = ''
-      for (let i = 0; i < input.length; i += 3) {
-        s2 += '%u0' + input.slice(i, i + 3)
-      }
-      input = decodeURI(s2)
-    }
-    return input
-  }
-
 
   if (typeof playlist === 'string') {
     if (playlist.startsWith('#0')) {
-      playlist = decode0(playlist)
+      playlist = decodeV0PlayerJSPlaylist(playlist)
     }
     if (playlist.startsWith('[{')) {
       return convertFolder(null, JSON.parse(playlist), linksExtractor)

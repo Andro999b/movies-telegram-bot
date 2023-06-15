@@ -138,10 +138,14 @@ abstract class CrawlerProvider<Config extends ProviderConfig = ProviderConfig> e
       }
     }
 
-    return this.config.baseUrl + url
+    if(url.startsWith('/') || this.config.baseUrl.endsWith('/')) {
+      return this.config.baseUrl + url
+    } else {
+      return this.config.baseUrl + '/' + url
+    }
   }
 
-  protected absoluteUrl(url: string): string {
+  protected absoluteImageUrl(url: string): string {
     const baseUrl = this.config.imagesUrl || this.config.baseUrl
     return url.startsWith('/') ? baseUrl + url : url
   }

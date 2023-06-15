@@ -1,4 +1,4 @@
-import { FileUrl } from "../types"
+import { FileUrl } from '../../types'
 
 export default (input: string): FileUrl[] => {
   const seen = new Set()
@@ -45,6 +45,7 @@ export default (input: string): FileUrl[] => {
           const groups = res.groups ?? {} as { ursl: string, audio: string }
 
           return {
+            // @ts-ignore
             url: groups?.url,
             audio: groups?.audio,
             quality

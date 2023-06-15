@@ -6,10 +6,10 @@ import { AnyNode, Cheerio } from 'cheerio'
 import $ from 'cheerio'
 import { base64decode, base64encode } from '../utils/base64'
 import { File, ProviderConfig } from '../types'
-import parsePlayerJSFile from '../utils/parsePlayerJSFile'
+import parsePlayerJSFile from '../utils/playerjs/parsePlayerJSFile'
 import { extractStringProperty } from '../utils/extractScriptVariable'
 import { DataNode } from 'domhandler'
-import decodePlayerJSPlaylist from '../utils/decodePlayerJSPlaylist'
+import decodePlayerJSPlaylist from '../utils/playerjs/decodeV1PlayerJSPlaylist'
 import { tunnelHttpsAgent } from '../utils/tunnelAgent'
 
 const PLAYLIST_REGEXP = /initCDNSeriesEvents\(\d+, (\d+)/
@@ -35,7 +35,7 @@ class RezkaProvider extends Provider<RezkaProviderConfig> {
     },
     image: {
       selector: '.b-content__inline_item-cover > a > img',
-      transform: ($el) => this.absoluteUrl($el.attr('src')!),
+      transform: ($el) => this.absoluteImageUrl($el.attr('src')!),
     }
   }
 
@@ -44,7 +44,7 @@ class RezkaProvider extends Provider<RezkaProviderConfig> {
     title: '.b-post__title h1',
     image: {
       selector: '.b-sidecover > a >  img',
-      transform: ($el) => this.absoluteUrl($el.attr('src')!),
+      transform: ($el) => this.absoluteImageUrl($el.attr('src')!),
     },
     files: {
       transform: ($scope, context) => {

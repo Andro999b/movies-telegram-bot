@@ -1,7 +1,7 @@
 import { File } from '../../types'
 import { SourceLoader } from '.'
-import getBestPlayerJSQuality from '../parsePlayerJSFile'
-import decodePlayerJSPlaylist from '../decodePlayerJSPlaylist'
+import getBestPlayerJSQuality from '../playerjs/parsePlayerJSFile'
+import decodePlayerJSPlaylist from '../playerjs/decodeV1PlayerJSPlaylist'
 
 const FILE_REG_EXP = /'file':\s*'([^']+)'/
 const decodeKeys = [

@@ -6,7 +6,7 @@ import { InfoSelectors, SearchSelectors } from './CrawlerProvider'
 import { File, FileUrl } from '../types/index'
 import invokeCFBypass from '../utils/invokeCFBypass'
 import { extractIntFromSting } from '../utils/extractNumber'
-import playerjsembed from '../utils/playerjsembed'
+import playerjsembed from '../utils/iframes/playerjsembed'
 
 class UAKinoClubProvider extends Provider {
   protected searchScope = '.movie-item'
@@ -18,14 +18,14 @@ class UAKinoClubProvider extends Provider {
     },
     image: {
       selector: '.movie-img img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     }
   }
   protected infoSelectors: InfoSelectors = {
     title: '.solototle',
     image: {
       selector: '.film-poster>a',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('href') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('href') ?? '')
     },
     files: {
       selector: ['.players-section .playlists-ajax', '.players-section iframe'],

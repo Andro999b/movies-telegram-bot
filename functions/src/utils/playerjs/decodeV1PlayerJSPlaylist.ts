@@ -1,4 +1,4 @@
-import { base64decode, base64encode } from './base64'
+import { base64decode, base64encode } from '../base64'
 
 export default (file: string, keys: string[], keyPrefix = '//_//'): string | null => {
 

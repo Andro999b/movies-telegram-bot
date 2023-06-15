@@ -1,8 +1,8 @@
 import superagent from 'superagent'
-import { File } from '../types/index'
-import convertPlayerJSPlaylist, { parseSubTitleString } from './convertPlayerJSPlaylist'
-import stripPlayerJSConfig from './stripPlayerJSConfig'
-import { tunnelHttpsAgent } from './tunnelAgent'
+import { File } from '../../types/index'
+import convertPlayerJSPlaylist, { parseSubTitleString } from '../playerjs/convertPlayerJSPlaylist'
+import stripPlayerJSConfig from '../playerjs/stripPlayerJSConfig'
+import { tunnelHttpsAgent } from '../tunnelAgent'
 import debugFactory from 'debug'
 
 const debug = debugFactory('playerjsembed')

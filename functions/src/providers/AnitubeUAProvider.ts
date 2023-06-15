@@ -61,7 +61,7 @@ class AnitubeUAProvider extends Provider {
     },
     image: {
       selector: '.story_post > img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     }
   }
   protected override infoScope = '.story'
@@ -69,7 +69,7 @@ class AnitubeUAProvider extends Provider {
     title: '.story_c h2',
     image: {
       selector: '.story_post img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     files: {
       selector: ['#VideoConstructor_v3_x_Player', '.playlists-ajax'],

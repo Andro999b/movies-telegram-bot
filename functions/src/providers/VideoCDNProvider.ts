@@ -1,6 +1,6 @@
 import Provider from './Provider'
 import superagent from 'superagent'
-import videocdnembed from '../utils/videocdnembed'
+import videocdnembed from '../utils/iframes/videocdnembed'
 import providersConfig from '../providersConfig'
 import { File, Playlist, ProviderConfig, SearchResult } from '../types/index'
 

@@ -1,5 +1,5 @@
 import Provider from './CFDataLifeProvider'
-import playerjsembed from '../utils/playerjsembed'
+import playerjsembed from '../utils/iframes/playerjsembed'
 import providersConfig from '../providersConfig'
 import { AnyNode, Cheerio } from 'cheerio'
 import { File } from '../types/index'
@@ -15,14 +15,14 @@ class UAFilmTVProvider extends Provider {
     name: 'a.movie-title',
     image: {
       selector: '.movie-img img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('data-src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('data-src') ?? '')
     }
   }
   protected infoSelectors = {
     title: 'h1[itemprop="name"]',
     image: {
       selector: '.m-img img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     files: {
       selector: '.player-box iframe',

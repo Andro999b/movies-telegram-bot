@@ -1,5 +1,5 @@
 import Provider from './CFDataLifeProvider'
-import playerjsembeded from '../utils/playerjsembed'
+import playerjsembeded from '../utils/iframes/playerjsembed'
 import providersConfig from '../providersConfig'
 import { AnyNode, Cheerio } from 'cheerio'
 import { File } from '../types/index'
@@ -30,7 +30,7 @@ class EneyidaProvider extends Provider {
     },
     image: {
       selector: 'a.short_img img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('data-src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('data-src') ?? '')
     }
   }
 
@@ -39,7 +39,7 @@ class EneyidaProvider extends Provider {
     title: '#full_header-title h1',
     image: {
       selector: '.full_content-poster.img_box img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     files: {
       selector: '.video_box iframe',

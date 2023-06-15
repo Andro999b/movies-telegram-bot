@@ -1,6 +1,6 @@
 import Provider from './CFDataLifeProvider'
 import superagent from 'superagent'
-import videocdnembed from '../utils/videocdnembed'
+import videocdnembed from '../utils/iframes/videocdnembed'
 import { extractStringProperty } from '../utils/extractScriptVariable'
 import { AnyNode, Cheerio } from 'cheerio'
 import providersConfig from '../providersConfig'
@@ -29,14 +29,14 @@ class KinogoProvider extends Provider {
     name: '.zagolovki>a:nth-last-child(1)',
     image: {
       selector: '.shortimg>div>a>img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     }
   }
   protected infoSelectors = {
     title: '.shortstorytitle>h1',
     image: {
       selector: '.fullimg>div>a>img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     files: {
       selector: '.box.visible iframe',

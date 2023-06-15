@@ -10,7 +10,6 @@ import mp4PExtractor, { mp4proxy } from './mp4Extractor'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { ExtractorTypes } from '../types/index'
 import animegoKodikExtractor from './animegoKodik'
-import aniboomExtractor from './aniboomExtractor'
 import webmExtractor from './webmExtractor'
 import mp4uploadExtractor from './mp4uploadExtractor'
 
@@ -29,7 +28,6 @@ const extractors: Record<ExtractorTypes, Extractor> = {
   anigit: anigitExtractor,
   animedia: m3u8Extractor,
   animego_kodik: animegoKodikExtractor,
-  aniboom: aniboomExtractor,
   sibnethls: sibnetHlsExtractor,
   sibnetmp4: sibnetMp4Extractor,
   stormo: mp4PExtractor,

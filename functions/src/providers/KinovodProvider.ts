@@ -1,51 +1,13 @@
 import CrawlerProvider, { SearchSelectors } from './CrawlerProvider'
 import { extractNumber, extractString } from '../utils/extractScriptVariable'
-import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
+import convertPlayerJSPlaylist from '../utils/playerjs/convertPlayerJSPlaylist'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
 import { AnyNode, Cheerio } from 'cheerio'
 import providersConfig from '../providersConfig'
 import { File } from '../types/index'
 import { ProcessingInstruction } from 'domhandler'
-
-function decodeChar(d: string, e: number, f: number): number {
-  const g = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('')
-  const h = g.slice(0, e)
-  const i = g.slice(0, f)
-  let j = d.split('')
-    .reverse()
-    .reduce((a, b, c) => {
-      if (h.indexOf(b) !== -1) 
-        return a += h.indexOf(b) * (Math.pow(e, c))
-      return
-    }, 0) || 0
-  let k = ''
-  while (j > 0) {
-    k = i[j % f] + k; j = (j - (j % f)) / f
-  }
-  return +k || 0
-}
-
-function decoder(h: string, n: string, t: number, e: number): string {
-  let r = ''
-
-  for (let i = 0, len = h.length; i < len; i++) {
-    let s = ''
-
-    while (h[i] !== n[e]) {
-      s += h[i]; i++
-    }
-
-    for (let j = 0; j < n.length; j++)
-      s = s.replace(new RegExp(n[j], 'g'), j.toString())
-
-    r += String.fromCharCode(decodeChar(s, e, 10) - t)
-  }
-
-  return decodeURIComponent(r)
-}
-
-const USER_DATA_REG_EXP = /\("(\w+)",\d+,"(\w+)",(\d+),(\d+),\d+\)/
+import { evalDecode } from '../utils/evalDecoder'
 
 class KinovodProvider extends CrawlerProvider {
   protected searchScope = '.items>.item'
@@ -65,7 +27,7 @@ class KinovodProvider extends CrawlerProvider {
     },
     image: {
       selector: '>a>img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     }
   }
   protected infoScope = '.content'
@@ -73,7 +35,7 @@ class KinovodProvider extends CrawlerProvider {
     title: '#movie>div>h1',
     image: {
       selector: '.poster img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     files: {
       selector: 'script',
@@ -105,15 +67,8 @@ class KinovodProvider extends CrawlerProvider {
           console.error(e)
           return []
         }
-
-        const matches = res.text.match(USER_DATA_REG_EXP) || []
-
-        const code = decoder(
-          matches[1],
-          matches[2],
-          +matches[3],
-          +matches[4]
-        )
+        
+        const code = evalDecode(res.text)
 
         const vodHash = extractString(code, 'marx13_vod_hash')
         const vodTime = extractString(code, 'marx13_vod_time')

@@ -33,7 +33,7 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
     },
     image: {
       selector: 'img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     name: {
       transform: ($el: Cheerio<AnyNode>): string => {
@@ -49,7 +49,7 @@ class GidOnlineProvider extends CrawlerProvider<GidOnlineProviderConfig> {
     title: '#single > .t-row > .r-1 > .rl-2',
     image: {
       selector: '#single > img.t-img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     files: {
       selector: '#cdn-player',

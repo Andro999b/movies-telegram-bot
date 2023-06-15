@@ -267,6 +267,10 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
     const resotreVideo = async (): Promise<void> => {
       currentVideo.currentTime = device.seekTo || device.currentTime
 
+      // if(currentVideo.textTracks && currentVideo.textTracks.length) {
+      //   currentVideo.textTracks[0].mode = 'showing'
+      // }
+
       if (isPlaying) {
         try {
           await currentVideo.play()
@@ -315,7 +319,9 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
         onError={tryNextVideo}
         onPlay={onPlayPause}
         onPause={onPlayPause}
-      />
+        crossOrigin="anonymous"
+      >
+      </video>
     </div>
   )
 })

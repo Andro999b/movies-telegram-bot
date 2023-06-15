@@ -16,14 +16,14 @@ class AnigatoProvider extends Provider {
     name: '.sres-wrap h2',
     image: {
       selector: '.sres-img img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     }
   }
   protected infoSelectors = {
     title: '.short-top-left h1',
     image: {
       selector: '.mimg img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     files: {
       selector: '#kodik-player iframe',

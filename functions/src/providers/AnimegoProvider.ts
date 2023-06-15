@@ -18,7 +18,7 @@ class AnimegoProvider extends CrawlerProvider {
     },
     image: {
       selector: '.animes-grid-item-picture .anime-grid-lazy',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('data-original') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('data-original') ?? '')
     },
     name: {
       selector: '.animes-grid-item-body',
@@ -35,7 +35,7 @@ class AnimegoProvider extends CrawlerProvider {
     title: '.anime-title h1',
     image: {
       selector: '.anime-poster img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     files: {
       transform: async (_, { additionalParams }): Promise<File[]> => {

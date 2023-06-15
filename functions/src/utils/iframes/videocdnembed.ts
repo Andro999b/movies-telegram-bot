@@ -1,9 +1,9 @@
 import superagent from 'superagent'
 import { load } from 'cheerio'
 import { ProcessingInstruction } from 'domhandler'
-import convertPlayerJSPlaylist from './convertPlayerJSPlaylist'
-import { File, PlayerJSPlaylist } from '../types/index'
-import providersConfig from '../providersConfig'
+import convertPlayerJSPlaylist from '../playerjs/convertPlayerJSPlaylist'
+import { File, FileUrl, PlayerJSPlaylist } from '../../types/index'
+import providersConfig from '../../providersConfig'
 
 function _extractTranslations(
   translations: Record<string, string>,
@@ -22,11 +22,11 @@ function _extractTranslations(
           const currentFile = filesByKey[key]
           if (currentFile) {
             const newUrls = currentFile.urls!.concat(
-              file.urls!.map((u) => ({ ...u, audio: translationName }))
+              file.urls!.map((u: FileUrl) => ({ ...u, audio: translationName }))
             )
             filesByKey[key] = { ...currentFile, urls: newUrls }
           } else {
-            const newUrls = file.urls!.map((u) => ({ ...u, audio: translationName }))
+            const newUrls = file.urls!.map((u: FileUrl) => ({ ...u, audio: translationName }))
             filesByKey[key] = { ...file, urls: newUrls }
           }
         })

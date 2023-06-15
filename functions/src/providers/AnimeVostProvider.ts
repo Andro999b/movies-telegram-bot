@@ -2,7 +2,7 @@ import Provider from './DataLifeProvider'
 import { extractObject, extractStringProperty } from '../utils/extractScriptVariable'
 import urlencode from 'urlencode'
 import superagent from 'superagent'
-import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
+import convertPlayerJSPlaylist from '../utils/playerjs/convertPlayerJSPlaylist'
 import { AnyNode, Cheerio } from 'cheerio'
 import { File } from '../types/index'
 import providersConfig from '../providersConfig'
@@ -18,14 +18,14 @@ class AnimeVostProvider extends Provider {
     name: '.shortstoryHead a',
     image: {
       selector: '.shortstoryContent div > a > img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     }
   }
   protected infoSelectors = {
     title: '.shortstoryHead h1',
     image: {
       selector: '.imgRadius',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     files: {
       selector: '.functionPanel',

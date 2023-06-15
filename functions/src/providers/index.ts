@@ -1,4 +1,5 @@
-import SeasonvarProvider from './SeasonvarProvider'
+import { File, Playlist, ProvidersNames, SearchResult } from '../types/index'
+import Provider from './Provider'
 import KinogoProvider from './KinogoProvider'
 import KinovodProvider from './KinovodProvider'
 import AnimeVostProvider from './AnimeVostProvider'
@@ -10,14 +11,12 @@ import EneyidaProvider from './EneyidaProvider'
 import UAFilmTVProvider from './UAFilmTVProvider'
 import UAKinoClubProvider from './UAKinoClubProvider'
 import UASerialsProvider from './UASerialsProvider'
-import Provider from './Provider'
-import { File, Playlist, ProvidersNames, SearchResult } from '../types/index'
 import GidOnlineProvider from './GidOnlineProvider'
 import AnimegoProvider from './AnimegoProvider'
 import RezkaProvider from './RezkaProvider'
 
+
 const providers: Record<ProvidersNames, Provider> = {
-  seasonvar: new SeasonvarProvider(),
   kinogo: new KinogoProvider(),
   kinovod: new KinovodProvider(),
   animego: new AnimegoProvider(),

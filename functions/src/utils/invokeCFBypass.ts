@@ -1,5 +1,8 @@
 
 import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda'
+import debugFactory from 'debug'
+
+const debug = debugFactory('cfbypass')
 
 const ACCOUNT_ID = process.env.ACCOUNT_ID
 const REGION = process.env.REGION
@@ -18,6 +21,9 @@ export default async (url: string, method = 'get', headers = {}, body: unknown =
   })
 
   const result = await lambda.send(invokeCommand)
+
+  
+  debug(`${method} ${url} -> ${result.StatusCode}`)
 
   return JSON.parse(Buffer.from(result.Payload!.buffer).toString())
 }

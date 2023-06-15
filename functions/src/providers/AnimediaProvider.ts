@@ -2,7 +2,7 @@ import Provider from './CrawlerProvider'
 import superagent from 'superagent'
 import { AnyNode, Cheerio, load } from 'cheerio'
 import $ from 'cheerio'
-import convertPlayerJSPlaylist from '../utils/convertPlayerJSPlaylist'
+import convertPlayerJSPlaylist from '../utils/playerjs/convertPlayerJSPlaylist'
 import { File, SearchResult } from '../types/index'
 import providersConfig from '../providersConfig'
 import { lastPathPart } from '../utils/url'
@@ -16,7 +16,7 @@ class AnimediaProvider extends Provider {
     title: '.breadcrumbs__list .breadcrumbs__list__item:last-child',
     image: {
       selector: '.widget__post-info__poster .zoomLink',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('href') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('href') ?? '')
     },
     files: {
       selector: '.media__tabs',

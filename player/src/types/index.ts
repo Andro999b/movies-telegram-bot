@@ -16,6 +16,12 @@ export interface File {
   path?: string
   asyncSource?: string | AsyncSource | null
   urls?: FileUrl[]
+  subtitle?: Subtitle[]
+}
+
+export interface Subtitle{
+  language: string
+  url: string
 }
 
 export interface AsyncSource {

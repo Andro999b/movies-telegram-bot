@@ -31,14 +31,14 @@ class UASerialsProvider extends Provider<UASerialsProviderConfig> {
     name: '.th-title',
     image: {
       selector: '.short-img img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     }
   }
   protected infoSelectors = {
     title: 'h1.short-title',
     image: {
       selector: '.fimg img',
-      transform: ($el: Cheerio<AnyNode>): string => this.absoluteUrl($el.attr('src') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     },
     files: {
       selector: 'player-control',
