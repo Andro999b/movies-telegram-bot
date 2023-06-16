@@ -18,6 +18,7 @@ export type ProvidersNames =
   'animego' | 
   'anigato' | // TODO: remove
   'anitubeua' |
+  'animelib' |
   'animevost' | // TODO: remove
   'kinogo' |
   'videocdn' |
@@ -25,7 +26,6 @@ export type ProvidersNames =
   'uafilmtv' |
   'uaserials' |
   'uakinoclub' |
-  'kinovod' |
   'gidonline' |
   'rezka'
 
