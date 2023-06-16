@@ -3,6 +3,7 @@ import makeResponse from '../utils/makeResponse'
 import providersConfig from '../providersConfig'
 import KinogoProvider from '../providers/KinogoProvider'
 import { Extractor } from './index'
+import { tunnelHttpsAgent } from '../utils/tunnelAgent'
 
 const baseUrl = providersConfig.providers.kinogo.baseUrl
 
@@ -14,6 +15,7 @@ const kinogoExtractor: Extractor = async ({ url, file }) => {
   const playlistUrl = `https://${iframeHost}${playlistPath}`
 
   const playlistRes = await superagent.post(playlistUrl)
+    .agent(tunnelHttpsAgent)
     .set({
       'Referer': `https://${iframeHost}`,
       'X-CSRF-TOKEN': csrfToken
@@ -22,10 +24,14 @@ const kinogoExtractor: Extractor = async ({ url, file }) => {
 
   const rootFiles = playlistRes.body
   const [seasonIndex, fileIndex, urlIndex] = file.split(',')
-  const filePath = rootFiles[+seasonIndex].folder[+fileIndex].folder[+urlIndex].file
+  const filePath = rootFiles[+seasonIndex].folder ?
+    rootFiles[+seasonIndex].folder[+fileIndex].folder[+urlIndex].file:
+    rootFiles[0].file
+
   const fileUrl = KinogoProvider.getFileUrlV1(iframeHost, filePath)
 
   const fileRes = await superagent.post(fileUrl)
+    .agent(tunnelHttpsAgent)
     .set({
       'Referer': `https://${iframeHost}`,
       'X-CSRF-TOKEN': csrfToken

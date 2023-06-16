@@ -6,6 +6,7 @@ import { AnyNode, Cheerio } from 'cheerio'
 import providersConfig from '../providersConfig'
 import { File, FileUrl } from '../types/index'
 import { lastPathPartNoExt } from '../utils/url'
+import { tunnelHttpsAgent } from '../utils/tunnelAgent'
 
 interface IframeV1ParseResult {
   iframeHost: string
@@ -71,6 +72,7 @@ class KinogoProvider extends Provider {
       let fileUrl = KinogoProvider.getFileUrlV1(iframeHost, playlistPath)
 
       const fileRes = await superagent.post(fileUrl)
+        .agent(tunnelHttpsAgent)
         .set({
           'Referer': `https://${iframeHost}`,
           'X-CSRF-TOKEN': csrfToken
@@ -89,6 +91,7 @@ class KinogoProvider extends Provider {
       const playlistUrl = `https://${iframeHost}${playlistPath}`
 
       const playlistRes = await superagent.post(playlistUrl)
+        .agent(tunnelHttpsAgent)
         .set({
           'Referer': `https://${iframeHost}`,
           'X-CSRF-TOKEN': csrfToken
@@ -96,6 +99,7 @@ class KinogoProvider extends Provider {
         .timeout(timeout!)
 
       const rootFiles = playlistRes.body as IframeV1PlaylistFolder[]
+
       if (rootFiles.length == 1) {
         return [{
           id: 0,
@@ -140,6 +144,7 @@ class KinogoProvider extends Provider {
 
   static async parseIframeV1(url: string, referer: string, timeout: number): Promise<IframeV1ParseResult> {
     const iframeRes = await superagent.get(url)
+      .agent(tunnelHttpsAgent)
       .set({ 'Referer': referer })
       .timeout(timeout)
 
