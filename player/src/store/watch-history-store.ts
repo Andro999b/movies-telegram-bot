@@ -137,42 +137,6 @@ class RemoteHistoryStorage implements HistoryStorage {
     return key.replace(/[#.]/g, '_')
   }
 }
-// Going to left this here in case if i wanted to revert this
-// class DexieHistoryDatabase extends Dexie {
-
-//   history!: Dexie.Table<HistoryItem, string> // number = type of the primkey
-
-//   constructor() {
-//     super('HistoryDatabase')
-//     this.version(3)
-//       .stores({
-//         history: '&key,provider,id,title,image,time,fileIndex,startTime,audio'
-//       })
-//   }
-// }
-
-// class LocalHistoryStorage implements HistoryStorage { // eslint-disable-line no-unused-vars
-//   localDB = new DexieHistoryDatabase()
-
-//   get = async (key: string): Promise<HistoryItem | null> =>
-//     await this.localDB.history.get(key) as (HistoryItem | null)
-
-//   set = async (key: string, data: HistoryItem): Promise<void> => {
-//     await this.localDB.history.put(data)
-//   }
-
-//   update = async (key: string, data: Partial<HistoryItem>): Promise<void> => {
-//     await this.localDB.history.update(key, data)
-//   }
-
-//   delete = async (key: string): Promise<void> => {
-//     await this.localDB.history
-//       .where({ key })
-//       .delete()
-//   }
-
-//   all = async (): Promise<HistoryItem[]> => await this.localDB.history.toArray()
-// }
 
 class LocalStoreHistoryStorage implements HistoryStorage {
   get = (key: string): HistoryItem | null => store.get(this._toInternalKey(key))
@@ -247,6 +211,9 @@ class ComposedHistoryStorage implements HistoryStorage {
   }
 
   update = async (key: string, data: Partial<HistoryItem>): Promise<void> => {
+    const { id, provider } = await this.get(key)
+    if(!id || !provider) return
+
     await Promise.all([
       this.loadHistory.update(key, data),
       this.remoteHistory.update(key, data)

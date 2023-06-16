@@ -1,13 +1,14 @@
+import { BypassMode } from '.'
+
 export interface ProviderConfig {
   baseUrl: string
   searchUrl: string
   imagesUrl?: string
   userAgent?: string
-  cfbypass?: boolean
-  timeout?: number,
-  infoTimeout?: number,
-  pageSize?: number,
-  useProxy?: boolean,
+  timeout?: number
+  bypassMode?: BypassMode
+  infoTimeout?: number
+  pageSize?: number
   headers?: Record<string, string>
   [key: string]: unknown
 }

@@ -24,6 +24,12 @@ export default async (url: string, method = 'get', headers = {}, body: unknown =
 
   
   debug(`${method} ${url} -> ${result.StatusCode}`)
+  const res = JSON.parse(Buffer.from(result.Payload!.buffer).toString())
+  
+  if(res.errorMessage) {
+    debug(res)
+    throw Error(res.errorMessage)
+  }
 
-  return JSON.parse(Buffer.from(result.Payload!.buffer).toString())
+  return res
 }

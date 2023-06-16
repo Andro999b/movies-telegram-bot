@@ -26,8 +26,8 @@ const Tile: React.FC<TileProps> = ({ item, onDelete }) => {
 
   return (
     <Grid item xs={6} sm={3} lg={2}>
-      <div className="watch-history__tile">
-        <Link to={`/watch?provider=${provider}&id=${id}&query=${encodeURIComponent(title)}`}>
+      <Link to={`/watch?provider=${provider}&id=${id}&query=${encodeURIComponent(title)}`}>
+        <div className="watch-history__tile">
           <img className="watch-history__tile-image" src={image} />
           <div className="watch-history__tile-title">
             <div className="watch-history__tile-title-text">
@@ -47,8 +47,8 @@ const Tile: React.FC<TileProps> = ({ item, onDelete }) => {
               </IconButton>
             </div>
           </div>
-        </Link>
-      </div>
+        </div>
+      </Link>
     </Grid>
   )
 }

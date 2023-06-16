@@ -3,6 +3,7 @@ import superagent from 'superagent'
 import invokeCFBypass from './invokeCFBypass'
 import superagentCharset from 'superagent-charset'
 import { tunnelHttpsAgent } from './tunnelAgent'
+import { BypassMode } from '../types'
 
 export const superagentWithCharset = superagentCharset(superagent)
 
@@ -30,7 +31,7 @@ class Scrapper<Item, AdditionalParams = null> {
   protected _selectors: { [key in keyof Item]?: Selector }
   protected _pagenatorSelector: string
   protected _limit: number
-  protected _useProxy: boolean
+  protected _bypassMode: BypassMode | null
 
   scope(scope: string): this {
     this._scope = scope
@@ -52,8 +53,8 @@ class Scrapper<Item, AdditionalParams = null> {
     return this
   }
 
-  useProxy(useProxy: boolean): this {
-    this._useProxy = useProxy
+  bypassMode(bypassMode: BypassMode | null): this {
+    this._bypassMode = bypassMode
     return this
   }
 
@@ -144,14 +145,13 @@ class Scrapper<Item, AdditionalParams = null> {
 class Crawler<Item, AdditionalParams = null> extends Scrapper<Item, AdditionalParams> {
   private _requestGenerator: RequestGenerator
   private _url: string
-  private _cfbypass = false
   private _timeoutMs: number
   private _headers: Record<string, string>
 
   constructor(url: string, requestGenerator?: RequestGenerator) {
     super()
     this._requestGenerator = requestGenerator ?? ((nextUrl: string): Promise<Response> => {
-      if (this._cfbypass) {
+      if (this._bypassMode == 'cf') {
         return this.createCFBypassRequest(nextUrl)
       } else {
         return this.createDefaultRequest(nextUrl)
@@ -172,7 +172,7 @@ class Crawler<Item, AdditionalParams = null> extends Scrapper<Item, AdditionalPa
     const request = superagentWithCharset
       .get(targetUrl)
 
-    if(this._useProxy) {
+    if(this._bypassMode == 'proxy') {
       request.agent(tunnelHttpsAgent)
     }
 
@@ -182,11 +182,6 @@ class Crawler<Item, AdditionalParams = null> extends Scrapper<Item, AdditionalPa
       .timeout(this._timeoutMs)
       .disableTLSCerts()
       .set(this._headers ?? {})
-  }
-
-  cfbypass(bypass: boolean): this {
-    this._cfbypass = bypass
-    return this
   }
 
   headers(headers: Record<string, string>): this {

@@ -1,1 +1,2 @@
 cloudscraper
+urllib3<2

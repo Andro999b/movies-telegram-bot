@@ -23,7 +23,7 @@ const config: ProvidersConfig = {
     },
     anigato: {
       timeout: 15,
-      cfbypass: true,
+      bypassMode: 'cf',
       baseUrl: 'https://anigato.ru/',
       searchUrl: 'https://anigato.ru/index.php',
       token: '447d179e875efe44217f20d1ee2146be',
@@ -109,7 +109,7 @@ const config: ProvidersConfig = {
         '@@@@@!##!^^^',
         '^^^!@##!!##'
       ],
-      useProxy: true
+      bypassMode: 'proxy'
     }
   }
 }
