@@ -97,12 +97,11 @@ class KinogoProvider extends Provider {
 
       const rootFiles = playlistRes.body as IframeV1PlaylistFolder[]
       if (rootFiles.length == 1) {
-        return rootFiles[0].folder
-          .map(({ title, folder }, fileIndex) => ({
-            id: fileIndex,
-            name: title,
-            urls: this.getUrls(folder, iframeSrc, 0, fileIndex)
-          }))
+        return [{
+          id: 0,
+          name: null,
+          urls: this.getUrls(rootFiles, iframeSrc, 0, 0)
+        }]
       } else {
         let id = 0
         return rootFiles.flatMap(({ title, folder }, seasonIndex) => {
