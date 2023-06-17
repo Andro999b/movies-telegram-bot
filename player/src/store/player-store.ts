@@ -7,6 +7,7 @@ import { watchHistoryStore } from '.'
 import { AudioTrack, Playlist, File, Source } from '../types'
 import { PlayMode } from '../types/PlayMode'
 import sourceLoaders from '../utils/source'
+import { Tune } from '@mui/icons-material'
 
 const END_FILE_TIME_OFFSET = 60
 
@@ -37,6 +38,7 @@ export class Device {
   @observable seekTo: number | null = null
   @observable source: Source | null = null
   @observable pip = false
+  @observable showSubtitle = true
 
   constructor() {
     makeObservable(this)
@@ -257,6 +259,10 @@ export class Device {
 
   @action.bound setPip(pip: boolean): void {
     this.pip = pip
+  }
+
+  @action.bound setShowSubtitle(showSubtitle: boolean): void {
+    this.showSubtitle = showSubtitle
   }
 }
 

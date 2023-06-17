@@ -42,7 +42,7 @@ export interface VideoApi {
 }
 
 const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
-  const { audioTrack, quality, seekTo, volume, isMuted, isPlaying, pip } =
+  const { audioTrack, quality, seekTo, volume, isMuted, isPlaying, pip, showSubtitle } =
     device
   const source = device.source!
   const video = useRef<HTMLVideoElement>(null)
@@ -277,7 +277,7 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
       currentVideo.currentTime = device.seekTo || device.currentTime
 
       if (currentVideo.textTracks && currentVideo.textTracks.length) {
-        currentVideo.textTracks[0].mode = 'showing'
+        currentVideo.textTracks[0].mode = showSubtitle ? 'showing' : 'hidden'
       }
 
       if (isPlaying) {
@@ -298,6 +298,16 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
   }
   const handlePlaying = (): void => device.setLoading(false)
   const handleWaiting = (): void => device.setLoading(true)
+
+  useEffect(() => {
+    const currentVideo = video.current
+
+    if (currentVideo) {
+      if (currentVideo.textTracks && currentVideo.textTracks.length) {
+        currentVideo.textTracks[0].mode = showSubtitle ? 'showing' : 'hidden'
+      }
+    }
+  }, [showSubtitle])
 
   const onPlayPause = (): void => {
     const currentVideo = video.current!

@@ -29,7 +29,9 @@ export default new LocalizedStrings({
     },
     videoQuality: 'Video Quality',
     hotkey: 'Hotkey: {0}',
-    saveUkraine: 'Save Ukraine'
+    saveUkraine: 'Save Ukraine',
+    enableSubtitle: 'Enable Subtitle',
+    disableSubtitle: 'Disable Subtitle',
   },
   uk: {
     videoNotFound: 'Нажаль відео не доступне',
@@ -59,6 +61,8 @@ export default new LocalizedStrings({
     },
     videoQuality: 'Якість відео',
     hotkey: 'Гаряча клавіша: {0}',
-    saveUkraine: 'Допомогти ЗСУ'
+    saveUkraine: 'Допомогти ЗСУ',
+    enableSubtitle: 'Сховати субтитри',
+    disableSubtitle: 'Показати субтитри'
   }
 })

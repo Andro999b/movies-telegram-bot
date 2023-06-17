@@ -5,6 +5,7 @@ import {
   IconButton,
   MenuItem,
   MenuList,
+  Switch,
   Tooltip
 } from '@mui/material'
 import { Settings as SettingsIcon } from '@mui/icons-material'
@@ -79,7 +80,7 @@ interface Props {
 
 const PlaySettingsSelector: React.FC<Props> = ({ device }): JSX.Element => {
   const [startTime, setStartTime] = useState(0)
-  const { currentTime } = device
+  const { currentTime, showSubtitle } = device
 
   const resetStartTime = async (): Promise<void> => {
     await watchHistoryStore.updateStartTime(device.playlist, 0)
@@ -101,6 +102,10 @@ const PlaySettingsSelector: React.FC<Props> = ({ device }): JSX.Element => {
 
   const hasQualities = device.qualities.length > 1
 
+  const toggleSubtitle = (): void => {
+    device.setShowSubtitle(!showSubtitle)
+  }
+
   return (
     <Selector
       renderButton={({ handleOpen }): React.ReactElement => {
@@ -117,8 +122,12 @@ const PlaySettingsSelector: React.FC<Props> = ({ device }): JSX.Element => {
 
         return (
           <MenuList>
+            <MenuItem onClick={toggleSubtitle}>
+              {showSubtitle ? localization.enableSubtitle : localization.disableSubtitle}
+            </MenuItem>
             {hasQualities && <QualitySelector device={device} handleClose={handleClose} />}
             <MenuItem disabled>{localization.playModeLabel}</MenuItem>
+
             <PlayModeList
               playMode={device.playMode}
               setPlayMode={device.setPlayMode}
