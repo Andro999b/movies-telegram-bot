@@ -75,9 +75,15 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
 
   const videoFiles = useMemo(() => {
     const { urls } = source
-    return urls
+    let filterAudio = urls
       .filter((it) => !audioTrack || it.audio == audioTrack)
+
+    filterAudio = filterAudio.length == 0 ? urls : filterAudio
+
+    const filterQuality = filterAudio
       .filter((it) => !quality || it.quality <= quality)
+
+    return filterQuality.length == 0 ? filterAudio : filterQuality
   }, [source, audioTrack, quality])
 
   useEffect(() => setFileIndex(0), [videoFiles])
@@ -272,7 +278,6 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
 
       if (currentVideo.textTracks && currentVideo.textTracks.length) {
         currentVideo.textTracks[0].mode = 'showing'
-        console.log(currentVideo.textTracks[0])
       }
 
       if (isPlaying) {
