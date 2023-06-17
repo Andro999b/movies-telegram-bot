@@ -28,7 +28,9 @@ class UAFilmTVProvider extends Provider {
       selector: '.player-box iframe',
       transform: async ($el: Cheerio<AnyNode>): Promise<File[]> => {
         const src = $el.attr('src')
-        if (!src) return []
+        if (!src) {
+          throw new Error('No iframe src')
+        }
         const files = await playerjsembed(src)
         files.forEach((file, index) => file.id = index)
         return files

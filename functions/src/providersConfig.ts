@@ -53,7 +53,19 @@ const config: ProvidersConfig = {
     },
     animelib: {
       searchUrl: 'https://animelib.me/search',
-      baseUrl: 'https://animelib.me'
+      baseUrl: 'https://animelib.me',
+      headers: {
+        'Cookie': 'mangalib_session=eyJpdiI6IndEMm1UaTZSVkpDbG5kVGVVN3VnRlE9PSIsInZhbHVlIjoiY0YyeDZPdy8wY0oxajhKUHY5cFNUeER3blo1aDRlRmtUTFJscDRBcVlISHM1eE5xbk4vMDFmN2FvSjhRZk5KVzEyUHAxUDhIcE91cUJhZFNIS0F3TTE3eVFZS2NnS2tvRlBURk1yeHl5djV6dkJkdmg4MGEwWm9ZSG5KNVFlQnkiLCJtYWMiOiJhMzFhZDM5ZjNiYmI1YTcxYjI5MTc0NWEyNDVjMmEyZDdkZmEyY2NhYmM1YjNiNmE2MGM1ZDE3ZTQ1ZGI3M2QyIiwidGFnIjoiIn0%3D;'
+      },
+      kodikSign: {
+        d: 'animelib.me',
+        d_sign: '5ad5c470aa204c917a88f1547d23131691be0636a4dd9f2f837cc16e8d99b294',
+        pd: 'kodik.info',
+        pd_sign: '09ffe86e9e452eec302620225d9848eb722efd800e15bf707195241d9b7e4b2b',
+        ref: 'https%3A%2F%2Fanimelib.me%2F',
+        ref_sign: '0c27eeb7e79de496a774e1d5321bd7295fec2310576fe37643c8a145a0a9e43b',
+      },
+      bypassMode: 'proxy'
     },
     eneyida: {
       baseUrl: 'https://eneyida.tv',

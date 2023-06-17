@@ -41,6 +41,7 @@ export interface FileUrl {
   audio?: string
   hls?: boolean
   extractor?: Extractor
+  subtitle?: Subtitle[]
 }
 
 export interface Extractor {
@@ -56,6 +57,7 @@ export type ExtractorTypes =
   'anigit' |
   'animedia' |
   'animego_kodik' |
+  'animelib_kodik' |
   'sibnethls' |
   'sibnetmp4' |
   'stormo' |
