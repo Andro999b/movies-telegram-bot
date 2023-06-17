@@ -17,7 +17,7 @@ import localization from '../localization'
 import logger from '../utils/logger'
 import analytics from '../utils/analytics'
 import { toJS } from 'mobx'
-import { Source } from '../types'
+import { Source, Subtitle } from '../types'
 import { Device } from '../store/player-store'
 import { isNativeHLSUserAgent as isNativeHLSUserAgent } from '../utils'
 
@@ -50,6 +50,7 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
   const [orientation, setOrientation] = useState('scale_hor')
   const [videoReady, setVideoReady] = useState(false)
   const [fileIndex, setFileIndex] = useState(0)
+  const [subtitle, setSubtitle] = useState<Subtitle[]>(source.subtitle ?? [])
 
   useImperativeHandle(ref, () => ({
     takeScreanShot(): string {
@@ -144,6 +145,8 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
 
       return
     }
+
+    setSubtitle(videoFile.subtitle ?? source.subtitle ?? [])
 
     let destroyCallback: () => void | null
     const currentVideo = video.current!
@@ -267,9 +270,10 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
     const resotreVideo = async (): Promise<void> => {
       currentVideo.currentTime = device.seekTo || device.currentTime
 
-      // if(currentVideo.textTracks && currentVideo.textTracks.length) {
-      //   currentVideo.textTracks[0].mode = 'showing'
-      // }
+      if (currentVideo.textTracks && currentVideo.textTracks.length) {
+        currentVideo.textTracks[0].mode = 'showing'
+        console.log(currentVideo.textTracks[0])
+      }
 
       if (isPlaying) {
         try {
@@ -321,6 +325,14 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
         onPause={onPlayPause}
         crossOrigin="anonymous"
       >
+        {subtitle.map(({ url, language }) => (
+          <track
+            kind='subtitles'
+            key={language}
+            label={language}
+            srcLang={language}
+            src={'https://corsproxy.movies-player.workers.dev/?' + encodeURIComponent(url)} />
+        ))}
       </video>
     </div>
   )

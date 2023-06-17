@@ -35,6 +35,7 @@ export interface FileUrl {
   audio?: string
   quality?: number
   extractor?: Extrator
+  subtitle?: Subtitle[]
 }
 
 export interface Extrator {
@@ -43,6 +44,7 @@ export interface Extrator {
 }
 
 export interface Source {
+  subtitle: Subtitle[]
   urls: FileUrl[]
   currentTime?: number
 }

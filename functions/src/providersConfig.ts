@@ -6,20 +6,14 @@ const config: ProvidersConfig = {
   pageSize: 10,
   userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
   providers: {
-    videocdn: {
-      pageSize: 20,
-      baseUrl: 'https://videocdn.tv/api',
-      searchUrl: 'https://videocdn.tv/api',
-      referer: 'https://videocdn.tv/',
-      types: ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
-      iframe: '83.annacdn.cc',
-      token: 'birzMxRwbHzYZSaRGe0ApcXgMbcNersl'// reserv      
-      // iframe: '89.annacdn.cc',
-      // token: 'wwwKfKgQ9PrIR6jX3ZILT6W10ymHsMt9'
-    },
     animedia: {
       baseUrl: 'https://online.animedia.tv',
       searchUrl: 'https://online.animedia.tv/ajax/search_result_search_page_2/P0'
+    },
+    animevost: {
+      baseUrl: 'https://animevost.org',
+      searchUrl: 'https://animevost.org/index.php',
+      playerUrl: 'https://animevost.org/frame5.php',
     },
     anigato: {
       timeout: 15,
@@ -57,19 +51,21 @@ const config: ProvidersConfig = {
         Host: 'anitube.in.ua'
       }
     },
-    kinovod: {
-      baseUrl: 'https://kinovod.net',
-      searchUrl: 'https://kinovod.net/search'
-    },
-    animevost: {
-      baseUrl: 'https://animevost.org',
-      searchUrl: 'https://animevost.org/index.php',
-      playerUrl: 'https://animevost.org/frame5.php',
-    },
-    kinogo: {
-      infoTimeout: 20,
-      baseUrl: 'https://kinogo.la',
-      searchUrl: 'https://kinogo.la/index.php'
+    animelib: {
+      searchUrl: 'https://animelib.me/search',
+      baseUrl: 'https://animelib.me',
+      headers: {
+        'Cookie': 'mangalib_session=eyJpdiI6IndEMm1UaTZSVkpDbG5kVGVVN3VnRlE9PSIsInZhbHVlIjoiY0YyeDZPdy8wY0oxajhKUHY5cFNUeER3blo1aDRlRmtUTFJscDRBcVlISHM1eE5xbk4vMDFmN2FvSjhRZk5KVzEyUHAxUDhIcE91cUJhZFNIS0F3TTE3eVFZS2NnS2tvRlBURk1yeHl5djV6dkJkdmg4MGEwWm9ZSG5KNVFlQnkiLCJtYWMiOiJhMzFhZDM5ZjNiYmI1YTcxYjI5MTc0NWEyNDVjMmEyZDdkZmEyY2NhYmM1YjNiNmE2MGM1ZDE3ZTQ1ZGI3M2QyIiwidGFnIjoiIn0%3D;'
+      },
+      kodikSign: {
+        d: 'animelib.me',
+        d_sign: '5ad5c470aa204c917a88f1547d23131691be0636a4dd9f2f837cc16e8d99b294',
+        pd: 'kodik.info',
+        pd_sign: '09ffe86e9e452eec302620225d9848eb722efd800e15bf707195241d9b7e4b2b',
+        ref: 'https%3A%2F%2Fanimelib.me%2F',
+        ref_sign: '0c27eeb7e79de496a774e1d5321bd7295fec2310576fe37643c8a145a0a9e43b',
+      },
+      bypassMode: 'proxy'
     },
     eneyida: {
       baseUrl: 'https://eneyida.tv',
@@ -110,6 +106,22 @@ const config: ProvidersConfig = {
         '^^^!@##!!##'
       ],
       bypassMode: 'proxy'
+    },
+    kinogo: {
+      infoTimeout: 20,
+      baseUrl: 'https://kinogo.la',
+      searchUrl: 'https://kinogo.la/index.php'
+    },
+    videocdn: {
+      pageSize: 20,
+      baseUrl: 'https://videocdn.tv/api',
+      searchUrl: 'https://videocdn.tv/api',
+      referer: 'https://videocdn.tv/',
+      types: ['tv-series', 'movies', 'show-tv-series', 'animes', 'anime-tv-series'],
+      iframe: '83.annacdn.cc',
+      token: 'birzMxRwbHzYZSaRGe0ApcXgMbcNersl'// reserv      
+      // iframe: '89.annacdn.cc',
+      // token: 'wwwKfKgQ9PrIR6jX3ZILT6W10ymHsMt9'
     }
   }
 }

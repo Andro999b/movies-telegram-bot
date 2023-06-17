@@ -1,7 +1,6 @@
 import { File, Playlist, ProvidersNames, SearchResult } from '../types/index'
 import Provider from './Provider'
 import KinogoProvider from './KinogoProvider'
-import KinovodProvider from './KinovodProvider'
 import AnimeVostProvider from './AnimeVostProvider'
 import AnimediaProvider from './AnimediaProvider'
 import AnigatoProvider from './AnigatoProvider'
@@ -14,11 +13,12 @@ import UASerialsProvider from './UASerialsProvider'
 import GidOnlineProvider from './GidOnlineProvider'
 import AnimegoProvider from './AnimegoProvider'
 import RezkaProvider from './RezkaProvider'
+import AnimelibProvider from './AnimelibProvider'
 
 
 const providers: Record<ProvidersNames, Provider> = {
+  animelib: new AnimelibProvider(),
   kinogo: new KinogoProvider(),
-  kinovod: new KinovodProvider(),
   animego: new AnimegoProvider(),
   animevost: new AnimeVostProvider(),
   animedia: new AnimediaProvider(),
