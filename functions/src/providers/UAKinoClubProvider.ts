@@ -3,7 +3,7 @@ import providerConfig from '../providersConfig'
 import $, { AnyNode, Cheerio } from 'cheerio'
 import urlencode from 'urlencode'
 import { InfoSelectors, SearchSelectors } from './CrawlerProvider'
-import { File, FileUrl } from '../types/index'
+import { File, FileUrl, SearchResult } from '../types/index'
 import invokeCFBypass from '../utils/invokeCFBypass'
 import { extractIntFromSting } from '../utils/extractNumber'
 import playerjsembed from '../utils/iframes/playerjsembed'
@@ -14,7 +14,10 @@ class UAKinoClubProvider extends Provider {
     name: '.movie-title',
     id: {
       selector: '.movie-title',
-      transform: ($el: Cheerio<AnyNode>): string => urlencode($el.attr('href') ?? '')
+      transform: ($el: Cheerio<AnyNode>): string => {
+        const { baseUrl } = this.config
+        return urlencode($el.attr('href')!.substring(baseUrl.length))
+      }
     },
     image: {
       selector: '.movie-img img',
@@ -120,6 +123,12 @@ class UAKinoClubProvider extends Provider {
       })
 
     return files.filter((f) => f)
+  }
+
+  protected override postProcessResult(results: SearchResult[]): Promise<SearchResult[]> {
+    results = results.filter(({ id }) => !id.startsWith('news') && !id.startsWith('franchise') )
+
+    return super.postProcessResult(results)
   }
 }
 

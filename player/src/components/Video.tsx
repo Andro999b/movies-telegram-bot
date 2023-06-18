@@ -142,9 +142,8 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
       const currentVideo = video.current
       logError(
         {
-          code: currentVideo?.error?.code,
-          message: currentVideo?.error?.message,
-          videoSrc: currentVideo?.src,
+          videoFile,
+          error: currentVideo.error
         },
         source
       )
@@ -213,7 +212,7 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
         startPosition: device.seekTo || device.currentTime,
         loader: Loader,
       })
-      hls.on(Hls.Events.ERROR, (_: unknown, data: { fatal: boolean }) => {
+      hls.on(Hls.Events.ERROR, (error: unknown, data: { fatal: boolean }) => {
         if (data.fatal) {
           logError(data, device.source)
           tryNextVideo()
@@ -320,6 +319,14 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
     }
   }
 
+  const handleError = (): void => {
+    const error = video?.current?.error
+    if(error) {
+      logError({videoFile, error}, source)
+      tryNextVideo()
+    }
+  }
+
   return (
     <div className="player__player-screen" ref={container}>
       <video
@@ -335,7 +342,7 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
         onLoadedMetadata={handleLoadedMetadata}
         onPlaying={handlePlaying}
         onWaiting={handleWaiting}
-        onError={tryNextVideo}
+        onError={handleError}
         onPlay={onPlayPause}
         onPause={onPlayPause}
         crossOrigin="anonymous"

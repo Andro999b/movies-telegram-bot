@@ -19,6 +19,7 @@ export type ProvidersNames =
   'anigato' | // TODO: remove
   'anitubeua' |
   'animelib' |
+  'animeuaclub' |
   'animevost' | // TODO: remove
   'kinogo' |
   'videocdn' |

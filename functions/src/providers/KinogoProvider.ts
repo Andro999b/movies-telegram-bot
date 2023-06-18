@@ -50,6 +50,10 @@ class KinogoProvider extends Provider {
           return this.extractV2(iframeSrc)
         }
 
+        if (iframeSrc.includes('svetacdn.in')) {
+          return this.extractV2(iframeSrc)
+        }
+
         return this.extractV1(iframeSrc)
       }
     }
@@ -60,7 +64,8 @@ class KinogoProvider extends Provider {
   }
 
   private extractV2(iframeSrc: string): Promise<File[]> {
-    return videocdnembed(iframeSrc)
+    const { timeout, baseUrl } = this.config
+    return videocdnembed(iframeSrc, timeout, baseUrl, true)
   }
 
   private async extractV1(iframeSrc: string): Promise<File[]> {

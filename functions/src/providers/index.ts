@@ -14,10 +14,12 @@ import GidOnlineProvider from './GidOnlineProvider'
 import AnimegoProvider from './AnimegoProvider'
 import RezkaProvider from './RezkaProvider'
 import AnimelibProvider from './AnimelibProvider'
+import AnimeUAClubProvider from './AnimeUAClubProvider'
 
 
 const providers: Record<ProvidersNames, Provider> = {
   animelib: new AnimelibProvider(),
+  animeuaclub: new AnimeUAClubProvider(),
   kinogo: new KinogoProvider(),
   animego: new AnimegoProvider(),
   animevost: new AnimeVostProvider(),

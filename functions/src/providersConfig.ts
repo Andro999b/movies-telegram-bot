@@ -51,6 +51,10 @@ const config: ProvidersConfig = {
         Host: 'anitube.in.ua'
       }
     },
+    animeuaclub: {
+      searchUrl: 'https://animeua.club',
+      baseUrl: 'https://animeua.club'
+    },
     animelib: {
       searchUrl: 'https://animelib.me/search',
       baseUrl: 'https://animelib.me',

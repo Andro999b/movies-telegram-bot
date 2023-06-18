@@ -4,6 +4,7 @@ import { ProcessingInstruction } from 'domhandler'
 import convertPlayerJSPlaylist from '../playerjs/convertPlayerJSPlaylist'
 import { File, FileUrl, PlayerJSPlaylist } from '../../types/index'
 import providersConfig from '../../providersConfig'
+import { tunnelHttpsAgent } from '../tunnelAgent'
 
 function _extractTranslations(
   translations: Record<string, string>,
@@ -37,9 +38,10 @@ function _extractTranslations(
     .map((file, id) => ({ ...file, id }))
 }
 
-export default async (url: string, timeout = 20, referer?: string): Promise<File[]> => {
+export default async (url: string, timeout = 20, referer?: string, proxy = false): Promise<File[]> => {
   let client = superagent
     .get(url.startsWith('//') ? 'https:' + url : url)
+    .agent(proxy ? tunnelHttpsAgent : undefined)
     .set('User-Agent', providersConfig.userAgent)
     .timeout(timeout * 1000)
 
