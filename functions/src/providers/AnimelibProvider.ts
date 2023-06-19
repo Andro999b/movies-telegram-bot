@@ -5,6 +5,7 @@ import CrawlerProvider, { InfoSelectors, SearchSelectors } from './CrawlerProvid
 import superagent from 'superagent'
 import { lastPathPart } from '../utils/url'
 import { tunnelHttpsAgent } from '../utils/tunnelAgent'
+import { RequestGenerator } from '../utils/crawler'
 
 interface APISearchResponse {
   href: string
@@ -56,17 +57,16 @@ class AnimelibProvider extends CrawlerProvider {
       selector: '.media-sidebar__buttons > a',
       transform: async ($el) => {
         const playerUrl = $el.attr('href')
-        const { timeout, headers, bypassMode } = this.config
+        const { timeout, bypassMode } = this.config
 
         if (!playerUrl) {
           throw new Error('Unable to extract player url')
         }
 
-        const playerRes = await superagent
+        const playerRes = await this.requestAgent
           .get(playerUrl)
           .agent(bypassMode == 'proxy' ? tunnelHttpsAgent : undefined)
           .timeout(timeout!)
-          .set(headers!)
 
         const urls = this.extractUrls(playerRes.text)
         const files = this.extractEpisodes(playerRes.text)
@@ -86,6 +86,7 @@ class AnimelibProvider extends CrawlerProvider {
       }
     }
   }
+  requestAgent: superagent.SuperAgentStatic & superagent.Request
 
   private extractEpisodes(playerHtml: string): File[] {
     const $ = load(playerHtml)
@@ -158,7 +159,7 @@ class AnimelibProvider extends CrawlerProvider {
   override async search(query: string): Promise<SearchResult[]> {
     const { timeout, bypassMode } = this.config
 
-    const res = await superagent
+    const res = await this.requestAgent
       .get(this.getSearchUrl(query))
       .agent(bypassMode == 'proxy' ? tunnelHttpsAgent : undefined)
       .timeout(timeout!)
@@ -197,14 +198,13 @@ class AnimelibProvider extends CrawlerProvider {
   }
 
   override async getSource(resultsId: string, sourceId: string): Promise<Partial<File> | null> {
-    const { bypassMode, timeout, headers } = this.config
+    const { bypassMode, timeout } = this.config
     const playerUrl = this.getInfoUrl(resultsId) + '/episode/' + sourceId
 
-    const playerRes = await superagent
+    const playerRes = await this.requestAgent
       .get(playerUrl)
       .agent(bypassMode == 'proxy' ? tunnelHttpsAgent : undefined)
       .timeout(timeout!)
-      .set(headers!)
 
     const urls = this.extractUrls(playerRes.text)
     return {
@@ -212,8 +212,15 @@ class AnimelibProvider extends CrawlerProvider {
     }
   }
 
+  protected override crawlerInfoRequestGenerator = (): RequestGenerator =>
+    (url: string) => this.requestAgent.get(url)
+
   constructor() {
     super('animelib', providersConfig.providers.animelib)
+    this.requestAgent =
+      superagent
+        .agent()
+        .set(this.config.headers!)
   }
 }
 

@@ -59,7 +59,7 @@ const config: ProvidersConfig = {
       searchUrl: 'https://animelib.me/search',
       baseUrl: 'https://animelib.me',
       headers: {
-        'Cookie': 'mangalib_session=eyJpdiI6IndEMm1UaTZSVkpDbG5kVGVVN3VnRlE9PSIsInZhbHVlIjoiY0YyeDZPdy8wY0oxajhKUHY5cFNUeER3blo1aDRlRmtUTFJscDRBcVlISHM1eE5xbk4vMDFmN2FvSjhRZk5KVzEyUHAxUDhIcE91cUJhZFNIS0F3TTE3eVFZS2NnS2tvRlBURk1yeHl5djV6dkJkdmg4MGEwWm9ZSG5KNVFlQnkiLCJtYWMiOiJhMzFhZDM5ZjNiYmI1YTcxYjI5MTc0NWEyNDVjMmEyZDdkZmEyY2NhYmM1YjNiNmE2MGM1ZDE3ZTQ1ZGI3M2QyIiwidGFnIjoiIn0%3D;'
+        'Cookie': 'remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d=eyJpdiI6InplVEJiVmJ6WlRLZ3hRZHZkeFdFeGc9PSIsInZhbHVlIjoiT1ZyYkozUjNlOEREWDdrQTdhUXRsS2NBZ2EzdG1TTi81ZzhoUFNrSFhuZSs5bEVsOWhBU20vWDhmVG5DbE1PTXozU0tlTUtFZEtuZFVQOU41K0R0a05LU05uMVYySGFPdWVLRWppLytVNGVGU3orWE10ajFyWDVodVo0QXg4MFFHWVFna1J4Rmp4VVMxbTlvQndJUTlNamJ6VWdZTzFuQ0NuZXlwOGxwL0ZOdVdKQXdDRVNDTElFWXl6VGtUa1Z0NHJZNFRWZi9wRVpSY1U0NTJBLzBadXpkQ1pMZmlKbjBOWWd0Z3hLTkg1dz0iLCJtYWMiOiJlOTBmZGQxYzQ5ODMxOWRkZTZmZDczMTBlZWY0OWVhOThkZmVmM2Y3MDVlYzVlMTI5ZjJjOWZkNzAxMzYwYmM2IiwidGFnIjoiIn0%3D'
       },
       kodikSign: {
         d: 'animelib.me',
