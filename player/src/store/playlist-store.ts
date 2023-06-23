@@ -49,7 +49,10 @@ class PlaylistStore {
     )
       .then((response) => response.json())
       .then(action((playlist): void => {
-        if (playlist.files && playlist.files.length) {
+        if(playlist == null) {
+          this.error = localization.videoNotFound
+          this.trackError(provider, id, null, 'Playlist is null')
+        } else if (playlist.files && playlist.files.length) {
           this.playlist = { id, provider, query, ...playlist }
           this.cache[cacheKey] = this.playlist
           analytics('playlist_loaded')
