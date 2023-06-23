@@ -105,7 +105,14 @@ class KinogoProvider extends Provider {
 
       const rootFiles = playlistRes.body as IframeV1PlaylistFolder[]
 
-      if (rootFiles.length == 1) {
+      if(rootFiles.length == 0) {
+        this.debug('No playlist files found')
+        return []
+      }
+
+      console.log(JSON.stringify(rootFiles, null, 2))
+
+      if (rootFiles[0].folder === undefined) {
         return [{
           id: 0,
           name: null,
