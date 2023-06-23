@@ -110,8 +110,6 @@ class KinogoProvider extends Provider {
         return []
       }
 
-      console.log(JSON.stringify(rootFiles, null, 2))
-
       if (rootFiles[0].folder === undefined) {
         return [{
           id: 0,
