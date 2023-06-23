@@ -1,4 +1,4 @@
-import { UrlAndQuality, UrlAndQualityAndAudio } from '../types/index'
+import { UrlAndQuality, UrlAndQualityAndAudio } from '../../types/index'
 
 export default (input: string): UrlAndQualityAndAudio[] => {
   const seen = new Set()
@@ -34,7 +34,7 @@ export default (input: string): UrlAndQualityAndAudio[] => {
     .flatMap(({ url, quality }) => {
       return url
         .split(';')
-        .map((url): UrlAndQualityAndAudio => {
+        .map((url: string): UrlAndQualityAndAudio => {
           const res = url.match(/\{(?<audio>[^}]*)\}(?<url>.*)/)
 
           if (!res) return {

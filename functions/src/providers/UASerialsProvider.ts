@@ -70,6 +70,17 @@ class UASerialsProvider extends Provider<UASerialsProviderConfig> {
               extractor: { type: 'm3u8proxy' }
             }]
           }]
+        } else if(playerTab.episodes) {
+          return [{
+            id: 0,
+            name: null,
+            urls: playerTab.episodes.map((e: { url: string, title: string }) => ({
+              extractor: { type: 'm3u8proxy' },
+              hls: true,
+              url: e.url,
+              audio: e.title
+            }))
+          }]
         } else {
           let id = 0
           return playerTab.seasons.flatMap(({ title, episodes }: Season) => {
