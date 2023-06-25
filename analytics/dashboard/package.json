@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev-server.config.js",
+    "dev": "webpack-dev-server --config webpack.dev-server.config.js",
     "build": "rm -rf dist/* && webpack --config webpack.workbox.config.js --mode production",
     "deploy": "surge dist movie-player-stat.surge.sh",
     "release": "npm run build && npm run deploy"

@@ -144,6 +144,7 @@ class AnimelibProvider extends CrawlerProvider {
           result.push({
             audio: p.team.name,
             url: p.code!,
+            hls: true,
             extractor: {
               type: 'animelib_kodik'
             }

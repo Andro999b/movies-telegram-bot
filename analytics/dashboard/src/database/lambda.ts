@@ -33,7 +33,7 @@ export const invokeMongoStat = async (): Promise<MongoStats> => {
 export const invokeMongoInvalidate = async (provider: string, resultId: string): Promise<void> => {
   const lambda = await getLambda()
   await lambda.invoke({
-    FunctionName: `arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:analytics-functions-dev-ga4`,
+    FunctionName: `arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:analytics-functions-dev-mongoinvalidate`,
     Payload: textEncoder.encode(JSON.stringify({ provider, resultId }))
   })
 }

@@ -25,7 +25,7 @@ const Tile: React.FC<TileProps> = ({ item, onDelete }) => {
   const { image, provider, id, title } = item
 
   return (
-    <Grid item xs={6} sm={3} lg={2}>
+    <Grid item xs={6} sm={4} md={3} lg={2}>
       <Link to={`/watch?provider=${provider}&id=${id}&query=${encodeURIComponent(title)}`}>
         <div className="watch-history__tile">
           <img className="watch-history__tile-image" src={image} />
@@ -102,7 +102,7 @@ const WatchHistoryView: React.FC = () => {
           <>
             {history.length == 0 && <NoHistory />}
             {history.length > 0 &&
-              <Grid container spacing={1} className="watch-history__tiles">
+              <Grid container spacing={2} className="watch-history__tiles">
                 {history.map((item) => <Tile
                   key={`${item.provider}#${item.id}`}
                   item={item}

@@ -4,6 +4,7 @@ import { extractStringSingleQuote } from '../utils/extractScriptVariable'
 import providersConfig from '../providersConfig'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { base64decode } from '../utils/base64'
+import { tunnelHttpsAgent } from '../utils/tunnelAgent'
 
 const linksApi = 'https://kodik.info/gvi'
 const userAgent = providersConfig.userAgent
@@ -47,7 +48,7 @@ export interface KodikParams {
 
 
 
-const kodikExtractor = async ({ url, referer, kodikSign, ttype, tid, thash, season }: KodikParams): Promise<APIGatewayProxyResult> => {
+const kodikExtractor = async ({ url, referer, kodikSign, ttype, tid, thash, season }: KodikParams, proxy = false): Promise<APIGatewayProxyResult> => {
   let id, hash, type = 'video'
 
   if (tid) {
@@ -65,7 +66,9 @@ const kodikExtractor = async ({ url, referer, kodikSign, ttype, tid, thash, seas
       url = `https://kodik.info/video/${tid}/${thash}/720p?${signParams}`
     }
 
-    const res = await superagent.get(url)
+    const res = await superagent
+      .get(url)
+      .agent(proxy ? tunnelHttpsAgent : undefined)
       .set({
         'User-Agent': userAgent,
         'Referer': referer,
@@ -93,6 +96,7 @@ const kodikExtractor = async ({ url, referer, kodikSign, ttype, tid, thash, seas
 
   const videoInfoRes = await superagent
     .post(linksApi)
+    .agent(proxy ? tunnelHttpsAgent : undefined)
     .type('form')
     .set({
       'User-Agent': userAgent,
