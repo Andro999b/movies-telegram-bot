@@ -7,6 +7,7 @@ import { ProcessingInstruction } from 'domhandler'
 import { extractIntFromSting } from '../utils/extractNumber'
 import { lastPathPartNoExt } from '../utils/url'
 import { SearchSelectors } from './CrawlerProvider'
+import { tunnelHttpsAgent } from '../utils/tunnelAgent'
 
 const playesRegExp = /RalodePlayer\.init\((.*),(\[\[.*\]\]),/
 const srcRegExp = /src="([^"]+)"/
@@ -101,9 +102,12 @@ class AnitubeUAProvider extends Provider {
     // https://anitube.in.ua/4110-chainsaw-man.html
     // https://anitube.in.ua/4304-suzume-no-tojimari.html
 
+    const { bypassMode } = this.config
+
     const newsId = $el.attr('data-news_id')
     const res = await superagent
       .get(`${this.config.baseUrl}/engine/ajax/playlists.php?news_id=${newsId}&xfield=playlist`)
+      .agent(bypassMode == 'proxy' ? tunnelHttpsAgent: undefined)
       .set(this.config.headers!)
       .timeout(5000)
       .disableTLSCerts()

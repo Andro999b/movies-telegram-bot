@@ -44,14 +44,15 @@ const config: ProvidersConfig = {
     },
     anitubeua: {
       timeout: 10,
+      bypassMode: 'proxy',
       imagesUrl: 'https://anitube.in.ua',
       baseUrl: 'https://anitube.in.ua',
       searchUrl: 'https://anitube.in.ua/index.php',
       // baseUrl: 'https://85.208.185.25',
       // searchUrl: 'https://85.208.185.25/index.php',
-      headers: {
-        Host: 'anitube.in.ua'
-      }
+      // headers: {
+      //   Host: 'anitube.in.ua'
+      // }
     },
     animeuaclub: {
       searchUrl: 'https://animeua.club',
