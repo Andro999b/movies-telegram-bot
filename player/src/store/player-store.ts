@@ -138,13 +138,13 @@ export class Device {
       return
 
     this.setError(null)
+    this.setLoading(true)
 
     this.currentFileIndex = fileIndex
 
     const file: File = files[this.currentFileIndex]
 
     if (file.asyncSource) {
-      this.setLoading(true)
       this.source = null
 
       try {
@@ -194,11 +194,12 @@ export class Device {
         analytics('error_playback')
 
         this.setError(localization.cantPlayMedia)
-        this.setLoading(false)
       }
     } else {
       await this.setSource(file as Source)
     }
+
+    this.setLoading(false)
   }
 
   @action.bound setLoading(loading: boolean): void {

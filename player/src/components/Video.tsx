@@ -310,12 +310,14 @@ const Video = React.forwardRef<VideoApi, Props>(({ device, onEnded }, ref) => {
 
   const onPlayPause = (): void => {
     const currentVideo = video.current!
-    if (currentVideo.paused == isPlaying) {
-      if (currentVideo.paused) {
-        device.pause()
-      } else {
-        device.play()
-      }
+    if (currentVideo.ended || currentVideo.paused != isPlaying) {
+      return
+    }
+
+    if (currentVideo.paused) {
+      device.pause()
+    } else {
+      device.play()
     }
   }
 
