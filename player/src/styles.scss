@@ -127,9 +127,8 @@ a:active {
 
 .playback-skip {
   position: absolute;
-  top: 10%;
-  height: 80%;
-  width: 20%;
+  height: 100%;
+  width: 30%;
   z-index: 3;
   touch-action: none;
 
@@ -142,7 +141,9 @@ a:active {
   }
 
   @media (min-width: 960px) {
-    width: 15%
+    top: 10%;
+    height: 80%;
+    width: 20%
   }
 }
 

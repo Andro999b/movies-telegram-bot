@@ -342,11 +342,11 @@ class PlayerStore {
 
   getPlayerTitle(): string {
     const {
-      playlist: { title, files },
+      playlist: { title, files, provider },
       currentFileIndex
     } = this.device
 
-    let res = title
+    let res = `[${provider}]${title}`
 
     if (files.length > 1) {
       const file = files[currentFileIndex]
