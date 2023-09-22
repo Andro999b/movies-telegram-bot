@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState, MouseEvent } from 'react'
+import React, { useCallback, useEffect, useRef, useState, TouchEvent } from 'react'
 
 import fscreen from 'fscreen'
 
@@ -27,16 +27,16 @@ interface HandleActionListenerProps {
 
 // eslint-disable-next-line react/display-name
 const HandleActionListener = React.forwardRef<HTMLDivElement, HandleActionListenerProps>(({ idle, onAction, children }, ref) => {
-  const handleClick = (e: MouseEvent): void => {
+  const handleTouch = (e: TouchEvent): void => {
     if (idle) {
       e.preventDefault()
       e.stopPropagation()
-      onAction()
     }
+    onAction()
   }
 
   if (isTouchDevice()) {
-    return (<div ref={ref} onClickCapture={handleClick} onTouchMoveCapture={onAction}>
+    return (<div ref={ref} onTouchStartCapture={handleTouch}>
       {children}
     </div>)
   } else {

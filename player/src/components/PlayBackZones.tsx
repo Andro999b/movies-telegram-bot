@@ -60,7 +60,7 @@ const PlayBackZones: React.FC<Props> = ({ device, onPlayPause, onSeek, onSeekEnd
         setAccTime(null)
         self.accTime = null
       },
-      400
+      600
     )
   }, [device, onSeek, onSeekEnd, self])
 
