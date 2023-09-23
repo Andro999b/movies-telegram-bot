@@ -24,7 +24,7 @@
     "json5": "^2.2.3",
     "lambda-request-handler": "^0.5.2",
     "luxon": "^3.2.1",
-    "mongodb": "^5.0.1",
+    "mongodb": "^5.8.0",
     "superagent": "^8.0.9",
     "superagent-charset": "^1.2.0",
     "telegraf": "^4.11.2",
