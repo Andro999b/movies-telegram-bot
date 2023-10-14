@@ -120,7 +120,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'anitubeua,animego,animelib,animeuaclub'
+      PROVIDERS: 'anitubeua,animego,animevost,animelib,animeuaclub'
       BOT_HOOK_PATH: '/bot/anime'
       BOT_TYPE: 'anime'
       TOKEN: ${ssm:bot_anime_TOKEN_prod}
