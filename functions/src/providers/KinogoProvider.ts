@@ -1,4 +1,4 @@
-import Provider from './CFDataLifeProvider'
+import Provider, { SearchMethod } from './CFDataLifeProvider'
 import superagent from 'superagent'
 import videocdnembed from '../utils/iframes/videocdnembed'
 import { extractStringProperty } from '../utils/extractScriptVariable'
@@ -33,6 +33,7 @@ class KinogoProvider extends Provider {
       transform: ($el: Cheerio<AnyNode>): string => this.absoluteImageUrl($el.attr('src') ?? '')
     }
   }
+  protected override searchMethod: SearchMethod = 'post'
   protected infoSelectors = {
     title: '.shortstorytitle>h1',
     image: {
