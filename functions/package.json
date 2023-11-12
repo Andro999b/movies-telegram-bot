@@ -17,7 +17,7 @@
     "@aws-sdk/client-dynamodb": "^3.267.0",
     "@aws-sdk/client-lambda": "^3.267.0",
     "cheerio": "^1.0.0-rc.12",
-    "crypto-js": "^4.1.1",
+    "crypto-js": "^4.2.0",
     "debug": "^4.3.4",
     "domhandler": "^5.0.3",
     "https-proxy-agent": "^5.0.1",
