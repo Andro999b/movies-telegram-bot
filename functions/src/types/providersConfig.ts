@@ -14,20 +14,16 @@ export interface ProviderConfig {
 }
 
 export type ProvidersNames =
-  'animedia' | // TODO: remove
   'animego' | 
-  'anigato' | // TODO: remove
   'anitubeua' |
   'animelib' |
   'animeuaclub' |
-  'animevost' | // TODO: remove
-  'kinogo' |
+  'animevost' | 
   'videocdn' |
   'eneyida' |
   'uafilmtv' |
   'uaserials' |
   'uakinoclub' |
-  'gidonline' |
   'rezka'
 
 export interface ProvidersConfig {

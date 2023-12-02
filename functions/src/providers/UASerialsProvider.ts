@@ -1,4 +1,4 @@
-import Provider from './CFDataLifeProvider'
+import Provider from './DataLifeProvider'
 import CryptoJS from 'crypto-js'
 import { AnyNode, Cheerio } from 'cheerio'
 import providersConfig from '../providersConfig'

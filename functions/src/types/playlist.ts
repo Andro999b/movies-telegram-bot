@@ -51,7 +51,6 @@ export interface Extractor {
 
 export type ExtractorTypes =
   'animevost' |
-  'kinogo' |
   'tortuga' |
   'ashdi' |
   'anigit' |

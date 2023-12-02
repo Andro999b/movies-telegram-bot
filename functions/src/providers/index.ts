@@ -1,16 +1,12 @@
 import { File, Playlist, ProvidersNames, SearchResult } from '../types/index'
 import Provider from './Provider'
-import KinogoProvider from './KinogoProvider'
 import AnimeVostProvider from './AnimeVostProvider'
-import AnimediaProvider from './AnimediaProvider'
-import AnigatoProvider from './AnigatoProvider'
 import VideoCDNProvider from './VideoCDNProvider'
 import AnitubeUAProvider from './AnitubeUAProvider'
 import EneyidaProvider from './EneyidaProvider'
 import UAFilmTVProvider from './UAFilmTVProvider'
 import UAKinoClubProvider from './UAKinoClubProvider'
 import UASerialsProvider from './UASerialsProvider'
-import GidOnlineProvider from './GidOnlineProvider'
 import AnimegoProvider from './AnimegoProvider'
 import RezkaProvider from './RezkaProvider'
 import AnimelibProvider from './AnimelibProvider'
@@ -20,18 +16,14 @@ import AnimeUAClubProvider from './AnimeUAClubProvider'
 const providers: Record<ProvidersNames, Provider> = {
   animelib: new AnimelibProvider(),
   animeuaclub: new AnimeUAClubProvider(),
-  kinogo: new KinogoProvider(),
   animego: new AnimegoProvider(),
   animevost: new AnimeVostProvider(),
-  animedia: new AnimediaProvider(),
-  anigato: new AnigatoProvider(),
   videocdn: new VideoCDNProvider(),
   anitubeua: new AnitubeUAProvider(),
   eneyida: new EneyidaProvider(),
   uafilmtv: new UAFilmTVProvider(),
   uakinoclub: new UAKinoClubProvider(),
   uaserials: new UASerialsProvider(),
-  gidonline: new GidOnlineProvider(),
   rezka: new RezkaProvider()
 }
 

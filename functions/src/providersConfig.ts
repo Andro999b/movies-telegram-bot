@@ -6,29 +6,10 @@ const config: ProvidersConfig = {
   pageSize: 10,
   userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
   providers: {
-    animedia: {
-      baseUrl: 'https://online.animedia.tv',
-      searchUrl: 'https://online.animedia.tv/ajax/search_result_search_page_2/P0'
-    },
     animevost: {
       baseUrl: 'https://animevost.org',
       searchUrl: 'https://animevost.org/index.php',
       playerUrl: 'https://animevost.org/frame5.php',
-    },
-    anigato: {
-      timeout: 15,
-      bypassMode: 'cf',
-      baseUrl: 'https://anigato.ru/',
-      searchUrl: 'https://anigato.ru/index.php',
-      token: '447d179e875efe44217f20d1ee2146be',
-      kodikSign: {
-        d: 'anigato.ru',
-        d_sign: 'cf40e6e20f1db41da51ba9838a01f05bf7f861eb799fedc164f63e83c660de25',
-        pd: 'kodik.info',
-        pd_sign: '09ffe86e9e452eec302620225d9848eb722efd800e15bf707195241d9b7e4b2b',
-        ref: 'https://anigato.ru/',
-        ref_sign: '751d0cd2bc5db44f9d47f30cc5ac3eace8dac460ad9b16399ef5c938b0c9d290'
-      }
     },
     animego: {
       searchUrl: 'https://animego.org/search/anime',
@@ -76,31 +57,24 @@ const config: ProvidersConfig = {
     },
     eneyida: {
       baseUrl: 'https://eneyida.tv',
-      searchUrl: 'https://eneyida.tv/index.php'
+      searchUrl: 'https://eneyida.tv/index.php',
+      bypassMode: 'cf'
     },
     uakinoclub: {
       baseUrl: 'https://uakino.club/',
-      searchUrl: 'https://uakino.club/index.php'
+      searchUrl: 'https://uakino.club/index.php',
+      bypassMode: 'cf'
     },
     uafilmtv: {
       baseUrl: 'https://uafilm.tv',
-      searchUrl: 'https://uafilm.tv/index.php'
+      searchUrl: 'https://uafilm.tv/index.php',
+      bypassMode: 'cf'
     },
     uaserials: {
       password: '297796CCB81D2551',
       baseUrl: 'https://uaserials.pro',
-      searchUrl: 'https://uaserials.pro/index.php'
-    },
-    gidonline: {
-      baseUrl: 'https://gidonline.io',
-      searchUrl: 'https://gidonline.io',
-      decodeKeys: [
-        '@#!@@@##$$@@',
-        '$$$####!!!!!!!',
-        '@!^^!@#@@$$$$$',
-        '^^#@@!!@#!$',
-        '^^^^^^##@'
-      ]
+      searchUrl: 'https://uaserials.pro/index.php',
+      bypassMode: 'cf'
     },
     rezka: {
       baseUrl: 'https://rezka.ag',
@@ -113,11 +87,6 @@ const config: ProvidersConfig = {
         '^^^!@##!!##'
       ],
       bypassMode: 'proxy'
-    },
-    kinogo: {
-      infoTimeout: 20,
-      baseUrl: 'https://kinogo.la',
-      searchUrl: 'https://kinogo.la/index.php'
     },
     videocdn: {
       pageSize: 20,

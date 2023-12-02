@@ -11,7 +11,7 @@
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "yarn",
       "runtimeArgs": [
-        "debug:win"
+        "debug:unix"
       ],
       "sourceMaps": true
     }

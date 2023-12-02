@@ -1,4 +1,4 @@
-import Provider from './CFDataLifeProvider'
+import Provider from './DataLifeProvider'
 import providerConfig from '../providersConfig'
 import $, { AnyNode, Cheerio } from 'cheerio'
 import urlencode from 'urlencode'

@@ -3,10 +3,8 @@ import makeResponse from '../utils/makeResponse'
 import { APIGatewayProxyResult } from 'aws-lambda'
 import { ExtractorTypes } from '../types/index'
 import animevostExtractor from './animevostExtractor'
-import anigitExtractor from './anigitExtractor'
 import sibnetHlsExtractor from './sibnetHlsExtractor'
 import sibnetMp4Extractor from './sibnetMp4Extractor'
-import kinogoExtractor from './kinogoExtractor'
 import animegoKodikExtractor from './animegoKodik'
 import animelibKodikExtractor from './animelibKodik'
 import webmExtractor from './webmExtractor'
@@ -23,10 +21,8 @@ export type Extractor = (params: ExtractorParams, headers: Record<string, string
 
 const extractors: Partial<Record<ExtractorTypes, Extractor>> = {
   animevost: animevostExtractor,
-  kinogo: kinogoExtractor,
   tortuga: m3u8proxy,
   ashdi: m3u8Extractor,
-  anigit: anigitExtractor,
   animedia: m3u8Extractor,
   animego_kodik: animegoKodikExtractor,
   animelib_kodik: animelibKodikExtractor,

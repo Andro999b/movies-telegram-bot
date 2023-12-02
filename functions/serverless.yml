@@ -107,7 +107,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'uakinoclub,uafilmtv,eneyida,rezka,videocdn,gidonline,kinogo'
+      PROVIDERS: 'uakinoclub,uafilmtv,eneyida,rezka,videocdn'
       BOT_TYPE: 'films'
       TOKEN: ${ssm:bot_ru_TOKEN_prod}
 
@@ -120,7 +120,7 @@ functions:
           method: any
           cors: true
     environment:
-      PROVIDERS: 'anitubeua,animego,animevost,animelib,animeuaclub'
+      PROVIDERS: 'anitubeua,animeuaclub,animego,animevost,animelib'
       BOT_HOOK_PATH: '/bot/anime'
       BOT_TYPE: 'anime'
       TOKEN: ${ssm:bot_anime_TOKEN_prod}

@@ -1,4 +1,4 @@
-import Provider from './CFDataLifeProvider'
+import Provider from './DataLifeProvider'
 import playerjsembed from '../utils/iframes/playerjsembed'
 import providersConfig from '../providersConfig'
 import { AnyNode, Cheerio } from 'cheerio'
