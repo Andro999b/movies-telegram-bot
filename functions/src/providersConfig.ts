@@ -14,6 +14,7 @@ const config: ProvidersConfig = {
     animego: {
       searchUrl: 'https://animego.org/search/anime',
       baseUrl: 'https://animego.org',
+      bypassMode: 'proxy',
       kodikSign: {
         d: 'animego.org',
         d_sign: '6d44aaa5cb9782cd4b3817129bfe9644c54504ad6c16a0e2adf239cde4dc416d',

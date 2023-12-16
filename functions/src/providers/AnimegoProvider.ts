@@ -6,6 +6,7 @@ import { Extractor, File, FileUrl } from '../types'
 import superagent from 'superagent'
 import { load } from 'cheerio'
 import { lastPathPart } from '../utils/url'
+import { tunnelHttpsAgent } from '../utils/tunnelAgent'
 
 const NEW_LINE_REGEXP = /\n/g
 
@@ -44,9 +45,11 @@ class AnimegoProvider extends CrawlerProvider {
         const parts = id.split('-')
         const playerId = parts[parts.length - 1]
 
-        const { timeout, baseUrl, headers } = this.config
+        const { timeout, baseUrl, headers, bypassMode } = this.config
+
         const res = await superagent
           .get(`${baseUrl}/anime/${playerId}/player?_allow=true`)
+          .agent(bypassMode == 'proxy' ? tunnelHttpsAgent: undefined)
           .set(headers!)
           .set('X-Requested-With', 'XMLHttpRequest')
           .timeout(timeout!)
@@ -101,10 +104,11 @@ class AnimegoProvider extends CrawlerProvider {
   }
 
   override async getSource(resultsId: string, sourceId: string, params: Record<string, string>): Promise<Partial<File> | null> {
-    const { timeout, baseUrl, headers } = this.config
+    const { timeout, baseUrl, headers, bypassMode } = this.config
 
     const res = await superagent
       .get(`${baseUrl}/anime/series?episode=${params.ep}&id=${sourceId}`)
+      .agent(bypassMode == 'proxy' ? tunnelHttpsAgent: undefined)
       .set(headers!)
       .set('X-Requested-With', 'XMLHttpRequest')
       .timeout(timeout!)
