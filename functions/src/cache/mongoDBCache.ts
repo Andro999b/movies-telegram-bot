@@ -10,8 +10,6 @@ interface CacheItem<Item> extends Document {
   result: Item
 }
 
-const defaultIsEmpty = (item: unknown): boolean => item != null
-
 class MongoDBCache<Item> extends Cache<string, Item> {
   private collection: Collection<CacheItem<Item>>
 
@@ -48,13 +46,9 @@ class MongoDBCache<Item> extends Cache<string, Item> {
   override async getOrCompute(
     key: string,
     compute: (key: string) => Promise<Item>,
-    isEmpty?: (item: Item) => boolean
+    isEmpty: (item: Item) => boolean
   ): Promise<Item> {
     const cacheItem = await this.getCacheItem(key)
-
-    if(!isEmpty) {
-      isEmpty = defaultIsEmpty
-    }
 
     if (!cacheItem) {
       const item = await compute(key)
