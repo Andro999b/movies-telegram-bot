@@ -1507,13 +1507,13 @@
     lodash "^4.17.11"
 
 "@serverless/platform-client@^4.3.2":
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/@serverless/platform-client/-/platform-client-4.3.2.tgz#10cd3ad8cf452a33528cfb14bbb6003d30a74805"
-  integrity sha512-DAa5Z0JAZc6UfrTZLYwqoZxgAponZpFwaqd7WzzMA+loMCkYWyJNwxrAmV6cr2UUJpkko4toPZuJ3vM9Ie+NDA==
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/@serverless/platform-client/-/platform-client-4.5.1.tgz#db5915bb53339761e704cc3f7d352c7754a79af2"
+  integrity sha512-XltmO/029X76zi0LUFmhsnanhE2wnqH1xf+WBt5K8gumQA9LnrfwLgPxj+VA+mm6wQhy+PCp7H5SS0ZPu7F2Cw==
   dependencies:
     adm-zip "^0.5.5"
     archiver "^5.3.0"
-    axios "^0.21.1"
+    axios "^1.6.2"
     fast-glob "^3.2.7"
     https-proxy-agent "^5.0.0"
     ignore "^5.1.8"
@@ -2209,12 +2209,14 @@ aws-sdk@^2.1352.0:
     uuid "8.0.0"
     xml2js "0.5.0"
 
-axios@^0.21.1:
-  version "0.21.4"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.4.tgz#c67b90dc0568e5c1cf2b0b858c43ba28e2eda575"
-  integrity sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==
+axios@^1.6.2:
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.7.tgz#7b48c2e27c96f9c68a2f8f31e2ab19f59b06b0a7"
+  integrity sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==
   dependencies:
-    follow-redirects "^1.14.0"
+    follow-redirects "^1.15.4"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
 
 balanced-match@^1.0.0:
   version "1.0.2"
@@ -3334,10 +3336,10 @@ flat@^5.0.2:
   resolved "https://registry.yarnpkg.com/flat/-/flat-5.0.2.tgz#8ca6fe332069ffa9d324c327198c598259ceb241"
   integrity sha512-b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==
 
-follow-redirects@^1.14.0:
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
-  integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
+follow-redirects@^1.15.4:
+  version "1.15.5"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.5.tgz#54d4d6d062c0fa7d9d17feb008461550e3ba8020"
+  integrity sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==
 
 for-each@^0.3.3:
   version "0.3.3"
@@ -4780,6 +4782,11 @@ promise-queue@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/promise-queue/-/promise-queue-2.2.5.tgz#2f6f5f7c0f6d08109e967659c79b88a9ed5e93b4"
   integrity sha512-p/iXrPSVfnqPft24ZdNNLECw/UrtLTpT3jpAAMzl/o5/rDsGCPo3/CQS2611flL6LkoEJ3oQZw7C8Q80ZISXRQ==
+
+proxy-from-env@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
+  integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
 pump@^3.0.0:
   version "3.0.0"
