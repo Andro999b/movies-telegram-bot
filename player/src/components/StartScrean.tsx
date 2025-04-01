@@ -3,9 +3,7 @@ import React from 'react'
 import { PlayCircleFilled as PlayIcon } from '@mui/icons-material'
 
 import Share from './Share'
-import analytics from '../utils/analytics'
-import localization from '../localization'
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
 import { Playlist } from '../types'
 import AddHistoryButton from './AddHistoryButton.js'
 
@@ -28,16 +26,11 @@ const StartScrean: React.FC<Props> = ({ starting, playlist, onStart }) => {
         {starting && <div className="loader-indicator center"><CircularProgress /></div>}
         {!starting && <PlayIcon className="center shadow-icon" fontSize="inherit" />}
       </div>
-      <a className='save-ukraine'
-        href='https://savelife.in.ua/'
-        target='_blank'
-        rel="noreferrer"
-        onClick={(): void => analytics('save_ukraine')}
-      >
-        {localization.saveUkraine}
-      </a>
       <Share playlist={playlist} />
       <AddHistoryButton playlist={playlist} />
+      <div className='shutdown_notification'>
+        <Typography variant='h5'>Цей плеєр більше не підтримується та буде вимкнений найближчим часом. Скористайтесь альтернативним додатком <a href='https://strumokapp.cc/'>Strumok</a></Typography>
+      </div>
     </>
   )
 }

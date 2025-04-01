@@ -101,7 +101,6 @@ const PlaylistView: React.FC = () => {
     <div className="screan-content gradient-bg">
       <HistoryNavButton />
       {renderContent()}
-      <TelegramLinks />
     </div>
   )
 }
