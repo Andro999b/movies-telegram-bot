@@ -28,9 +28,6 @@ const StartScrean: React.FC<Props> = ({ starting, playlist, onStart }) => {
       </div>
       <Share playlist={playlist} />
       <AddHistoryButton playlist={playlist} />
-      <div className='shutdown_notification'>
-        <Typography variant='h5'>Цей плеєр більше не підтримується та буде вимкнений найближчим часом. Скористайтесь альтернативним додатком <a href='https://strumokapp.cc/'>Strumok</a></Typography>
-      </div>
     </>
   )
 }

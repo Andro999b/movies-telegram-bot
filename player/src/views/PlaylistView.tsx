@@ -101,6 +101,9 @@ const PlaylistView: React.FC = () => {
     <div className="screan-content gradient-bg">
       <HistoryNavButton />
       {renderContent()}
+      <div className='shutdown_notification'>
+        <Typography variant='h5'>Цей плеєр більше не підтримується та буде вимкнений найближчим часом. Скористайтесь альтернативним додатком <a href='https://strumokapp.cc/'>Strumok</a></Typography>
+      </div>
     </div>
   )
 }
